@@ -23,7 +23,7 @@ phases:
       - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
       - aws configure set region $REGION
       - aws s3 rm s3://${S3_BUCKET} --recursive
-      - aws s3 sync dist s3://${S3_BUCKET}
+      - aws s3 sync dist/vega-test-portal/ s3://${S3_BUCKET}
       - aws cloudfront create-invalidation --distribution-id ${CLOUD_FRONT} --paths '/*'
       - echo Build completed on `date`
 artifacts:
