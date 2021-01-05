@@ -1,0 +1,33 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+  pre_build:
+    commands:
+      - echo Installing source NPM dependencies...
+      - echo $PWD
+      - npm install
+      - npm install -g @angular/cli
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo $PWD
+      - export NODE_OPTIONS=--max_old_space_size=$RAM
+      - ng build --configuration=$ENVIRONMENT
+
+  post_build:
+     commands:
+      - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+      - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+      - aws configure set region $REGION
+      - aws s3 rm s3://${S3_BUCKET} --recursive
+      - aws s3 sync dist s3://${S3_BUCKET}
+      - aws cloudfront create-invalidation --distribution-id ${CLOUD_FRONT} --paths '/*'
+      - echo Build completed on `date`
+artifacts:
+  files:
+      - '**/*'
+  base-directory: 'dist*'
+  discard-paths: yes
