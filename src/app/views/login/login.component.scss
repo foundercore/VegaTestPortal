@@ -67,7 +67,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   min-height: 100vh;
-  background-image: url("../../assets/images/background-1280x720.jpg");
+  background-image: url("/assets/images/background-1280x720.jpg");
 }
 
 .loginContainer {
@@ -84,15 +84,17 @@
   width: 100%;
 }
 .loginButton {
-  text-align: center;
+  margin: 5px;
 }
 .loginButton button {
-  width: 150px;
+  width: 200px;
   height: 45px;
   background-color: white;
   border: var(--success-color) solid 3px;
   color: var(--success-color);
   font-weight: bold;
+  text-align: left;
+  left: 25% !important;
 }
 
 .loginButton button:disabled,
@@ -100,4 +102,17 @@
   border: 3px solid var(--disable-border);
   background-color: var(--disable-background);
   color: var(--disable-color);
+}
+
+.loginMicrosoftButton {
+  margin: 5px;
+}
+.loginMicrosoftButton button {
+  width: 200px;
+  height: 45px;
+  background-color: white;
+  border: rgb(37, 0, 202) solid 3px;
+  color: rgb(37, 0, 202);
+  font-weight: bold;
+  left: 25% !important;
 }

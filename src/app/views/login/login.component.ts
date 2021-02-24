@@ -11,6 +11,7 @@ export class LoginComponent implements OnInit {
 
   username = '';
   password = '';
+  pageTitle = 'LOGIN';
   userNamePlaceHolder = 'ramesh@education.com';
   maskPassword = true;
   constructor(private router: Router) { }

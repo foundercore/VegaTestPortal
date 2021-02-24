@@ -1,38 +1,46 @@
 <div class="parentContainer">
-  <div class="loginContainer">
-    <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
-        <div class="box">
-        <div class="title">LOGIN</div>
-        <mat-form-field appearance="fill"  class="full-width">
+   <div class="loginContainer">
+      <div class="box">
+         <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
+         <div class="title">{{pageTitle}}</div>
+         <mat-form-field appearance="fill"  class="full-width">
             <mat-label>Username</mat-label>
             <input matInput 
-                placeholder="{{userNamePlaceHolder}}"
-                name="username"
-                ngModel
-                required/>
-        </mat-form-field>
-        
-        <mat-form-field appearance="fill"  class="full-width">
+               placeholder="{{userNamePlaceHolder}}"
+               name="username"
+               ngModel
+               required/>
+         </mat-form-field>
+         <mat-form-field appearance="fill"  class="full-width">
             <mat-label>Password</mat-label>
             <input matInput 
-                placeholder="Password" 
-                name="password"
-                ngModel
-                [type]="maskPassword ? 'password' : 'text'" required/>
+               placeholder="Password" 
+               name="password"
+               ngModel
+               [type]="maskPassword ? 'password' : 'text'" required/>
             <mat-icon matSuffix (click)="maskPassword = !maskPassword">
-                {{maskPassword ? 'visibility_off' : 'visibility'}}
+               {{maskPassword ? 'visibility_off' : 'visibility'}}
             </mat-icon>
-        </mat-form-field>
-
-        <div class="loginButton">
+         </mat-form-field>
+         <div class="iconButton loginButton">
             <button mat-raised-button 
-                    color="primary" 
-                    [disabled]="!loginForm.form.valid"
-                    type="submit">
-                <span>GO</span> <i class="fa fa-check"></i>
+               color="primary" 
+               [disabled]="!loginForm.form.valid"
+               type="submit">
+            <i class="icon material-icons mdc-button__icon" aria-hidden="true">login</i>
+            <span>Login</span> <i class="fa fa-check"></i>
             </button>
-        </div>
-        </div>
-    </form>
-  </div>
+         </div>
+         </form>
+         <mat-divider></mat-divider>
+         <div class="iconButton loginMicrosoftButton">
+            <button mat-raised-button 
+               color="primary"
+               type="button">
+            <img class="icon" src="../../assets/images/microsoft-logo.jpg" style="width: 24px; height: 24px;">
+            <span>Login with Microsoft</span> <i class="fa fa-check"></i>
+            </button>
+         </div>
+      </div>
+   </div>
 </div>

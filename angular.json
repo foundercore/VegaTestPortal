@@ -28,7 +28,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -124,5 +124,10 @@
       }
     }
   },
-  "defaultProject": "vega-test-portal"
+  "defaultProject": "vega-test-portal",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }
