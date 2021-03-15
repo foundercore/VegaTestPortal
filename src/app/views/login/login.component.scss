@@ -1,0 +1,118 @@
+.box {
+  position: relative;
+  top: 0;
+  opacity: 1;
+  float: left;
+  padding: 60px 50px 40px 50px;
+  width: 100%;
+  background: #fff;
+  border-radius: 10px;
+  transform: scale(1);
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  z-index: 5;
+
+  &.back {
+    transform: scale(0.95);
+    -webkit-transform: scale(0.95);
+    -ms-transform: scale(0.95);
+    top: -20px;
+    opacity: .8;
+    z-index: -1;
+  }
+
+  &:before {
+    content: "";
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+    position: absolute;
+    top: -10px;
+    background: rgba(255, 255, 255, 0.6);
+    left: 0;
+    transform: scale(0.95);
+    -webkit-transform: scale(0.95);
+    -ms-transform: scale(0.95);
+    z-index: -1;
+  }
+}
+
+
+.title {
+  width: 100%;
+  float: left;
+  line-height: 46px;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--main-color);
+  position: relative;
+  margin-bottom: 25px;
+
+  &:before {
+    content: "";
+    width: 5px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: -50px;
+    background: var(--main-color);
+  }
+}
+
+
+.parentContainer {
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  background-image: url("/assets/images/background-1280x720.jpg");
+}
+
+.loginContainer {
+  width: 100%;
+  max-width: 25vw;
+  position: absolute;
+  top: 45%;
+  right: 1%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+.full-width {
+  width: 100%;
+}
+.loginButton {
+  margin: 5px;
+}
+.loginButton button {
+  width: 200px;
+  height: 45px;
+  background-color: white;
+  border: var(--success-color) solid 3px;
+  color: var(--success-color);
+  font-weight: bold;
+  text-align: left;
+  left: 25% !important;
+}
+
+.loginButton button:disabled,
+.loginButton button[disabled]{
+  border: 3px solid var(--disable-border);
+  background-color: var(--disable-background);
+  color: var(--disable-color);
+}
+
+.loginMicrosoftButton {
+  margin: 5px;
+}
+.loginMicrosoftButton button {
+  width: 200px;
+  height: 45px;
+  background-color: white;
+  border: rgb(37, 0, 202) solid 3px;
+  color: rgb(37, 0, 202);
+  font-weight: bold;
+  left: 25% !important;
+}
