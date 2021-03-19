@@ -86,7 +86,7 @@
     height: 30px;
     padding: 8px;
     margin-bottom: 1.8em;
-    padding-left: 35px;
+    padding-left: 13%;
   }
 }
 .nav__link {
@@ -95,11 +95,24 @@
 .nav__icon {
   margin-right: 16px;
 }
-@media screen and (max-width: 450px) {
-  .sidenav {
-    padding-top: 15px;
-    a {
-      font-size: 18px;
+
+@media screen and (max-width: 1430px) {
+  .nav--open {
+    width: 20%;
+  }
+}
+
+@media screen and (max-width: 1110px) {
+  .nav--open {
+    width: 31%;
+  }
+}
+
+@media screen and (max-width: 690px) {
+  .nav--open {
+    width: 42%;
+    &* {
+      font-size: 14px;
     }
   }
 }
