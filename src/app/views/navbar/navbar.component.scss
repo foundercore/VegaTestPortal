@@ -1,98 +1,105 @@
 @import "https://fonts.googleapis.com/css2?family=Montserrat&display=swap";
 * {
-	padding: 0;
-	margin: 0;
+  padding: 0;
+  margin: 0;
 }
 .sidenav {
-	height: 100%;
-	font-family: 'Montserrat', sans-serif;
-	width: 60px;
-	position: fixed;
-	z-index: 1;
-	top: 0;
-	left: 0;
-	background-color: #F5F5F5;
-	overflow-x: hidden;
-	transition: 0.6s;
-	box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06), 0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 100px 80px rgba(0, 0, 0, 0.12);
-	a {
-		text-decoration: none;
-		overflow: hidden;
-		font-size: 1.2em;
-		color: #818181;
-		display: block;
-		transition: 0.3s;
-		max-height: 32px;
-		margin-left: 17px;
-		margin-bottom: 1.9em;
-	}
-	.closebtn {
-		position: absolute;
-		top: 0;
-		right: 25px;
-		font-size: 36px;
-		margin-left: 50px;
-	}
+  height: 100%;
+  font-family: "Montserrat", sans-serif;
+  width: 60px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #f5f5f5;
+  overflow-x: hidden;
+  transition: 0.6s;
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
+  a {
+    text-decoration: none;
+    overflow: hidden;
+    font-size: 1.2em;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+    max-height: 32px;
+    margin-left: 17px;
+    text-align: center;
+    margin-bottom: 1.9em;
+  }
+
+  .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
 }
 .nav__search {
-	display: none;
+  display: none;
 }
 .input__icon {
-	display: none;
-	position: absolute;
-	padding: 15px;
-	padding-left: 18px;
-	margin: 0;
+  display: none;
+  position: absolute;
+  padding: 15px;
+  padding-left: 18px;
+  margin: 0;
 }
 .nav__ham {
-	* {
-		font-size: 26px;
-	}
-	background: #808080;
-	height: 70px;
-	text-align: center;
-	color: #fff;
-	width: 100%;
-	display: flex;
-	margin-bottom: 0.8em;
-	cursor: pointer;
-	justify-content: center;
-	align-items: center;
-	font-size: 14px;
+  * {
+    font-size: 26px;
+  }
+  background: #808080;
+  height: 70px;
+  text-align: center;
+  color: #fff;
+  width: 100%;
+  display: flex;
+  margin-bottom: 0.8em;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
 }
 .nav--open {
-	width: 15%;
-	.input__icon {
-		display: block;
-	}
-	.nav__ham {
-		justify-content: flex-start;
-		padding-left: 7%;
-		height: 70px;
-	}
-	.nav__search {
-		margin-left: 6px;
-		display: block;
-		border: 0.7px solid gray;
-		border-radius: 5px;
-		width: 80%;
-		height: 30px;
-		padding: 8px;
-		margin-bottom: 1.8em;
-		padding-left: 35px;
-	}
+  width: 15%;
+  a {
+    text-align: left;
+  }
+  .input__icon {
+    display: block;
+  }
+  .nav__ham {
+    justify-content: flex-start;
+    padding-left: 7%;
+    height: 70px;
+  }
+  .nav__search {
+    margin-left: 6px;
+    display: block;
+    border: 0.7px solid gray;
+    border-radius: 5px;
+    width: 78%;
+    height: 30px;
+    padding: 8px;
+    margin-bottom: 1.8em;
+    padding-left: 35px;
+  }
 }
 .nav__link {
-	display: none;
+  display: none;
 }
 .nav__icon {
-	margin-right: 16px;
+  margin-right: 16px;
 }
 @media screen and (max-width: 450px) {
-	.sidenav {
-		padding-top: 15px;
-		a {
-			font-size: 18px;
-		}
-	}
+  .sidenav {
+    padding-top: 15px;
+    a {
+      font-size: 18px;
+    }
+  }
 }
