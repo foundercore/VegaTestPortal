@@ -12,6 +12,8 @@ import { ToastrModule } from 'ngx-toastr';
 import { NavbarComponent } from './views/navbar/navbar.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
+import { ReportsComponent } from './views/reports/reports.component';
+import { AdminComponent } from './views/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
     HomeComponent,
     NavbarComponent,
     DashboardComponent,
+    ReportsComponent,
+    AdminComponent,
   ],
 
   imports: [

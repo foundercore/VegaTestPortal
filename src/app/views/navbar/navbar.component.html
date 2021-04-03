@@ -8,32 +8,18 @@
     <fa-icon [icon]="faHome" class="nav__icon"></fa-icon>
     <p class="nav__link">DASHBOARD</p></a
   >
+  <a [routerLink]="['./tests']"
+    >
+    <fa-icon [icon]="faFileText" class="nav__icon"></fa-icon>
+    <p class="nav__link">TESTS</p></a
+  >
+
   <a [routerLink]="['./reports']">
     <fa-icon [icon]="faFile" class="nav__icon"></fa-icon>
     <p class="nav__link">REPORTS</p></a
   >
-  <a [routerLink]="['./analytics']"
-    ><fa-icon [icon]="faChartLine" class="nav__icon"></fa-icon>
-    <p class="nav__link">ANALYTICS</p></a
-  >
-  <a [routerLink]="['./inbox']"
-    ><fa-icon [icon]="faInbox" class="nav__icon"></fa-icon>
-    <p class="nav__link">INBOX</p></a
-  >
-  <a [routerLink]="['./media']"
-    ><fa-icon [icon]="faFilm" class="nav__icon"></fa-icon>
-    <p class="nav__link">MEDIA</p></a
-  >
-  <a [routerLink]="['./calender']"
-    ><fa-icon [icon]="faCalender" class="nav__icon"></fa-icon>
-    <p class="nav__link">CALENDER</p></a
-  >
   <a [routerLink]="['./users']"
     ><fa-icon [icon]="faUsers" class="nav__icon"></fa-icon>
-    <p class="nav__link">USERS</p></a
-  >
-  <a [routerLink]="['./settings']"
-    ><fa-icon [icon]="faCog" class="nav__icon"></fa-icon>
-    <p class="nav__link">SETTINGS</p></a
+    <p class="nav__link">Users</p></a
   >
 </div>

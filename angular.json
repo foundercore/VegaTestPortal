@@ -128,7 +128,10 @@
   "defaultProject": "vega-test-portal",
   "schematics": {
     "@schematics/angular:component": {
-      "styleext": "scss"
+      "styleext": "scss",
+      "spec": true,
+      "flat": false,
+      "changeDetection": "OnPush"
     }
   }
 }
