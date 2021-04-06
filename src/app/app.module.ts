@@ -14,6 +14,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { ReportsComponent } from './views/reports/reports.component';
 import { AdminComponent } from './views/admin/admin.component';
+import { AuthGuard } from './guard/auth.guard';
+import { HttpClientModule } from '@angular/common/http';
+import { LoggedInAuthGuard } from './guard/loggedin.guard';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,7 @@ import { AdminComponent } from './views/admin/admin.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     FontAwesomeModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -39,7 +43,7 @@ import { AdminComponent } from './views/admin/admin.component';
     ReactiveFormsModule,
     ToastrModule.forRoot(),
   ],
-  providers: [],
+  providers: [AuthGuard, LoggedInAuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
