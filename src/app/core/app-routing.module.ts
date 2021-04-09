@@ -11,29 +11,28 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [LoggedInAuthGuard]
+    canActivate: [LoggedInAuthGuard],
   },
   {
     path: 'home',
     component: HomeComponent,
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'tests', component: DashboardComponent },
       { path: 'users', component: DashboardComponent },
     ],
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: '**',
-    redirectTo: 'home'
-  }
-
+    redirectTo: 'home',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

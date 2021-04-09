@@ -6,19 +6,14 @@ import { fade } from 'src/app/core/app-animation.module';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  animations: [
-    fade
-  ]
+  animations: [fade],
 })
 export class HomeComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData;
-}
-
+  }
 }

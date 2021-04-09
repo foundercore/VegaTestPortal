@@ -17,6 +17,7 @@ import { AdminComponent } from './views/admin/admin.component';
 import { AuthGuard } from './guard/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
 import { LoggedInAuthGuard } from './guard/loggedin.guard';
+import { HeaderComponent } from './shared/components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { LoggedInAuthGuard } from './guard/loggedin.guard';
     DashboardComponent,
     ReportsComponent,
     AdminComponent,
+    HeaderComponent,
   ],
 
   imports: [
