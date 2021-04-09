@@ -16,6 +16,7 @@ export class AuthService extends BaseService {
 
     return new Promise((resolve, reject) => {
       if (!localStorage.getItem('authInfo')) return reject(false);
+      if (!!localStorage.getItem('authState')) return resolve(true);
       this.http
         .get('https://basic-auth-snipextt.vercel.app/api/auth', {
           headers: {
@@ -23,10 +24,11 @@ export class AuthService extends BaseService {
           },
         })
         .subscribe({
-          error: (err) => {
-            reject(false);
+          error: (err) => reject(false),
+          next: (data) => {
+            localStorage.setItem('authState', (true as unknown) as string);
+            resolve(true);
           },
-          next: (data) => resolve(true),
         });
     });
   }

@@ -9,8 +9,4 @@ export class DashboardComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit(): void {}
-  logout(): void {
-    localStorage.removeItem('authInfo');
-    this.router.navigate(['/login']);
-  }
 }

@@ -1,0 +1,15 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.2em;
+  h1 {
+    margin: 0;
+    font-size: 2em;
+    font-weight: bold;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  }
+  button {
+    border-radius: 6px;
+    border: 1px solid grey;
+  }
+}
