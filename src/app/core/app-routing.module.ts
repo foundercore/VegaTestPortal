@@ -6,12 +6,17 @@ import { DashboardComponent } from '../views/dashboard/dashboard.component';
 import { ReportsComponent } from '../views/reports/reports.component';
 import { AuthGuard } from '../guard/auth.guard';
 import { LoggedInAuthGuard } from '../guard/loggedin.guard';
+import { RegisterComponent } from '../views/register/register.component';
 
 const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
     canActivate: [LoggedInAuthGuard],
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
   },
   {
     path: 'home',

@@ -18,6 +18,8 @@ import { AuthGuard } from './guard/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
 import { LoggedInAuthGuard } from './guard/loggedin.guard';
 import { HeaderComponent } from './shared/components/header/header.component';
+import { UploadQuestionsComponent } from './views/questions/upload-questions/upload-questions.component';
+import { RegisterComponent } from './views/register/register.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { HeaderComponent } from './shared/components/header/header.component';
     ReportsComponent,
     AdminComponent,
     HeaderComponent,
+    UploadQuestionsComponent,
+    RegisterComponent,
   ],
 
   imports: [
