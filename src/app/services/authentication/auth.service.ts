@@ -15,8 +15,8 @@ export class AuthService extends BaseService {
     // TODO - add user validation
 
     return new Promise((resolve, reject) => {
-      if (!localStorage.getItem('authInfo')) return reject(false);
-      if (!!localStorage.getItem('authState')) return resolve(true);
+      if (!localStorage.getItem('authInfo')) { return reject(false); }
+      if (!!localStorage.getItem('authState')) { return resolve(true); }
       this.http
         .get('https://basic-auth-snipextt.vercel.app/api/auth', {
           headers: {

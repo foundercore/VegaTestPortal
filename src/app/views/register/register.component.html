@@ -1,0 +1,41 @@
+<div class="parentContainer">
+  <div class="registerContainer">
+    <div class="box">
+      <form (ngSubmit)="onSubmit(registerForm)" #registerForm="ngForm">
+        <div class="title">Register</div>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>First Name</mat-label>
+          <input matInput name="firstName" ngModel required />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Last Name</mat-label>
+          <input matInput name="lastName" ngModel required />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Phone Number </mat-label>
+          <input matInput name="phoneNumber"  ngModel required />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="pat@example.com" required />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput  required />
+        </mat-form-field>
+        <div class="iconButton registerButton">
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="!registerForm.form.valid"
+            type="submit"
+          >
+          <mat-icon aria-hidden="false">receipt</mat-icon>
+            <span>Register</span> <i class="fa fa-check"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
