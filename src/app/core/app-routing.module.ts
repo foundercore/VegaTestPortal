@@ -5,8 +5,8 @@ import { LoginComponent } from '../views/login/login.component';
 import { DashboardComponent } from '../views/dashboard/dashboard.component';
 import { ReportsComponent } from '../views/reports/reports.component';
 import { AuthGuard } from '../guard/auth.guard';
-import { LoggedInAuthGuard } from '../guard/loggedin.guard';
 import { RegisterComponent } from '../views/register/register.component';
+import { LoggedInAuthGuard } from '../guard/loggedin.guard';
 
 const routes: Routes = [
   {

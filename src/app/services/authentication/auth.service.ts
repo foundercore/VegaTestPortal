@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BaseService } from '../base.service';
 
@@ -7,29 +8,21 @@ import { BaseService } from '../base.service';
   providedIn: 'root',
 })
 export class AuthService extends BaseService {
+
+
   constructor(private http: HttpClient) {
     super();
   }
 
-  loggedIn(): Promise<boolean> {
-    // TODO - add user validation
+  public getToken(): string | null{
+    return localStorage.getItem('authInfo');
+  }
 
-    return new Promise((resolve, reject) => {
-      if (!localStorage.getItem('authInfo')) { return reject(false); }
-      if (!!localStorage.getItem('authState')) { return resolve(true); }
-      this.http
-        .get('https://basic-auth-snipextt.vercel.app/api/auth', {
-          headers: {
-            Authorization: `Basic ${localStorage.getItem('authInfo')}`,
-          },
-        })
-        .subscribe({
-          error: (err) => reject(false),
-          next: (data) => {
-            localStorage.setItem('authState', (true as unknown) as string);
-            resolve(true);
-          },
-        });
-    });
+
+  logIn(username: string, password: string): Observable<any> {
+    const url = `${this.BASE_SERVICE_URL}/login`;
+    let headers = new HttpHeaders({ 'Authorization': 'Basic ' + btoa(username+':'+ password) });
+    let options = { headers: headers };
+    return this.http.post<any>(url, {},options);
   }
 }

@@ -18,11 +18,11 @@ export class RegisterComponent implements OnInit {
         private authenticationService: AuthService,
         private userService: UserService,
         private toastr: ToastrService
-    ) { 
+    ) {
         // redirect to home if already logged in
-        this.authenticationService
-        .loggedIn()
-        .then(() => this.router.navigate(['/']));
+        // this.authenticationService
+        // .loggedIn()
+        // .then(() => this.router.navigate(['/']));
     }
 
     ngOnInit() {
