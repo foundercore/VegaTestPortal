@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit {
     if (this.username === 'admin' && this.password === 'admin') {
       this.router.navigate(['user']);
     } else {
-      //alert('Invalid credentials');
       this.toastr.success('Invalid credentials');
     }
   }
@@ -46,14 +45,5 @@ export class LoginComponent implements OnInit {
       password: form.value.password
     };
     this.store.dispatch(new LogIn(payload));
-    // console.log('User Name is : ' + form.value.username);
-    // localStorage.setItem(
-    //   'authInfo',
-    //   btoa(`${form.value.username}:${form.value.password}`)
-    // );
-    // this.authService
-    //   .loggedIn()
-    //   .then(() => this.router.navigate(['home']))
-    //   .catch(() => this.toastr.error('Invalid credentials'));
   }
 }
