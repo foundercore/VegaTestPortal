@@ -24,6 +24,7 @@ import { StoreModule } from '@ngrx/store';
 import { AuthEffects } from './state_management/_effects/auth.effects';
 import { AppReducer } from './state_management/_reducers/auth.reducers';
 import { LoggedInAuthGuard } from './guard/loggedin.guard';
+import { UserManagemntComponent } from './views/user-managemnt/user-managemnt.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { LoggedInAuthGuard } from './guard/loggedin.guard';
     HeaderComponent,
     UploadQuestionsComponent,
     RegisterComponent,
+    UserManagemntComponent,
   ],
 
   imports: [
