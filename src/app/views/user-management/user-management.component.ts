@@ -1,54 +1,44 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-
-interface IUser {
-  _id: number;
-  name: string;
-  email: string;
-  phone: number;
-  batch: number;
-}
+import { IUserModel } from 'src/app/models/user/user-model';
+import { UserService } from 'src/app/services/users/users.service';
 
 @Component({
   selector: 'app-user-managemnt',
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserManagementComponent implements OnInit {
-  userResponses: Array<IUser> = new Array(8).fill({
-    _id: Math.random() * 97,
-    name: 'Jhon Doe',
-    email: 'jhone.doe@email.co',
-    phone: 9898786776,
-    batch: 2021,
-  });
+  userResponses: Array<IUserModel> = [];
   searchIcon = faSearch;
-  userList: Array<IUser>;
+  userList: Array<IUserModel> = [];
 
-  checkedUserList: Array<IUser> = [];
+  checkedUserList: Array<IUserModel> = [];
 
-  constructor() {
-    this.userList = this.userResponses;
+  constructor(private userService: UserService) {
+    userService.getUsers().subscribe((data) => {
+      this.userList = data;
+      this.userResponses = data;
+    });
   }
 
   ngOnInit(): void {}
   searchUser(e: any): void {
     this.userList = this.userResponses.filter((user) => {
-      if (user.name.includes(e.value) || user.email.includes(e.value))
+      if (user.displayName!.includes(e.value) || user.email!.includes(e.value))
         return user;
       return null;
     });
-    console.log(e.value);
   }
-  checkboxChnaged(e: any, userID: number): void {
+  checkboxChnaged(e: any, email: string): void {
     if (e.target.checked)
       this.checkedUserList.push(
-        this.userList.find((user) => user._id == userID)!
+        this.userList.find((user) => user.email == email)!
       );
     else
       this.checkedUserList.splice(
-        this.checkedUserList.findIndex((user) => user._id == userID),
+        this.checkedUserList.findIndex((user) => user.email == email),
         1
       );
   }
