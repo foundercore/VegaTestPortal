@@ -11,11 +11,11 @@ interface IUser {
 
 @Component({
   selector: 'app-user-managemnt',
-  templateUrl: './user-managemnt.component.html',
-  styleUrls: ['./user-managemnt.component.scss'],
+  templateUrl: './user-management.component.html',
+  styleUrls: ['./user-management.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserManagemntComponent implements OnInit {
+export class UserManagementComponent implements OnInit {
   userResponses: Array<IUser> = new Array(8).fill({
     _id: Math.random() * 97,
     name: 'Jhon Doe',

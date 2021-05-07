@@ -24,7 +24,7 @@ import { StoreModule } from '@ngrx/store';
 import { AuthEffects } from './state_management/_effects/auth.effects';
 import { AppReducer } from './state_management/_reducers/auth.reducers';
 import { LoggedInAuthGuard } from './guard/loggedin.guard';
-import { UserManagemntComponent } from './views/user-managemnt/user-managemnt.component';
+import { UserManagementComponent } from './views/user-management/user-management.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +38,7 @@ import { UserManagemntComponent } from './views/user-managemnt/user-managemnt.co
     HeaderComponent,
     UploadQuestionsComponent,
     RegisterComponent,
-    UserManagemntComponent,
+    UserManagementComponent,
   ],
 
   imports: [
@@ -57,7 +57,7 @@ import { UserManagemntComponent } from './views/user-managemnt/user-managemnt.co
     EffectsModule.forRoot([AuthEffects]),
     ToastrModule.forRoot(),
   ],
-  providers: [AuthGuard,LoggedInAuthGuard],
-  bootstrap: [AppComponent]
+  providers: [AuthGuard, LoggedInAuthGuard],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
