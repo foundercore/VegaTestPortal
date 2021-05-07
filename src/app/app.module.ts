@@ -16,10 +16,14 @@ import { ReportsComponent } from './views/reports/reports.component';
 import { AdminComponent } from './views/admin/admin.component';
 import { AuthGuard } from './guard/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
-import { LoggedInAuthGuard } from './guard/loggedin.guard';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { UploadQuestionsComponent } from './views/questions/upload-questions/upload-questions.component';
 import { RegisterComponent } from './views/register/register.component';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { AuthEffects } from './state_management/_effects/auth.effects';
+import { AppReducer } from './state_management/_reducers/auth.reducers';
+import { LoggedInAuthGuard } from './guard/loggedin.guard';
 
 @NgModule({
   declarations: [
@@ -47,9 +51,11 @@ import { RegisterComponent } from './views/register/register.component';
     FormsModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    StoreModule.forRoot(AppReducer, {}),
+    EffectsModule.forRoot([AuthEffects]),
     ToastrModule.forRoot(),
   ],
-  providers: [AuthGuard, LoggedInAuthGuard],
+  providers: [AuthGuard,LoggedInAuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
