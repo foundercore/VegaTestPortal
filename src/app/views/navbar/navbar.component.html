@@ -2,10 +2,14 @@
   <span (click)="toggleNav()" class="nav__ham"
     ><fa-icon [icon]="faBars"></fa-icon
   ></span>
-  
+
   <a [routerLink]="['./dashboard']">
     <fa-icon [icon]="faHome" class="nav__icon"></fa-icon>
     <p class="nav__link">DASHBOARD</p></a
+  >
+  <a [routerLink]="['./questionmanagement']">
+    <fa-icon [icon]="faFileText" class="nav__icon"></fa-icon>
+    <p class="nav__link">Question Management</p></a
   >
   <a [routerLink]="['./tests']"
     >

@@ -1,0 +1,97 @@
+<div class="question-list-title">
+  Question List
+</div>
+
+<div class="question-grid-action">
+  <button mat-raised-button (click)="performGridAction()">
+    <mat-icon>edit</mat-icon> Edit
+  </button>
+  <button mat-raised-button (click)="performGridAction()">
+    <mat-icon>view_compact</mat-icon> View
+  </button>
+  <button mat-raised-button (click)="performGridAction()">
+    <mat-icon>delete_forever</mat-icon> Delete
+  </button>
+  <button mat-raised-button (click)="performGridAction()">
+    <mat-icon>add_circle</mat-icon> Add
+  </button>
+  <button mat-raised-button (click)="performGridAction()">
+    <mat-icon>cloud_upload</mat-icon> Upload
+  </button>
+</div>
+
+<div class="question-grid-search-bar">
+  <mat-form-field style="width: 600px;">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
+  </mat-form-field>
+</div>
+
+<div class="question-list-grid">
+
+  <div class="example-container mat-elevation-z8">
+    <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+        Something is wrong with server.
+      </div>
+    </div>
+
+    <div class="example-table-container">
+
+      <table mat-table [dataSource]="filteredAndPagedIssues" class="example-table" matSort matSortActive="name"
+        matSortDisableClear matSortDirection="desc" (matSortChange)="resetPaging()">
+
+
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let row">{{row.name}}</td>
+        </ng-container>
+
+        <!-- Decription Column -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Decription</th>
+          <td mat-cell *matCellDef="let row">{{row.description}}</td>
+        </ng-container>
+
+
+        <!-- Subject Column -->
+        <ng-container matColumnDef="subject">
+          <th mat-header-cell *matHeaderCellDef>Subject</th>
+          <td mat-cell *matCellDef="let row">{{row.subject}}</td>
+        </ng-container>
+
+        <!-- Explanation Column -->
+        <ng-container matColumnDef="explanation_added">
+          <th mat-header-cell *matHeaderCellDef>Explanation Added?</th>
+          <td mat-cell *matCellDef="let row">{{row.explanation_added? 'Yes': 'No'}}</td>
+        </ng-container>
+
+        <!-- Tag Column -->
+        <ng-container matColumnDef="tags">
+          <th mat-header-cell *matHeaderCellDef>Tag</th>
+          <td mat-cell *matCellDef="let row">{{row.tags}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <mat-paginator [length]="totalNumberOfRecords" [pageSize]="30"></mat-paginator>
+  </div>
+
+
+</div>
