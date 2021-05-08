@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class BaseService {
-  public BASE_SERVICE_URL = '';
+  public BASE_SERVICE_URL = 'http://13.233.119.112:5501';
 
   constructor() {
   }

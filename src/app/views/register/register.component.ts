@@ -15,14 +15,13 @@ export class RegisterComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
-        private authenticationService: AuthService,
+        private authService: AuthService,
         private userService: UserService,
         private toastr: ToastrService
-    ) { 
-        // redirect to home if already logged in
-        this.authenticationService
-        .loggedIn()
-        .then(() => this.router.navigate(['/']));
+    ) {
+        if (this.authService.getToken()) {
+          this.router.navigateByUrl('/home/dashboard');
+        }
     }
 
     ngOnInit() {
