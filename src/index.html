@@ -13,28 +13,6 @@
 </head>
 <body>
   <app-root></app-root>
-
-  <script>
-
-        /* When the user clicks on the button,
-     toggle between hiding and showing the circle content */
-     function myFunction() {
-      document.getElementById("mycircle").classList.toggle("show");
-     }
-     
-     // Close the circle if the user clicks outside of it
-     window.onclick = function(event) {
-      if (!event.target.matches('.dropbtn')) {
-        var circles = document.getElementsByClassName("circle-content");
-        var i;
-        for (i = 0; i < circles.length; i++) {
-          var opencircle = circles[i];
-          if (opencircle.classList.contains('show')) {
-            opencircle.classList.remove('show');
-          }
-        }
-      }
-     }
-  </script>
+  
 </body>
 </html>
