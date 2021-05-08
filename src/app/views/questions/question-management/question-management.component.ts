@@ -1,4 +1,4 @@
-import { QuestionManagementService } from './../../services/question-management/question-management.service';
+import { QuestionManagementService } from './../../../services/question-management/question-management.service';
 import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';

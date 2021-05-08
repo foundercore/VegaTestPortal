@@ -24,9 +24,9 @@ import { StoreModule } from '@ngrx/store';
 import { AuthEffects } from './state_management/_effects/auth.effects';
 import { AppReducer } from './state_management/_reducers/auth.reducers';
 import { LoggedInAuthGuard } from './guard/loggedin.guard';
-import { QuestionManagementComponent } from './views/question-management/question-management.component';
+import { QuestionManagementComponent } from './views/questions/question-management/question-management.component';
 import { TokenInterceptor } from './core/token-interceptor';
-import { QuestionBulkUploadDialogComponent } from './views/question-bulk-upload-dialog/question-bulk-upload-dialog.component';
+import { QuestionBulkUploadDialogComponent } from './views/questions/question-bulk-upload-dialog/question-bulk-upload-dialog.component';
 
 @NgModule({
   declarations: [
