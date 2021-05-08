@@ -26,6 +26,7 @@ import { AppReducer } from './state_management/_reducers/auth.reducers';
 import { LoggedInAuthGuard } from './guard/loggedin.guard';
 import { QuestionManagementComponent } from './views/question-management/question-management.component';
 import { TokenInterceptor } from './core/token-interceptor';
+import { QuestionBulkUploadDialogComponent } from './views/question-bulk-upload-dialog/question-bulk-upload-dialog.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { TokenInterceptor } from './core/token-interceptor';
     UploadQuestionsComponent,
     RegisterComponent,
     QuestionManagementComponent,
+    QuestionBulkUploadDialogComponent,
   ],
 
   imports: [

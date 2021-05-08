@@ -7,6 +7,8 @@ import {merge, Observable, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {SelectionModel} from '@angular/cdk/collections';
 import { MatTable } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { QuestionBulkUploadDialogComponent } from '../question-bulk-upload-dialog/question-bulk-upload-dialog.component';
 
 
 @Component({
@@ -38,7 +40,10 @@ export class QuestionManagementComponent implements OnInit,AfterViewInit  {
   sort!: MatSort;
 
 
-  constructor(private questionService: QuestionManagementService) {}
+  constructor(
+    private questionService: QuestionManagementService,
+    public dialog: MatDialog
+    ) {}
 
 
   ngOnInit(): void {
@@ -79,8 +84,10 @@ export class QuestionManagementComponent implements OnInit,AfterViewInit  {
   }
 
 
-  performGridAction(){
-
+  performGridAction(type?: string){
+      if(type === 'upload'){
+          this.openBulkUploadDialog();
+      }
   }
 
   applyFilter(event: Event){
@@ -102,4 +109,10 @@ export class QuestionManagementComponent implements OnInit,AfterViewInit  {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
   }
 
+  openBulkUploadDialog() {
+    const dialogRef = this.dialog.open(QuestionBulkUploadDialogComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 }
