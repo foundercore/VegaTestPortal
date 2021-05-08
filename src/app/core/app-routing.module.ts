@@ -7,6 +7,7 @@ import { ReportsComponent } from '../views/reports/reports.component';
 import { AuthGuard } from '../guard/auth.guard';
 import { RegisterComponent } from '../views/register/register.component';
 import { LoggedInAuthGuard } from '../guard/loggedin.guard';
+import { QuestionManagementComponent } from '../views/questions/question-management/question-management.component';
 import { UserManagementComponent } from '../views/user-management/user-management.component';
 
 const routes: Routes = [
@@ -25,6 +26,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
+      { path: 'questionmanagement', component: QuestionManagementComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'tests', component: DashboardComponent },
       { path: 'users', component: UserManagementComponent },

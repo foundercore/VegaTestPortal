@@ -15,7 +15,7 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { ReportsComponent } from './views/reports/reports.component';
 import { AdminComponent } from './views/admin/admin.component';
 import { AuthGuard } from './guard/auth.guard';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { UploadQuestionsComponent } from './views/questions/upload-questions/upload-questions.component';
 import { RegisterComponent } from './views/register/register.component';
@@ -24,6 +24,9 @@ import { StoreModule } from '@ngrx/store';
 import { AuthEffects } from './state_management/_effects/auth.effects';
 import { AppReducer } from './state_management/_reducers/auth.reducers';
 import { LoggedInAuthGuard } from './guard/loggedin.guard';
+import { QuestionManagementComponent } from './views/questions/question-management/question-management.component';
+import { TokenInterceptor } from './core/token-interceptor';
+import { QuestionBulkUploadDialogComponent } from './views/questions/question-bulk-upload-dialog/question-bulk-upload-dialog.component';
 import { UserManagementComponent } from './views/user-management/user-management.component';
 
 @NgModule({
@@ -38,6 +41,8 @@ import { UserManagementComponent } from './views/user-management/user-management
     HeaderComponent,
     UploadQuestionsComponent,
     RegisterComponent,
+    QuestionManagementComponent,
+    QuestionBulkUploadDialogComponent,
     UserManagementComponent,
   ],
 
@@ -57,7 +62,13 @@ import { UserManagementComponent } from './views/user-management/user-management
     EffectsModule.forRoot([AuthEffects]),
     ToastrModule.forRoot(),
   ],
-  providers: [AuthGuard, LoggedInAuthGuard],
-  bootstrap: [AppComponent],
+  providers: [AuthGuard,LoggedInAuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
