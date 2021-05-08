@@ -7,6 +7,7 @@ import { ReportsComponent } from '../views/reports/reports.component';
 import { AuthGuard } from '../guard/auth.guard';
 import { RegisterComponent } from '../views/register/register.component';
 import { LoggedInAuthGuard } from '../guard/loggedin.guard';
+import { UserManagementComponent } from '../views/user-management/user-management.component';
 
 const routes: Routes = [
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'tests', component: DashboardComponent },
-      { path: 'users', component: DashboardComponent },
+      { path: 'users', component: UserManagementComponent },
     ],
     canActivate: [AuthGuard],
   },

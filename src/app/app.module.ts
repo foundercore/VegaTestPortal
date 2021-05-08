@@ -24,6 +24,7 @@ import { StoreModule } from '@ngrx/store';
 import { AuthEffects } from './state_management/_effects/auth.effects';
 import { AppReducer } from './state_management/_reducers/auth.reducers';
 import { LoggedInAuthGuard } from './guard/loggedin.guard';
+import { UserManagementComponent } from './views/user-management/user-management.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { LoggedInAuthGuard } from './guard/loggedin.guard';
     HeaderComponent,
     UploadQuestionsComponent,
     RegisterComponent,
+    UserManagementComponent,
   ],
 
   imports: [
@@ -55,7 +57,7 @@ import { LoggedInAuthGuard } from './guard/loggedin.guard';
     EffectsModule.forRoot([AuthEffects]),
     ToastrModule.forRoot(),
   ],
-  providers: [AuthGuard,LoggedInAuthGuard],
-  bootstrap: [AppComponent]
+  providers: [AuthGuard, LoggedInAuthGuard],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
