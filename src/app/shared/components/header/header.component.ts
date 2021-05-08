@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
+
 export class HeaderComponent implements OnInit {
   constructor(private router: Router) {}
   ngOnInit(): void {}
