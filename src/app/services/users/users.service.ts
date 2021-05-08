@@ -13,10 +13,6 @@ export class UserService extends BaseService {
   }
   getUsers(): Observable<any> {
     const url = `${this.BASE_SERVICE_URL}/api/v1/users`;
-    let headers = new HttpHeaders({
-      Authorization: 'Basic ' + btoa('test@demo.com:Pass@123'),
-    });
-    let options = { headers: headers };
-    return this.http.get<any>(url, options);
+    return this.http.get<any>(url);
   }
 }
