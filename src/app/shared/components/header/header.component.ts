@@ -10,6 +10,8 @@ import { AppState } from 'src/app/state_management/_states/auth.state';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
+
 export class HeaderComponent implements OnInit {
 
   constructor(
