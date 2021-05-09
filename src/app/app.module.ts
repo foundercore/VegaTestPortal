@@ -27,6 +27,7 @@ import { LoggedInAuthGuard } from './guard/loggedin.guard';
 import { QuestionManagementComponent } from './views/questions/question-management/question-management.component';
 import { TokenInterceptor } from './core/token-interceptor';
 import { QuestionBulkUploadDialogComponent } from './views/questions/question-bulk-upload-dialog/question-bulk-upload-dialog.component';
+import { UserManagementComponent } from './views/user-management/user-management.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { QuestionBulkUploadDialogComponent } from './views/questions/question-bu
     RegisterComponent,
     QuestionManagementComponent,
     QuestionBulkUploadDialogComponent,
+    UserManagementComponent,
   ],
 
   imports: [
@@ -69,4 +71,4 @@ import { QuestionBulkUploadDialogComponent } from './views/questions/question-bu
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
