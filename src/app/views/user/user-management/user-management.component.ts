@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { ToastrService } from 'ngx-toastr';
 import { IUserModel } from 'src/app/models/user/user-model';
 import { UserService } from 'src/app/services/users/users.service';
 import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
@@ -27,7 +28,11 @@ export class UserManagementComponent implements OnInit {
 
   checkedUserList: Array<IUserModel> = [];
 
-  constructor(private userService: UserService, public dialog: MatDialog) {
+  constructor(
+    private userService: UserService,
+    public dialog: MatDialog,
+    private toastr: ToastrService
+  ) {
     userService.getUsers().subscribe(
       (data) => {
         this.isLoading = false;
@@ -58,6 +63,23 @@ export class UserManagementComponent implements OnInit {
       );
     console.log(this.checkedUserList);
   }
+
+  deleteUser(): void {
+    if (!this.checkedUserList.length) return;
+    const userToDelete = this.checkedUserList[0];
+    this.userService.deleteUser(userToDelete.userName).subscribe(
+      (data) => {
+        this.checkedUserList.shift();
+        this.userList.splice(
+          this.userList.findIndex((u) => u.email == userToDelete.email),
+          1
+        );
+        this.toastr.success(`User removed.`);
+      },
+      (err) => this.toastr.error('Unable to delete user')
+    );
+  }
+
   performGridAction(type?: string) {
     switch (type) {
       case 'upload':
