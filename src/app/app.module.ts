@@ -27,9 +27,10 @@ import { LoggedInAuthGuard } from './guard/loggedin.guard';
 import { QuestionManagementComponent } from './views/questions/question-management/question-management.component';
 import { TokenInterceptor } from './core/token-interceptor';
 import { QuestionBulkUploadDialogComponent } from './views/questions/question-bulk-upload-dialog/question-bulk-upload-dialog.component';
-import { UserManagementComponent } from './views/user-management/user-management.component';
+import { UserManagementComponent } from './views/user/user-management/user-management.component';
+import { UserBulkUploadDialogComponent } from './views/user/user-bulk-upload-dialog/user-bulk-upload-dialog.component';
+import { AddUserDialogComponent } from './views/user/add-user-dialog/add-user-dialog.component';
 import { ProfileComponent } from './views/users/profile/profile.component';
-
 
 @NgModule({
   declarations: [
@@ -46,6 +47,8 @@ import { ProfileComponent } from './views/users/profile/profile.component';
     QuestionManagementComponent,
     QuestionBulkUploadDialogComponent,
     UserManagementComponent,
+    UserBulkUploadDialogComponent,
+    AddUserDialogComponent,
     ProfileComponent,
   ],
 
@@ -65,13 +68,15 @@ import { ProfileComponent } from './views/users/profile/profile.component';
     EffectsModule.forRoot([AuthEffects]),
     ToastrModule.forRoot(),
   ],
-  providers: [AuthGuard,LoggedInAuthGuard,
+  providers: [
+    AuthGuard,
+    LoggedInAuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
-      multi: true
+      multi: true,
     },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

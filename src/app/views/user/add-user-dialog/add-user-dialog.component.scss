@@ -1,0 +1,19 @@
+.title {
+  border-bottom: 1px solid grey;
+  border-width: medium;
+  button {
+    float: right;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+}
+
+.add-user-content {
+  width: 700px;
+  .example-container {
+    display: flex;
+    justify-content: space-around;
+  }
+}
