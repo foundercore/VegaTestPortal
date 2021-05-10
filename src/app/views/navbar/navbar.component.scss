@@ -39,6 +39,9 @@
   width: 95%;
   display: flex;
   margin-bottom: 0.8em;
+  margin-top: 72px;
+  position: relative;
+  left: 0px;
   cursor: pointer;
   justify-content: center;
   align-items: center;
@@ -60,4 +63,5 @@
 }
 .nav__icon {
   margin-right: 16px;
+  color: #2596be;
 }
