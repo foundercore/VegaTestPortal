@@ -28,6 +28,8 @@ import { QuestionManagementComponent } from './views/questions/question-manageme
 import { TokenInterceptor } from './core/token-interceptor';
 import { QuestionBulkUploadDialogComponent } from './views/questions/question-bulk-upload-dialog/question-bulk-upload-dialog.component';
 import { UserManagementComponent } from './views/user-management/user-management.component';
+import { ProfileComponent } from './views/users/profile/profile.component';
+
 
 @NgModule({
   declarations: [
@@ -44,6 +46,7 @@ import { UserManagementComponent } from './views/user-management/user-management
     QuestionManagementComponent,
     QuestionBulkUploadDialogComponent,
     UserManagementComponent,
+    ProfileComponent,
   ],
 
   imports: [
