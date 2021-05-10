@@ -1,0 +1,19 @@
+.bulk-upload-title {
+  border-bottom: 1px solid grey;
+  border-width: medium;
+  button {
+    float: right;
+    background: none;
+    border: none;
+    outline: none;
+  }
+}
+
+.bulk-upload-content {
+  padding: 15px;
+  width: 700px;
+}
+
+.bulk-upload-bottom {
+  float: right;
+}

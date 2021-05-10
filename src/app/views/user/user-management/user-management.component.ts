@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { IUserModel } from 'src/app/models/user/user-model';
 import { UserService } from 'src/app/services/users/users.service';
+import { UserBulkUploadDialogComponent } from '../user-bulk-upload-dialog/user-bulk-upload-dialog.component';
 
 @Component({
   selector: 'app-user-managemnt',
@@ -55,5 +56,16 @@ export class UserManagementComponent implements OnInit {
         1
       );
     console.log(this.checkedUserList);
+  }
+  performGridAction(type?: string) {
+    if (type === 'upload') {
+      this.openBulkUploadDialog();
+    }
+  }
+  openBulkUploadDialog() {
+    const dialogRef = this.dialog.open(UserBulkUploadDialogComponent);
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 }

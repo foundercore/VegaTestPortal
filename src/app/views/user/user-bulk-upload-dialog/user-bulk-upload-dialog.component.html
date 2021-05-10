@@ -1,0 +1,35 @@
+<h1 mat-dialog-title class="bulk-upload-title">
+  Bulk Upload - Question
+  <button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h1>
+<div mat-dialog-content>
+  <div class="bulk-upload-content">
+    <p>Question file:</p>
+    <div class="custom-file mb-3">
+      <input
+        (change)="onFileChange($event)"
+        type="file"
+        accept=".csv"
+        class="custom-file-input"
+        id="customFile"
+        name="filename"
+        #fileInput
+      />
+    </div>
+    <div *ngIf="file?.inProgress">
+      <div [@fadeInOut]="file?.state">
+        <mat-progress-bar [value]="file?.progress"></mat-progress-bar>
+      </div>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions class="bulk-upload-bottom">
+  <button mat-raised-button (click)="downloadTemplate()">
+    <mat-icon>cloud_download</mat-icon> Download Template
+  </button>
+  <button (click)="uploadTemplate()" mat-raised-button>
+    <mat-icon>cloud_upload</mat-icon> Upload
+  </button>
+</div>
