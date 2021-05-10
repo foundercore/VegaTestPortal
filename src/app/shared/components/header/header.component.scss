@@ -2,6 +2,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  left:-55px;
+  width: 100%;
+  padding: 0px 56px;
   border-bottom: 1px solid #d3d3d3;
   box-shadow: 0 2.8px 0 rgba(0, 0, 0, 0.034), 0 6.7px 0 rgba(0, 0, 0, 0.048);
  
@@ -63,4 +67,8 @@
 
 .show {display: block;}
 
-
+@media screen and (max-width: 360px) {
+  .header {
+    width: 118%;
+  }
+}

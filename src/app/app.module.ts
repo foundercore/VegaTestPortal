@@ -30,6 +30,7 @@ import { QuestionBulkUploadDialogComponent } from './views/questions/question-bu
 import { UserManagementComponent } from './views/user/user-management/user-management.component';
 import { UserBulkUploadDialogComponent } from './views/user/user-bulk-upload-dialog/user-bulk-upload-dialog.component';
 import { AddUserDialogComponent } from './views/user/add-user-dialog/add-user-dialog.component';
+import { ProfileComponent } from './views/users/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { AddUserDialogComponent } from './views/user/add-user-dialog/add-user-di
     UserManagementComponent,
     UserBulkUploadDialogComponent,
     AddUserDialogComponent,
+    ProfileComponent,
   ],
 
   imports: [
