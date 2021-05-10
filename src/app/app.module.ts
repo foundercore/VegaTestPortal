@@ -29,6 +29,7 @@ import { TokenInterceptor } from './core/token-interceptor';
 import { QuestionBulkUploadDialogComponent } from './views/questions/question-bulk-upload-dialog/question-bulk-upload-dialog.component';
 import { UserManagementComponent } from './views/user/user-management/user-management.component';
 import { UserBulkUploadDialogComponent } from './views/user/user-bulk-upload-dialog/user-bulk-upload-dialog.component';
+import { AddUserDialogComponent } from './views/user/add-user-dialog/add-user-dialog.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { UserBulkUploadDialogComponent } from './views/user/user-bulk-upload-dia
     QuestionBulkUploadDialogComponent,
     UserManagementComponent,
     UserBulkUploadDialogComponent,
+    AddUserDialogComponent,
   ],
 
   imports: [

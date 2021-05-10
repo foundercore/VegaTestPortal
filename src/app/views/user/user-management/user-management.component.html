@@ -6,7 +6,9 @@
         <mat-icon>delete_forever</mat-icon> Delete
       </button>
       <button mat-raised-button><mat-icon>edit</mat-icon> Edit</button>
-      <button mat-raised-button><mat-icon>add_circle</mat-icon> Add</button>
+      <button mat-raised-button (click)="performGridAction('add')">
+        <mat-icon>add_circle</mat-icon> Add
+      </button>
       <button mat-raised-button (click)="performGridAction('upload')">
         <mat-icon>cloud_upload</mat-icon> Upload
       </button>

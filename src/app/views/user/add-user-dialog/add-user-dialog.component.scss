@@ -1,4 +1,4 @@
-.bulk-upload-title {
+.title {
   border-bottom: 1px solid grey;
   border-width: medium;
   button {
@@ -10,11 +10,10 @@
   }
 }
 
-.bulk-upload-content {
-  padding: 15px;
+.add-user-content {
   width: 700px;
-}
-
-.bulk-upload-bottom {
-  float: right;
+  .example-container {
+    display: flex;
+    justify-content: space-around;
+  }
 }
