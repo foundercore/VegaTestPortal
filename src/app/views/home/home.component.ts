@@ -16,12 +16,6 @@ export class HomeComponent implements OnInit {
   prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData;
   }
-      /* When the user clicks on the button,
-        toggle between hiding and showing the dropdown content */
-  circleFunction() {
-    document.getElementById("mycircle")!.classList.toggle("show");
-   }
-   
 
 }
 
