@@ -1,10 +1,27 @@
 <div class="header">
-  <h1><img src="../../../../assets/images/app-logo.jpg" style="height: 65px; border-radius: 2.5px;"></h1>
+  <h1>
+    <img
+      src="../../../../assets/images/app-logo.jpg"
+      style="max-height:65px; border-radius: 2.5px"
+    />
+  </h1>
   <div class="circle">
-        <button onclick="circleFunction()" class="dropbtn"></button>
-      <div id="mycircle" class="circle-content">
-        <a href="#">View Profile</a>
-        <a href="#">Signin</a>
-    </div>
-   </div>
-
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      aria-label="User Profile"
+    >
+      <mat-icon>view_headline</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>menu</mat-icon>
+        <span>Profile</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>logout</mat-icon>
+        <span>Signout</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>
