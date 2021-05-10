@@ -27,7 +27,7 @@ import { LoggedInAuthGuard } from './guard/loggedin.guard';
 import { QuestionManagementComponent } from './views/questions/question-management/question-management.component';
 import { TokenInterceptor } from './core/token-interceptor';
 import { QuestionBulkUploadDialogComponent } from './views/questions/question-bulk-upload-dialog/question-bulk-upload-dialog.component';
-import { UserManagementComponent } from './views/user-management/user-management.component';
+import { UserManagementComponent } from './views/user/user-management/user-management.component';
 
 @NgModule({
   declarations: [
@@ -62,13 +62,15 @@ import { UserManagementComponent } from './views/user-management/user-management
     EffectsModule.forRoot([AuthEffects]),
     ToastrModule.forRoot(),
   ],
-  providers: [AuthGuard,LoggedInAuthGuard,
+  providers: [
+    AuthGuard,
+    LoggedInAuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
-      multi: true
+      multi: true,
     },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
