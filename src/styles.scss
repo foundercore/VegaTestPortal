@@ -16,22 +16,28 @@
 body {
   margin: 0em;
 }
-body::-webkit-scrollbar {
-  width: 1em;
-}
- 
-body::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  margin-top: 75px;
-  margin-left: 210px;
-}
- 
-body::-webkit-scrollbar-thumb {
-  background-color: darkgrey;
-  outline: 1px solid slategrey;
+
+body {
+  height: 100%;
+  overflow: hidden;
 }
 
+// body::-webkit-scrollbar {
+//   width: 1em;
+// }
+ 
+// body::-webkit-scrollbar-track {
+//   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+//   margin-top: 75px;
+//   margin-left: 210px;
+// }
+ 
+// body::-webkit-scrollbar-thumb {
+//   background-color: darkgrey;
+//   outline: 1px solid slategrey;
+// }
 
-.iconButton *.icon {
-  margin-right: 5px;
-}
+
+// .iconButton *.icon {
+//   margin-right: 5px;
+// }
