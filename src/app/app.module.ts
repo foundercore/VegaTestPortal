@@ -31,6 +31,8 @@ import { UserManagementComponent } from './views/user/user-management/user-manag
 import { UserBulkUploadDialogComponent } from './views/user/user-bulk-upload-dialog/user-bulk-upload-dialog.component';
 import { AddUserDialogComponent } from './views/user/add-user-dialog/add-user-dialog.component';
 import { ProfileComponent } from './views/users/profile/profile.component';
+import { AdminDashboardComponent } from './views/dashboard/admin-dashboard/admin-dashboard.component';
+import { StudentDashboardComponent } from './views/dashboard/student-dashboard/student-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,8 @@ import { ProfileComponent } from './views/users/profile/profile.component';
     UserBulkUploadDialogComponent,
     AddUserDialogComponent,
     ProfileComponent,
+    AdminDashboardComponent,
+    StudentDashboardComponent,
   ],
 
   imports: [
