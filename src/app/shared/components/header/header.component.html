@@ -1,9 +1,12 @@
 <div class="header">
   <h1>
+   <a [routerLink]="['./home']">
     <img
       src="../../../../assets/images/app-logo.jpg"
       style="max-height:65px; border-radius: 2.5px"
-    />
+    /></a
+  >
+    
   </h1>
   <div class="circle">
     <button
@@ -13,12 +16,12 @@
     >
       <mat-icon>view_headline</mat-icon>
     </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item>
+    <mat-menu #menu="matMenu"  >
+      <button mat-menu-item (click)="showProfile()">
         <mat-icon>menu</mat-icon>
         <span>Profile</span>
       </button>
-      <button mat-menu-item>
+      <button mat-menu-item  (click)="logout()">
         <mat-icon>logout</mat-icon>
         <span>Signout</span>
       </button>
