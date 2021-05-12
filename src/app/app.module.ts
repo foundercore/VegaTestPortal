@@ -29,6 +29,7 @@ import { TokenInterceptor } from './core/token-interceptor';
 import { QuestionBulkUploadDialogComponent } from './views/questions/question-bulk-upload-dialog/question-bulk-upload-dialog.component';
 import { UserManagementComponent } from './views/user-management/user-management.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { QuestionFormComponent } from './views/questions/question-form/question-form.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     QuestionManagementComponent,
     QuestionBulkUploadDialogComponent,
     UserManagementComponent,
+    QuestionFormComponent
   ],
 
   imports: [
