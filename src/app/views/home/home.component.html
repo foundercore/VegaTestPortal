@@ -1,9 +1,14 @@
-<app-header></app-header>
-<div class="home">
-  <!-- TODO Update the css logic to bring all the css setup here instead of having it split in app navbar -->
-  <app-navbar></app-navbar>
-  <main [@routeAnimations]="prepareRoute(outlet)">
-    <router-outlet #outlet="outlet"></router-outlet>
-  </main>
+<div class="container">
+  <div class="appHeader">
+    <app-header></app-header>
+  </div>
+  <div class="content">
+    <!-- TODO Update the css logic to bring all the css setup here instead of having it split in app navbar -->
+    <app-navbar></app-navbar>
+    <main [@routeAnimations]="prepareRoute(outlet)">
+      <router-outlet #outlet="outlet"></router-outlet>
+    </main>
+
+  </div>
 
 </div>
