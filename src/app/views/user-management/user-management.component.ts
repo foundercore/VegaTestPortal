@@ -31,7 +31,7 @@ export class UserManagementComponent implements OnInit {
       return null;
     });
   }
-  checkboxChnaged(e: any, email: string): void {
+  checkboxChnaged(e: any, email: string | undefined): void {
     if (e.target.checked)
       this.checkedUserList.push(
         this.userList.find((user) => user.email == email)!
