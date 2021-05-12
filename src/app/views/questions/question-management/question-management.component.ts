@@ -9,6 +9,9 @@ import {SelectionModel} from '@angular/cdk/collections';
 import { MatTable } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { QuestionBulkUploadDialogComponent } from '../question-bulk-upload-dialog/question-bulk-upload-dialog.component';
+import { QuestionFormComponent } from '../question-form/question-form.component';
+import { Router , Params, ActivatedRoute} from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -20,7 +23,7 @@ import { QuestionBulkUploadDialogComponent } from '../question-bulk-upload-dialo
 export class QuestionManagementComponent implements OnInit,AfterViewInit  {
 
 
-  displayedColumns: string[] = ['select', 'name', 'description', 'subject','explanation_added','tags'];
+  displayedColumns: string[] = ['select', 'name', 'description', 'subject','explanation_added','tags','actions'];
 
   filteredAndPagedIssues!: Observable<QuestionModel[]>;
 
@@ -42,11 +45,14 @@ export class QuestionManagementComponent implements OnInit,AfterViewInit  {
 
   constructor(
     private questionService: QuestionManagementService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router,
+    private toastr: ToastrService
     ) {}
 
 
   ngOnInit(): void {
+
   }
 
 
@@ -65,8 +71,8 @@ export class QuestionManagementComponent implements OnInit,AfterViewInit  {
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
           this.totalNumberOfRecords = 100;
-          return data.map(x => {
-            x.explanation_added = x.answer?.explanation?.length != 0 ? "Yes": "No";
+          return data.questions.map(x => {
+            x.explanation_added = x.explanation?.length != 0 ? "Yes": "No";
             return x;
           });
         }),
@@ -84,9 +90,19 @@ export class QuestionManagementComponent implements OnInit,AfterViewInit  {
   }
 
 
-  performGridAction(type?: string){
+  performGridAction(type?: string,row?:any){
       if(type === 'upload'){
           this.openBulkUploadDialog();
+      } else if (type === 'add'){
+        this.router.navigate(['home/questionmanagement/add']);
+      } else if(type === 'view'){
+
+      }else if(type === 'edit'){
+          this.router.navigate(['home/questionmanagement/' + row.id?.questionId + '/edit']);
+      }else if(type === 'delete'){
+        this.deleteQuestion(row);
+      } else if(type === 'bulk_delete'){
+          this.bulkDeletQuestions();
       }
   }
 
@@ -115,4 +131,31 @@ export class QuestionManagementComponent implements OnInit,AfterViewInit  {
       console.log(`Dialog result: ${result}`);
     });
   }
+
+  deleteQuestion(row: QuestionModel){
+      this.questionService.deletQuestion(row.id?.questionId).subscribe(resp => {
+          this.toastr.success("Question Delete SuccessFully");
+          this.resetPaging();
+      },
+      error =>{
+          this.toastr.error(error.error.apierror.message);
+      }
+      )
+  }
+
+  bulkDeletQuestions(){
+    if(this.selection.selected.length == 0){
+      this.toastr.error("Please select atleast one Question");
+    } else {
+      let questionIdlList = this.selection.selected.map(x => x.id?.questionId);
+      this.questionService.bulkDeletQuestions(questionIdlList).subscribe(resp => {
+        this.toastr.success("Question Delete SuccessFully");
+        this.selection.clear();
+        this.resetPaging();
+    },error =>{
+        this.toastr.error(error.error.apierror.message);
+    })
+    }
+
+}
 }

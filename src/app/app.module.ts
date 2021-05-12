@@ -28,6 +28,8 @@ import { QuestionManagementComponent } from './views/questions/question-manageme
 import { TokenInterceptor } from './core/token-interceptor';
 import { QuestionBulkUploadDialogComponent } from './views/questions/question-bulk-upload-dialog/question-bulk-upload-dialog.component';
 import { UserManagementComponent } from './views/user-management/user-management.component';
+import { QuestionFormComponent } from './views/questions/question-form/question-form.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,7 @@ import { UserManagementComponent } from './views/user-management/user-management
     QuestionManagementComponent,
     QuestionBulkUploadDialogComponent,
     UserManagementComponent,
+    QuestionFormComponent
   ],
 
   imports: [
@@ -58,6 +61,7 @@ import { UserManagementComponent } from './views/user-management/user-management
     FormsModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    AngularEditorModule,
     StoreModule.forRoot(AppReducer, {}),
     EffectsModule.forRoot([AuthEffects]),
     ToastrModule.forRoot(),
