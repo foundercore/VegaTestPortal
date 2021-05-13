@@ -15,4 +15,8 @@ export class UserService extends BaseService {
     const url = `${this.BASE_SERVICE_URL}/api/v1/users`;
     return this.http.get<any>(url);
   }
+  deleteUser(userName: string): Observable<any> {
+    const url = `${this.BASE_SERVICE_URL}/api/v1/users/${userName}`;
+    return this.http.delete<any>(url);
+  }
 }

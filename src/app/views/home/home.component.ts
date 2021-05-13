@@ -16,4 +16,6 @@ export class HomeComponent implements OnInit {
   prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData;
   }
+
 }
+
