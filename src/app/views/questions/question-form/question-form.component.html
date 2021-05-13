@@ -89,17 +89,11 @@
               <mat-option *ngFor="let questionType of questionTypeList" [value]="questionType">{{questionType}}</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field appearance="outline" class="w-75-field form-field-padding">
+          <mat-form-field appearance="outline" class="w-25-field form-field-padding">
             <mat-label>Tags</mat-label>
-            <mat-chip-list #chipList aria-label="Tag selection">
-              <mat-chip *ngFor="let tag of tags" [selectable]="true" [removable]="true" (removed)="removeTag(tag)">
-                {{tag}}
-                <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
-              </mat-chip>
-              <input placeholder="New tag..." [matChipInputFor]="chipList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
-                (matChipInputTokenEnd)="addTag($event)">
-            </mat-chip-list>
+            <mat-select formControlName="tag" multiple>
+              <mat-option *ngFor="let tag of tags" [value]="tag">{{tag}}</mat-option>
+            </mat-select>
           </mat-form-field>
           <mat-form-field appearance="outline" class="w-50-field form-field-padding">
             <mat-label>Explanation</mat-label>

@@ -14,15 +14,13 @@ export class QuestionManagementService  extends BaseService {
       super();
   }
 
-  getQuestionList(sort: string, order: string, page: number):Observable<QuestionPaginatedResponse>{
+  getQuestionList(searchQuestion:SearchQuestion):Observable<QuestionPaginatedResponse>{
     const url = `${this.BASE_SERVICE_URL}/api/v1/question/search`;
-    const searchQuestion = new SearchQuestion("0",100)
     return this.http.post<any>(url, searchQuestion);
   }
 
   getQuestion(questionId: string):Observable<QuestionModel>{
     const url = `${this.BASE_SERVICE_URL}/api/v1/question/${questionId}`;
-    const searchQuestion = new SearchQuestion("0",100)
     return this.http.get<any>(url);
   }
 
@@ -39,20 +37,13 @@ export class QuestionManagementService  extends BaseService {
 
   deletQuestion(questionId: string | undefined){
     const url = `${this.BASE_SERVICE_URL}/api/v1/question/${questionId}/remove`;
-    return this.http.post<any>(url,{});
+    return this.http.delete<any>(url);
   }
 
   bulkDeletQuestions(questionIdlist: any[]){
     const url = `${this.BASE_SERVICE_URL}/api/v1/question/bulk-remove`;
     return this.http.post<any>(url, questionIdlist);
   }
-
-
-  getQuestionType():Observable<string[]>{
-    const url = `${this.BASE_SERVICE_URL}/api/v1/question/configured-question-types`;
-    return this.http.post<any>(url,{});
-  }
-
 
   bulkUploadQuestion(file: any){
     const fd = new FormData();
@@ -65,4 +56,30 @@ export class QuestionManagementService  extends BaseService {
 
      return this.http.request(req);
   }
+
+  getQuestionTags():Observable<string[]>{
+    const url = `${this.BASE_SERVICE_URL}/api/v1/question/tags`;
+    return this.http.get<any>(url);
+  }
+
+  getQuestionType():Observable<string[]>{
+    const url = `${this.BASE_SERVICE_URL}/api/v1/question/types`;
+    return this.http.get<any>(url);
+  }
+
+  getQuestionSubjects():Observable<string[]>{
+    const url = `${this.BASE_SERVICE_URL}/api/v1/question/subjects`;
+    return this.http.get<any>(url);
+  }
+
+  getQuestionTopics():Observable<string[]>{
+    const url = `${this.BASE_SERVICE_URL}/api/v1/question/topics`;
+    return this.http.get<any>(url);
+  }
+
+  getQuestionSubtopics():Observable<string[]>{
+    const url = `${this.BASE_SERVICE_URL}/api/v1/question/sub-topics`;
+    return this.http.get<any>(url);
+  }
+
 }
