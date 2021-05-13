@@ -1,4 +1,4 @@
 export class QuestionOption {
-  key:string | undefined;
+  key!:string ;
   value:string | undefined;
 }

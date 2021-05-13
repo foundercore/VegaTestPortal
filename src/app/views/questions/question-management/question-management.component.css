@@ -43,6 +43,9 @@ table {
   max-width: 124px;
 }
 
+.mat-column-actions{
+  max-width: 50px;
+}
 
 .question-list-grid{
   margin: 20px;
@@ -65,4 +68,10 @@ table {
 
 .question-grid-action button {
   margin: 0px 10px;
+}
+
+
+.action-btn{
+  margin-right: 10px;
+  cursor: pointer;
 }

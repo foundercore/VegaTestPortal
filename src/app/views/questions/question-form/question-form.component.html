@@ -1,0 +1,179 @@
+<mat-card style="margin: 20px;width: calc(100% - 90px);">
+  <mat-card-header>
+    <mat-card-title *ngIf="isNewForm">Add Question</mat-card-title>
+    <mat-card-title *ngIf="!isNewForm">Edit Question</mat-card-title>
+  </mat-card-header>
+  <mat-horizontal-stepper linear #stepper>
+    <mat-step [stepControl]="questionFirstFormGrp">
+      <form [formGroup]="questionFirstFormGrp">
+        <ng-template matStepLabel>Basic Information</ng-template>
+        <div class="w-100-div flex-container">
+             <mat-form-field appearance="outline" class="w-25-field form-field-padding">
+              <mat-label>Subject</mat-label>
+              <mat-select formControlName="subject" >
+                <mat-option *ngFor="let subject of subjectList" [value]="subject">{{subject}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-25-field form-field-padding">
+              <mat-label>Topic</mat-label>
+              <mat-select formControlName="topic" >
+                <mat-option *ngFor="let topic of topicList" [value]="topic">{{topic}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-25-field form-field-padding">
+              <mat-label>Sub Topic</mat-label>
+              <mat-select formControlName="subTopic" >
+                <mat-option *ngFor="let subTopic of subTopicList" [value]="subTopic">{{subTopic}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-25-field form-field-padding">
+              <mat-label>Difficulty Level</mat-label>
+              <mat-select formControlName="difficulty" >
+                <mat-option *ngFor="let level of difficultyLevel" [value]="level">{{level}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+           <div class="w-100-div" style="margin-bottom: 20px;">
+            <mat-label>Name</mat-label>
+            <angular-editor id="name_editor" formControlName="name" [config]="descriptionEditorconfig">
+            </angular-editor>
+          </div>
+          <div class="w-100-div" style="margin-bottom: 20px;">
+            <mat-label>Description</mat-label>
+            <angular-editor id="description_editor" formControlName="description" [config]="descriptionEditorconfig">
+            </angular-editor>
+          </div>
+        </div>
+        <div>
+          <button mat-button (click)="cancel()"  class="cancel-btn">Cancel</button>
+          <button mat-button matStepperNext class="next-save-btn">Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="questionSecondFormGrp">
+      <form [formGroup]="questionSecondFormGrp">
+        <ng-template matStepLabel>Marking System</ng-template>
+        <div class="w-50-div flex-container">
+          <div class="w-equal-field">
+            <mat-form-field appearance="outline" class="form-field-padding">
+              <mat-label>Positive Mark</mat-label>
+              <input matInput type="number" min="0" max="100" formControlName="positiveMark">
+            </mat-form-field>
+          </div>
+          <div class="w-equal-field">
+            <mat-form-field appearance="outline" class="form-field-padding">
+              <mat-label>Negative Mark</mat-label>
+              <input matInput type="number" min="0" max="100" formControlName="negativeMark">
+            </mat-form-field>
+          </div>
+          <div class="w-equal-field">
+            <mat-form-field appearance="outline" class="form-field-padding">
+              <mat-label>Skip Mark</mat-label>
+              <input matInput type="number" min="0" max="100" formControlName="skipMark">
+            </mat-form-field>
+          </div>
+        </div>
+        <div>
+          <button mat-button (click)="cancel()" class="cancel-btn" >Cancel</button>
+          <button mat-button matStepperPrevious class="back-btn">Back</button>
+          <button mat-button matStepperNext class="next-save-btn">Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="questionThirdFormGrp">
+      <form [formGroup]="questionThirdFormGrp">
+        <ng-template matStepLabel>Question Configuration</ng-template>
+        <div class="w-100-div">
+          <mat-form-field appearance="outline" class="w-25-field form-field-padding">
+            <mat-label>Question Type</mat-label>
+            <mat-select formControlName="type">
+              <mat-option *ngFor="let questionType of questionTypeList" [value]="questionType">{{questionType}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-75-field form-field-padding">
+            <mat-label>Tags</mat-label>
+            <mat-chip-list #chipList aria-label="Tag selection">
+              <mat-chip *ngFor="let tag of tags" [selectable]="true" [removable]="true" (removed)="removeTag(tag)">
+                {{tag}}
+                <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="New tag..." [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                (matChipInputTokenEnd)="addTag($event)">
+            </mat-chip-list>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-50-field form-field-padding">
+            <mat-label>Explanation</mat-label>
+            <input matInput type="text" formControlName="explanation">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-50-field form-field-padding">
+            <mat-label>Book Reference</mat-label>
+            <input matInput type="text" formControlName="bookReference">
+          </mat-form-field>
+        </div>
+        <div class="w-100-div" style="margin-bottom: 20px;">
+          <mat-label>Passage</mat-label>
+          <angular-editor id="passage_editor" formControlName="passage" [config]="descriptionEditorconfig">
+          </angular-editor>
+        </div>
+      </form>
+      <div class="w-100-div" style="margin-bottom: 20px;">
+        <mat-label>Question Options</mat-label>
+        <button mat-icon-button color="primary" aria-label="Example icon-button with a heart icon"
+          (click)="addOption()">
+          <mat-icon>add</mat-icon>
+        </button>
+
+        <div class="w-100-div flex-container">
+          <div class="w-50-div" *ngFor="let option of options; let i = index">
+           <div style="margin: 10px;">
+            <button mat-icon-button color="primary" aria-label="Example icon-button with a heart icon"
+              (click)="removeOption(i,option)">
+              <mat-label>Option - {{i + 1}}</mat-label>
+              <mat-icon>delete</mat-icon>
+            </button>
+            <angular-editor id="answer_option_{{i}}" [(ngModel)]="option.value" [config]="descriptionEditorconfig">
+            </angular-editor>
+          </div>
+
+
+          </div>
+        </div>
+
+      </div>
+      <div>
+        <button mat-button (click)="cancel()" class="cancel-btn">Cancel</button>
+        <button mat-button matStepperPrevious class="back-btn">Back</button>
+        <button mat-button matStepperNext class="next-save-btn">Next</button>
+      </div>
+
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Answer Configuration</ng-template>
+      <form [formGroup]="questionForthFormGrp">
+          <mat-form-field appearance="outline" class="w-100-field form-field-padding">
+            <mat-label>Answer Text</mat-label>
+            <input matInput type="text" formControlName="answerText">
+          </mat-form-field>
+      </form>
+
+        <label id="example-radio-group-label">Mark Correct Answer Option</label>
+        <div class="w-100-div flex-container">
+          <div [formGroup]="answerOptionFormGrp"  class="w-50-div" style=" margin-bottom: 20px;align-items: center;display: flex;" *ngFor="let option of options; let i = index">
+            <div><mat-checkbox style="margin: 0 12px;" formControlName="{{option.key}}"></mat-checkbox></div>
+            <div class="answer-option">
+              <div [innerHTML]="option.value"></div>
+            </div>
+          </div>
+        </div>
+
+      <div>
+        <button mat-button (click)="cancel()" class="cancel-btn">Cancel</button>
+        <button mat-button matStepperPrevious class="back-btn">Back</button>
+        <button *ngIf="isNewForm" mat-button (click)="createQuestion()" class="next-save-btn">Save</button>
+        <button *ngIf="!isNewForm" mat-button (click)="updateQuestion()" class="next-save-btn">Update</button>
+
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+
+</mat-card>

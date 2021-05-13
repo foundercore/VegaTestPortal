@@ -1,3 +1,4 @@
+import { QuestionModel } from 'src/app/models/questions/question-model';
 export class SearchQuestion {
   filename: string | undefined;
   nameRegexPattern: string | undefined;
@@ -13,7 +14,18 @@ export class SearchQuestion {
   updateStartTime: string | undefined;
 
   constructor(paginatedRowIdValue:string,pageSizeValue:number) {
-    this.paginatedRowId = paginatedRowIdValue;
+    //this.paginatedRowId = paginatedRowIdValue;
     this.pageSize = pageSizeValue;
   }
+}
+
+
+
+
+
+export interface QuestionPaginatedResponse {
+  pageSize: number | undefined;
+  paginatedRowId: string | undefined;
+  questions: QuestionModel[]
+  totalRecords: number | undefined;
 }
