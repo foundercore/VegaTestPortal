@@ -8,8 +8,8 @@ import { AuthGuard } from '../guard/auth.guard';
 import { RegisterComponent } from '../views/register/register.component';
 import { LoggedInAuthGuard } from '../guard/loggedin.guard';
 import { QuestionManagementComponent } from '../views/questions/question-management/question-management.component';
-import { UserManagementComponent } from '../views/user-management/user-management.component';
 import { QuestionFormComponent } from '../views/questions/question-form/question-form.component';
+import { UserManagementComponent } from '../views/user/user-management/user-management.component';
 
 const routes: Routes = [
   {

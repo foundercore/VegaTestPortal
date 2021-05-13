@@ -11,19 +11,18 @@ import {
   HttpEventType,
   HttpRequest,
 } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { catchError, last, map, tap } from 'rxjs/operators';
 import { FileUploadModel } from 'src/app/models/file/file-upload-model';
 import { BaseService } from 'src/app/services/base.service';
-import { QuestionManagementService } from 'src/app/services/question-management/question-management.service';
 
 @Component({
-  selector: 'app-question-bulk-upload-dialog',
-  templateUrl: './question-bulk-upload-dialog.component.html',
-  styleUrls: ['./question-bulk-upload-dialog.component.scss'],
+  selector: 'app-user-bulk-upload-dialog',
+  templateUrl: './user-bulk-upload-dialog.component.html',
+  styleUrls: ['./user-bulk-upload-dialog.component.scss'],
   animations: [
     trigger('fadeInOut', [
       state('in', style({ opacity: 100 })),
@@ -31,21 +30,26 @@ import { QuestionManagementService } from 'src/app/services/question-management/
     ]),
   ],
 })
-export class QuestionBulkUploadDialogComponent extends BaseService {
+export class UserBulkUploadDialogComponent extends BaseService {
   public file: FileUploadModel | undefined;
 
-  public fileName = 'Choose file';
-
   constructor(
-    private questionManagementService: QuestionManagementService,
+    private http: HttpClient,
     private toastr: ToastrService,
-    private dialogRef: MatDialogRef<QuestionBulkUploadDialogComponent>
+    private dialogRef: MatDialogRef<UserBulkUploadDialogComponent>
   ) {
     super();
   }
 
-  ngOnInit() {}
+  @ViewChild('fileInput') input: any;
 
+  ngOnInit(): void {}
+  downloadTemplate() {
+    let link = document.createElement('a');
+    link.download = 'user_bulk_upload_sample.csv';
+    link.href = 'assets/templates/user_bulk_upload_sample.csv';
+    link.click();
+  }
   onFileChange(event: any) {
     if (event.target.files.length !== 0) {
       this.file = {
@@ -56,24 +60,23 @@ export class QuestionBulkUploadDialogComponent extends BaseService {
         canRetry: false,
         canCancel: true,
       };
-      this.fileName = event.target.files[0].name;
-    } else {
-      this.fileName = 'Choose file';
     }
   }
-
-  downloadTemplate() {
-    let link = document.createElement('a');
-    link.download = 'question_bulk_upload_sample.csv';
-    link.href = 'assets/templates/question_bulk_upload_sample.csv';
-    link.click();
-  }
-
   uploadTemplate() {
+    if (!this.file) return;
+    const fd = new FormData();
+    fd.append('file', this.file!.data);
+    const url = `${this.BASE_SERVICE_URL}/api/v1/users/bulk-upload`;
+
+    const req = new HttpRequest('POST', url, fd, {
+      reportProgress: true,
+    });
 
     this.file!.inProgress = true;
-    this.file!.sub = this.questionManagementService.bulkUploadQuestion(this.file).pipe(
-        map((event : any) => {
+    this.file!.sub = this.http
+      .request(req)
+      .pipe(
+        map((event: any) => {
           switch (event.type) {
             case HttpEventType.UploadProgress:
               this.file!.progress = Math.round(
@@ -90,16 +93,16 @@ export class QuestionBulkUploadDialogComponent extends BaseService {
           this.file!.inProgress = false;
           this.file!.canRetry = true;
           this.toastr.error(`${this.file!.data.name} upload failed.`);
+          const { data } = this.file!;
           this.file = undefined;
-          this.fileName = 'Choose file';
-          return of(`${this.file!.data.name} upload failed.`);
+          this.input.nativeElement.value = null;
+          return of(`${data.name} upload failed.`);
         })
       )
       .subscribe((event: any) => {
         if (typeof event === 'object') {
           this.toastr.success(`${this.file!.data.name} upload successfully.`);
           this.file = undefined;
-          this.fileName = 'Choose file';
           this.dialogRef.close();
         }
       });

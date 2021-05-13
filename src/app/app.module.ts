@@ -27,9 +27,14 @@ import { LoggedInAuthGuard } from './guard/loggedin.guard';
 import { QuestionManagementComponent } from './views/questions/question-management/question-management.component';
 import { TokenInterceptor } from './core/token-interceptor';
 import { QuestionBulkUploadDialogComponent } from './views/questions/question-bulk-upload-dialog/question-bulk-upload-dialog.component';
-import { UserManagementComponent } from './views/user-management/user-management.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { QuestionFormComponent } from './views/questions/question-form/question-form.component';
+import { UserManagementComponent } from './views/user/user-management/user-management.component';
+import { UserBulkUploadDialogComponent } from './views/user/user-bulk-upload-dialog/user-bulk-upload-dialog.component';
+import { AddUserDialogComponent } from './views/user/add-user-dialog/add-user-dialog.component';
+import { ProfileComponent } from './views/users/profile/profile.component';
+import { AdminDashboardComponent } from './views/dashboard/admin-dashboard/admin-dashboard.component';
+import { StudentDashboardComponent } from './views/dashboard/student-dashboard/student-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +51,12 @@ import { QuestionFormComponent } from './views/questions/question-form/question-
     QuestionManagementComponent,
     QuestionBulkUploadDialogComponent,
     UserManagementComponent,
-    QuestionFormComponent
+    QuestionFormComponent,
+    UserBulkUploadDialogComponent,
+    AddUserDialogComponent,
+    ProfileComponent,
+    AdminDashboardComponent,
+    StudentDashboardComponent,
   ],
 
   imports: [
@@ -66,13 +76,15 @@ import { QuestionFormComponent } from './views/questions/question-form/question-
     EffectsModule.forRoot([AuthEffects]),
     ToastrModule.forRoot(),
   ],
-  providers: [AuthGuard,LoggedInAuthGuard,
+  providers: [
+    AuthGuard,
+    LoggedInAuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
-      multi: true
+      multi: true,
     },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
