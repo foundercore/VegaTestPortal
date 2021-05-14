@@ -1,6 +1,6 @@
 <div class="flex-container">
 
-        <div style="width:250px; height: 260px;">
+        <div style="width:320px; height: 340px;">
             <canvas mdbChart
                 [chartType]="chartType"
                 [datasets]="chartDatasets"
@@ -14,7 +14,7 @@
           </div>
 
     
-        <div style="height: 260px; width: 510px;">
+        <div style="height: 340px; width: 1000px;">
             <canvas mdbChart
                   [chartType]="barChartType"
                   [datasets]="barChartDatasets"
@@ -26,7 +26,7 @@
                   (chartClick)="barChartClicked($event)">
               </canvas> 
           </div>
-              <div class="box_3" style= "width: 300px; height: 500px;">
+              <div class="box_3" style= "height: 500px;flex: 50%;">
                 <div style="width:120px; height: 120px; margin-left: 80px;">
                   <div class="extra_box" style="margin-left: -75px; font-size: 10px; font-weight: bold;">Average student Details</div>
                   <canvas mdbChart
@@ -79,7 +79,7 @@
               </div>
      </div>
       <div class="flex-container">
-              <div class="tab_content" style="height: 230px; width: 780px; margin-top: -230px; margin-left: 10px;">
+              <div class="tab_content" style="height: 250px; width:890px; margin-top: -150px; margin-left: 20px; ">
                 <table id="tab_admin"><b>Student Details</b>
                   <tr>
                     <th>Student Name</th>

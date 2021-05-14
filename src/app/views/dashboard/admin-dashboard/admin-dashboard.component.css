@@ -1,6 +1,9 @@
+
+
 .flex-container {
     display: flex;
     flex-wrap: nowrap;
+    flex-direction: row;
   }
   
   .flex-container > div {
@@ -9,6 +12,7 @@
     height: 200px;
     margin: 10px;
   }
+  
 
   #tab_admin {
     font-family: Arial, Helvetica, sans-serif;
@@ -18,7 +22,7 @@
   
   #tab_admin td, #tab_admin th {
     border: 1px solid #ddd;
-    padding: 0px;
+    padding: 6px;
     font-size: 12px;
   }
    table {
@@ -29,14 +33,15 @@
   #tab_admin tr:hover {background-color: #ddd;}
   
   #tab_admin th {
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-top: 6px;
+    padding-bottom: 6px;
     text-align: left;
     background-color: #606de0;
     color: white;
     font-size: 12px;
   }
-  .abc {
-    font-size: 12px;
+  @media (max-width: 800px) {
+    .flex-container {
+      flex-direction: column;
+    }
   }
-  
