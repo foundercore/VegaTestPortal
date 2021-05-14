@@ -11,7 +11,7 @@
     padding: auto;
     position: relative;
     width: 100%;
-    //overflow: scroll;
+    overflow: scroll;
     height: 100%;
   }
 
@@ -23,4 +23,5 @@
       overflow: hidden;
       height: 100%;
       width: 100%;
+     margin-left: -15px;
     }
