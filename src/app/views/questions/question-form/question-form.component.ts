@@ -9,6 +9,7 @@ import { QuestionOption } from 'src/app/models/questions/question-option-model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionAnswer } from 'src/app/models/questions/question-answer-model';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-question-form',
@@ -24,9 +25,9 @@ export class QuestionFormComponent implements OnInit {
 
   tags: string[] | undefined = [];
   isNewForm = true;
-  subjectList : string[] = ['GK1','GK2'];
-  topicList : string[] = ['Topic 1','Topic 2'];
-  subTopicList : string[] = ['Sub Topic 1','Sub Topic 2'];
+  subjectList : string[] = [];
+  topicList : string[] = [];
+  subTopicList : string[] = [];
   difficultyLevel : string[] = ['Easy','Medium','Hard'];
   questionTypeList : string[] = [];
 
@@ -105,9 +106,20 @@ export class QuestionFormComponent implements OnInit {
     private activateRouter: ActivatedRoute,
     private questionManagementService: QuestionManagementService
     ) {
-      this.questionManagementService.getQuestionType().subscribe(resp => {
-        this.questionTypeList = resp;
-      });
+
+      forkJoin([this.questionManagementService.getQuestionType(),
+        this.questionManagementService.getQuestionTags(),
+        this.questionManagementService.getQuestionSubjects(),
+        this.questionManagementService.getQuestionTopics(),
+        this.questionManagementService.getQuestionSubtopics()
+      ]).subscribe(results => {
+        this.questionTypeList = results[0];
+        this.tags = results[1];
+        this.subjectList = results[2];
+        this.topicList = results[3];
+        this.subTopicList = results[4];
+      })
+
      }
 
   ngOnInit() {
@@ -136,28 +148,6 @@ export class QuestionFormComponent implements OnInit {
         })
       }
      });
-  }
-
-  addTag(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    if ((value || '').trim()) {
-      this.tags?.push(value.trim());
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-  }
-
-  removeTag(tag: string): void {
-    const index = this.tags?.indexOf(tag);
-
-    if (index !=undefined && index >= 0) {
-      this.tags?.splice(index, 1);
-    }
   }
 
   addOption() {
@@ -193,7 +183,7 @@ export class QuestionFormComponent implements OnInit {
       skipMark: this.questionSecondFormGrp.get('skipMark')?.value,
       subject:  this.questionFirstFormGrp.get('subject')?.value,
       subTopic:  this.questionFirstFormGrp.get('subTopic')?.value,
-      tags: this.tags,
+      tags:  this.questionThirdFormGrp.get('tags')?.value,
       topic:  this.questionFirstFormGrp.get('topic')?.value,
       type:  this.questionThirdFormGrp.get('type')?.value
     };
