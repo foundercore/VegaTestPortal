@@ -1,5 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+//import { ChartsModule, ChartSimpleModule, WavesModule } from 'ng-uikit-pro-standard'
+    
+import {​​​​​ MDBBootstrapModule }​​​​​ from 'angular-bootstrap-md';
 
 import { AppRoutingModule } from './core/app-routing.module';
 import { AppComponent } from './app.component';
@@ -75,6 +78,7 @@ import { StudentDashboardComponent } from './views/dashboard/student-dashboard/s
     StoreModule.forRoot(AppReducer, {}),
     EffectsModule.forRoot([AuthEffects]),
     ToastrModule.forRoot(),
+    MDBBootstrapModule.forRoot()
   ],
   providers: [
     AuthGuard,
