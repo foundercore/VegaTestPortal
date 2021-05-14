@@ -18,6 +18,7 @@ import { of } from 'rxjs';
 import { catchError, last, map, tap } from 'rxjs/operators';
 import { FileUploadModel } from 'src/app/models/file/file-upload-model';
 import { BaseService } from 'src/app/services/base.service';
+import { QuestionManagementService } from 'src/app/services/question-management/question-management.service';
 
 @Component({
   selector: 'app-question-bulk-upload-dialog',
@@ -36,7 +37,7 @@ export class QuestionBulkUploadDialogComponent extends BaseService {
   public fileName = 'Choose file';
 
   constructor(
-    private http: HttpClient,
+    private questionManagementService: QuestionManagementService,
     private toastr: ToastrService,
     private dialogRef: MatDialogRef<QuestionBulkUploadDialogComponent>
   ) {
@@ -69,19 +70,10 @@ export class QuestionBulkUploadDialogComponent extends BaseService {
   }
 
   uploadTemplate() {
-    const fd = new FormData();
-    fd.append('file', this.file!.data);
-    const url = `${this.BASE_SERVICE_URL}/api/v1/question/bulk-upload`;
-
-    const req = new HttpRequest('POST', url, fd, {
-      reportProgress: true,
-    });
 
     this.file!.inProgress = true;
-    this.file!.sub = this.http
-      .request(req)
-      .pipe(
-        map((event: any) => {
+    this.file!.sub = this.questionManagementService.bulkUploadQuestion(this.file).pipe(
+        map((event : any) => {
           switch (event.type) {
             case HttpEventType.UploadProgress:
               this.file!.progress = Math.round(

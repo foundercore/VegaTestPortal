@@ -1,8 +1,9 @@
+import { QuestionModel } from 'src/app/models/questions/question-model';
 export class SearchQuestion {
   filename: string | undefined;
   nameRegexPattern: string | undefined;
   pageSize: number | undefined;
-  paginatedRowId: string | undefined;
+  pageNumber: string | undefined;
   questionId: string | undefined;
   sortColumn: string | undefined;
   sortOrder: string | undefined;
@@ -12,8 +13,25 @@ export class SearchQuestion {
   updateEndTime: string | undefined;
   updateStartTime: string | undefined;
 
-  constructor(paginatedRowIdValue:string,pageSizeValue:number) {
-    this.paginatedRowId = paginatedRowIdValue;
+  constructor(pageNumber:string,pageSizeValue:number,sortColumn?:string,sortOrder?:string,) {
+    this.pageNumber = pageNumber;
     this.pageSize = pageSizeValue;
+    this.sortColumn = sortColumn;
+    this.sortOrder = sortOrder;
   }
+
+
+
+
+}
+
+
+
+
+
+export interface QuestionPaginatedResponse {
+  pageSize: number | undefined;
+  paginatedRowId: string | undefined;
+  questions: QuestionModel[]
+  totalRecords: number;
 }

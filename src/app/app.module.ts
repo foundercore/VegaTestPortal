@@ -30,6 +30,8 @@ import { LoggedInAuthGuard } from './guard/loggedin.guard';
 import { QuestionManagementComponent } from './views/questions/question-management/question-management.component';
 import { TokenInterceptor } from './core/token-interceptor';
 import { QuestionBulkUploadDialogComponent } from './views/questions/question-bulk-upload-dialog/question-bulk-upload-dialog.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { QuestionFormComponent } from './views/questions/question-form/question-form.component';
 import { UserManagementComponent } from './views/user/user-management/user-management.component';
 import { UserBulkUploadDialogComponent } from './views/user/user-bulk-upload-dialog/user-bulk-upload-dialog.component';
 import { AddUserDialogComponent } from './views/user/add-user-dialog/add-user-dialog.component';
@@ -52,6 +54,7 @@ import { StudentDashboardComponent } from './views/dashboard/student-dashboard/s
     QuestionManagementComponent,
     QuestionBulkUploadDialogComponent,
     UserManagementComponent,
+    QuestionFormComponent,
     UserBulkUploadDialogComponent,
     AddUserDialogComponent,
     ProfileComponent,
@@ -71,6 +74,7 @@ import { StudentDashboardComponent } from './views/dashboard/student-dashboard/s
     FormsModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    AngularEditorModule,
     StoreModule.forRoot(AppReducer, {}),
     EffectsModule.forRoot([AuthEffects]),
     ToastrModule.forRoot(),
