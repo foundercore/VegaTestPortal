@@ -11,6 +11,7 @@ import {
   faUsers,
   faCog,
   faFileAlt,
+  faQuestion,
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -30,6 +31,7 @@ export class NavbarComponent implements OnInit {
   faUsers = faUsers;
   faCog = faCog;
   faFileText = faFileAlt;
+  faQuestion = faQuestion;
 
   constructor() {}
   ngOnInit(): void {}
