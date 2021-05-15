@@ -1,12 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-<<<<<<< HEAD
-=======
 //import { ChartsModule, ChartSimpleModule, WavesModule } from 'ng-uikit-pro-standard'
     
 import {​​​​​ MDBBootstrapModule }​​​​​ from 'angular-bootstrap-md';
 
->>>>>>> 302fa98b1eca353f14bc45820a2e1ed856cf824d
 import { AppRoutingModule } from './core/app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './views/login/login.component';
