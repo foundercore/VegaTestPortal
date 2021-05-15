@@ -3,14 +3,13 @@ import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ViewChild } 
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { QuestionModel } from 'src/app/models/questions/question-model';
-import {merge, Observable, of as observableOf, Subject} from 'rxjs';
+import {merge, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import {SelectionModel} from '@angular/cdk/collections';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { QuestionBulkUploadDialogComponent } from '../question-bulk-upload-dialog/question-bulk-upload-dialog.component';
-import { QuestionFormComponent } from '../question-form/question-form.component';
-import { Router , Params, ActivatedRoute} from '@angular/router';
+import { Router} from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SearchQuestion } from 'src/app/models/questions/search-question-model';

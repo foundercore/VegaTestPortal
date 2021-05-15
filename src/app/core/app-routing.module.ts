@@ -42,6 +42,7 @@ const routes: Routes = [
     ],
     canActivate: [AuthGuard],
   },
+  { path: 'assignments', loadChildren: () => import('../views/assignments/assignments.module').then(m => m.AssignmentsModule)},
   {
     path: '**',
     redirectTo: 'home',

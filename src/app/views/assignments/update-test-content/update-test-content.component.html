@@ -1,0 +1,102 @@
+ 
+<section class="update__sec py-5">
+    <div class="container">
+        <!--  -->
+        <div class="text-right py-4">
+            <button mat-raised-button class="add-btn" (click)="addSection()">Add Section</button>
+        </div>
+        <mat-accordion *ngIf="sections?.length > 0">
+            <div *ngFor="let section of sections">
+            <mat-expansion-panel  (opened)="panelOpenState = true" (closed)="panelOpenState = false" >
+                <mat-expansion-panel-header>
+                    <mat-panel-title class=" position-relative">
+                        {{section?.sectionName}}
+                        <button class="btn close-btn" (click)="removeItem(section)"><span class="position-center">&times;</span></button> 
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                
+                <h2 class="text-center">Question List</h2>
+                <!-- action box -->
+                <div class="row py-5">
+                    <div class="col-lg-6">
+                        <form action="" class="search__box">
+                            <div class="input-group">
+                                <div class="input-group-prepend border-0">
+                                    <span class="input-group-text border-0" id="search"><i class="fa fa-search"></i></span>
+                                </div>
+                                <input type="text" class="form-control border-0" placeholder="Search anything ..."
+                                    aria-label="search" aria-describedby="search">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="btn__group"> 
+                            <button class="btn btn-danger">Delete</button> 
+                            <button class="btn btn-add">Add</button> 
+                        </div>
+                    </div>
+                </div>
+                <table mat-table [dataSource]="dataSource"  matSort class="mat-elevation-z8 border custom_table border-right">
+                    <!-- Checkbox Column -->
+                    <ng-container matColumnDef="select">
+                      <th mat-header-cell *matHeaderCellDef >
+                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                      [checked]="selection?.hasValue() && isAllSelected()"
+                                      [indeterminate]="selection?.hasValue() && !isAllSelected()"
+                                      [aria-label]="checkboxLabel()">
+                        </mat-checkbox>
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                                      (change)="$event ? selection?.toggle(row) : null"
+                                      [checked]="selection?.isSelected(row)"
+                                      [aria-label]="checkboxLabel(row)">
+                        </mat-checkbox>
+                      </td>
+                    </ng-container>
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="position">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 1 </th>
+                      <td mat-cell *matCellDef="let element"> dfsd </td>
+                    </ng-container>
+                  
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 2 </th>
+                      <td mat-cell *matCellDef="let element"> erwe </td>
+                    </ng-container>
+                  
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="weight">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 3 </th>
+                      <td mat-cell *matCellDef="let element">cvxc  </td>
+                    </ng-container>
+                  
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="symbol">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 4 </th>
+                      <td mat-cell *matCellDef="let element"> bnvb </td>
+                    </ng-container>
+                  
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                        (click)="selection.toggle(row)">
+                    </tr>
+                  </table>
+                    <div class="tbl-no-record" *ngIf="dataSource?.length == 0">
+                      No record found
+                    </div>
+                  <mat-paginator
+                  [pageSize]="5"
+                  [pageSizeOptions]="[5, 25, 50, 100]"
+                  ></mat-paginator>
+            </mat-expansion-panel>
+            </div>
+        </mat-accordion>
+        <div class="py-5 text-center" *ngIf="sections?.length == 0">
+            No Sections Found
+        </div>
+
+    </div>
+    <!--.//container-->
+</section>
