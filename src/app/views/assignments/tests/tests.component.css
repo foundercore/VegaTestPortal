@@ -1,0 +1,38 @@
+
+
+.btn__group {
+    text-align: right;
+}
+
+
+.btn {
+    font-size: 1rem !important;
+    line-height: 1 !important;
+    padding: .5rem 1rem .5rem 1rem !important;
+    margin: 0 3px !important;
+  }
+
+  
+
+.btn__group {
+    text-align: right;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead{
+    background: #ECECEC !important;
+  }
+  tr.mat-header-row {
+    height: 45px;
+  }
+  th {
+    background: #3a4248;
+    color: #fff !important;
+  }
+  .mat-header-cell {
+    background: #3a4248;
+    color: #fff !important;
+  }

@@ -1,0 +1,141 @@
+<section class="data__table">
+    <div class="container">
+        <!-- action box -->
+        <div class="row py-5">
+            <div class="col-lg-6">
+                <form action="" class="search__box">
+                    <div class="input-group">
+                        <div class="input-group-prepend border-0">
+                            <span class="input-group-text border-0" id="search"><i class="fa fa-search"></i></span>
+                        </div>
+                        <input type="text" class="form-control border-0" placeholder="Search anything ..."
+                            aria-label="search" aria-describedby="search">
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-6">
+                <div class="btn__group text-right">
+                    <button class="btn btn-success">View</button>
+                    <button class="btn btn-danger">Delete</button>
+                    <button class="btn btn-edit">Edit</button>
+                    <button class="btn btn-add">Add</button>
+                    <button class="btn btn-primary">Download</button>
+                </div>
+            </div>
+        </div>
+        <!--./row-->
+
+        <!-- data table -->
+        <!-- <table class="table table-bordered data__table">
+            <thead>
+                <th style="vertical-align: middle;">
+                    <mat-checkbox class="p-0"></mat-checkbox>
+                </th>
+                <th>Column 1</th>
+                <th>Column 2</th>
+                <th>Column 3</th>
+                <th>Column 4</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><mat-checkbox></mat-checkbox></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><mat-checkbox></mat-checkbox></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><mat-checkbox></mat-checkbox></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><mat-checkbox></mat-checkbox></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><mat-checkbox></mat-checkbox></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><mat-checkbox></mat-checkbox></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table> -->
+        <table mat-table [dataSource]="dataSource"  matSort class="mat-elevation-z8 border custom_table border-right">
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef >
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                              [checked]="selection?.hasValue() && isAllSelected()"
+                              [indeterminate]="selection?.hasValue() && !isAllSelected()"
+                              [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                              (change)="$event ? selection?.toggle(row) : null"
+                              [checked]="selection?.isSelected(row)"
+                              [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+            <!-- Position Column -->
+            <ng-container matColumnDef="position">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 1 </th>
+              <td mat-cell *matCellDef="let element"> dfsd </td>
+            </ng-container>
+          
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 2 </th>
+              <td mat-cell *matCellDef="let element"> erwe </td>
+            </ng-container>
+          
+            <!-- Weight Column -->
+            <ng-container matColumnDef="weight">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 3 </th>
+              <td mat-cell *matCellDef="let element">cvxc  </td>
+            </ng-container>
+          
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="symbol">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 4 </th>
+              <td mat-cell *matCellDef="let element"> bnvb </td>
+            </ng-container>
+          
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                (click)="selection.toggle(row)">
+            </tr>
+          </table>
+            <div class="tbl-no-record" *ngIf="dataSource?.length == 0">
+              No record found
+            </div>
+          <mat-paginator
+          [pageSize]="5"
+          [pageSizeOptions]="[5, 25, 50, 100]"
+          ></mat-paginator>
+      
+    </div>
+    <!--.//container-->
+</section>
