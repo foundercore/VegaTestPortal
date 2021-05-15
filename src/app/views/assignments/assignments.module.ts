@@ -11,6 +11,8 @@ import { VegaMaterialModule } from 'src/app/core/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TestPreviewComponent } from './test-preview/test-preview.component';
+import { CalculatorComponent } from './popups/calculator/calculator.component';
+import { CountdownModule } from 'ngx-countdown';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { TestPreviewComponent } from './test-preview/test-preview.component';
     SetupTestConfigurationComponent,
     AssessmentEditorComponent,
     SectionComponent,
-    TestPreviewComponent
+    TestPreviewComponent,
+    CalculatorComponent
   ],
   imports: [
     CommonModule,
@@ -28,12 +31,14 @@ import { TestPreviewComponent } from './test-preview/test-preview.component';
     VegaMaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    CountdownModule
 
   ],
   entryComponents : [
     AssessmentEditorComponent,
-    SectionComponent
+    SectionComponent,
+    CalculatorComponent
   ]
 })
 export class AssignmentsModule { }

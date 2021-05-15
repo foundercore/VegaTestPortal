@@ -1,8 +1,5 @@
-
-
 <div class="preview__box">
     <div class="container p-0 border">
-
         <!-- header box -->
         <div class="row mx-0 align-items-center border-bottom">
             <div class="col-md-7 p-0 d-flex align-items-center">
@@ -12,9 +9,12 @@
                 </h4> 
             </div>
             <div class="col-md-5 d-flex">
+                <button class="auto-btn" mat-raised-button (click)="calculate()">C</button>
                 <div class="time d-flex p-2 align-items-center">
                     <img src="assets/images/clock.png" alt="">
-                    <h4 class="mb-0 ml-5">2:00:00</h4> 
+                    <h4 class="mb-0 ml-5">
+                        <countdown [config]="{leftTime: timeSeconds}"></countdown>
+                    </h4> 
                 </div>
                 <div class="student__box d-flex align-items-center">
                     <h5>Student Name</h5>
@@ -22,7 +22,6 @@
                 </div>
             </div>
         </div>
-
         <!-- main body content start here -->
         <mat-tab-group class="pt-2">
             <!-- one -->
