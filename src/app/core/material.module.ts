@@ -41,6 +41,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
+import { CardsModule, WavesModule } from 'angular-bootstrap-md';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   exports: [
@@ -86,7 +88,8 @@ import { MatTreeModule } from '@angular/material/tree';
     MatTooltipModule,
     MatTreeModule,
     PortalModule,
-    ScrollingModule
+    ScrollingModule,
+    NgxChartsModule
   ],
   imports: [
     A11yModule,
@@ -131,7 +134,8 @@ import { MatTreeModule } from '@angular/material/tree';
     MatTooltipModule,
     MatTreeModule,
     PortalModule,
-    ScrollingModule
+    ScrollingModule,
+    NgxChartsModule,
   ]
 })
 export class VegaMaterialModule { }

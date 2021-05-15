@@ -14,30 +14,77 @@
   </button>
 </div>
 
-<div class="question-grid-search-bar" [formGroup] = "filterGroup">
-  <mat-form-field appearance="outline" style="margin-right:20px">
-    <mat-label>Filter Column</mat-label>
-    <mat-select formControlName="filterField" >
-      <mat-option *ngFor="let filterColumn of filterColumns" [value]="filterColumn">{{filterColumn}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field *ngIf="typeOfFilter === 1" style="width: 600px;" appearance="outline" >
-    <mat-label>Filter</mat-label>
-    <input matInput  placeholder="Search" #input (keyup)="applyFilter($event)">
-  </mat-form-field>
-  <mat-form-field  *ngIf="typeOfFilter === 2"  appearance="outline" class="w-25-field form-field-padding">
-    <mat-label>Choose an Option</mat-label>
-    <mat-select (selectionChange)="applyFilter($event)">
-      <mat-option *ngFor="let option of filterOptions" [value]="option">{{option}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field  *ngIf="typeOfFilter === 3"  appearance="outline" class="w-25-field form-field-padding">
-    <mat-label>Choose an Option</mat-label>
-    <mat-select (selectionChange)="applyFilter($event)" multiple>
-      <mat-option *ngFor="let option of filterOptions" [value]="option">{{option}}</mat-option>
-    </mat-select>
-  </mat-form-field>
+<div class="question-filter-panel">
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Filter
+        </mat-panel-title>
+        <mat-panel-description>
+          This is a Filter Configuration
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="question-grid-search-bar" [formGroup]="filterGroup">
+        <div class="w-50-field">
+          <mat-form-field appearance="outline" class="form-field-padding">
+            <mat-label>Name & Description</mat-label>
+            <input matInput placeholder="Name & Description" formControlName="filterNameValue">
+          </mat-form-field>
+        </div>
+        <div  class="w-25-field">
+          <mat-form-field appearance="outline" class="form-field-padding">
+            <mat-label>Question Type</mat-label>
+            <mat-select formControlName="questionTypeCntrl">
+              <mat-option *ngFor="let questionType of questionTypeList" [value]="questionType">{{questionType}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="w-25-field">
+          <mat-form-field appearance="outline" class=" form-field-padding">
+            <mat-label>Subject</mat-label>
+            <mat-select  formControlName="subjectCntrl">
+              <mat-option *ngFor="let subject of subjectList" [value]="subject">{{subject}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="w-25-field">
+          <mat-form-field appearance="outline" class=" form-field-padding">
+            <mat-label>Tags</mat-label>
+            <mat-select multiple formControlName="tagCntrl">
+              <mat-option *ngFor="let tag of tags" [value]="tag">{{tag}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="w-25-field">
+          <mat-form-field appearance="outline" class=" form-field-padding">
+            <mat-label >Topic</mat-label>
+            <mat-select formControlName="topicCntrl">
+              <mat-option *ngFor="let topic of topicList" [value]="topic">{{topic}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="w-25-field">
+          <mat-form-field appearance="outline" class=" form-field-padding">
+            <mat-label >Sub Topic</mat-label>
+            <mat-select formControlName="substopicCntrl">
+              <mat-option *ngFor="let subtopic of subTopicList" [value]="subtopic">{{subtopic}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <button mat-raised-button class="filter-btn-cls" (click)="applyFilter()">Filter</button>
+        <button mat-raised-button class="reset-btn-cls" (click)="resetFilter()">Reset</button>
+      </div>
+
+
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>
+
+
+
 
 <div class="question-list-grid">
 
@@ -51,17 +98,15 @@
 
     <div class="example-table-container">
 
-      <table mat-table [dataSource]="dataSource" class="example-table" matSort matSortActive="name"
-        matSortDisableClear matSortDirection="desc" (matSortChange)="resetPaging()">
+      <table mat-table [dataSource]="dataSource" class="example-table" matSort matSortActive="name" matSortDisableClear
+        matSortDirection="desc" (matSortChange)="resetPaging()">
 
 
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()"
-                          [aria-label]="checkboxLabel()">
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
             </mat-checkbox>
           </th>
           <td mat-cell *matCellDef="let row">
@@ -98,17 +143,23 @@
 
         <!-- Tag Column -->
         <ng-container matColumnDef="tags">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Tag</th>
+          <th mat-header-cell *matHeaderCellDef>Tag</th>
           <td mat-cell *matCellDef="let row">{{row.tags}}</td>
         </ng-container>
 
-         <!-- actions Column -->
-         <ng-container matColumnDef="actions">
+        <!-- actions Column -->
+        <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let row">
-            <span class="action-btn" matTooltip="View Question" (click)="performGridAction('view',row)"><mat-icon>view_compact</mat-icon></span>
-            <span class="action-btn" matTooltip="Edit Question" (click)="performGridAction('edit',row)"><mat-icon>edit</mat-icon></span>
-            <span class="action-btn" matTooltip="Delete Question" (click)="performGridAction('delete',row)"><mat-icon>delete_forever</mat-icon></span>
+            <span class="action-btn" matTooltip="View Question" (click)="performGridAction('view',row)">
+              <mat-icon>view_compact</mat-icon>
+            </span>
+            <span class="action-btn" matTooltip="Edit Question" (click)="performGridAction('edit',row)">
+              <mat-icon>edit</mat-icon>
+            </span>
+            <span class="action-btn" matTooltip="Delete Question" (click)="performGridAction('delete',row)">
+              <mat-icon>delete_forever</mat-icon>
+            </span>
           </td>
         </ng-container>
 
@@ -117,7 +168,7 @@
       </table>
     </div>
 
-    <mat-paginator [length]="totalNumberOfRecords" [pageSizeOptions]="[2,5, 10, 25, 100]"></mat-paginator>
+    <mat-paginator [length]="totalNumberOfRecords" [pageSizeOptions]="[25,50,75,100]"></mat-paginator>
   </div>
 
 
