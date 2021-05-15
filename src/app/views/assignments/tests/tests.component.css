@@ -1,0 +1,15 @@
+
+
+.btn__group {
+    text-align: right;
+}
+
+
+.btn {
+    font-size: 1rem !important;
+    line-height: 1 !important;
+    padding: .5rem 1rem .5rem 1rem !important;
+    margin: 0 3px !important;
+  }
+
+  
