@@ -1,0 +1,100 @@
+.question-form-title{
+  border-bottom: 1px solid grey;
+  border-width: medium;
+  button {
+    float: right;
+    background: none;
+    border: none;
+    outline: none;
+  }
+}
+
+.question-form-group-title{
+  font-size: 18px;
+  font-weight: bold;
+  padding-left: 0px;
+  margin-bottom: 20px;
+}
+
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.main-div{
+  width: 1400px;
+}
+
+.w-equal-field {
+  flex-grow: 1;
+}
+
+.w-50-field{
+  width: 50%;
+}
+
+.w-25-field{
+  width: 25%;
+}
+
+.w-75-field{
+  width: 75%;
+}
+
+.w-100-field{
+  width: 100%;
+}
+
+.form-field-padding{
+  padding-right: 20px;
+}
+
+.w-100-div{
+  width: 100%;
+}
+
+.w-50-div{
+  width: 50%;
+}
+
+
+
+:host ::ng-deep .mat-radio-label-content {
+    width: calc(100% - 100px);
+    max-height: 400px;
+    border: 1px solid;
+    overflow: auto;
+  }
+
+
+  .cancel-btn{
+    background: red;
+    color: white;
+    margin-right: 10px;
+  }
+
+  .back-btn{
+    background: white;
+    color: blue;
+    margin-right: 10px;
+    border: 1px solid;
+  }
+
+  .next-save-btn{
+    background: blue;
+    color: white;
+    margin-right: 10px;
+    border: 1px solid;
+  }
+
+
+  .answer-option{
+    border: 1px solid black;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    max-height: 400px;
+    min-height: 400px;
+  }

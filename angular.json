@@ -29,12 +29,26 @@
               "src/assets/templates"
             ],
             "styles": [
+<<<<<<< HEAD
               "src/styles.scss",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
+=======
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss",
+              "node_modules/@fortawesome/fontawesome-free/scss/solid.scss",
+              "node_modules/@fortawesome/fontawesome-free/scss/regular.scss",
+              "node_modules/@fortawesome/fontawesome-free/scss/brands.scss",
+              "node_modules/animate.css/animate.css",
+              "src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/chart.js/dist/Chart.js",
+              "node_modules/hammerjs/hammer.min.js"
+>>>>>>> 302fa98b1eca353f14bc45820a2e1ed856cf824d
             ]
           },
           "configurations": {
@@ -55,7 +69,11 @@
               "budgets": [
                 {
                   "type": "initial",
+<<<<<<< HEAD
                   "maximumWarning": "10mb",
+=======
+                  "maximumWarning": "5mb",
+>>>>>>> 302fa98b1eca353f14bc45820a2e1ed856cf824d
                   "maximumError": "10mb"
                 },
                 {

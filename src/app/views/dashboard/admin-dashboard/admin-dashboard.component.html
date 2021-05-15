@@ -1,1 +1,179 @@
-<p>admin-dashboard works!</p>
+<div class="flex-container">
+
+        <div style="width:320px; height: 340px;">
+            <canvas mdbChart
+                [chartType]="chartType"
+                [datasets]="chartDatasets"
+                [labels]="chartLabels"
+                [colors]="chartColors"
+                [options]="chartOptions"
+                [legend]="true"
+                (chartHover)="chartHovered($event)"
+                (chartClick)="chartClicked($event)">
+            </canvas>
+          </div>
+
+    
+        <div style="height: 340px; width: 1000px;">
+            <canvas mdbChart
+                  [chartType]="barChartType"
+                  [datasets]="barChartDatasets"
+                  [labels]="barChartLabels"
+                  [colors]="barChartColors"
+                  [options]="barChartOptions"
+                  [legend]="true"
+                  (chartHover)="barChartHovered($event)"
+                  (chartClick)="barChartClicked($event)">
+              </canvas> 
+          </div>
+              <div class="box_3" style= "height: 500px;flex: 50%;">
+                <div style="width:120px; height: 120px; margin-left: 80px;">
+                  <div class="extra_box" style="margin-left: -75px; font-size: 10px; font-weight: bold;">Average student Details</div>
+                  <canvas mdbChart
+                      [chartType]="chartType"
+                      [datasets]="chartDatasets"
+                      [colors]="chartSingleColors"
+                      [options]="chartOptions"
+                      [legend]="true"
+                      (chartHover)="chartHovered($event)"
+                      (chartClick)="chartClicked($event)">
+                  </canvas>
+                </div>
+
+                <div style="width:120px; height: 120px; margin-left: 80px; margin-top: 15px;">
+                  <canvas mdbChart
+                      [chartType]="chartType"
+                      [datasets]="chartSingle_blueDatasets"
+                      [colors]="chartSingle_blueColors"
+                      [options]="chartOptions"
+                      [legend]="true"
+                      (chartHover)="chartHovered($event)"
+                      (chartClick)="chartClicked($event)">
+                  </canvas>
+                </div>
+
+                <div style="width:120px; height: 120px; margin-left: 80px;">
+                  <canvas mdbChart
+                      [chartType]="chartType"
+                      [datasets]="chartSingle_yellowDatasets"
+                      [colors]="chartSingle_yellowColors"
+                      [options]="chartOptions"
+                      [legend]="true"
+                      (chartHover)="chartHovered($event)"
+                      (chartClick)="chartClicked($event)">
+                  </canvas>
+                </div>
+
+                <div style="width:120px; height: 120px; margin-left: 80px;">
+                  <canvas mdbChart
+                      [chartType]="chartType"
+                      [datasets]="chartSingle_GreyDatasets"
+                      [colors]="chartSingle_GreyColors"
+                      [options]="chartOptions"
+                      [legend]="true"
+                      (chartHover)="chartHovered($event)"
+                      (chartClick)="chartClicked($event)">
+                  </canvas>
+                </div>
+                
+              </div>
+     </div>
+      <div class="flex-container">
+              <div class="tab_content" style="height: 250px; width:890px; margin-top: -150px; margin-left: 20px; ">
+                <table id="tab_admin"><b>Student Details</b>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Gender</th>
+                    <th>Grade Name</th>
+                    <th>Average Marks</th>
+                    <th>GPA</th>
+                    <th>Attendance</th>
+                    <th>Student_Id</th>
+                  </tr>
+                  <tr>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>zsgdcdsy</td>
+                  </tr>
+                  <tr>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>zsgdcdsy</td>
+                  </tr>
+                  <tr>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>zsgdcdsy</td>
+                  </tr>
+                  <tr>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>zsgdcdsy</td>
+                  </tr>
+                  <tr>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>zsgdcdsy</td>
+                  </tr>
+                  <tr>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>zsgdcdsy</td>
+                  </tr>
+                  <tr>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>zsgdcdsy</td>
+                  </tr>
+                  <tr>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>zsgdcdsy</td>
+                  </tr>
+                  <tr>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>Alfreds Futterkiste</td>
+                    <td>Maria Anders</td>
+                    <td>Germany</td>
+                    <td>zsgdcdsy</td>
+                  </tr>
+                  
+                </table>
+              
+              </div>  
+      </div> 
+       

@@ -8,6 +8,7 @@ import { AuthGuard } from '../guard/auth.guard';
 import { RegisterComponent } from '../views/register/register.component';
 import { LoggedInAuthGuard } from '../guard/loggedin.guard';
 import { QuestionManagementComponent } from '../views/questions/question-management/question-management.component';
+import { QuestionFormComponent } from '../views/questions/question-form/question-form.component';
 import { UserManagementComponent } from '../views/user/user-management/user-management.component';
 
 const routes: Routes = [
@@ -26,7 +27,15 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'questionmanagement', component: QuestionManagementComponent },
+      {
+        path: 'questionmanagement',
+        children:[
+          { path: '', component: QuestionManagementComponent },
+          { path: ':id/edit', component: QuestionFormComponent},
+          { path: ':id/view', component: QuestionFormComponent},
+          { path: 'add', component: QuestionFormComponent }
+        ]
+       },
       { path: 'reports', component: ReportsComponent },
       { path: 'tests', component: DashboardComponent },
       { path: 'users', component: UserManagementComponent },
