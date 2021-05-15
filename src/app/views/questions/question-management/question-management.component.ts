@@ -20,6 +20,7 @@ import { Router, Params, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SearchQuestion } from 'src/app/models/questions/search-question-model';
+import { PAGE_OPTIONS } from 'src/app/core/constants';
 
 @Component({
   selector: 'app-question-management',
@@ -46,6 +47,9 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   totalNumberOfRecords = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
+
+  public pageOptions = PAGE_OPTIONS;
+
 
   filterGroup = new FormGroup({
     filterNameValue: new FormControl(),

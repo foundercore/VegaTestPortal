@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { LogOut } from 'src/app/state_management/_actions/user.action';
 import { AppState } from 'src/app/state_management/_states/auth.state';
-import {ProfileComponent } from 'src/app/views/users/profile/profile.component';
+import {ProfileComponent } from 'src/app/views/user/profile/profile.component';
 
 
 @Component({

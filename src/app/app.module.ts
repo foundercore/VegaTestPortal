@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 //import { ChartsModule, ChartSimpleModule, WavesModule } from 'ng-uikit-pro-standard'
-    
+
 import {​​​​​ MDBBootstrapModule }​​​​​ from 'angular-bootstrap-md';
 
 import { AppRoutingModule } from './core/app-routing.module';
@@ -35,7 +35,7 @@ import { QuestionFormComponent } from './views/questions/question-form/question-
 import { UserManagementComponent } from './views/user/user-management/user-management.component';
 import { UserBulkUploadDialogComponent } from './views/user/user-bulk-upload-dialog/user-bulk-upload-dialog.component';
 import { AddUserDialogComponent } from './views/user/add-user-dialog/add-user-dialog.component';
-import { ProfileComponent } from './views/users/profile/profile.component';
+import {ProfileComponent } from 'src/app/views/user/profile/profile.component';
 import { AdminDashboardComponent } from './views/dashboard/admin-dashboard/admin-dashboard.component';
 import { StudentDashboardComponent } from './views/dashboard/student-dashboard/student-dashboard.component';
 

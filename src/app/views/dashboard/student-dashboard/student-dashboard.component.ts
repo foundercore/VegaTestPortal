@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { PAGE_OPTIONS } from 'src/app/core/constants';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -40,6 +41,8 @@ export class StudentDashboardComponent implements OnInit {
   colorScheme = {
     domain: [ '#52D726', '#FF0000']
   };
+
+  public pageOptions = PAGE_OPTIONS;
 
   displayedColumns: string[] = ['name', 'totalScore', 'markObtained','percentage','status','actions'];
 
