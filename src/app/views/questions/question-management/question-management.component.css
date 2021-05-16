@@ -34,17 +34,34 @@ table {
 }
 
 /* Column Widths */
-.mat-column-number,
-.mat-column-state {
-  max-width: 64px;
+.mat-column-subject,
+.mat-column-tags {
+  width:200px;
+}
+
+.mat-column-explanation_added {
+  width:100px;
+}
+
+.mat-column-description {
+  padding-left: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mat-column-name {
-  max-width: 124px;
+  max-width: 400px;
+  width: 400px;
+  padding-left: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mat-column-actions{
-  max-width: 50px;
+  width:150px;
+  max-width: 150px;
 }
 
 .question-list-grid{

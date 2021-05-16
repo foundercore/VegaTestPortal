@@ -1,3 +1,4 @@
+import { QuestionFormPreviewComponent } from './../views/questions/question-form-preview/question-form-preview.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from '../views/home/home.component';
@@ -32,7 +33,7 @@ const routes: Routes = [
         children:[
           { path: '', component: QuestionManagementComponent },
           { path: ':id/edit', component: QuestionFormComponent},
-          { path: ':id/view', component: QuestionFormComponent},
+          { path: ':id/view', component: QuestionFormPreviewComponent},
           { path: 'add', component: QuestionFormComponent }
         ]
        },

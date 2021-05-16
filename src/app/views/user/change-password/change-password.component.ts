@@ -44,6 +44,7 @@ export class ChangePasswordComponent implements OnInit {
     confirmPassword: new FormControl ('',  [Validators.required]),
   },MustMatch)
 
+  appState: any;
 
   constructor( private userService: UserService,
     private tosterService: ToastrService,
@@ -52,6 +53,10 @@ export class ChangePasswordComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
+    this.store.select('appState').subscribe(data =>
+      {
+        this.appState = data;
+      });
   }
 
   changePassword(){
@@ -71,10 +76,6 @@ export class ChangePasswordComponent implements OnInit {
 
 
   reset(){
-    this.store.select(state => state.appState).subscribe(data =>
-      {
-        localStorage.setItem('state', JSON.stringify(data))
-      });
     this.changePasswordFormGroup.reset();
   }
 

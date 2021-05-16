@@ -42,6 +42,7 @@ import { ChangePasswordComponent } from './views/user/change-password/change-pas
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { reducers } from './state_management/_states/auth.state';
+import { QuestionFormPreviewComponent } from './views/questions/question-form-preview/question-form-preview.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { reducers } from './state_management/_states/auth.state';
     AdminDashboardComponent,
     StudentDashboardComponent,
     ChangePasswordComponent,
+    QuestionFormPreviewComponent
   ],
 
   imports: [
