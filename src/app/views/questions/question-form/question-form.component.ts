@@ -173,7 +173,8 @@ export class QuestionFormComponent implements OnInit {
     const answerOptions = [];
 
     for (const field in this.answerOptionFormGrp.controls) {
-      answerOptions.push(this.answerOptionFormGrp.controls[field].value);
+      if(this.answerOptionFormGrp.controls[field].value)
+                answerOptions.push(field);
      }
 
     let questionAnswer : QuestionAnswer = {

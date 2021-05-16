@@ -70,7 +70,7 @@ export interface IUserCommonModel {
   firstName?: string;
   gender?: string;
   lastName?: string;
-  roles: [];
+  roles: string[];
   state?: string;
   userName?: string;
 }
