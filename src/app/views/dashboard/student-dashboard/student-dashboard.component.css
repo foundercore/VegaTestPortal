@@ -1,0 +1,45 @@
+.student-dash-card {
+  max-width: 400px;
+}
+
+.student-dash-main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+.student-result-container {
+  position: relative;
+  min-height: 200px;
+}
+
+table {
+  width: 100%;
+}
+
+
+.loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-occured {
+  color: #980000;
+  max-width: 360px;
+  text-align: center;
+}
+
+
+.student-dash-list-grid{
+  margin: 20px;
+  width: 100%;
+}

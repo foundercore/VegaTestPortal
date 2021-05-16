@@ -58,3 +58,31 @@ export class UserModel implements IUserModel {
     this.authInfo = authInfo;
   }
 }
+
+export interface IUserCommonModel {
+  address?: string;
+  displayName?: string;
+  firstName?: string;
+  gender?: string;
+  lastName?: string;
+  roles: [];
+  state?: string;
+  userName?: string;
+}
+
+export interface IUserCreateRequestModel extends IUserCommonModel {
+  password?: string;
+  email?: string;
+}
+
+export interface IUserResponseModel extends IUserCommonModel{
+  enabled: boolean;
+  lastUpdatedBy: Date;
+  lastUpdatedOn: Date;
+  userName: string;
+  email?: string;
+}
+
+export interface IUserUpdateRequestModel extends IUserCommonModel{
+  enabled: boolean;
+}

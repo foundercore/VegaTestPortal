@@ -1,38 +1,105 @@
 <h1 mat-dialog-title class="title">
-  Add Users
+  <span *ngIf="!this.data">Add User</span>
+  <span *ngIf="this.data  && !this.data.isView">Edit User</span>
+  <span *ngIf="this.data && this.data.isView">User Preview</span>
+
   <button mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
 </h1>
 <div mat-dialog-content>
   <div class="add-user-content">
-    <div class="example-container">
-      <mat-form-field style="width: 270px" appearance="fill">
+    <div class="example-container"  [formGroup]="userFormGroup">
+
+      <mat-form-field appearance="outline">
         <mat-label>First Name</mat-label>
-        <input matInput placeholder="Jane Doe" required />
+        <input matInput required  formControlName="firstname" />
+        <mat-error *ngIf="userFormGroup.controls.firstname.hasError('required')">
+          First Name is <strong>required</strong>
+        </mat-error>
       </mat-form-field>
-      <mat-form-field style="width: 270px" appearance="fill">
+
+
+      <mat-form-field appearance="outline">
         <mat-label>Last Name</mat-label>
-        <input matInput placeholder="Jane Doe" required />
+        <input matInput required formControlName="lastname" />
+        <mat-error *ngIf="userFormGroup.controls.lastname.hasError('required')">
+          Last Name is <strong>required</strong>
+        </mat-error>
       </mat-form-field>
-    </div>
-    <div class="example-container">
-      <mat-form-field style="width: 270px" appearance="fill">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Gender</mat-label>
+        <mat-select formControlName="gender" >
+          <mat-option value="M">Male</mat-option>
+          <mat-option value="F">Female</mat-option>
+        </mat-select>
+        <mat-error *ngIf="userFormGroup.controls.gender.hasError('required')">
+          Gender is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>Roles</mat-label>
+        <mat-select multiple formControlName="roles" >
+          <mat-option *ngFor="let role of roleList" [value]="role">
+            {{role}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="userFormGroup.controls.roles.hasError('required')">
+          Roles is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field style="width: 660px !important" appearance="outline">
+        <mat-label>Address</mat-label>
+        <textarea matInput placeholder="Ex. 100 Main St" required formControlName="address" ></textarea>
+        <mat-error *ngIf="userFormGroup.controls.address.hasError('required')">
+          Address is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>State</mat-label>
+        <input matInput placeholder="Ex. Delhi" required formControlName="state" />
+        <mat-error *ngIf="userFormGroup.controls.state.hasError('required')">
+          State is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input matInput placeholder="Jane Doe" required />
+        <input type="email" matInput placeholder="Ex. pat@example.com" required formControlName="email" />
+        <mat-error *ngIf="userFormGroup.controls.email.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="userFormGroup.controls.email.hasError('email') && !userFormGroup.controls.email.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
       </mat-form-field>
-      <mat-form-field style="width: 270px" appearance="fill">
+
+
+      <mat-form-field appearance="outline"  *ngIf="!this.data">
         <mat-label>Password</mat-label>
-        <input matInput placeholder="Jane Doe" required />
+        <input matInput required formControlName="password" />
+        <mat-error *ngIf="userFormGroup.controls.password.hasError('required')">
+          Password is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="userFormGroup.controls.password.hasError('minlength') && !userFormGroup.controls.password.hasError('required')">
+          Password must be at least 6 characters
+        </mat-error>
       </mat-form-field>
+
+
     </div>
-    <div class="example-container">
-      <mat-form-field style="width: 270px" appearance="fill">
-        <mat-label>Mobile Number</mat-label>
-        <div>
-          <input matInput placeholder="Jane Doe" required />
-        </div>
-      </mat-form-field>
+    <div class="btn-grp-cls">
+      <button *ngIf="!data" mat-raised-button class="save-btn-cls" (click)="createUser()">Save</button>
+      <button *ngIf="data && !data.isView" mat-raised-button class="save-btn-cls" (click)="updateUser()">Update</button>
+      <button *ngIf="!data" mat-raised-button class="reset-btn-cls" (click)="reset()">Reset</button>
     </div>
   </div>
 </div>

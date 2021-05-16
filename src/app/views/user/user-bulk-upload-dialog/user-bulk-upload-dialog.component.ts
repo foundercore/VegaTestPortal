@@ -1,3 +1,4 @@
+import { UserService } from 'src/app/services/users/users.service';
 import {
   trigger,
   state,
@@ -32,11 +33,13 @@ import { BaseService } from 'src/app/services/base.service';
 })
 export class UserBulkUploadDialogComponent extends BaseService {
   public file: FileUploadModel | undefined;
+  public fileName = 'Choose file';
 
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
-    private dialogRef: MatDialogRef<UserBulkUploadDialogComponent>
+    private dialogRef: MatDialogRef<UserBulkUploadDialogComponent>,
+    private userService: UserService
   ) {
     super();
   }
@@ -44,12 +47,14 @@ export class UserBulkUploadDialogComponent extends BaseService {
   @ViewChild('fileInput') input: any;
 
   ngOnInit(): void {}
+
   downloadTemplate() {
     let link = document.createElement('a');
     link.download = 'user_bulk_upload_sample.csv';
     link.href = 'assets/templates/user_bulk_upload_sample.csv';
     link.click();
   }
+
   onFileChange(event: any) {
     if (event.target.files.length !== 0) {
       this.file = {
@@ -60,21 +65,15 @@ export class UserBulkUploadDialogComponent extends BaseService {
         canRetry: false,
         canCancel: true,
       };
+      this.fileName = event.target.files[0].name;
+    } else {
+      this.fileName = 'Choose file';
     }
   }
+
   uploadTemplate() {
-    if (!this.file) return;
-    const fd = new FormData();
-    fd.append('file', this.file!.data);
-    const url = `${this.BASE_SERVICE_URL}/api/v1/users/bulk-upload`;
-
-    const req = new HttpRequest('POST', url, fd, {
-      reportProgress: true,
-    });
-
     this.file!.inProgress = true;
-    this.file!.sub = this.http
-      .request(req)
+    this.file!.sub = this.userService.bulkCreateUser(this.file)
       .pipe(
         map((event: any) => {
           switch (event.type) {
