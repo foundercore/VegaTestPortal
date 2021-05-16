@@ -1,5 +1,5 @@
 
-.content {
+.appContent {
   position: absolute;
   width: 100%;
   display: flex;
@@ -16,12 +16,12 @@
   }
 
 }
-    .appHeader{
-      overflow: hidden;
-    }
-    .container{
-      overflow: hidden;
-      height: 100%;
-      width: 100%;
-     margin-left: -15px;
-    }
+.appHeader{
+  overflow: hidden;
+}
+.parentContainer{
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  margin-left: -15px;
+}
