@@ -6,5 +6,5 @@ export interface AppState {
 }
 
 export const reducers = {
-  auth: auth.AppReducer
+  appState: auth.AppReducer
 };

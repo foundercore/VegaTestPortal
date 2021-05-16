@@ -38,6 +38,10 @@ import { AddUserDialogComponent } from './views/user/add-user-dialog/add-user-di
 import {ProfileComponent } from 'src/app/views/user/profile/profile.component';
 import { AdminDashboardComponent } from './views/dashboard/admin-dashboard/admin-dashboard.component';
 import { StudentDashboardComponent } from './views/dashboard/student-dashboard/student-dashboard.component';
+import { ChangePasswordComponent } from './views/user/change-password/change-password.component';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
+import { reducers } from './state_management/_states/auth.state';
 
 @NgModule({
   declarations: [
@@ -60,6 +64,7 @@ import { StudentDashboardComponent } from './views/dashboard/student-dashboard/s
     ProfileComponent,
     AdminDashboardComponent,
     StudentDashboardComponent,
+    ChangePasswordComponent,
   ],
 
   imports: [
@@ -75,7 +80,11 @@ import { StudentDashboardComponent } from './views/dashboard/student-dashboard/s
     AppRoutingModule,
     ReactiveFormsModule,
     AngularEditorModule,
-    StoreModule.forRoot(AppReducer, {}),
+    StoreModule.forRoot(reducers, {}),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
+    }),
     EffectsModule.forRoot([AuthEffects]),
     ToastrModule.forRoot(),
     MDBBootstrapModule.forRoot()

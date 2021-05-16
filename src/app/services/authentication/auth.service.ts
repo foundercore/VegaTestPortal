@@ -25,4 +25,5 @@ export class AuthService extends BaseService {
     let options = { headers: headers };
     return this.http.post<any>(url, {},options);
   }
+
 }

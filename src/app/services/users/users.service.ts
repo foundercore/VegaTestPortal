@@ -61,4 +61,12 @@ export class UserService extends BaseService {
     return this.http.post<any>(url, userNameIdList);
   }
 
+
+
+  changePassword(newPassword: string){
+    const url = `${this.BASE_SERVICE_URL}/api/v1/users/my/password`;
+    return this.http.put<any>(url,newPassword);
+  }
+
+
 }
