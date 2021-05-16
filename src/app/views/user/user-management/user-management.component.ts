@@ -1,7 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { SelectionModel } from '@angular/cdk/collections';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
+import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { IUserModel } from 'src/app/models/user/user-model';
 import { UserService } from 'src/app/services/users/users.service';
 import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
@@ -12,33 +17,51 @@ import { UserBulkUploadDialogComponent } from '../user-bulk-upload-dialog/user-b
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.scss'],
 })
-export class UserManagementComponent implements OnInit {
+export class UserManagementComponent implements OnInit, AfterViewInit  {
+
   displayedColumns: string[] = [
     'select',
     'name',
     'email',
     'phone_number',
     'batch',
+    'actions'
   ];
-  isLoading: boolean = true;
-  totalUsers: number = 0;
-  userResponses: Array<IUserModel> = [];
-  searchIcon = faSearch;
-  userList: Array<IUserModel> = [];
 
-  checkedUserList: Array<IUserModel> = [];
+  public pageOptions = PAGE_OPTIONS;
+
+  isLoading: boolean = true;
+
+  selection = new SelectionModel<any>(true, []);
+
+  dataSource = new MatTableDataSource<any>();
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private userService: UserService,
     public dialog: MatDialog,
     private toastr: ToastrService
   ) {
-    userService.getUsers().subscribe(
+
+  }
+
+  ngOnInit(): void {}
+
+  ngAfterViewInit() {
+   this.refreshUserList();
+  }
+
+  refreshUserList(){
+    this.userService.getUserList().subscribe(
       (data) => {
         this.isLoading = false;
-        this.userList = data;
-        this.userResponses = data;
-        this.totalUsers = data.length;
+        this.dataSource = new MatTableDataSource<any>(data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+
       },
       (err) => {
         this.isLoading = false;
@@ -46,41 +69,59 @@ export class UserManagementComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
-  searchUser(e: any): void {
-    this.userList = this.userResponses.filter((user) => {
-      if (user.displayName!.includes(e.value) || user.email!.includes(e.value))
-        return user;
-      return null;
-    });
-  }
-  checkboxChnaged(e: any, user: IUserModel): void {
-    if (e.checked) this.checkedUserList.push(user);
-    else
-      this.checkedUserList.splice(
-        this.checkedUserList.findIndex((u) => u.email == user.email),
-        1
+    /** Whether the number of selected elements matches the total number of rows. */
+    isAllSelected() {
+      const numSelected = this.selection.selected.length;
+      const numRows = this.dataSource.data.length;
+      return numSelected === numRows;
+    }
+
+    /** Selects all rows if they are not all selected; otherwise clear selection. */
+    masterToggle() {
+      this.isAllSelected() ?
+          this.selection.clear() :
+          this.dataSource.data.forEach(row => this.selection.select(row));
+    }
+
+    /** The label for the checkbox on the passed row */
+    checkboxLabel(row?: any): string {
+      if (!row) {
+        return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+      }
+      return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    }
+
+
+    applyFilter(event: Event) {
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+
+      if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+      }
+    }
+
+  deleteBulkUser(): void {
+    if (this.selection.selected.length == 0) {
+      this.toastr.error('Please select atleast one Question');
+    } else {
+      let userIdList = this.selection.selected.map(
+        (x) => x.userName
       );
-    console.log(this.checkedUserList);
+      this.userService.bulkDeleteUser(userIdList).subscribe(
+        (resp) => {
+          this.toastr.success('Users Delete SuccessFully');
+          this.selection.clear();
+          this.refreshUserList();
+        },
+        (error) => {
+          this.toastr.error(error.error.apierror.message);
+        }
+      );
+    }
   }
 
-  deleteUser(): void {
-    if (!this.checkedUserList.length) return;
-    const userToDelete = this.checkedUserList[0];
-    this.userService.deleteUser(userToDelete.userName).subscribe(
-      (data) => {
-        this.checkedUserList.shift();
-        this.userList.splice(
-          this.userList.findIndex((u) => u.email == userToDelete.email),
-          1
-        );
-        this.toastr.success(`User removed.`);
-      },
-      (err) => this.toastr.error('Unable to delete user')
-    );
-  }
-
-  performGridAction(type?: string) {
+  performGridAction(type?: string,row?:any) {
     switch (type) {
       case 'upload':
         this.openBulkUploadDialog();
@@ -88,6 +129,18 @@ export class UserManagementComponent implements OnInit {
       case 'add':
         this.openAddUserdDialog();
         break;
+      case 'edit':
+          this.openEditUserdDialog(row);
+          break;
+      case 'delete':
+          this.deleteUser(row);
+          break;
+      case 'bulk_delete':
+          this.openAddUserdDialog();
+          break;
+      case 'view':
+          this.openViewUserdDialog(row);
+          break;
       default:
         break;
     }
@@ -95,13 +148,39 @@ export class UserManagementComponent implements OnInit {
   openBulkUploadDialog() {
     const dialogRef = this.dialog.open(UserBulkUploadDialogComponent);
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
+      this.refreshUserList();
     });
   }
   openAddUserdDialog() {
-    const dialogRef = this.dialog.open(AddUserDialogComponent);
+    const dialogRef = this.dialog.open(AddUserDialogComponent, { disableClose: true });
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
+      this.refreshUserList();
     });
   }
+
+  openEditUserdDialog(row: any) {
+    row.isView = false;
+    const dialogRef = this.dialog.open(AddUserDialogComponent, { disableClose: true, data: row });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.refreshUserList();
+    });
+  }
+
+  openViewUserdDialog(row: any) {
+    row.isView = true;
+    const dialogRef = this.dialog.open(AddUserDialogComponent, { disableClose: true, data: row });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.refreshUserList();
+    });
+  }
+
+  deleteUser(user: any){
+    this.userService.deleteUser(user.userName).subscribe(resp => {
+      this.refreshUserList();
+      this.toastr.success(`User removed.`);
+    },error =>{
+      this.toastr.error('Unable to delete user');
+    })
+  }
+
 }

@@ -17,6 +17,7 @@
         name="filename"
         #fileInput
       />
+      <label class="custom-file-label" for="customFile">{{fileName}}</label>
     </div>
     <div *ngIf="file?.inProgress">
       <div [@fadeInOut]="file?.state">

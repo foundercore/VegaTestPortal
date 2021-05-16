@@ -1,32 +1,43 @@
 import { QuestionManagementService } from './../../../services/question-management/question-management.service';
-import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  AfterViewInit,
+  ViewChild,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { QuestionModel } from 'src/app/models/questions/question-model';
-import {merge, of as observableOf} from 'rxjs';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
-import {SelectionModel} from '@angular/cdk/collections';
+import { forkJoin, merge, Observable, of as observableOf, Subject } from 'rxjs';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { SelectionModel } from '@angular/cdk/collections';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { QuestionBulkUploadDialogComponent } from '../question-bulk-upload-dialog/question-bulk-upload-dialog.component';
-import { Router} from '@angular/router';
+import { QuestionFormComponent } from '../question-form/question-form.component';
+import { Router, Params, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SearchQuestion } from 'src/app/models/questions/search-question-model';
-
+import { PAGE_OPTIONS } from 'src/app/core/constants';
 
 @Component({
   selector: 'app-question-management',
   templateUrl: './question-management.component.html',
   styleUrls: ['./question-management.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class QuestionManagementComponent implements OnInit,AfterViewInit  {
-
-
-  displayedColumns: string[] = ['select', 'name', 'description', 'subject','explanation_added','tags','actions'];
-
-  filterColumns: string[] = ['Name & Description', 'Subject', 'Tags', 'Type','Topic','Sub Topic'];
+export class QuestionManagementComponent implements OnInit, AfterViewInit {
+  displayedColumns: string[] = [
+    'select',
+    'name',
+    'description',
+    'subject',
+    'explanation_added',
+    'tags',
+    'actions',
+  ];
 
 
   dataSource = new MatTableDataSource<QuestionModel>();
@@ -37,15 +48,25 @@ export class QuestionManagementComponent implements OnInit,AfterViewInit  {
   isLoadingResults = true;
   isRateLimitReached = false;
 
+  public pageOptions = PAGE_OPTIONS;
 
-  filterGroup  = new FormGroup({
-    filterField : new FormControl('Name & Description'),
-    filterValue : new FormControl(),
-  })
 
-  filterOptions:string[] = [];
+  filterGroup = new FormGroup({
+    filterNameValue: new FormControl(),
+    questionTypeCntrl: new FormControl(),
+    subjectCntrl: new FormControl(),
+    tagCntrl: new FormControl(),
+    topicCntrl: new FormControl(),
+    substopicCntrl: new FormControl(),
+  });
 
-  typeOfFilter = 1;
+  isFilterApply = false;
+
+  subjectList: string[] = [];
+  topicList: string[] = [];
+  subTopicList: string[] = [];
+  tags: string[] | undefined = [];
+  questionTypeList: string[] = [];
 
   @ViewChild(MatTable)
   table!: MatTable<any>;
@@ -61,46 +82,41 @@ export class QuestionManagementComponent implements OnInit,AfterViewInit  {
     public dialog: MatDialog,
     private router: Router,
     private toastr: ToastrService
-    ) {}
-
-
-  ngOnInit(): void {
-
+  ) {
+    forkJoin([
+      this.questionService.getQuestionType(),
+      this.questionService.getQuestionTags(),
+      this.questionService.getQuestionSubjects(),
+      this.questionService.getQuestionTopics(),
+      this.questionService.getQuestionSubtopics(),
+    ]).subscribe((results) => {
+      this.questionTypeList = results[0];
+      this.tags = results[1];
+      this.subjectList = results[2];
+      this.topicList = results[3];
+      this.subTopicList = results[4];
+    });
   }
 
+  ngOnInit(): void {}
 
   ngAfterViewInit() {
-
-    merge(this.sort.sortChange, this.paginator.page,this.filterGroup.controls['filterValue'].valueChanges)
+    merge(
+      this.sort.sortChange,
+      this.paginator.page    )
       .pipe(
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          const searchQuestion = new SearchQuestion(String(this.paginator.pageIndex + 1),this.paginator.pageSize,this.sort.active, this.sort.direction )
-          if(this.filterGroup.controls['filterValue'].value && this.filterGroup.controls['filterValue'].value.length != 0){
-            if(this.filterGroup.controls['filterField'].value === 'Name & Description')
-                    searchQuestion.nameRegexPattern = this.filterGroup.controls['filterValue'].value;
-            else  if(this.filterGroup.controls['filterField'].value === 'Subject')
-                    searchQuestion.subject = this.filterGroup.controls['filterValue'].value;
-            else  if(this.filterGroup.controls['filterField'].value === 'Tags')
-                    searchQuestion.tags = this.filterGroup.controls['filterValue'].value;
-            else  if(this.filterGroup.controls['filterField'].value === 'Type')
-                    searchQuestion.type = this.filterGroup.controls['filterValue'].value;
-            else  if(this.filterGroup.controls['filterField'].value === 'Topic')
-                     searchQuestion.nameRegexPattern = this.filterGroup.controls['filterValue'].value;
-            else  if(this.filterGroup.controls['filterField'].value === 'Sub Topic')
-                     searchQuestion.nameRegexPattern = this.filterGroup.controls['filterValue'].value;
-
-            searchQuestion.pageNumber = "1";
-          }
+          const searchQuestion = this.createSearchObject();
           return this.questionService.getQuestionList(searchQuestion);
         }),
-        map(data => {
+        map((data) => {
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
           this.totalNumberOfRecords = data.totalRecords;
-          return data.questions.map(x => {
-            x.explanation_added = x.explanation?.length != 0 ? "Yes": "No";
+          return data.questions.map((x) => {
+            x.explanation_added = x.explanation?.length != 0 ? 'Yes' : 'No';
             return x;
           });
         }),
@@ -109,71 +125,99 @@ export class QuestionManagementComponent implements OnInit,AfterViewInit  {
           this.isRateLimitReached = true;
           return observableOf([]);
         })
-      ).subscribe(data => this.dataSource.data = data);
-
-
-      this.filterGroup.controls['filterField'].valueChanges.subscribe(resp => {
-            if(resp === 'Name & Description'){
-              this.typeOfFilter = 1;
-              this.filterOptions = [];
-            }
-            else  if(resp === 'Subject'){
-                  this.typeOfFilter = 2;
-                  this.questionService.getQuestionSubjects().subscribe(resp => this.filterOptions = resp);
-            }
-            else  if(resp === 'Tags'){
-                  this.typeOfFilter = 3;
-                  this.questionService.getQuestionTags().subscribe(resp => this.filterOptions = resp);
-            }
-            else  if(resp === 'Type'){
-                  this.typeOfFilter = 2;
-                  this.questionService.getQuestionType().subscribe(resp => this.filterOptions = resp);
-            }
-            else  if(resp === 'Topic'){
-                  this.typeOfFilter = 2;
-                  this.questionService.getQuestionTopics().subscribe(resp => this.filterOptions = resp);
-            }
-            else  if(resp === 'Sub Topic'){
-                this.typeOfFilter = 2;
-                this.questionService.getQuestionSubtopics().subscribe(resp => this.filterOptions = resp);
-              }
-        this.filterGroup.controls['filterValue'].reset();
-      })
+      )
+      .subscribe((data) => (this.dataSource.data = data));
   }
 
   resetPaging(): void {
     this.paginator.pageIndex = 0;
   }
 
-
-  performGridAction(type?: string,row?:any){
-      if(type === 'upload'){
-          this.openBulkUploadDialog();
-      } else if (type === 'add'){
-        this.router.navigate(['home/questionmanagement/add']);
-      } else if(type === 'view'){
-
-      }else if(type === 'edit'){
-          this.router.navigate(['home/questionmanagement/' + row.id?.questionId + '/edit']);
-      }else if(type === 'delete'){
-        this.deleteQuestion(row);
-      } else if(type === 'bulk_delete'){
-          this.bulkDeletQuestions();
-      }
+  performGridAction(type?: string, row?: any) {
+    if (type === 'upload') {
+      this.openBulkUploadDialog();
+    } else if (type === 'add') {
+      this.router.navigate(['home/questionmanagement/add']);
+    } else if (type === 'view') {
+    } else if (type === 'edit') {
+      this.router.navigate([
+        'home/questionmanagement/' + row.id?.questionId + '/edit',
+      ]);
+    } else if (type === 'delete') {
+      this.deleteQuestion(row);
+    } else if (type === 'bulk_delete') {
+      this.bulkDeletQuestions();
+    }
   }
 
-  applyFilter(event: any){
-    if(event.value)
-    this.filterGroup.controls['filterValue'].setValue(event.value);
-    else
-    this.filterGroup.controls['filterValue'].setValue(event.target.value);
+  applyFilter() {
+    this.isFilterApply = true;
+    this.isLoadingResults = true;
+    this.resetPaging();
+    const searchQuestion =  this.createSearchObject();
+    this.refreshQuestionData(searchQuestion);
   }
 
-   /** Selects all rows if they are not all selected; otherwise clear selection. */
-   masterToggle() {
-    this.isAllSelected() ?
-       this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
+  resetFilter() {
+    this.filterGroup.controls['filterNameValue'].reset();
+    this.filterGroup.controls['questionTypeCntrl'].reset();
+    this.filterGroup.controls['subjectCntrl'].reset();
+    this.filterGroup.controls['tagCntrl'].reset();
+    this.filterGroup.controls['topicCntrl'].reset();
+    this.filterGroup.controls['substopicCntrl'].reset();
+    this.isFilterApply = false;
+    this.resetPaging();
+    const searchQuestion =  this.createSearchObject();
+    this.refreshQuestionData(searchQuestion);
+  }
+
+  refreshQuestionData(searchQuestion: SearchQuestion){
+    this.questionService.getQuestionList(searchQuestion).subscribe(data => {
+      this.isLoadingResults = false;
+      this.isRateLimitReached = false;
+      this.totalNumberOfRecords = data.totalRecords;
+      data.questions.map((x) => {
+        x.explanation_added = x.explanation?.length != 0 ? 'Yes' : 'No';
+        return x;
+      });
+      this.dataSource.data = data.questions;
+    },error => {
+      this.isLoadingResults = false;
+      this.isRateLimitReached = true;
+    })
+  }
+
+  createSearchObject(){
+    const searchQuestion = new SearchQuestion(
+      String(this.paginator.pageIndex + 1),
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction
+    );
+
+    if(this.isFilterApply){
+      if(this.filterGroup.controls['filterNameValue'].value !== null && this.filterGroup.controls['filterNameValue'].value.length !== 0)
+      searchQuestion.nameRegexPattern = this.filterGroup.controls['filterNameValue'].value;
+      else if(this.filterGroup.controls['questionTypeCntrl'].value !== null && this.filterGroup.controls['questionTypeCntrl'].value.length !== 0)
+      searchQuestion.type = this.filterGroup.controls['questionTypeCntrl'].value;
+      else if(this.filterGroup.controls['subjectCntrl'].value !== null && this.filterGroup.controls['subjectCntrl'].value.length !== 0)
+      searchQuestion.subject = this.filterGroup.controls['subjectCntrl'].value;
+      else if(this.filterGroup.controls['tagCntrl'].value !== null && this.filterGroup.controls['tagCntrl'].value.length !== 0)
+      searchQuestion.tags = this.filterGroup.controls['tagCntrl'].value;
+      // else if(this.filterGroup.controls['topicCntrl'].value !== null && this.filterGroup.controls['topicCntrl'].value.length !== 0)
+      // searchQuestion.topic = this.filterGroup.controls['topicCntrl'].value;
+      // else if(this.filterGroup.controls['substopicCntrl'].value !== null && this.filterGroup.controls['substopicCntrl'].value.length !== 0)
+      // searchQuestion.nameRegexPattern = this.filterGroup.controls['substopicCntrl'].value;
+    }
+
+    return searchQuestion;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -188,40 +232,47 @@ export class QuestionManagementComponent implements OnInit,AfterViewInit  {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
+      row.id
+    }`;
   }
 
   openBulkUploadDialog() {
     const dialogRef = this.dialog.open(QuestionBulkUploadDialogComponent);
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       console.log(`Dialog result: ${result}`);
     });
   }
 
-  deleteQuestion(row: QuestionModel){
-      this.questionService.deletQuestion(row.id?.questionId).subscribe(resp => {
-          this.toastr.success("Question Delete SuccessFully");
-          this.resetPaging();
+  deleteQuestion(row: QuestionModel) {
+    this.questionService.deletQuestion(row.id?.questionId).subscribe(
+      (resp) => {
+        this.toastr.success('Question Delete SuccessFully');
+        this.resetPaging();
       },
-      error =>{
-          this.toastr.error(error.error.apierror.message);
+      (error) => {
+        this.toastr.error(error.error.apierror.message);
       }
-      )
+    );
   }
 
-  bulkDeletQuestions(){
-    if(this.selection.selected.length == 0){
-      this.toastr.error("Please select atleast one Question");
+  bulkDeletQuestions() {
+    if (this.selection.selected.length == 0) {
+      this.toastr.error('Please select atleast one Question');
     } else {
-      let questionIdlList = this.selection.selected.map(x => x.id?.questionId);
-      this.questionService.bulkDeletQuestions(questionIdlList).subscribe(resp => {
-        this.toastr.success("Question Delete SuccessFully");
-        this.selection.clear();
-        this.resetPaging();
-    },error =>{
-        this.toastr.error(error.error.apierror.message);
-    })
+      let questionIdlList = this.selection.selected.map(
+        (x) => x.id?.questionId
+      );
+      this.questionService.bulkDeletQuestions(questionIdlList).subscribe(
+        (resp) => {
+          this.toastr.success('Question Delete SuccessFully');
+          this.selection.clear();
+          this.resetPaging();
+        },
+        (error) => {
+          this.toastr.error(error.error.apierror.message);
+        }
+      );
     }
-
-}
+  }
 }

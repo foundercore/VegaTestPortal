@@ -14,6 +14,31 @@
   width: 700px;
   .example-container {
     display: flex;
-    justify-content: space-around;
+    flex-wrap: wrap;
+    //justify-content: space-around;
+    justify-content: flex-start;
+    .mat-form-field{
+      margin-right: 40px;
+      width: 310px !important;
+    }
   }
+}
+
+
+.btn-grp-cls {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.save-btn-cls {
+  background: blue;
+  color: white;
+}
+
+.reset-btn-cls {
+  background: red;
+  color: white;
+  margin-left: 20px;
 }

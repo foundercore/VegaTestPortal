@@ -57,7 +57,8 @@ table {
 }
 
 .question-grid-search-bar{
-  margin: 20px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .question-grid-action{
@@ -74,4 +75,44 @@ table {
 .action-btn{
   margin-right: 10px;
   cursor: pointer;
+}
+
+
+.question-filter-panel{
+  margin-left: 20px;
+  margin-top: 100px;
+  margin-right: 20px;
+}
+
+
+.w-25-field{
+  width: 25%;
+}
+
+
+.w-50-field{
+  width: 50%;
+}
+
+.form-field-padding{
+  padding-right: 20px;
+  width: -webkit-fill-available;
+}
+
+
+.filter-btn-cls{
+    position: absolute;
+    right: 40px;
+    bottom: 20px;
+    background: blue;
+    color: white;
+}
+
+.reset-btn-cls{
+  position: absolute;
+  right: 100px;
+  bottom: 20px;
+  background: red;
+  color: white;
+  margin-right: 10px;
 }
