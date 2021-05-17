@@ -1,30 +1,30 @@
 <div class="sidenav">
   <span (click)="toggleNav()" class="nav__ham"
-    ><fa-icon [icon]="faBars"></fa-icon
-  ></span>
+    ><fa-icon [icon]="faBars"></fa-icon>
+  </span>
 
   <a [routerLink]="['./dashboard']">
     <fa-icon [icon]="faHome" class="nav__icon"></fa-icon>
-    <p class="nav__link">DashBoard</p></a
-  >
-  <a [routerLink]="['./questionmanagement']">
-    <fa-icon [icon]="faQuestion" class="nav__icon"></fa-icon>
-    <!-- <i class="fa fa-question-circle" aria-hidden="true"></i> -->
-    <p class="nav__link">Question</p>
-    </a
-  >
-  <a [routerLink]="['./tests']"
-    >
-    <fa-icon [icon]="faFileText" class="nav__icon"></fa-icon>
-    <p class="nav__link">Tests</p></a
-  >
+    <p class="nav__link">DashBoard</p>
+  </a>
 
-  <a [routerLink]="['./reports']">
+  <a [routerLink]="['./questionmanagement']"  *ngIf="authorizationService.isAdmin">
+    <fa-icon [icon]="faQuestion" class="nav__icon"></fa-icon>
+    <p class="nav__link">Question</p>
+  </a>
+
+  <a [routerLink]="['./tests']" *ngIf="authorizationService.isAdmin" >
+    <fa-icon [icon]="faFileText" class="nav__icon"></fa-icon>
+    <p class="nav__link">Tests</p>
+  </a>
+
+  <a [routerLink]="['./reports']" *ngIf="authorizationService.isAdmin">
     <fa-icon [icon]="faFile" class="nav__icon"></fa-icon>
-    <p class="nav__link">Reports</p></a
-  >
-  <a [routerLink]="['./users']"
-    ><fa-icon [icon]="faUsers" class="nav__icon"></fa-icon>
-    <p class="nav__link">Users</p></a
-  >
+    <p class="nav__link">Reports</p>
+  </a>
+
+  <a [routerLink]="['./users']" *ngIf="authorizationService.isAdmin">
+    <fa-icon [icon]="faUsers" class="nav__icon"></fa-icon>
+    <p class="nav__link">Users</p>
+  </a>
 </div>

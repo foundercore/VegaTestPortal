@@ -6,7 +6,7 @@ export interface IUserModel {
   firstName?: string;
   gender?: string;
   lastName?: string;
-  authorities?: [];
+  authorities?: any[];
   state?: string;
   userName: string;
   tenantId?: string;

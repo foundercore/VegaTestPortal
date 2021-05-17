@@ -13,6 +13,7 @@ import {
   faFileAlt,
   faQuestion,
 } from '@fortawesome/free-solid-svg-icons';
+import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
 
 @Component({
   selector: 'app-navbar',
@@ -33,7 +34,8 @@ export class NavbarComponent implements OnInit {
   faFileText = faFileAlt;
   faQuestion = faQuestion;
 
-  constructor() {}
+  constructor(public authorizationService: AuthorizationService) {}
+
   ngOnInit(): void {}
 
   toggleNav() {
