@@ -1,1 +1,77 @@
-<p>profile works!</p>
+<h1 mat-dialog-title class="title">
+  <span>Profile</span>
+
+  <button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h1>
+<div mat-dialog-content>
+  <div class="add-user-content">
+    <div class="example-container"  [formGroup]="userFormGroup">
+
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput required  formControlName="firstname" />
+        <mat-error *ngIf="userFormGroup.controls.firstname.hasError('required')">
+          First Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput required formControlName="lastname" />
+        <mat-error *ngIf="userFormGroup.controls.lastname.hasError('required')">
+          Last Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Display Name</mat-label>
+        <input matInput required formControlName="displayName" />
+        <mat-error *ngIf="userFormGroup.controls.lastname.hasError('required')">
+          Last Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Gender</mat-label>
+        <mat-select formControlName="gender" required>
+          <mat-option value="M">Male</mat-option>
+          <mat-option value="F">Female</mat-option>
+        </mat-select>
+        <mat-error *ngIf="userFormGroup.controls.gender.hasError('required')">
+          Gender is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field style="width: 660px !important" appearance="outline">
+        <mat-label>Address</mat-label>
+        <textarea matInput placeholder="Ex. 100 Main St" required formControlName="address" ></textarea>
+        <mat-error *ngIf="userFormGroup.controls.address.hasError('required')">
+          Address is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>State</mat-label>
+        <input matInput placeholder="Ex. Delhi" required formControlName="state" />
+        <mat-error *ngIf="userFormGroup.controls.state.hasError('required')">
+          State is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput placeholder="Ex. pat@example.com" required formControlName="email" />
+      </mat-form-field>
+
+    </div>
+    <div class="btn-grp-cls">
+      <button mat-raised-button class="save-btn-cls" (click)="updateProfile()">Update</button>
+    </div>
+  </div>
+</div>

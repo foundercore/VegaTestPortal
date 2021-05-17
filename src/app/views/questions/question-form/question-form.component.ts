@@ -3,7 +3,6 @@ import { QuestionManagementService } from './../../../services/question-manageme
 import { FormControl, FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {MatChipInputEvent} from '@angular/material/chips';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { QuestionOption } from 'src/app/models/questions/question-option-model';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -73,8 +72,8 @@ export class QuestionFormComponent implements OnInit {
   descriptionEditorconfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
-    minHeight: '20rem',
-    maxHeight: '20rem',
+    minHeight: '10rem',
+    maxHeight: '10rem',
     placeholder: 'Enter Description here...',
     translate: 'no',
     sanitize: false,
@@ -144,7 +143,14 @@ export class QuestionFormComponent implements OnInit {
           this.tags = resp.tags;
           this.questionFirstFormGrp.get('topic')?.setValue(resp.topic);
           this.questionThirdFormGrp.get('type')?.setValue(resp.type);
-
+          this.options.forEach(x => {
+            const newCntrl = new FormControl();
+            this.answerOptionFormGrp.addControl(x.key,newCntrl);
+            this.optionCount = parseInt(x.key) > parseInt(this.optionCount)  ? x.key : String(parseInt(this.optionCount));
+          })
+          resp.answer.options.forEach(x => {
+            this.answerOptionFormGrp.controls[x].setValue(true);
+          });
         })
       }
      });
@@ -164,9 +170,16 @@ export class QuestionFormComponent implements OnInit {
   }
 
   createQuestion(){
+    const answerOptions = [];
+
+    for (const field in this.answerOptionFormGrp.controls) {
+      if(this.answerOptionFormGrp.controls[field].value)
+                answerOptions.push(field);
+     }
+
     let questionAnswer : QuestionAnswer = {
       answerText : this.questionForthFormGrp.get('answerText')?.value,
-      options : []
+      options :answerOptions
     }
 
     let question : QuestionModel = {
@@ -200,9 +213,17 @@ export class QuestionFormComponent implements OnInit {
 
 
   updateQuestion(){
+
+    const answerOptions = [];
+
+    for (const field in this.answerOptionFormGrp.controls) {
+      if(this.answerOptionFormGrp.controls[field].value)
+      answerOptions.push(field);
+     }
+
     let questionAnswer : QuestionAnswer = {
       answerText : this.questionForthFormGrp.get('answerText')?.value,
-      options : []
+      options :answerOptions
     }
     //this.updatedQuestion.
     if(this.updatedQuestion){
@@ -226,18 +247,11 @@ export class QuestionFormComponent implements OnInit {
       this.questionManagementService.updateQuestion(this.updatedQuestion).subscribe(resp => {
         this.toastr.success('Question Updated Successfully');
         this.cancel();
-    }, error => {
-      this.toastr.error(error.error.apierror.message);
-    })
-    }
-
-
-
-
-
-
+        }, error => {
+          this.toastr.error(error.error.apierror.message);
+          })
+        }
   }
-
 
   cancel(){
     this.router.navigate(['home/questionmanagement']);

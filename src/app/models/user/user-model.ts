@@ -38,7 +38,7 @@ export class UserModel implements IUserModel {
   lastUpdatedBy?: string | undefined;
   authInfo: string;
 
-  constructor(userObj: any, authInfo: string) {
+  constructor(userObj: any, authInfo: string,authorities: string[]) {
     this.address = userObj?.address;
     this.displayName = userObj?.displayName;
     this.email = userObj?.email;
@@ -46,7 +46,7 @@ export class UserModel implements IUserModel {
     this.firstName = userObj?.firstName;
     this.gender = userObj?.gender;
     this.lastName = userObj?.lastName;
-    this.authorities = userObj?.authorities;
+    this.authorities = authorities;
     this.state = userObj?.state;
     this.userName = userObj?.userName;
     this.tenantId = userObj?.tenantId;
@@ -57,6 +57,11 @@ export class UserModel implements IUserModel {
     this.lastUpdatedBy = userObj?.lastUpdatedBy;
     this.authInfo = authInfo;
   }
+
+
+  setAuthInfo(authInfo:string){
+    this.authInfo = authInfo;
+  }
 }
 
 export interface IUserCommonModel {
@@ -65,7 +70,7 @@ export interface IUserCommonModel {
   firstName?: string;
   gender?: string;
   lastName?: string;
-  roles: [];
+  roles: string[];
   state?: string;
   userName?: string;
 }

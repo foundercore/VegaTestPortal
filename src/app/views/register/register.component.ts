@@ -1,9 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { IUserCreateRequestModel } from 'src/app/models/user/user-model';
 import { AuthService } from 'src/app/services/authentication/auth.service';
 import { UserService } from 'src/app/services/users/users.service';
+import { MustMatch } from '../user/change-password/change-password.component';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -12,12 +14,20 @@ import { UserService } from 'src/app/services/users/users.service';
 })
 export class RegisterComponent implements OnInit {
 
+  registerFormGroup = new FormGroup({
+    firstname: new FormControl('',[Validators.required]),
+    lastname: new FormControl('',[Validators.required]),
+    email: new FormControl('',[Validators.required,Validators.email]  ),
+    password: new FormControl('',[Validators.required,Validators.minLength(6)]),
+    confirmPassword: new FormControl('',[Validators.required]),
+  },MustMatch)
+
+
     constructor(
-        private formBuilder: FormBuilder,
         private router: Router,
         private authService: AuthService,
         private userService: UserService,
-        private toastr: ToastrService
+        private tosterService: ToastrService
     ) {
         if (this.authService.getToken()) {
           this.router.navigateByUrl('/home/dashboard');
@@ -27,24 +37,24 @@ export class RegisterComponent implements OnInit {
     ngOnInit() {
     }
 
-    onSubmit(registerForm: NgForm) {
-        // stop here if form is invalid
-        if (registerForm.invalid) {
+    register() {
+        if (this.registerFormGroup.invalid) {
             return;
         }
-
-        // api call
-        // this.userService.register(this.registerForm.value)
-        //     .pipe(first())
-        //     .subscribe(
-        //         data => {
-        //             this.toastr.success('Registration successful', true);
-        //             this.router.navigate(['/login']);
-        //         },
-        //         error => {
-        //             this.toastr.error(error);
-        //             this.loading = false;
-        //         });
+        const user : IUserCreateRequestModel = {
+          displayName: this.registerFormGroup.controls.firstname.value + ' ' + this.registerFormGroup.controls.lastname.value,
+          firstName:  this.registerFormGroup.controls.firstname.value,
+          lastName:  this.registerFormGroup.controls.lastname.value,
+          roles:  ["ROLE_STUDENT"],
+          password: this.registerFormGroup.controls.password.value,
+          email: this.registerFormGroup.controls.email.value,
+        }
+        this.userService.createUsers(user).subscribe(resp => {
+          this.tosterService.success('Registration successful');
+          this.router.navigate(['/login']);
+        },error => {
+          this.tosterService.error(error.error.apierror.message);
+        });
     }
 
 }

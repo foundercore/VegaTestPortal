@@ -139,6 +139,9 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     } else if (type === 'add') {
       this.router.navigate(['home/questionmanagement/add']);
     } else if (type === 'view') {
+      this.router.navigate([
+        'home/questionmanagement/' + row.id?.questionId + '/view',
+      ]);
     } else if (type === 'edit') {
       this.router.navigate([
         'home/questionmanagement/' + row.id?.questionId + '/edit',

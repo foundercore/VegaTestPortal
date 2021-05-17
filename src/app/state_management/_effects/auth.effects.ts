@@ -6,6 +6,7 @@ import { map, switchMap, catchError, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import {
   AuthActionTypes,
+  ChangeAuthInfo,
   LogIn,
   LogInFailure,
   LogInSuccess,
@@ -31,7 +32,7 @@ export class AuthEffects {
       return this.authService.logIn(payload.username, payload.password).pipe(
         map((user: any) => {
           console.debug(user);
-          return new LogInSuccess(new UserModel(user, btoa(payload.username+':'+ payload.password)));
+          return new LogInSuccess(new UserModel(user.principal, btoa(payload.username+':'+ payload.password),user.authorities));
         }),
         catchError((error: any) => {
           console.error(error);
@@ -59,5 +60,15 @@ export class AuthEffects {
 
     })
   );
+
+
+  @Effect({ dispatch: false })
+  ChangeAuthInfo: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.CHANGE_AUTH_INFO),
+    tap((user: any) => {
+
+    })
+  );
+
 }
 

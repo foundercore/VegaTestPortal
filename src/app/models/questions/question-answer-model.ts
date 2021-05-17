@@ -1,6 +1,6 @@
 export class QuestionAnswer {
   answerText:string | undefined;
-  options: [] | undefined;
+  options: any[] ;
 
   constructor() {
 

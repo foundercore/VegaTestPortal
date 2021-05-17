@@ -1,3 +1,4 @@
+import { ChangePasswordComponent } from './../../../views/user/change-password/change-password.component';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -34,6 +35,13 @@ export class HeaderComponent implements OnInit {
     const dialogRef = this.dialog.open(ProfileComponent);
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  changePassword(): void {
+    const dialogRef = this.dialog.open(ChangePasswordComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      dialogRef.close();
     });
   }
 
