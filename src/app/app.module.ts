@@ -43,6 +43,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { reducers } from './state_management/_states/auth.state';
 import { QuestionFormPreviewComponent } from './views/questions/question-form-preview/question-form-preview.component';
+import { StudentBatchManagementComponent } from './views/student-batch/student-batch-management/student-batch-management.component';
+import { AddBatchComponent } from './views/student-batch/add-batch/add-batch.component';
+import { AddBatchStudentComponent } from './views/student-batch/add-batch-student/add-batch-student.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +69,10 @@ import { QuestionFormPreviewComponent } from './views/questions/question-form-pr
     AdminDashboardComponent,
     StudentDashboardComponent,
     ChangePasswordComponent,
-    QuestionFormPreviewComponent
+    QuestionFormPreviewComponent,
+    StudentBatchManagementComponent,
+    AddBatchComponent,
+    AddBatchStudentComponent
   ],
 
   imports: [

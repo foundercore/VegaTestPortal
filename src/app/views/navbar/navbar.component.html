@@ -27,4 +27,10 @@
     <fa-icon [icon]="faUsers" class="nav__icon"></fa-icon>
     <p class="nav__link">Users</p>
   </a>
+
+  <a [routerLink]="['./batch']" *ngIf="authorizationService.isAdmin">
+    <fa-icon [icon]="faUsers" class="nav__icon"></fa-icon>
+    <p class="nav__link">Student Batch</p>
+  </a>
+
 </div>
