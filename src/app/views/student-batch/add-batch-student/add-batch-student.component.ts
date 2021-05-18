@@ -33,8 +33,8 @@ export class AddBatchStudentComponent implements OnInit {
 
   ngOnInit() {
     this.studentBatchService.getStudentBatch(this.data.id.batchId).subscribe(resp => {
-      this.taggedStudentList = resp.students;
-      this.previousStudentList = Array.from(resp.students);
+      this.taggedStudentList = resp.students !== null ? resp.students : [];
+      this.previousStudentList = Array.from(resp.students !== null ? resp.students : []);
       this.userService.getUserList().subscribe(resp => {
         this.availableStudentList = resp.filter(x => x.roles.includes("ROLE_STUDENT")).map(x => x.email).filter(x => !this.taggedStudentList.includes(x));
       });
