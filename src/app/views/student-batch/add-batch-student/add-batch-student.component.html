@@ -1,0 +1,53 @@
+<h1 mat-dialog-title class="title">
+  <span >Add Student In Batch</span>
+  <button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h1>
+<div mat-dialog-content>
+  <div class="add-student-batch-content">
+    <div class="add-student-batch-content-container">
+<div class="example-container">
+
+  <span>List of All Student which are NOT in the batch selected</span>
+
+  <div
+    cdkDropList
+    #todoList="cdkDropList"
+    [cdkDropListData]="availableStudentList"
+    [cdkDropListConnectedTo]="[doneList]"
+    class="example-list"
+    (cdkDropListDropped)="drop($event)">
+    <div class="example-box" *ngFor="let item of availableStudentList" cdkDrag>{{item}}</div>
+  </div>
+</div>
+
+<div style="align-self: center;margin: 0px 20px;">
+  <div>
+    <i class="fas fa-long-arrow-alt-right fa-5x" style="cursor:pointer"></i>
+  </div>
+  <div>
+    <i class="fas fa-long-arrow-alt-left fa-5x" style="cursor:pointer"></i>
+  </div>
+</div>
+
+<div class="example-container">
+  <span>List of All Student which are in the batch selected</span>
+
+  <div
+    cdkDropList
+    #doneList="cdkDropList"
+    [cdkDropListData]="taggedStudentList"
+    [cdkDropListConnectedTo]="[todoList]"
+    class="example-list"
+    (cdkDropListDropped)="drop($event)">
+    <div class="example-box" *ngFor="let student of taggedStudentList" cdkDrag>{{student}}</div>
+  </div>
+</div>
+
+    </div>
+    <div class="btn-grp-cls">
+      <button   mat-raised-button class="save-btn-cls" (click)="addStudent()">Save</button>
+    </div>
+  </div>
+</div>

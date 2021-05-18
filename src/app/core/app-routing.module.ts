@@ -1,3 +1,4 @@
+import { StudentBatchManagementComponent } from './../views/student-batch/student-batch-management/student-batch-management.component';
 import { QuestionFormPreviewComponent } from './../views/questions/question-form-preview/question-form-preview.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -40,6 +41,7 @@ const routes: Routes = [
       { path: 'reports', component: ReportsComponent },
       { path: 'tests', component: DashboardComponent },
       { path: 'users', component: UserManagementComponent },
+      { path: 'batch', component: StudentBatchManagementComponent },
     ],
     canActivate: [AuthGuard],
   },

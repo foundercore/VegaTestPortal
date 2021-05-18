@@ -1,0 +1,32 @@
+<h1 mat-dialog-title class="title">
+  <span >Add Batch</span>
+  <button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h1>
+<div mat-dialog-content>
+  <div class="add-batch-content">
+    <div class="example-container"  [formGroup]="batchFormGroup">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput required  formControlName="name" />
+        <mat-error *ngIf="batchFormGroup.controls.name.hasError('required')">
+          Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field style="width: 660px !important" appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput  required formControlName="description" ></textarea>
+        <mat-error *ngIf="batchFormGroup.controls.description.hasError('required')">
+          Description is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="btn-grp-cls">
+      <button   mat-raised-button class="save-btn-cls" (click)="createBatch()">Save</button>
+      <button   mat-raised-button class="reset-btn-cls" (click)="reset()">Reset</button>
+    </div>
+  </div>
+</div>
