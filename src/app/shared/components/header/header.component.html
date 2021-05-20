@@ -1,33 +1,54 @@
-<div class="header">
-  <h1>
-   <a [routerLink]="['./home']">
-    <img
-      src="../../../../assets/images/app-logo.jpg"
-      style="max-height:65px; border-radius: 2.5px"
-    /></a>
-
-  </h1>
-  <div class="circle">
-    <button
-      mat-icon-button
-      [matMenuTriggerFor]="menu"
-      aria-label="User Profile"
-    >
-      <mat-icon>view_headline</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu"  >
-      <button mat-menu-item (click)="showProfile()">
-        <mat-icon>supervised_user_circle</mat-icon>
-        <span>Profile</span>
-      </button>
-      <button mat-menu-item (click)="changePassword()">
-        <mat-icon>vpn_key</mat-icon>
-        <span>Change Password</span>
-      </button>
-      <button mat-menu-item  (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        <span>Signout</span>
-      </button>
-    </mat-menu>
-  </div>
-</div>
+<nav class="navbar">
+  <a href="#" class="navbar-logo">
+    <img style="height: 70px;"  src="../../../../assets/images/app-logo.jpg"/>
+  </a>
+  <ul class="navbar-links">
+    <li>
+      <a [routerLink]="['./dashboard']">DashBoard</a>
+    </li>
+    <li  *ngIf="authorizationService.isAdmin">
+      <a [routerLink]="['./questionmanagement']" >Question</a>
+    </li>
+    <li  *ngIf="false">
+      <a [routerLink]="['./tests']">Tests</a>
+    </li>
+    <li class="navbar-dropdown"  *ngIf="authorizationService.isAdmin">
+      <a>Administration</a>
+      <div class="dropdown">
+        <a [routerLink]="['./users']">User</a>
+        <a [routerLink]="['./batch']">Batch</a>
+      </div>
+    </li>
+    <li  *ngIf="authorizationService.isAdmin">
+      <a [routerLink]="['./reports']">Reports</a>
+    </li>
+    <li style="top: 15px;
+    position: fixed;
+    right: 10px;
+    color: white;">
+      <div class="circle">
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          aria-label="User Profile"
+        >
+          <mat-icon>view_headline</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu"  >
+          <button mat-menu-item (click)="showProfile()">
+            <mat-icon>supervised_user_circle</mat-icon>
+            <span>Profile</span>
+          </button>
+          <button mat-menu-item (click)="changePassword()">
+            <mat-icon>vpn_key</mat-icon>
+            <span>Change Password</span>
+          </button>
+          <button mat-menu-item  (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Signout</span>
+          </button>
+        </mat-menu>
+      </div>
+    </li>
+  </ul>
+</nav>

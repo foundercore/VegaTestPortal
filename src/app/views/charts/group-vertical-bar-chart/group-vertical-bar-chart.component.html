@@ -1,0 +1,28 @@
+
+
+<div class="chart-container">
+  <p class="chart-title">{{title}}</p>
+
+
+<ngx-charts-bar-vertical-2d
+[view] = "[700,400]"
+ [scheme]="colorScheme"
+[results]="multi"
+[gradient]="gradient"
+[xAxis]="showXAxis"
+[yAxis]="showYAxis"
+[legend]="showLegend"
+[showXAxisLabel]="showXAxisLabel"
+[showYAxisLabel]="showYAxisLabel"
+[xAxisLabel]="xAxisLabel"
+[yAxisLabel]="yAxisLabel"
+[legendTitle]="legendTitle"
+[barPadding]="2"
+[groupPadding]="20"
+[roundDomains]=true
+(select)="onSelect($event)"
+(activate)="onActivate($event)"
+(deactivate)="onDeactivate($event)">
+</ngx-charts-bar-vertical-2d>
+
+</div>

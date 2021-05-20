@@ -1,0 +1,28 @@
+
+
+<div class="chart-container">
+  <p class="chart-title">{{title}}</p>
+
+  <ng-container *ngFor="let item of single;let i=index">
+    <p class="title">{{item[0].name}}</p>
+    <div>
+      <ngx-charts-gauge class="test-class"
+      [view]=[300,300]
+      [scheme]="colorScheme[i]"
+      [results]="item"
+      [legend]="legend"
+      [bigSegments]=1
+      [smallSegments]=0
+      [angleSpan]=300
+      [startAngle]=-150
+      (select)="onSelect($event)"
+      (activate)="onActivate($event)"
+      (deactivate)="onDeactivate($event)"
+      >
+    </ngx-charts-gauge>
+    </div>
+
+  </ng-container>
+
+
+</div>
