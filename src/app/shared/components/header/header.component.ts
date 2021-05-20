@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { LogOut } from 'src/app/state_management/_actions/user.action';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import {ProfileComponent } from 'src/app/views/user/profile/profile.component';
+import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
 
 
 @Component({
@@ -21,7 +22,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     private router: Router,
     private store: Store<AppState>,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public authorizationService: AuthorizationService
     ) {}
 
   ngOnInit(): void {}

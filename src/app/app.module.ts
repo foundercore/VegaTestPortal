@@ -1,3 +1,4 @@
+import { GroupVerticalBarChartComponent } from './views/charts/group-vertical-bar-chart/group-vertical-bar-chart.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 //import { ChartsModule, ChartSimpleModule, WavesModule } from 'ng-uikit-pro-standard'
@@ -46,6 +47,10 @@ import { QuestionFormPreviewComponent } from './views/questions/question-form-pr
 import { StudentBatchManagementComponent } from './views/student-batch/student-batch-management/student-batch-management.component';
 import { AddBatchComponent } from './views/student-batch/add-batch/add-batch.component';
 import { AddBatchStudentComponent } from './views/student-batch/add-batch-student/add-batch-student.component';
+import { StudentReportComponent } from './views/reports/student-report/student-report.component';
+import { VerticalBarChartComponent } from './views/charts/vertical-bar-chart/vertical-bar-chart.component';
+import { PieChartComponent } from './views/charts/pie-chart/pie-chart.component';
+import { SingleLayerGaugeComponent } from './views/charts/single-layer-gauge/single-layer-gauge.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +77,12 @@ import { AddBatchStudentComponent } from './views/student-batch/add-batch-studen
     QuestionFormPreviewComponent,
     StudentBatchManagementComponent,
     AddBatchComponent,
-    AddBatchStudentComponent
+    AddBatchStudentComponent,
+    StudentReportComponent,
+    VerticalBarChartComponent,
+    GroupVerticalBarChartComponent,
+    PieChartComponent,
+    SingleLayerGaugeComponent
   ],
 
   imports: [
