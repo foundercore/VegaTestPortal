@@ -21,11 +21,15 @@ text-align: center;
 }
 
 
-// ngx-charts-gauge ::ng-deep .gauge {
-//   transform: translate(150px, 50px) !important;
-// }
+ngx-charts-gauge ::ng-deep .gauge {
+  transform: translate(150px, 50px) !important;
+}
 
 
-// ngx-charts-gauge ::ng-deep svg {
-//   height: 200px;
-// }
+ngx-charts-gauge ::ng-deep svg {
+  height: 200px;
+}
+
+ngx-charts-gauge ::ng-deep  .gauge >  text {
+  transform: scale(1);
+}

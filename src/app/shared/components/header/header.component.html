@@ -6,20 +6,20 @@
     <li>
       <a [routerLink]="['./dashboard']">DashBoard</a>
     </li>
-    <li  *ngIf="authorizationService.isAdmin">
+    <li  *ngIf="authorizationService.isAdminAndStaff">
       <a [routerLink]="['./questionmanagement']" >Question</a>
     </li>
     <li  *ngIf="false">
       <a [routerLink]="['./tests']">Tests</a>
     </li>
-    <li class="navbar-dropdown"  *ngIf="authorizationService.isAdmin">
+    <li class="navbar-dropdown"  *ngIf="authorizationService.isAdminAndStaff">
       <a style="cursor: pointer;">Administration  <i class="fa fa-caret-down"></i> </a>
       <div class="dropdown">
         <a [routerLink]="['./users']">User</a>
         <a [routerLink]="['./batch']">Batch</a>
       </div>
     </li>
-    <li  *ngIf="authorizationService.isAdmin">
+    <li  *ngIf="authorizationService.isAdminAndStaff">
       <a [routerLink]="['./reports']">Reports</a>
     </li>
     <li style="top: 15px;

@@ -31,6 +31,10 @@ export class AuthorizationService   {
     return this.accessRoleList.includes("ROLE_USER_ADMIN");
   }
 
+  get isAdminAndStaff() {
+    return this.accessRoleList.includes("ROLE_USER_ADMIN") || this.accessRoleList.includes("ROLE_STAFF");
+  }
+
   get isStaff() {
     return this.accessRoleList.includes("ROLE_STAFF");
   }
