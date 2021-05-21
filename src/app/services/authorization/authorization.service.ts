@@ -12,11 +12,16 @@ export class AuthorizationService   {
 
   constructor(private store: Store<AppState>) {
     this.store.select('appState').subscribe((data) => {
-      this.accessRoleList = data.user.authorities?.map(x => x.authority);
+      if(data.user)
+             this.accessRoleList = data.user.authorities?.map(x => x.authority);
+      else
+              this.accessRoleList = [];
     });
   }
 
-
+  getAllRoleTag(){
+    return this.accessRoleList;
+  }
 
   get isStudent() {
     return this.accessRoleList.includes("ROLE_STUDENT");
