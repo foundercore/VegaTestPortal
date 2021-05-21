@@ -19,6 +19,7 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { ReportsComponent } from './views/reports/reports.component';
 import { AdminComponent } from './views/admin/admin.component';
 import { AuthGuard } from './guard/auth.guard';
+import { RoleGuard } from './guard/role.guard';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { UploadQuestionsComponent } from './views/questions/upload-questions/upload-questions.component';
@@ -109,6 +110,7 @@ import { SingleLayerGaugeComponent } from './views/charts/single-layer-gauge/sin
   ],
   providers: [
     AuthGuard,
+    RoleGuard,
     LoggedInAuthGuard,
     {
       provide: HTTP_INTERCEPTORS,

@@ -13,7 +13,7 @@
       <a [routerLink]="['./tests']">Tests</a>
     </li>
     <li class="navbar-dropdown"  *ngIf="authorizationService.isAdmin">
-      <a>Administration</a>
+      <a style="cursor: pointer;">Administration  <i class="fa fa-caret-down"></i> </a>
       <div class="dropdown">
         <a [routerLink]="['./users']">User</a>
         <a [routerLink]="['./batch']">Batch</a>

@@ -47,7 +47,6 @@ export class AuthEffects {
   LogInSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
     tap((user: any) => {
-      localStorage.setItem('authInfo', user.payload.authInfo);
       this.router.navigateByUrl('/');
     })
   );
@@ -56,7 +55,6 @@ export class AuthEffects {
   public LogOut: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGOUT),
     tap((user) => {
-      localStorage.removeItem('authInfo');
 
     })
   );

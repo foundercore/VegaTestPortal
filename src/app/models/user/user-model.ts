@@ -17,6 +17,7 @@ export interface IUserModel {
   lastUpdatedBy?: string;
   phone?: number;
   batch?: number;
+  authInfo?:string;
 }
 
 export class UserModel implements IUserModel {
