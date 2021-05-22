@@ -1,0 +1,94 @@
+.card-stats-container{
+  display: flex;
+  margin: 20px 0;
+  color: white;
+  .card-stats{
+
+    width: 25%;
+    height: 150px;
+    margin: 20px;
+    border-radius: 10px;
+    .card-stats-body{
+      display: flex;
+      position: relative;
+      padding: 20px;
+      height: 100%;
+
+    }
+  }
+}
+
+.card-title{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.card-subtitle{
+  font-size: 20px;
+}
+
+
+.card-icon{
+  position: absolute;
+    right: 20px;
+    font-size: 45px;
+}
+
+
+.card-bg-pink{
+  background-color: rgb(240,102,154);
+}
+
+.card-bg-blue{
+  background-color: rgb(76,166,250);
+}
+
+.card-bg-orange{
+  background-color: rgb(255,152,49);
+}
+
+.card-bg-green{
+  background-color: rgb(139,195,74);
+}
+
+
+
+.content {
+  padding: 20px 20px 0;
+  table {
+    width: 100%;
+  }
+  .page-options {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    margin-bottom: 1.2em;
+    button {
+      margin-left: 8px;
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #dcdcdc;
+  }
+
+  @media screen and (max-width: 1280px) {
+    .page-options {
+      flex-direction: column;
+      .user-actions {
+        margin-left: auto;
+      }
+    }
+  }
+}
+
+.student-report-list-grid{
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+}

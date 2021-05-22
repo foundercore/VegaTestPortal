@@ -1,3 +1,2 @@
-<div class="dashboard">Dashboard</div>
-<app-admin-dashboard></app-admin-dashboard>
-
+<app-admin-dashboard *ngIf="!authorizationService.isStudent"></app-admin-dashboard>
+<app-student-dashboard *ngIf="authorizationService.isStudent"></app-student-dashboard>

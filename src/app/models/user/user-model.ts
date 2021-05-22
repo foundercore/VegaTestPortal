@@ -6,7 +6,7 @@ export interface IUserModel {
   firstName?: string;
   gender?: string;
   lastName?: string;
-  authorities?: [];
+  authorities?: any[];
   state?: string;
   userName: string;
   tenantId?: string;
@@ -17,6 +17,7 @@ export interface IUserModel {
   lastUpdatedBy?: string;
   phone?: number;
   batch?: number;
+  authInfo?:string;
 }
 
 export class UserModel implements IUserModel {

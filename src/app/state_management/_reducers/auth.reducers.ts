@@ -66,6 +66,11 @@ export function AppReducer(state = initialState, action: All): State  {
     case AuthActionTypes.RETRIVE_STATE: {
       return retriceState(state);
     }
+    case AuthActionTypes.LOGOUT: {
+      return {
+        ...initialState,
+      };
+    }
     default: {
       return state;
     }
