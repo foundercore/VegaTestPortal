@@ -5,14 +5,13 @@ import { TestsComponent } from './tests/tests.component';
 import { UpdateTestContentComponent } from './update-test-content/update-test-content.component';
 
 const routes: Routes = [
- 
-  {
-    path: 'update-test/:id',
-    component: UpdateTestContentComponent,
-  },
   {
     path: '',
     component: TestsComponent,
+  },
+  {
+    path: 'update-test/:id',
+    component: UpdateTestContentComponent,
   },
   {
     path: 'test-preview',

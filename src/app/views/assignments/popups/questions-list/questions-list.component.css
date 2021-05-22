@@ -3,3 +3,8 @@
     width: 25%;
     padding: 5px;
   }
+
+  .mat-elevation-z8 {
+    box-shadow: none !important;
+  }
+  

@@ -8,12 +8,12 @@ import { TestconfigComponent } from '../popups/test-config/test-config.component
 import { QuestionslistComponent } from '../popups/questions-list/questions-list.component';
 import { ActivatedRoute } from '@angular/router';
 import { TestConfigService } from '../services/test-config-service';
-import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { TestConfigurationVM } from '../models/test-configuration';
 import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
+import { PAGE_OPTIONS } from 'src/app/core/constants';
 
 @Component({
   selector: 'app-update-test-content',
@@ -21,22 +21,27 @@ import { SelectionModel } from '@angular/cdk/collections';
   styleUrls: ['./update-test-content.component.css']
 })
 export class UpdateTestContentComponent implements OnInit {
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   panelOpenState : boolean = false;
   modelsections : any =[]=[];
+  section = new Section();
+  ques =[];
   testId : string ="";
   controlparms : TestConfigurationVM;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   dataSource = new MatTableDataSource<any>();
   selection = new SelectionModel<any>(true, []);
   displayedColumns: string[] = ['select', 'negative', 'positive', 'skip'];
   sectionId : string = "";
+  totalNumberOfRecords = 0;
+  public pageOptions = PAGE_OPTIONS;
   constructor(public dialog: MatDialog,private route: ActivatedRoute,
     private testConfigService : TestConfigService,private toastrService : ToastrService) { }
 
   ngOnInit(): void {
     this.testId = this.route.snapshot.paramMap.get('id'); 
     this.getQuestionPaperbyId();
+   
   }
 
   addSection(){
@@ -73,9 +78,6 @@ export class UpdateTestContentComponent implements OnInit {
          
         }
       )
-        // this.sections.push(model);
-        // localStorage.setItem("sections",JSON.stringify(this.sections));
-        // window.location.reload();
       }
     });
   }
@@ -144,8 +146,7 @@ export class UpdateTestContentComponent implements OnInit {
   }
 
 
-ques =[];
-section : Section;
+
   getSectionId(section : Section){
   this.section = section;
   if(section != null){
@@ -183,5 +184,6 @@ section : Section;
     })
   }
 
+  
 
 }

@@ -73,13 +73,14 @@
                              </table>
                         </div>
                     </div>
-                    <div class="col-12 text-center pt-5">
-                        <button class="btn btn-primary mx-1" (click)="SubmitConfiguration()">
-                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                    <div class="col-12 text-center pt-5"> 
+
+                        <button mat-raised-button class="mat-btn save-btn mx-1" (click)="SubmitConfiguration()">
+                            <mat-icon>save</mat-icon>
                             Save
                         </button>
-                        <button class="btn btn-outline-secondary mx-1">
-                            <i class="fa fa-repeat" aria-hidden="true"></i>
+                        <button mat-raised-button class="mat-btn reset mx-1">
+                            <mat-icon>cached</mat-icon>
                             Reset
                         </button>
                     </div>

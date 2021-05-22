@@ -23,7 +23,7 @@ table {
     border-collapse: collapse;
   }
   thead{
-    background: #ECECEC !important;
+    background: #fff !important;
   }
   tr.mat-header-row {
     height: 45px;
@@ -36,3 +36,55 @@ table {
     background: #3a4248;
     color: #fff !important;
   } */
+
+  .data__table th {
+    background-color: #fff;
+  }
+
+  .data__table th:nth-child(1),
+  .data__table td:nth-child(1) {
+    width: 10%;
+    text-align: center;
+  }
+  .data__table th:nth-child(2),
+  .data__table td:nth-child(2) {
+    width: 40%;
+    text-align: left;
+  }
+  .data__table th:nth-child(3),
+  .data__table td:nth-child(3) {
+    width: 15%;
+    text-align: left;
+  }
+  .data__table th:nth-child(4),
+  .data__table td:nth-child(4) {
+    width: 15%;
+    text-align: left;
+  }
+  .data__table th:nth-child(5),
+  .data__table td:nth-child(5) {
+    width: 20%;
+    text-align: left;
+  }
+
+ .action-btn {
+    cursor: pointer;
+    margin: 0 .3rem;
+  }
+
+  .mat__action_btn:hover {
+    background-color: #275 ;
+    color: #fff;
+  }
+
+  .delete:hover {
+    background-color: red;
+  }
+
+  .mat-elevation-z8 {
+    box-shadow: none !important;
+  }
+  .shadow__box {
+  box-shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%), 0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%);
+
+}

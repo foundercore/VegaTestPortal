@@ -15,15 +15,15 @@
             </div>
             <div class="col-lg-6">
                 <div class="btn__group text-right">
-                    <button mat-raised-button routerLink="/home/assignments/test-preview">
+                    <button class="mx-2 mat__action_btn" mat-raised-button routerLink="/home/assignments/test-preview">
                         <mat-icon>remove_red_eye</mat-icon> View</button>
-                    <button mat-raised-button (click)="deleteSelectedTestsId()">
+                    <button class="mx-2 mat__action_btn delete" mat-raised-button (click)="deleteSelectedTestsId()">
                       <mat-icon>delete_forever</mat-icon> Delete
                     </button>
-                    <button mat-raised-button (click)="createTest()">
+                    <button class="mx-2 mat__action_btn" mat-raised-button (click)="createTest()">
                       <mat-icon>add_circle</mat-icon> Add
                     </button>
-                    <button mat-raised-button >
+                    <button class="mx-2 mat__action_btn" mat-raised-button >
                       <mat-icon>cloud_download</mat-icon> Download
                     </button>
                   </div>
@@ -94,7 +94,8 @@
                 </tr>
             </tbody>
         </table> -->
-        <table mat-table [dataSource]="dataSource"  matSort class="mat-elevation-z8 border custom_table border-right">
+        <div class="shadow__box">
+        <table mat-table [dataSource]="dataSource" class="mat__data__table mb-0"  matSort class="mat-elevation-z8 border custom_table border-right">
             <!-- Checkbox Column -->
             <ng-container matColumnDef="select">
               <th mat-header-cell *matHeaderCellDef>
@@ -150,14 +151,16 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"
                 (click)="selection.toggle(row)">
             </tr>
+              
           </table>
-            <!-- <div class="tbl-no-record" *ngIf="dataSource?.length == 0">
-              No record found
-            </div> -->
           <mat-paginator
           [pageSize]="5"
           [pageSizeOptions]="[5, 25, 50, 100]"
           ></mat-paginator>
+            <!-- <div class="tbl-no-record" *ngIf="dataSource?.length == 0">
+              No record found
+            </div> -->
+          </div>
     </div>
     <!--.//container-->
 </section>

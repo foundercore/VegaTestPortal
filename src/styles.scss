@@ -17,7 +17,7 @@
 }
 
 body {
-  margin: 0em;
+  margin: 0em; 
 }
 
 body {
@@ -248,11 +248,68 @@ mat-checkbox span { white-space: pre-wrap; }
 }
 
 .save-btn {
-  background-color: #3773ff !important;
-  border-color: #3773ff !important;
+  background-color: #448dc4 !important;
+  border-color: #448dc4 !important;
+  color: #fff;
 
   &:hover {
-    background-color: #0f56fc !important;
-    border-color: #0f56fc !important;
+    background-color: #eee !important;
+    border-color: #eee !important;
+    color: #5bc4e1 !important;
+  }
+}
+
+.mat-btn {
+  height: 45px !important;
+}
+
+.reset:hover {
+  background-color: rgb(218, 31, 31);
+  color: #fff;
+}
+
+
+.data__table th {
+  background-color: #fff;
+}
+
+.data__table th:nth-child(1),
+.data__table td:nth-child(1) {
+  width: 10%;
+  text-align: center;
+}
+.data__table th:nth-child(2),
+.data__table td:nth-child(2) {
+  width: 40%;
+  text-align: left;
+}
+.data__table th:nth-child(3),
+.data__table td:nth-child(3) {
+  width: 15%;
+  text-align: left;
+}
+.data__table th:nth-child(4),
+.data__table td:nth-child(4) {
+  width: 15%;
+  text-align: left;
+}
+.data__table th:nth-child(5),
+.data__table td:nth-child(5) {
+  width: 20%;
+  text-align: left;
+}
+
+.shadow__box {
+  box-shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%), 0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%);  
+}
+
+.btn-save {
+  span {
+    padding-left: .4rem;
+  }
+
+  &:hover {
+    background-color: #448dc4;
+    color: #fff;
   }
 }
