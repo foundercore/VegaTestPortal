@@ -6,7 +6,7 @@
     </button>
   </div>
   <div class="card-body">
-    <!-- action box -->
+   
     <div class="row py-3 ">
       <div class="col-lg-6">
         <form action="" class="search__box">
@@ -33,9 +33,9 @@
         </div>
       </div>
     </div>
-    <!--./row-->
+ 
     <div class="shadow__box data__table mt-3">
-      <!-- data table -->
+    
       <table
         mat-table
         [dataSource]="dataSource"
@@ -43,7 +43,7 @@
         class="mat-elevation-z8"
         style="width: 100%"
       >
-        <!-- Checkbox Column -->
+      
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox
@@ -63,7 +63,7 @@
             </mat-checkbox>
           </td>
         </ng-container>
-        <!-- Position Column -->
+      
         <ng-container matColumnDef="quesName">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
           <td
@@ -73,7 +73,7 @@
           ></td>
         </ng-container>
 
-        <!-- Name Column -->
+      
         <ng-container matColumnDef="negativeMark">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             Negative Mark
@@ -87,7 +87,7 @@
           </td>
         </ng-container>
 
-        <!-- Weight Column -->
+       
         <ng-container matColumnDef="positiveMark">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             Positive Mark
@@ -101,7 +101,7 @@
           </td>
         </ng-container>
 
-        <!-- Symbol Column -->
+      
         <ng-container matColumnDef="skipMark">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Skip Mark</th>
           <td mat-cell *matCellDef="let element">
@@ -120,13 +120,10 @@
           (click)="selection.toggle(row)"
         ></tr>
       </table>
-      <!-- <div class="tbl-no-record" *ngIf="dataSource?.length == 0">
-              No record found
-            </div> -->
       <mat-paginator
-        [pageSize]="5"
-        [pageSizeOptions]="[5, 25, 50, 100]"
-      ></mat-paginator>
+      [length]="totalNumberOfRecords"
+      [pageSizeOptions]="pageOptions"
+    ></mat-paginator>
     </div>
    
   </div>

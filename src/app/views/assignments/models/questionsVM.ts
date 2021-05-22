@@ -1,4 +1,4 @@
-export class questionsVM{
+export class QuestionsViewModel{
     id : string = "";
     negativeMark : number = 0;
     positiveMark : number = 0;

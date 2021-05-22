@@ -23,6 +23,8 @@ import { PAGE_OPTIONS } from 'src/app/core/constants';
 export class UpdateTestContentComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  totalNumberOfRecords = 0;
+  public pageOptions = PAGE_OPTIONS;
   panelOpenState : boolean = false;
   modelsections : any =[]=[];
   section = new Section();
@@ -33,8 +35,6 @@ export class UpdateTestContentComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
   displayedColumns: string[] = ['select', 'negative', 'positive', 'skip'];
   sectionId : string = "";
-  totalNumberOfRecords = 0;
-  public pageOptions = PAGE_OPTIONS;
   constructor(public dialog: MatDialog,private route: ActivatedRoute,
     private testConfigService : TestConfigService,private toastrService : ToastrService) { }
 

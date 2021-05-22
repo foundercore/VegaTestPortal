@@ -7,8 +7,9 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
+import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { QuestionModel } from 'src/app/models/questions/question-model';
-import { questionsVM } from '../../models/questionsVM';
+import { QuestionsViewModel } from '../../models/questionsVM';
 import { SearchQuestionPaperVM } from '../../models/searchQuestionVM';
 import { TestConfigService } from '../../services/test-config-service';
 import { AssessmentEditorComponent } from '../assessment-editor/assessment-editor.component';
@@ -22,8 +23,9 @@ import { AssessmentEditorComponent } from '../assessment-editor/assessment-edito
 export class QuestionslistComponent implements OnInit {
   panelOpenState: boolean = false;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  //dataSource: any;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  totalNumberOfRecords = 0;
+  public pageOptions = PAGE_OPTIONS;
   questions: QuestionModel[];
   questions2: QuestionModel[];
   quesmodel = [];
@@ -110,7 +112,6 @@ export class QuestionslistComponent implements OnInit {
 
 
   saveQuestions() {
-    debugger;
     this.quesmodel=[];
     // let model = new Section();
     // model.durationInMinutes = this._data.section.durationInMinutes;
@@ -122,7 +123,7 @@ export class QuestionslistComponent implements OnInit {
     else {
       if (this.selection != null && this._data.testId != null && this._data.section != null) {
         this.selection?.selected?.forEach(element => {
-          let model = new questionsVM();
+          let model = new QuestionsViewModel();
           model.id = element?.id?.questionId;
           model.negativeMark = element.negativeMark;
           model.positiveMark = element.positiveMark;

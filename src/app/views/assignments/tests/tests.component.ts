@@ -6,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
+import { PAGE_OPTIONS } from 'src/app/core/constants';
 import Swal from 'sweetalert2';
 import { TestVM } from '../models/postTestVM';
 import { SearchQuestionPaperVM } from '../models/searchQuestionVM';
@@ -20,7 +21,9 @@ import { TestConfigService } from '../services/test-config-service';
 })
 export class TestsComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  totalNumberOfRecords = 0;
+  public pageOptions = PAGE_OPTIONS;
   dataSource = new MatTableDataSource<any>();
   selection = new SelectionModel<any>(true, []);
   alltest =[];

@@ -70,12 +70,6 @@ const routes: Routes = [
         canActivate: [RoleGuard],
         data: { roles: [Role.ADMIN, Role.STAFF] }
       },
-      // {
-      //   path: 'tests',
-      //   component: DashboardComponent,
-      //   canActivate: [RoleGuard],
-      //   data: { roles: [Role.ADMIN, Role.STAFF] }
-      // },
       { path: 'tests', canActivate: [RoleGuard], 
       data: { roles: [Role.ADMIN, Role.STAFF] },
       loadChildren: () => import('../views/assignments/assignments.module').then(m => m.AssignmentsModule)},

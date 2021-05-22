@@ -6,7 +6,7 @@ import { SearchQuestionPaperVM } from "../models/searchQuestionVM";
 import { BaseService } from "src/app/services/base.service";
 import { TestConfigurationVM } from "../models/test-configuration";
 import { Section } from "../models/sections";
-import { questionsVM } from "../models/questionsVM";
+import { QuestionsViewModel } from "../models/questionsVM";
 
 @Injectable({
     providedIn: "root",
@@ -54,7 +54,7 @@ export class TestConfigService extends BaseService{
         return this.http.post<any>(Url, model,this.headers)
     }
 
-    updateQuestionPaperSectionMeta(model: questionsVM[], sectionId : string="",testId: string = "" ): Observable<any> {
+    updateQuestionPaperSectionMeta(model: QuestionsViewModel[], sectionId : string="",testId: string = "" ): Observable<any> {
         const Url =  `${this.BASE_SERVICE_URL}/api/v1/test/config/${testId}/section/${sectionId}/question/add`;
         return this.http.post<any>(Url, model,this.headers)
     }

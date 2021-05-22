@@ -1,9 +1,10 @@
-import { questionsVM } from "./questionsVM";
+import { QuestionsViewModel } from "./questionsVM";
+
 
 export class Section{
     id : string ="";
     durationInMinutes : number = 0;
     name : string = "";
     testId : string = "";
-    questions : questionsVM[];
+    questions : QuestionsViewModel[];
 }
