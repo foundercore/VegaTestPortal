@@ -1,20 +1,23 @@
- 
 <section class="update__sec py-5">
     <div class="container">
         <!--  -->
         <div class="text-right py-4">
-            <button mat-raised-button class="add-btn" (click)="addSection()">Add Section</button>
+          <button mat-raised-button class="add-btn" (click)="TestConfig()"> <mat-icon>add_circle</mat-icon>Configure Test</button>
+            <button mat-raised-button class="add-btn" (click)="addSection()"> <mat-icon>add_circle</mat-icon>Add Section</button>
         </div>
-        <mat-accordion *ngIf="sections?.length > 0">
-            <div *ngFor="let section of sections">
-            <mat-expansion-panel  (opened)="panelOpenState = true" (closed)="panelOpenState = false" >
+      
+       <!-- <div *ngFor="let sec of modelsections">
+       
+       </div>  -->
+     
+        <mat-accordion *ngIf="modelsections?.length > 0">
+            <mat-expansion-panel  *ngFor="let section of modelsections" expanded="false" (click)="getSectionId(section)">
                 <mat-expansion-panel-header>
                     <mat-panel-title class=" position-relative">
-                        {{section?.sectionName}}
-                        <button class="btn close-btn" (click)="removeItem(section)"><span class="position-center">&times;</span></button> 
+                      <span class="">{{section.name}} </span>
+                        <button class="btn close-btn" (click)="removeSection(section)"><span class="position-center"><mat-icon>delete_forever</mat-icon></span></button> 
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                
                 <h2 class="text-center">Question List</h2>
                 <!-- action box -->
                 <div class="row py-5">
@@ -31,51 +34,50 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="btn__group"> 
-                            <button class="btn btn-danger">Delete</button> 
-                            <button class="btn btn-add">Add</button> 
+                            <!-- <button class="btn btn-danger">Delete</button>  -->
+                            <button class="btn btn-add" (click)="openQuestionList()">Add</button> 
                         </div>
                     </div>
                 </div>
                 <table mat-table [dataSource]="dataSource"  matSort class="mat-elevation-z8 border custom_table border-right">
                     <!-- Checkbox Column -->
                     <ng-container matColumnDef="select">
-                      <th mat-header-cell *matHeaderCellDef >
+                      <th mat-header-cell *matHeaderCellDef>
                         <mat-checkbox (change)="$event ? masterToggle() : null"
-                                      [checked]="selection?.hasValue() && isAllSelected()"
-                                      [indeterminate]="selection?.hasValue() && !isAllSelected()"
-                                      [aria-label]="checkboxLabel()">
+                                      [checked]="selection.hasValue() && isAllSelected()"
+                                      [indeterminate]="selection.hasValue() && !isAllSelected()">
                         </mat-checkbox>
                       </th>
                       <td mat-cell *matCellDef="let row">
                         <mat-checkbox (click)="$event.stopPropagation()"
-                                      (change)="$event ? selection?.toggle(row) : null"
-                                      [checked]="selection?.isSelected(row)"
-                                      [aria-label]="checkboxLabel(row)">
+                                      (change)="$event ? selection.toggle(row) : null"
+                                      [checked]="selection.isSelected(row)">
+                                      
                         </mat-checkbox>
                       </td>
                     </ng-container>
                     <!-- Position Column -->
-                    <ng-container matColumnDef="position">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 1 </th>
+                    <!-- <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
                       <td mat-cell *matCellDef="let element"> dfsd </td>
-                    </ng-container>
+                    </ng-container> -->
                   
                     <!-- Name Column -->
-                    <ng-container matColumnDef="name">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 2 </th>
-                      <td mat-cell *matCellDef="let element"> erwe </td>
+                    <ng-container matColumnDef="negative">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Negative Mark </th>
+                      <td mat-cell *matCellDef="let element"> {{element.negativeMark}} </td>
                     </ng-container>
                   
                     <!-- Weight Column -->
-                    <ng-container matColumnDef="weight">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 3 </th>
-                      <td mat-cell *matCellDef="let element">cvxc  </td>
+                    <ng-container matColumnDef="positive">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Positive Mark </th>
+                      <td mat-cell *matCellDef="let element">{{element.positiveMark}}  </td>
                     </ng-container>
                   
                     <!-- Symbol Column -->
-                    <ng-container matColumnDef="symbol">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 4 </th>
-                      <td mat-cell *matCellDef="let element"> bnvb </td>
+                    <ng-container matColumnDef="skip">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Skip Mark </th>
+                      <td mat-cell *matCellDef="let element"> {{element.skipMark}} </td>
                     </ng-container>
                   
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -83,19 +85,22 @@
                         (click)="selection.toggle(row)">
                     </tr>
                   </table>
-                    <div class="tbl-no-record" *ngIf="dataSource?.length == 0">
+                    <!-- <div class="tbl-no-record" *ngIf="dataSource?.length == 0">
                       No record found
-                    </div>
+                    </div> -->
                   <mat-paginator
                   [pageSize]="5"
                   [pageSizeOptions]="[5, 25, 50, 100]"
                   ></mat-paginator>
             </mat-expansion-panel>
-            </div>
+        
+       
+       
         </mat-accordion>
-        <div class="py-5 text-center" *ngIf="sections?.length == 0">
+     
+        <!-- <div class="py-5 text-center" *ngIf="sections?.length == 0">
             No Sections Found
-        </div>
+        </div> -->
 
     </div>
     <!--.//container-->

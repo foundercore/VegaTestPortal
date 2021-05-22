@@ -28,11 +28,11 @@ table {
   tr.mat-header-row {
     height: 45px;
   }
-  th {
+  /* th {
     background: #3a4248;
     color: #fff !important;
-  }
-  .mat-header-cell {
+  } */
+  /* .mat-header-cell {
     background: #3a4248;
     color: #fff !important;
-  }
+  } */

@@ -40,10 +40,11 @@ const routes: Routes = [
       { path: 'reports', component: ReportsComponent },
       { path: 'tests', component: DashboardComponent },
       { path: 'users', component: UserManagementComponent },
+      { path: 'assignments', loadChildren: () => import('../views/assignments/assignments.module').then(m => m.AssignmentsModule)},
+
     ],
     canActivate: [AuthGuard],
   },
-  { path: 'assignments', loadChildren: () => import('../views/assignments/assignments.module').then(m => m.AssignmentsModule)},
   {
     path: '**',
     redirectTo: 'home',
