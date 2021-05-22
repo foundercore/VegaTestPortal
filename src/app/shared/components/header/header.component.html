@@ -9,9 +9,12 @@
     <li  *ngIf="authorizationService.isAdminAndStaff">
       <a [routerLink]="['./questionmanagement']" >Question</a>
     </li>
-    <li  *ngIf="false">
-      <a [routerLink]="['./tests']">Tests</a>
+    <li  *ngIf="authorizationService.isAdminAndStaff">
+      <a [routerLink]="['./tests']" >Tests</a>
     </li>
+    <!-- <li  *ngIf="false">
+      <a [routerLink]="['./tests']">Tests</a>
+    </li> -->
     <li class="navbar-dropdown"  *ngIf="authorizationService.isAdminAndStaff">
       <a style="cursor: pointer;">Administration  <i class="fa fa-caret-down"></i> </a>
       <div class="dropdown">

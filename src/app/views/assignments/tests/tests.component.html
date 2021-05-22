@@ -15,7 +15,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="btn__group text-right">
-                    <button class="mx-2 mat__action_btn" mat-raised-button routerLink="/home/assignments/test-preview">
+                    <button class="mx-2 mat__action_btn" mat-raised-button routerLink="/home/tests/test-preview">
                         <mat-icon>remove_red_eye</mat-icon> View</button>
                     <button class="mx-2 mat__action_btn delete" mat-raised-button (click)="deleteSelectedTestsId()">
                       <mat-icon>delete_forever</mat-icon> Delete
@@ -28,7 +28,7 @@
                     </button>
                   </div>
                 <!-- <div class="btn__group text-right">
-                    <button class="btn btn-success" routerLink="/home/assignments/test-preview">View</button>
+                    <button class="btn btn-success" routerLink="/home/tests/test-preview">View</button>
                     <button class="btn btn-danger">Delete</button>
                    
                     <button class="btn btn-add" (click)="createTest()">Add</button>
@@ -135,10 +135,10 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
               <!-- <td mat-cell *matCellDef="let element"> </td> -->
               <td mat-cell *matCellDef="let element">
-                <span class="action-btn" matTooltip="View Question" routerLink="/home/assignments/test-preview/{{element?.questionPaperId}}">
+                <span class="action-btn" matTooltip="View Question" routerLink="/home/tests/test-preview/{{element?.questionPaperId}}">
                   <mat-icon>remove_red_eye</mat-icon>
                 </span>
-                <span class="action-btn" matTooltip="Edit Question" routerLink="/home/assignments/update-test/{{element?.questionPaperId}}">
+                <span class="action-btn" matTooltip="Edit Question" routerLink="/home/tests/update-test/{{element?.questionPaperId}}">
                   <mat-icon>edit</mat-icon>
                 </span>
                 <span class="action-btn" matTooltip="Delete Question" (click)="deleteQuestionPaperbyId(element?.questionPaperId)">

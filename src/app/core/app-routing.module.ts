@@ -64,25 +64,21 @@ const routes: Routes = [
           }
         ],
        },
-<<<<<<< HEAD
-      { path: 'reports', component: ReportsComponent },
-      { path: 'tests', component: DashboardComponent },
-      { path: 'users', component: UserManagementComponent },
-      { path: 'assignments', loadChildren: () => import('../views/assignments/assignments.module').then(m => m.AssignmentsModule)},
-
-=======
       {
         path: 'reports',
         component: ReportsComponent,
         canActivate: [RoleGuard],
         data: { roles: [Role.ADMIN, Role.STAFF] }
       },
-      {
-        path: 'tests',
-        component: DashboardComponent,
-        canActivate: [RoleGuard],
-        data: { roles: [Role.ADMIN, Role.STAFF] }
-      },
+      // {
+      //   path: 'tests',
+      //   component: DashboardComponent,
+      //   canActivate: [RoleGuard],
+      //   data: { roles: [Role.ADMIN, Role.STAFF] }
+      // },
+      { path: 'tests', canActivate: [RoleGuard], 
+      data: { roles: [Role.ADMIN, Role.STAFF] },
+      loadChildren: () => import('../views/assignments/assignments.module').then(m => m.AssignmentsModule)},
       {
         path: 'users',
         component: UserManagementComponent,
@@ -95,7 +91,7 @@ const routes: Routes = [
         canActivate: [RoleGuard],
         data: { roles: [Role.ADMIN, Role.STAFF] }
       },
->>>>>>> master
+     
     ],
     canActivate: [AuthGuard],
   },
