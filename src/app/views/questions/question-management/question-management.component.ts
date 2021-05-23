@@ -272,7 +272,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
         (resp) => {
           this.toastr.success('Question Delete SuccessFully');
           this.selection.clear();
-          this.resetPaging();
+          this.resetFilter();
         },
         (error) => {
           this.toastr.error(error.error.apierror.message);
