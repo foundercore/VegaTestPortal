@@ -7,6 +7,15 @@
 .btn__group .btn {
     margin: 0 3px;
 }
+
+.add-btn span {
+  padding-left: .5rem;
+}
+
+.add-btn:hover {
+  background-color: #5bc4e1;
+  color: #fff;
+}
 table {
     width: 100%;
     border-collapse: collapse;
@@ -17,11 +26,38 @@ table {
   tr.mat-header-row {
     height: 45px;
   }
-  th {
+  /* th {
     background: #3a4248;
     color: #fff !important;
   }
   .mat-header-cell {
     background: #3a4248;
     color: #fff !important;
-  }
+  } */
+
+.remove__btn {
+  margin-right: 3rem;
+}
+.remove__btn:hover {
+  background-color: red;
+  color: #fff;
+}
+ 
+
+.data__table td .action-btn {
+  cursor: pointer;
+  margin: 0 .3rem;
+}
+
+.mat__action_btn:hover {
+  background-color: #275 ;
+  color: #fff;
+}
+
+.delete:hover {
+  background-color: red;
+}
+
+.mat-elevation-z8 {
+  box-shadow: none !important;
+}

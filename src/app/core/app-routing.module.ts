@@ -70,12 +70,9 @@ const routes: Routes = [
         canActivate: [RoleGuard],
         data: { roles: [Role.ADMIN, Role.STAFF] }
       },
-      {
-        path: 'tests',
-        component: DashboardComponent,
-        canActivate: [RoleGuard],
-        data: { roles: [Role.ADMIN, Role.STAFF] }
-      },
+      { path: 'tests', canActivate: [RoleGuard], 
+      data: { roles: [Role.ADMIN, Role.STAFF] },
+      loadChildren: () => import('../views/assignments/assignments.module').then(m => m.AssignmentsModule)},
       {
         path: 'users',
         component: UserManagementComponent,
@@ -88,10 +85,10 @@ const routes: Routes = [
         canActivate: [RoleGuard],
         data: { roles: [Role.ADMIN, Role.STAFF] }
       },
+     
     ],
     canActivate: [AuthGuard],
   },
-  { path: 'assignments', loadChildren: () => import('../views/assignments/assignments.module').then(m => m.AssignmentsModule)},
   {
     path: '**',
     redirectTo: 'home',
