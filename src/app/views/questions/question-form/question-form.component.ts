@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionAnswer } from 'src/app/models/questions/question-answer-model';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
+import { MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
   selector: 'app-question-form',
@@ -24,9 +25,6 @@ export class QuestionFormComponent implements OnInit {
 
   tags: string[] | undefined = [];
   isNewForm = true;
-  subjectList : string[] = [];
-  topicList : string[] = [];
-  subTopicList : string[] = [];
   difficultyLevel : string[] = ['Easy','Medium','Hard'];
   questionTypeList : string[] = [];
 
@@ -106,17 +104,9 @@ export class QuestionFormComponent implements OnInit {
     private questionManagementService: QuestionManagementService
     ) {
 
-      forkJoin([this.questionManagementService.getQuestionType(),
-        this.questionManagementService.getQuestionTags(),
-        this.questionManagementService.getQuestionSubjects(),
-        this.questionManagementService.getQuestionTopics(),
-        this.questionManagementService.getQuestionSubtopics()
+      forkJoin([this.questionManagementService.getQuestionType()
       ]).subscribe(results => {
         this.questionTypeList = results[0];
-        this.tags = results[1];
-        this.subjectList = results[2];
-        this.topicList = results[3];
-        this.subTopicList = results[4];
       })
 
      }
@@ -140,7 +130,9 @@ export class QuestionFormComponent implements OnInit {
           this.questionSecondFormGrp.get('skipMark')?.setValue(resp.skipMark);
           this.questionFirstFormGrp.get('subject')?.setValue(resp.subject);
           this.questionFirstFormGrp.get('subTopic')?.setValue(resp.subTopic);
-          this.tags = resp.tags;
+          if(resp.tags){
+            this.tags = resp.tags;
+          }
           this.questionFirstFormGrp.get('topic')?.setValue(resp.topic);
           this.questionThirdFormGrp.get('type')?.setValue(resp.type);
           this.options.forEach(x => {
@@ -167,6 +159,28 @@ export class QuestionFormComponent implements OnInit {
     this.options?.splice(index, 1);
     this.answerOptionFormGrp.removeControl(option.key);
 
+  }
+
+  addTag(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if ((value || '').trim()) {
+      this.tags?.push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  removeTag(tag: string): void {
+    const index = this.tags?.indexOf(tag);
+
+    if (index !=undefined && index >= 0) {
+      this.tags?.splice(index, 1);
+    }
   }
 
   createQuestion(){
@@ -196,7 +210,7 @@ export class QuestionFormComponent implements OnInit {
       skipMark: this.questionSecondFormGrp.get('skipMark')?.value,
       subject:  this.questionFirstFormGrp.get('subject')?.value,
       subTopic:  this.questionFirstFormGrp.get('subTopic')?.value,
-      tags:  this.questionThirdFormGrp.get('tags')?.value,
+      tags:  this.tags,
       topic:  this.questionFirstFormGrp.get('topic')?.value,
       type:  this.questionThirdFormGrp.get('type')?.value
     };
