@@ -49,6 +49,7 @@ export class AddUserDialogComponent implements OnInit {
         this.userFormGroup.controls.state.setValue(this.data.state);
         this.userFormGroup.controls.email.setValue(this.data.email);
         this.userFormGroup.controls.password.setValidators([]);
+        this.userFormGroup.controls.confirmPassword.setValidators([]);
         if(this.data.isView){
           this.userFormGroup.controls.firstname.disable();
           this.userFormGroup.controls.address.disable();
