@@ -1,0 +1,13 @@
+
+
+.row > .col-lg-3 {
+    padding-bottom: 20px;
+}
+
+.table td {
+    padding: 6px 5px;
+}
+
+.mat-checkbox {
+    display: block;
+}

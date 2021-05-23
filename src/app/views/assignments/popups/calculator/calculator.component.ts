@@ -4,8 +4,8 @@ import { Component, OnInit, ChangeDetectionStrategy, HostListener } from '@angul
 @Component({
   selector: 'app-calculator',
   templateUrl: './calculator.component.html',
-  styleUrls: ['./calculator.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./calculator.component.css']
+  
 })
 export class CalculatorComponent implements OnInit {
   input:string = '';

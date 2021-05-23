@@ -11,12 +11,15 @@
   <a [routerLink]="['./questionmanagement']"  *ngIf="authorizationService.isAdmin">
     <fa-icon [icon]="faQuestion" class="nav__icon"></fa-icon>
     <p class="nav__link">Question</p>
-  </a>
+    </a
+  >
+ 
 
   <a [routerLink]="['./tests']" *ngIf="authorizationService.isAdmin" >
     <fa-icon [icon]="faFileText" class="nav__icon"></fa-icon>
     <p class="nav__link">Tests</p>
   </a>
+
 
   <a [routerLink]="['./reports']" *ngIf="authorizationService.isAdmin">
     <fa-icon [icon]="faFile" class="nav__icon"></fa-icon>

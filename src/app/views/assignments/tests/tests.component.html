@@ -1,6 +1,5 @@
 <section class="data__table">
     <div class="container">
-        <!-- action box -->
         <div class="row py-5">
             <div class="col-lg-6">
                 <form action="" class="search__box">
@@ -8,134 +7,86 @@
                         <div class="input-group-prepend border-0">
                             <span class="input-group-text border-0" id="search"><i class="fa fa-search"></i></span>
                         </div>
-                        <input type="text" class="form-control border-0" placeholder="Search anything ..."
-                            aria-label="search" aria-describedby="search">
+                        <input type="text" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" (keyup)="searchtest()" class="form-control border-0" placeholder="Search anything ..."
+                            >
                     </div>
                 </form>
             </div>
             <div class="col-lg-6">
                 <div class="btn__group text-right">
-                    <button class="btn btn-success">View</button>
-                    <button class="btn btn-danger">Delete</button>
-                    <button class="btn btn-edit">Edit</button>
-                    <button class="btn btn-add">Add</button>
-                    <button class="btn btn-primary">Download</button>
-                </div>
+                    <button class="mx-2 mat__action_btn" mat-raised-button routerLink="/home/tests/test-preview">
+                        <mat-icon>remove_red_eye</mat-icon> View</button>
+                    <button class="mx-2 mat__action_btn delete" mat-raised-button (click)="deleteSelectedTestsId()">
+                      <mat-icon>delete_forever</mat-icon> Delete
+                    </button>
+                    <button class="mx-2 mat__action_btn" mat-raised-button (click)="createTest()">
+                      <mat-icon>add_circle</mat-icon> Add
+                    </button>
+                    <button class="mx-2 mat__action_btn" mat-raised-button >
+                      <mat-icon>cloud_download</mat-icon> Download
+                    </button>
+                  </div>
             </div>
         </div>
-        <!--./row-->
-
-        <!-- data table -->
-        <!-- <table class="table table-bordered data__table">
-            <thead>
-                <th style="vertical-align: middle;">
-                    <mat-checkbox class="p-0"></mat-checkbox>
-                </th>
-                <th>Column 1</th>
-                <th>Column 2</th>
-                <th>Column 3</th>
-                <th>Column 4</th>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><mat-checkbox></mat-checkbox></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><mat-checkbox></mat-checkbox></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><mat-checkbox></mat-checkbox></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><mat-checkbox></mat-checkbox></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><mat-checkbox></mat-checkbox></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><mat-checkbox></mat-checkbox></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table> -->
-        <table mat-table [dataSource]="dataSource"  matSort class="mat-elevation-z8 border custom_table border-right">
-            <!-- Checkbox Column -->
+        <div class="shadow__box">
+        <table mat-table [dataSource]="dataSource" class="mat__data__table mb-0"  matSort class="mat-elevation-z8 border custom_table border-right">
+           
             <ng-container matColumnDef="select">
-              <th mat-header-cell *matHeaderCellDef >
+              <th mat-header-cell *matHeaderCellDef>
                 <mat-checkbox (change)="$event ? masterToggle() : null"
-                              [checked]="selection?.hasValue() && isAllSelected()"
-                              [indeterminate]="selection?.hasValue() && !isAllSelected()"
-                              [aria-label]="checkboxLabel()">
+                              [checked]="selection.hasValue() && isAllSelected()"
+                              [indeterminate]="selection.hasValue() && !isAllSelected()">
                 </mat-checkbox>
               </th>
               <td mat-cell *matCellDef="let row">
                 <mat-checkbox (click)="$event.stopPropagation()"
-                              (change)="$event ? selection?.toggle(row) : null"
-                              [checked]="selection?.isSelected(row)"
-                              [aria-label]="checkboxLabel(row)">
+                              (change)="$event ? selection.toggle(row) : null"
+                              [checked]="selection.isSelected(row)">
+                              
                 </mat-checkbox>
               </td>
             </ng-container>
-            <!-- Position Column -->
-            <ng-container matColumnDef="position">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 1 </th>
-              <td mat-cell *matCellDef="let element"> dfsd </td>
+           
+            <ng-container matColumnDef="testName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Test Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
             </ng-container>
           
-            <!-- Name Column -->
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 2 </th>
-              <td mat-cell *matCellDef="let element"> erwe </td>
+         
+            <ng-container matColumnDef="minimumDurationInMinutes">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Minimum Duration</th>
+              <td mat-cell *matCellDef="let element"> {{element.minimumDurationInMinutes}} </td>
             </ng-container>
           
-            <!-- Weight Column -->
-            <ng-container matColumnDef="weight">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 3 </th>
-              <td mat-cell *matCellDef="let element">cvxc  </td>
+           
+            <ng-container matColumnDef="totalDurationInMinutes">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Duration</th>
+              <td mat-cell *matCellDef="let element">{{element.totalDurationInMinutes}}  </td>
             </ng-container>
           
-            <!-- Symbol Column -->
-            <ng-container matColumnDef="symbol">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Column 4 </th>
-              <td mat-cell *matCellDef="let element"> bnvb </td>
+         
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
+              <td mat-cell *matCellDef="let element">
+                <span class="action-btn" matTooltip="View Question" routerLink="/home/tests/test-preview/{{element?.questionPaperId}}">
+                  <mat-icon>remove_red_eye</mat-icon>
+                </span>
+                <span class="action-btn" matTooltip="Edit Question" routerLink="/home/tests/update-test/{{element?.questionPaperId}}">
+                  <mat-icon>edit</mat-icon>
+                </span>
+                <span class="action-btn" matTooltip="Delete Question" (click)="deleteQuestionPaperbyId(element?.questionPaperId)">
+                  <mat-icon>delete_forever</mat-icon>
+                </span>
+              </td>
             </ng-container>
           
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"
                 (click)="selection.toggle(row)">
             </tr>
+              
           </table>
-            <div class="tbl-no-record" *ngIf="dataSource?.length == 0">
-              No record found
-            </div>
-          <mat-paginator
-          [pageSize]="5"
-          [pageSizeOptions]="[5, 25, 50, 100]"
-          ></mat-paginator>
-      
+          <mat-paginator [length]="totalNumberOfRecords" [pageSizeOptions]="pageOptions"></mat-paginator>
+          </div>
     </div>
-    <!--.//container-->
 </section>

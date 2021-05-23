@@ -5,8 +5,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 @Component({
   selector: 'app-section',
   templateUrl: './section.component.html',
-  styleUrls: ['./section.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./section.component.css']
 })
 export class SectionComponent implements OnInit {
   public sectionForm: FormGroup;
