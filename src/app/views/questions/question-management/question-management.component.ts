@@ -159,6 +159,8 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     this.resetPaging();
     const searchQuestion =  this.createSearchObject();
     this.refreshQuestionData(searchQuestion);
+    this.isLoadingResults = false;
+    this.isRateLimitReached = false;
   }
 
   resetFilter() {
@@ -251,7 +253,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     this.questionService.deletQuestion(row.id?.questionId).subscribe(
       (resp) => {
         this.toastr.success('Question Delete SuccessFully');
-        this.resetPaging();
+        this.resetFilter();
       },
       (error) => {
         this.toastr.error(error.error.apierror.message);
