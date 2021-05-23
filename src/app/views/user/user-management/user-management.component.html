@@ -27,7 +27,7 @@
       </div>
       <div class="mat-elevation-z8">
         <div >
-          <table mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear>
+          <table mat-table [dataSource]="dataSource" matSort matSortActive="displayName" matSortDisableClear>
               <!-- Checkbox Column -->
             <ng-container matColumnDef="select">
               <th mat-header-cell *matHeaderCellDef>
@@ -47,7 +47,7 @@
             </ng-container>
 
             <!-- Name Column -->
-            <ng-container matColumnDef="name">
+            <ng-container matColumnDef="displayName">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
               <td mat-cell *matCellDef="let row">{{ row.displayName }}</td>
             </ng-container>
@@ -69,7 +69,7 @@
             <!-- Tag Column -->
             <ng-container matColumnDef="batch" >
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Batch</th>
-              <td mat-cell *matCellDef="let row">{{ row.batch || 2021 }}</td>
+              <td mat-cell *matCellDef="let row">{{ row.batch }}</td>
             </ng-container>
 
              <!-- actions Column -->

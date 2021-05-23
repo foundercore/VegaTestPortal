@@ -30,7 +30,12 @@ export class AddBatchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+      if(this.data){
+            this.batchFormGroup.controls.name.setValue(this.data.name);
+            this.batchFormGroup.controls.name.disable();
+            this.batchFormGroup.controls.description.setValue(this.data.description);
+            this.batchFormGroup.controls.description.disable();
+      }
   }
 
 

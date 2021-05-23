@@ -1,5 +1,6 @@
 <h1 mat-dialog-title class="title">
-  <span >Add Batch</span>
+  <span *ngIf="!data">Add Batch</span>
+  <span *ngIf="data">View Batch</span>
   <button mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
@@ -24,7 +25,14 @@
         </mat-error>
       </mat-form-field>
     </div>
-    <div class="btn-grp-cls">
+    <mat-list *ngIf="data">
+      <div mat-subheader>Students Tagged to Batch</div>
+      <mat-list-item *ngFor="let student of data.students">
+        <i mat-list-icon class="fas fa-user-graduate"></i>
+        <div mat-line>{{student}}</div>
+      </mat-list-item>
+    </mat-list>
+    <div class="btn-grp-cls" *ngIf="!data">
       <button   mat-raised-button class="save-btn-cls" (click)="createBatch()">Save</button>
       <button   mat-raised-button class="reset-btn-cls" (click)="reset()">Reset</button>
     </div>

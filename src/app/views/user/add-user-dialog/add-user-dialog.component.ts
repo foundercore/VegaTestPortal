@@ -4,6 +4,7 @@ import { UserService } from 'src/app/services/users/users.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MustMatch } from '../change-password/change-password.component';
 
 
 
@@ -25,7 +26,8 @@ export class AddUserDialogComponent implements OnInit {
     state: new FormControl('',[Validators.required]),
     email: new FormControl('',[Validators.required,Validators.email]  ),
     password: new FormControl('',[Validators.required,Validators.minLength(6)]),
-  })
+    confirmPassword: new FormControl('',[Validators.required]),
+  },MustMatch)
 
   constructor(
     private userService: UserService,

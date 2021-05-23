@@ -94,6 +94,17 @@
         </mat-error>
       </mat-form-field>
 
+      <mat-form-field appearance="outline"  *ngIf="!this.data">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput formControlName="confirmPassword"  required />
+        <mat-error *ngIf="userFormGroup.controls.confirmPassword.hasError('required')">
+          Confirm Password is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="userFormGroup.controls.confirmPassword.hasError('mustMatch')">
+          Passwords must match
+        </mat-error>
+      </mat-form-field>
+
 
     </div>
     <div class="btn-grp-cls">

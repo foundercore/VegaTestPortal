@@ -1,5 +1,5 @@
 <h1 mat-dialog-title class="title">
-  <span >Add Student In Batch</span>
+  <span >Add Student In Batch ({{data.name}})</span>
   <button mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
@@ -21,16 +21,19 @@
     [cdkDropListConnectedTo]="[doneList]"
     class="example-list"
     (cdkDropListDropped)="drop($event)">
-    <div class="example-box" *ngFor="let item of availableStudentList" cdkDrag>{{item}}</div>
+    <div class="example-box" *ngFor="let item of availableStudentList" cdkDrag>
+      <mat-checkbox (change)="$event ? leftSideSelection.toggle(item) : null"
+      [checked]="leftSideSelection.isSelected(item)" >{{item}}</mat-checkbox>
+    </div>
   </div>
 </div>
 
 <div style="align-self: center;margin: 0px 20px;">
   <div>
-    <i class="fas fa-long-arrow-alt-right fa-5x" style="cursor:pointer"></i>
+    <i class="fas fa-long-arrow-alt-right fa-5x" style="cursor:pointer" (click)="moveItemRightSide()"></i>
   </div>
   <div>
-    <i class="fas fa-long-arrow-alt-left fa-5x" style="cursor:pointer"></i>
+    <i class="fas fa-long-arrow-alt-left fa-5x" style="cursor:pointer" (click)="moveItemLeftSide()"></i>
   </div>
 </div>
 
@@ -44,7 +47,10 @@
     [cdkDropListConnectedTo]="[todoList]"
     class="example-list"
     (cdkDropListDropped)="drop($event)">
-    <div class="example-box" *ngFor="let student of taggedStudentList" cdkDrag>{{student}}</div>
+    <div class="example-box" *ngFor="let student of taggedStudentList" cdkDrag>
+      <mat-checkbox (change)="$event ? rightSideSelection.toggle(student) : null"
+      [checked]="rightSideSelection.isSelected(student)" >{{student}}</mat-checkbox>
+    </div>
   </div>
 </div>
 

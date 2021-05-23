@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AddUserDialogComponent } from '../../user/add-user-dialog/add-user-dialog.component';
 import { StudentBatchModel } from 'src/app/models/student-batch/student-batch-model';
 import { forkJoin } from 'rxjs';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-add-batch-student',
@@ -22,6 +23,10 @@ export class AddBatchStudentComponent implements OnInit {
 
   availableStudentList = [
   ];
+
+
+  leftSideSelection = new SelectionModel<string>(true, []);
+  rightSideSelection = new SelectionModel<string>(true, []);
 
   constructor(
     private studentBatchService: StudentBatchService,
@@ -65,11 +70,25 @@ export class AddBatchStudentComponent implements OnInit {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+      this.leftSideSelection.clear();
+      this.rightSideSelection.clear();
       transferArrayItem(event.previousContainer.data,
                         event.container.data,
                         event.previousIndex,
                         event.currentIndex);
     }
+  }
+
+  moveItemRightSide(){
+    this.leftSideSelection.selected.forEach(x => this.taggedStudentList.push(x));
+    this.availableStudentList = this.availableStudentList.filter(x => !this.leftSideSelection.selected.includes(x));
+    this.leftSideSelection.clear();
+  }
+
+  moveItemLeftSide(){
+    this.rightSideSelection.selected.forEach(x => this.availableStudentList.push(x));
+    this.taggedStudentList = this.taggedStudentList.filter(x => !this.rightSideSelection.selected.includes(x));
+    this.rightSideSelection.clear();
   }
 
 }

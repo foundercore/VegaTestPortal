@@ -21,7 +21,7 @@ export class UserManagementComponent implements OnInit, AfterViewInit  {
 
   displayedColumns: string[] = [
     'select',
-    'name',
+    'displayName',
     'email',
     'phone_number',
     'batch',

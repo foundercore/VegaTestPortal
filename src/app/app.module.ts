@@ -52,6 +52,7 @@ import { StudentReportComponent } from './views/reports/student-report/student-r
 import { VerticalBarChartComponent } from './views/charts/vertical-bar-chart/vertical-bar-chart.component';
 import { PieChartComponent } from './views/charts/pie-chart/pie-chart.component';
 import { SingleLayerGaugeComponent } from './views/charts/single-layer-gauge/single-layer-gauge.component';
+import { BulkUploadBatchStudentsComponent } from './views/student-batch/bulk-upload-batch-students/bulk-upload-batch-students.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { SingleLayerGaugeComponent } from './views/charts/single-layer-gauge/sin
     VerticalBarChartComponent,
     GroupVerticalBarChartComponent,
     PieChartComponent,
-    SingleLayerGaugeComponent
+    SingleLayerGaugeComponent,
+    BulkUploadBatchStudentsComponent
   ],
 
   imports: [
