@@ -20,6 +20,7 @@ import { QuestionBulkUploadDialogComponent } from '../../questions/question-bulk
 import { AddUserDialogComponent } from '../../user/add-user-dialog/add-user-dialog.component';
 import { UserBulkUploadDialogComponent } from '../../user/user-bulk-upload-dialog/user-bulk-upload-dialog.component';
 import { AddBatchComponent } from '../add-batch/add-batch.component';
+import { BulkUploadBatchStudentsComponent } from '../bulk-upload-batch-students/bulk-upload-batch-students.component';
 
 @Component({
   selector: 'app-student-batch-management',
@@ -99,17 +100,27 @@ export class StudentBatchManagementComponent implements OnInit {
       case 'add_student':
           this.openAddStudentDialog(row);
           break;
+      case 'view':
+          this.openPreviwBatchDialog(row);
+          break;
       default:
         break;
     }
   }
 
   openBulkUploadDialog() {
-    const dialogRef = this.dialog.open(UserBulkUploadDialogComponent);
+    const dialogRef = this.dialog.open(BulkUploadBatchStudentsComponent);
     dialogRef.afterClosed().subscribe((result) => {
       this.refreshUserList();
     });
 
+  }
+
+  openPreviwBatchDialog(row) {
+    const dialogRef = this.dialog.open(AddBatchComponent, { disableClose: true,data:row });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.refreshUserList();
+    });
   }
 
   openAddBatchDialog() {
