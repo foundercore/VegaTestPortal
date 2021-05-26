@@ -3,16 +3,16 @@
     <div class="user-actions">
 
       <button mat-raised-button (click)="performGridAction('add')">
-        <mat-icon>add_circle</mat-icon> Add
+        <mat-icon>add_circle</mat-icon> {{ 'COMMON_TAG.ADD' | translate }}
       </button>
       <button mat-raised-button (click)="performGridAction('upload')">
-        <mat-icon>cloud_upload</mat-icon> Upload
+        <mat-icon>cloud_upload</mat-icon> {{ 'COMMON_TAG.UPLOAD' | translate }}
       </button>
     </div>
 
     <div class="user-search-bar">
       <mat-form-field style="width: 600px" appearance="outline">
-        <mat-label>Filter</mat-label>
+        <mat-label>{{ 'COMMON_TAG.SEARCH' | translate }}</mat-label>
         <input matInput placeholder="Search" #input  (keyup)="applyFilter($event)" />
       </mat-form-field>
     </div>

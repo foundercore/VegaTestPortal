@@ -1,16 +1,12 @@
-<div class="question-list-title">
-  Question List
-</div>
-
 <div class="question-grid-action">
   <button mat-raised-button (click)="performGridAction('bulk_delete')">
-    <mat-icon>delete_forever</mat-icon> Delete
+    <mat-icon>delete_forever</mat-icon> {{ 'COMMON_TAG.DELETE' | translate }}
   </button>
   <button mat-raised-button (click)="performGridAction('add')">
-    <mat-icon>add_circle</mat-icon> Add
+    <mat-icon>add_circle</mat-icon> {{ 'COMMON_TAG.ADD' | translate }}
   </button>
   <button mat-raised-button (click)="performGridAction('upload')">
-    <mat-icon>cloud_upload</mat-icon> Upload
+    <mat-icon>cloud_upload</mat-icon> {{ 'COMMON_TAG.UPLOAD' | translate }}
   </button>
 </div>
 
@@ -19,7 +15,7 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Filter
+          Search
         </mat-panel-title>
       </mat-expansion-panel-header>
 
@@ -71,8 +67,8 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <button mat-raised-button class="filter-btn-cls" (click)="applyFilter()">Filter</button>
-        <button mat-raised-button class="reset-btn-cls" (click)="resetFilter()">Reset</button>
+        <button mat-raised-button class="filter-btn-cls" (click)="applyFilter()">{{ 'COMMON_TAG.SEARCH' | translate }}</button>
+        <button mat-raised-button class="reset-btn-cls" (click)="resetFilter()">{{ 'COMMON_TAG.RESET' | translate }}</button>
       </div>
 
 

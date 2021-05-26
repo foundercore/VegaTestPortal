@@ -19,6 +19,7 @@ import { of } from 'rxjs';
 import { catchError, last, map, tap } from 'rxjs/operators';
 import { FileUploadModel } from 'src/app/models/file/file-upload-model';
 import { BaseService } from 'src/app/services/base.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-bulk-upload-dialog',
@@ -38,6 +39,7 @@ export class UserBulkUploadDialogComponent extends BaseService {
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
+    public translate: TranslateService,
     private dialogRef: MatDialogRef<UserBulkUploadDialogComponent>,
     private userService: UserService
   ) {
@@ -68,6 +70,7 @@ export class UserBulkUploadDialogComponent extends BaseService {
       this.fileName = event.target.files[0].name;
     } else {
       this.fileName = 'Choose file';
+      this.file  = undefined;
     }
   }
 

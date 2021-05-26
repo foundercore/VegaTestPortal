@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { CSVRecord } from 'src/app/models/questions/csvRecord';
 
 @Component({
@@ -9,7 +10,8 @@ import { CSVRecord } from 'src/app/models/questions/csvRecord';
 })
 export class UploadQuestionsComponent implements OnInit {
 
-  constructor() { }
+  constructor(    public translate: TranslateService,
+    ) { }
 
   ngOnInit(): void {
   }

@@ -18,10 +18,10 @@
   </div>
 </div>
 <div mat-dialog-actions class="bulk-upload-bottom">
-  <button mat-raised-button  (click)="downloadTemplate()">
-    <mat-icon>cloud_download</mat-icon> Download Template
+  <button class="download-cls" mat-raised-button  (click)="downloadTemplate()">
+    <mat-icon>cloud_download</mat-icon> {{ 'COMMON_TAG.DOWNLOAD_TEMPLATE' | translate }}
   </button>
-  <button mat-raised-button   (click)="uploadTemplate()">
-    <mat-icon>cloud_upload</mat-icon> Upload
+  <button class="upload-cls"  mat-raised-button   (click)="uploadTemplate()" [disabled]="!file">
+    <mat-icon>cloud_upload</mat-icon> {{ 'COMMON_TAG.UPLOAD' | translate }}
   </button>
 </div>

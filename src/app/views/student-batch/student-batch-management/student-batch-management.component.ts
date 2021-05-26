@@ -21,6 +21,7 @@ import { AddUserDialogComponent } from '../../user/add-user-dialog/add-user-dial
 import { UserBulkUploadDialogComponent } from '../../user/user-bulk-upload-dialog/user-bulk-upload-dialog.component';
 import { AddBatchComponent } from '../add-batch/add-batch.component';
 import { BulkUploadBatchStudentsComponent } from '../bulk-upload-batch-students/bulk-upload-batch-students.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-student-batch-management',
@@ -49,6 +50,7 @@ export class StudentBatchManagementComponent implements OnInit {
   constructor(
     private studentBatchService: StudentBatchService,
     public dialog: MatDialog,
+    public translate: TranslateService,
     private toastr: ToastrService
   ) {
 

@@ -26,10 +26,11 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/assets/i18n",
               "src/assets/templates"
             ],
             "styles": [
-              
+
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss",

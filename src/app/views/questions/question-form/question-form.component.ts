@@ -10,6 +10,7 @@ import { QuestionAnswer } from 'src/app/models/questions/question-answer-model';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-question-form',
@@ -101,6 +102,7 @@ export class QuestionFormComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService,
     private activateRouter: ActivatedRoute,
+    public translate: TranslateService,
     private questionManagementService: QuestionManagementService
     ) {
 

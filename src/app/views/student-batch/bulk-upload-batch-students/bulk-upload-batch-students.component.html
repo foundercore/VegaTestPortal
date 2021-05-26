@@ -11,6 +11,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Batch Name</mat-label>
         <mat-select  formControlName="name" required>
+          <mat-option>None</mat-option>
           <mat-option *ngFor="let batch of batchList" [value]="batch">
             {{batch.name}}
           </mat-option>
@@ -34,7 +35,7 @@
     </div>
 
     <div class="btn-grp-cls">
-      <button   mat-raised-button class="save-btn-cls" (click)="upload()">Upload</button>
+      <button  [disabled]="batchFormGroup.invalid" mat-raised-button class="save-btn-cls" (click)="upload()">{{ 'COMMON_TAG.UPLOAD' | translate }}</button>
     </div>
   </div>
 </div>

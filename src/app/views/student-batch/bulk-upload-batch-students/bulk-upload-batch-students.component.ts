@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { StudentBatchModel } from 'src/app/models/student-batch/student-batch-model';
 import { StudentBatchService } from 'src/app/services/student-batch/student-batch.service';
@@ -25,6 +26,7 @@ export class BulkUploadBatchStudentsComponent implements OnInit {
   constructor(
     private studentBatchService: StudentBatchService,
     private tosterService: ToastrService,
+    public translate: TranslateService,
     public dialogRef: MatDialogRef<AddUserDialogComponent>
   ) {
     this.studentBatchService.getStudentBatchList().subscribe(
@@ -54,7 +56,7 @@ export class BulkUploadBatchStudentsComponent implements OnInit {
       this.batchFormGroup.controls.name.reset();
       this.batchFormGroup.controls.listOfStudent.reset();
     },error => {
-      this.tosterService.error(error.error.apierror.message);
+      this.tosterService.error(error.error.apierror.debugMessage);
     });
 
 

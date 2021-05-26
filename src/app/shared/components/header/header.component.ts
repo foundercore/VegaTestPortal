@@ -7,6 +7,7 @@ import { LogOut } from 'src/app/state_management/_actions/user.action';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import { ProfileComponent } from 'src/app/views/user/profile/profile.component';
 import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
@@ -21,6 +22,7 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private store: Store<AppState>,
     private dialog: MatDialog,
+    public translate: TranslateService,
     public authorizationService: AuthorizationService
   ) {}
 

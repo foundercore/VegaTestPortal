@@ -13,6 +13,7 @@ import {
 } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { catchError, last, map, tap } from 'rxjs/operators';
@@ -39,6 +40,7 @@ export class QuestionBulkUploadDialogComponent extends BaseService {
   constructor(
     private questionManagementService: QuestionManagementService,
     private toastr: ToastrService,
+    public translate: TranslateService,
     private dialogRef: MatDialogRef<QuestionBulkUploadDialogComponent>
   ) {
     super();
@@ -59,6 +61,7 @@ export class QuestionBulkUploadDialogComponent extends BaseService {
       this.fileName = event.target.files[0].name;
     } else {
       this.fileName = 'Choose file';
+      this.file  = undefined;
     }
   }
 

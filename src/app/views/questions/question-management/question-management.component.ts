@@ -21,6 +21,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SearchQuestion } from 'src/app/models/questions/search-question-model';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-question-management',
@@ -81,6 +82,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     private questionService: QuestionManagementService,
     public dialog: MatDialog,
     private router: Router,
+    public translate: TranslateService,
     private toastr: ToastrService
   ) {
     forkJoin([

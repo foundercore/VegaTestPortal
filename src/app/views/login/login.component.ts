@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/authentication/auth.service';
 import { LogIn } from 'src/app/state_management/_actions/user.action';
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private store: Store<AppState>,
+    public translate: TranslateService,
     private toastr: ToastrService
   ) {}
 
