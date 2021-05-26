@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { IUserCreateRequestModel } from 'src/app/models/user/user-model';
 import { AuthService } from 'src/app/services/authentication/auth.service';
@@ -27,6 +28,7 @@ export class RegisterComponent implements OnInit {
         private router: Router,
         private authService: AuthService,
         private userService: UserService,
+        public translate: TranslateService,
         private tosterService: ToastrService
     ) {
         if (this.authService.getToken()) {

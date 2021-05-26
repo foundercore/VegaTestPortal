@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { IUserCreateRequestModel, IUserUpdateRequestModel } from 'src/app/models/user/user-model';
 import { UserService } from 'src/app/services/users/users.service';
 import { AddUserDialogComponent } from '../../user/add-user-dialog/add-user-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-batch',
@@ -23,6 +24,7 @@ export class AddBatchComponent implements OnInit {
   constructor(
     private studentBatchService: StudentBatchService,
     private tosterService: ToastrService,
+    public translate: TranslateService,
     public dialogRef: MatDialogRef<AddUserDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {

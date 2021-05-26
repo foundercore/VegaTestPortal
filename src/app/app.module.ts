@@ -53,6 +53,14 @@ import { VerticalBarChartComponent } from './views/charts/vertical-bar-chart/ver
 import { PieChartComponent } from './views/charts/pie-chart/pie-chart.component';
 import { SingleLayerGaugeComponent } from './views/charts/single-layer-gauge/single-layer-gauge.component';
 import { BulkUploadBatchStudentsComponent } from './views/student-batch/bulk-upload-batch-students/bulk-upload-batch-students.component';
+// import ngx-translate and the http loader
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {HttpClient} from '@angular/common/http';
+
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -108,7 +116,14 @@ import { BulkUploadBatchStudentsComponent } from './views/student-batch/bulk-upl
     }),
     EffectsModule.forRoot([AuthEffects]),
     ToastrModule.forRoot(),
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+      }
+  })
   ],
   providers: [
     AuthGuard,
@@ -119,6 +134,7 @@ import { BulkUploadBatchStudentsComponent } from './views/student-batch/bulk-upl
       useClass: TokenInterceptor,
       multi: true,
     },
+    TranslateService
   ],
   bootstrap: [AppComponent],
 })

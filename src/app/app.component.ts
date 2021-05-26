@@ -4,6 +4,7 @@ import { Router, NavigationStart } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from './state_management/_states/auth.state';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,11 @@ export class AppComponent {
   subscription: Subscription;
 
 
-  constructor(private router: Router,    private store: Store<AppState>    ) {
+  constructor(
+    private router: Router,
+    private store: Store<AppState>,
+    private translate: TranslateService
+  ) {
     this.subscription = router.events.subscribe((event) => {
         if (event instanceof NavigationStart) {
           if(!router.navigated){
@@ -24,6 +29,7 @@ export class AppComponent {
           }
         }
     });
+    translate.setDefaultLang('en');
   }
 
   @HostListener('window:beforeunload')

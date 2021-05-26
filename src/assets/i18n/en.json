@@ -1,0 +1,25 @@
+{
+  "COMMON_TAG": {
+      "ADD": "Add",
+      "UPLOAD": "Upload",
+      "DOWNLOAD": "Download",
+      "DOWNLOAD_TEMPLATE": "Download Template",
+      "DELETE": "Delete",
+      "SAVE": "Save",
+      "RESET": "Reset",
+      "FILTER": "Filter",
+      "CANCEL": "Cancel",
+      "ACTIONS": "Actions",
+      "UPDATE": "Update",
+      "BACK": "Back",
+      "NEXT": "Next",
+      "SEARCH": "Search"
+  },
+  "USER_MANAGEMENT_TAG":{
+    "NAME":"Name",
+    "EMAIL":"Email",
+    "ROLES_TAG":"Role Tag",
+    "BATCH":"Batch"
+
+  }
+}

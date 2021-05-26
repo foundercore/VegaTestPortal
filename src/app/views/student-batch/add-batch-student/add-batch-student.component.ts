@@ -8,6 +8,7 @@ import { AddUserDialogComponent } from '../../user/add-user-dialog/add-user-dial
 import { StudentBatchModel } from 'src/app/models/student-batch/student-batch-model';
 import { forkJoin } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-batch-student',
@@ -32,6 +33,7 @@ export class AddBatchStudentComponent implements OnInit {
     private studentBatchService: StudentBatchService,
     private userService : UserService,
     private tosterService: ToastrService,
+    public translate: TranslateService,
     public dialogRef: MatDialogRef<AddUserDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: StudentBatchModel
   ) { }

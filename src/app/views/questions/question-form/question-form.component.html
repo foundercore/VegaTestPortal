@@ -38,8 +38,8 @@
           </div>
         </div>
         <div>
-          <button mat-button (click)="cancel()"  class="cancel-btn">Cancel</button>
-          <button mat-button matStepperNext class="next-save-btn">Next</button>
+          <button mat-button (click)="cancel()"  class="cancel-btn">{{ 'COMMON_TAG.CANCEL' | translate }}</button>
+          <button mat-button matStepperNext class="next-save-btn">{{ 'COMMON_TAG.NEXT' | translate }}</button>
         </div>
       </form>
     </mat-step>
@@ -67,9 +67,9 @@
           </div>
         </div>
         <div>
-          <button mat-button (click)="cancel()" class="cancel-btn" >Cancel</button>
-          <button mat-button matStepperPrevious class="back-btn">Back</button>
-          <button mat-button matStepperNext class="next-save-btn">Next</button>
+          <button mat-button (click)="cancel()" class="cancel-btn" >{{ 'COMMON_TAG.CANCEL' | translate }}</button>
+          <button mat-button matStepperPrevious class="back-btn">{{ 'COMMON_TAG.BACK' | translate }}</button>
+          <button mat-button matStepperNext class="next-save-btn">{{ 'COMMON_TAG.NEXT' | translate }}</button>
         </div>
       </form>
     </mat-step>
@@ -135,9 +135,9 @@
 
       </div>
       <div>
-        <button mat-button (click)="cancel()" class="cancel-btn">Cancel</button>
-        <button mat-button matStepperPrevious class="back-btn">Back</button>
-        <button mat-button matStepperNext class="next-save-btn">Next</button>
+        <button mat-button (click)="cancel()" class="cancel-btn">{{ 'COMMON_TAG.CANCEL' | translate }}</button>
+        <button mat-button matStepperPrevious class="back-btn">{{ 'COMMON_TAG.BACK' | translate }}</button>
+        <button mat-button matStepperNext class="next-save-btn">{{ 'COMMON_TAG.NEXT' | translate }}</button>
       </div>
 
     </mat-step>
@@ -161,10 +161,10 @@
         </div>
 
       <div>
-        <button mat-button (click)="cancel()" class="cancel-btn">Cancel</button>
-        <button mat-button matStepperPrevious class="back-btn">Back</button>
-        <button *ngIf="isNewForm" mat-button (click)="createQuestion()" class="next-save-btn">Save</button>
-        <button *ngIf="!isNewForm" mat-button (click)="updateQuestion()" class="next-save-btn">Update</button>
+        <button mat-button (click)="cancel()" class="cancel-btn">{{ 'COMMON_TAG.CANCEL' | translate }}</button>
+        <button mat-button matStepperPrevious class="back-btn">{{ 'COMMON_TAG.BACK' | translate }}</button>
+        <button *ngIf="isNewForm" mat-button (click)="createQuestion()" class="next-save-btn">{{ 'COMMON_TAG.SAVE' | translate }}</button>
+        <button *ngIf="!isNewForm" mat-button (click)="updateQuestion()" class="next-save-btn">{{ 'COMMON_TAG.UPDATE' | translate }}</button>
 
       </div>
     </mat-step>
