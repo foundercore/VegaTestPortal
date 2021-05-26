@@ -59,6 +59,7 @@ export class QuestionBulkUploadDialogComponent extends BaseService {
       this.fileName = event.target.files[0].name;
     } else {
       this.fileName = 'Choose file';
+      this.file  = undefined;
     }
   }
 

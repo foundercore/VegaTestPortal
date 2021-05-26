@@ -1,5 +1,5 @@
 <h1 mat-dialog-title class="title">
-  <span >Add Student In Batch ({{data.name}})</span>
+  <span >Tag Student In Batch ({{data.name}})</span>
   <button mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
@@ -13,7 +13,13 @@
 <div class="example-container">
 
   <span>List of All Student which are NOT in the batch selected</span>
-
+  <div style="    margin: 10px;">
+    <mat-checkbox (change)="$event ? masterLeftSelectionToggle() : null"
+    [checked]="leftSideSelection.hasValue() && isAllLeftSelected()"
+    [indeterminate]="leftSideSelection.hasValue() && !isAllLeftSelected()"
+    [aria-label]="leftCheckboxLabel()">
+    </mat-checkbox>
+    Select all Student</div>
   <div
     cdkDropList
     #todoList="cdkDropList"
@@ -39,7 +45,13 @@
 
 <div class="example-container">
   <span>List of All Student which are in the batch selected</span>
-
+  <div style="    margin: 10px;">
+    <mat-checkbox (change)="$event ? masterRightSelectionToggle() : null"
+    [checked]="rightSideSelection.hasValue() && isAllRightSelected()"
+    [indeterminate]="rightSideSelection.hasValue() && !isAllRightSelected()"
+    [aria-label]="rightCheckboxLabel()">
+    </mat-checkbox>
+    Select all Student</div>
   <div
     cdkDropList
     #doneList="cdkDropList"

@@ -27,10 +27,10 @@
   </div>
 </div>
 <div mat-dialog-actions class="bulk-upload-bottom">
-  <button mat-raised-button (click)="downloadTemplate()">
+  <button class="download-cls"  mat-raised-button (click)="downloadTemplate()">
     <mat-icon>cloud_download</mat-icon> Download Template
   </button>
-  <button (click)="uploadTemplate()" mat-raised-button>
+  <button class="upload-cls" (click)="uploadTemplate()" mat-raised-button  [disabled]="!file">
     <mat-icon>cloud_upload</mat-icon> Upload
   </button>
 </div>

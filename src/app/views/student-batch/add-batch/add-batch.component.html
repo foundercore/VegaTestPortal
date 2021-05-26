@@ -33,7 +33,7 @@
       </mat-list-item>
     </mat-list>
     <div class="btn-grp-cls" *ngIf="!data">
-      <button   mat-raised-button class="save-btn-cls" (click)="createBatch()">Save</button>
+      <button [disabled]="batchFormGroup.invalid"  mat-raised-button class="save-btn-cls" (click)="createBatch()">Save</button>
       <button   mat-raised-button class="reset-btn-cls" (click)="reset()">Reset</button>
     </div>
   </div>

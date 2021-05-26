@@ -54,7 +54,7 @@ export class BulkUploadBatchStudentsComponent implements OnInit {
       this.batchFormGroup.controls.name.reset();
       this.batchFormGroup.controls.listOfStudent.reset();
     },error => {
-      this.tosterService.error(error.error.apierror.message);
+      this.tosterService.error(error.error.apierror.debugMessage);
     });
 
 
