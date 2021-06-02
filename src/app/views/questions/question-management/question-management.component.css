@@ -64,6 +64,11 @@ table {
   max-width: 150px;
 }
 
+.mat-column-select{
+  width:50px;
+  max-width: 50px;
+}
+
 .question-list-grid{
   margin: 20px;
 
@@ -109,6 +114,10 @@ table {
 
 .w-50-field{
   width: 50%;
+}
+
+.w-100-field{
+  width: 100%;
 }
 
 .form-field-padding{

@@ -57,6 +57,7 @@ import { BulkUploadBatchStudentsComponent } from './views/student-batch/bulk-upl
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClient} from '@angular/common/http';
+import { QuestionMigrateUploadDialogComponent } from './views/questions/question-migrate-upload-dialog/question-migrate-upload-dialog.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -93,7 +94,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     GroupVerticalBarChartComponent,
     PieChartComponent,
     SingleLayerGaugeComponent,
-    BulkUploadBatchStudentsComponent
+    BulkUploadBatchStudentsComponent,
+    QuestionMigrateUploadDialogComponent
   ],
 
   imports: [

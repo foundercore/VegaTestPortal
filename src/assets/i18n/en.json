@@ -4,6 +4,7 @@
       "UPLOAD": "Upload",
       "DOWNLOAD": "Download",
       "DOWNLOAD_TEMPLATE": "Download Template",
+      "MIGRATE": "Migrate",
       "DELETE": "Delete",
       "SAVE": "Save",
       "RESET": "Reset",
@@ -20,6 +21,12 @@
     "EMAIL":"Email",
     "ROLES_TAG":"Role Tag",
     "BATCH":"Batch"
+
+  },
+  "QUESTION_MANAGEMENT_TAG":{
+    "QUESTION_MIGRATOR_DIALOG_TITLE":"Question Migrator",
+    "QUESTION_MIGRATOR_JSON_FILE_LABEL":"Question json:"
+
 
   }
 }

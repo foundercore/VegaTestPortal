@@ -1,3 +1,4 @@
+import { QuestionMigrateUploadDialogComponent } from './../question-migrate-upload-dialog/question-migrate-upload-dialog.component';
 import { QuestionManagementService } from './../../../services/question-management/question-management.service';
 import {
   Component,
@@ -33,7 +34,6 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'select',
     'name',
-    'description',
     'subject',
     'explanation_added',
     'tags',
@@ -59,6 +59,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     tagCntrl: new FormControl(),
     topicCntrl: new FormControl(),
     substopicCntrl: new FormControl(),
+    fileNameCntrl: new FormControl(),
   });
 
   isFilterApply = false;
@@ -152,6 +153,8 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
       this.deleteQuestion(row);
     } else if (type === 'bulk_delete') {
       this.bulkDeletQuestions();
+    } else if(type === 'migrate'){
+      this.openMigrateUploadDialog();
     }
   }
 
@@ -172,6 +175,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     this.filterGroup.controls['tagCntrl'].reset();
     this.filterGroup.controls['topicCntrl'].reset();
     this.filterGroup.controls['substopicCntrl'].reset();
+    this.filterGroup.controls['fileNameCntrl'].reset();
     this.isFilterApply = false;
     this.resetPaging();
     const searchQuestion =  this.createSearchObject();
@@ -211,10 +215,12 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
       searchQuestion.subject = this.filterGroup.controls['subjectCntrl'].value;
       else if(this.filterGroup.controls['tagCntrl'].value !== null && this.filterGroup.controls['tagCntrl'].value.length !== 0)
       searchQuestion.tags = this.filterGroup.controls['tagCntrl'].value;
-      // else if(this.filterGroup.controls['topicCntrl'].value !== null && this.filterGroup.controls['topicCntrl'].value.length !== 0)
-      // searchQuestion.topic = this.filterGroup.controls['topicCntrl'].value;
-      // else if(this.filterGroup.controls['substopicCntrl'].value !== null && this.filterGroup.controls['substopicCntrl'].value.length !== 0)
-      // searchQuestion.nameRegexPattern = this.filterGroup.controls['substopicCntrl'].value;
+      else if(this.filterGroup.controls['topicCntrl'].value !== null && this.filterGroup.controls['topicCntrl'].value.length !== 0)
+      searchQuestion.topic = this.filterGroup.controls['topicCntrl'].value;
+      else if(this.filterGroup.controls['substopicCntrl'].value !== null && this.filterGroup.controls['substopicCntrl'].value.length !== 0)
+      searchQuestion.subTopic = this.filterGroup.controls['substopicCntrl'].value;
+      else if(this.filterGroup.controls['fileNameCntrl'].value !== null && this.filterGroup.controls['fileNameCntrl'].value.length !== 0)
+      searchQuestion.filename = this.filterGroup.controls['fileNameCntrl'].value;
     }
 
     return searchQuestion;
@@ -247,7 +253,14 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   openBulkUploadDialog() {
     const dialogRef = this.dialog.open(QuestionBulkUploadDialogComponent);
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
+      this.resetFilter();
+    });
+  }
+
+  openMigrateUploadDialog(){
+    const dialogRef = this.dialog.open(QuestionMigrateUploadDialogComponent);
+    dialogRef.afterClosed().subscribe((result) => {
+
     });
   }
 
