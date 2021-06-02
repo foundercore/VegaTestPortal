@@ -49,7 +49,7 @@ export class UserModel implements IUserModel {
     this.lastName = userObj?.lastName;
     this.authorities = authorities;
     this.state = userObj?.state;
-    this.userName = userObj?.userName;
+    this.userName = userObj?.username;
     this.tenantId = userObj?.tenantId;
     this.accountNonLocked = userObj?.accountNonLocked;
     this.accountNonExpired = userObj?.accountNonExpired;
