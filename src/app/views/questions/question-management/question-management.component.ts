@@ -1,3 +1,4 @@
+import { QuestionMigrateUploadDialogComponent } from './../question-migrate-upload-dialog/question-migrate-upload-dialog.component';
 import { QuestionManagementService } from './../../../services/question-management/question-management.service';
 import {
   Component,
@@ -152,6 +153,8 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
       this.deleteQuestion(row);
     } else if (type === 'bulk_delete') {
       this.bulkDeletQuestions();
+    } else if(type === 'migrate'){
+      this.openMigrateUploadDialog();
     }
   }
 
@@ -251,6 +254,13 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(QuestionBulkUploadDialogComponent);
     dialogRef.afterClosed().subscribe((result) => {
       this.resetFilter();
+    });
+  }
+
+  openMigrateUploadDialog(){
+    const dialogRef = this.dialog.open(QuestionMigrateUploadDialogComponent);
+    dialogRef.afterClosed().subscribe((result) => {
+
     });
   }
 

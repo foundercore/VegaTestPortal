@@ -57,6 +57,19 @@ export class QuestionManagementService  extends BaseService {
      return this.http.request(req);
   }
 
+  migrateQuestion(file: any){
+    const fd = new FormData();
+    fd.append('file', file!.data);
+    const url = `${this.BASE_SERVICE_URL}/api/v1/migration/question`;
+
+    const req = new HttpRequest('POST', url, fd, {
+      reportProgress: true,
+      responseType: 'blob'
+    });
+
+     return this.http.request(req);
+  }
+
   getQuestionTags():Observable<string[]>{
     const url = `${this.BASE_SERVICE_URL}/api/v1/question/tags`;
     return this.http.get<any>(url);
