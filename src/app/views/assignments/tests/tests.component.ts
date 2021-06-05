@@ -4,13 +4,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
+import { AppState } from 'src/app/state_management/_states/auth.state';
 import Swal from 'sweetalert2';
 import { TestVM } from '../models/postTestVM';
 import { SearchQuestionPaperVM } from '../models/searchQuestionVM';
 import { AssessmentEditorComponent } from '../popups/assessment-editor/assessment-editor.component';
+import { TestLiveComponent } from '../popups/test-live/test-live.component';
 import { TestConfigService } from '../services/test-config-service';
 
 @Component({
@@ -30,9 +34,19 @@ export class TestsComponent implements OnInit {
   alltest2 =[];
   displayedColumns: string[] = ['select','testName', 'minimumDurationInMinutes', 'totalDurationInMinutes', 'actions'];
   searchText : string="";
-  constructor(private testConfigService : TestConfigService, public dialog : MatDialog,public toastrService : ToastrService) { }
+  appState: any;
+  userName: string = '';
+  currentSectionSubmittedData: any;
+  studentName: string = '';
+  constructor(private testConfigService : TestConfigService, public dialog : MatDialog,public toastrService : ToastrService,
+    private router : Router, private store: Store<AppState>) { }
 
   ngOnInit(): void {
+    this.store.select('appState').subscribe((data) => {
+      this.userName = data.user.lastUpdatedBy;
+      this.studentName = data.user.firstName + ' ' + data.user.lastName;
+      console.log('data', data);
+    });
     this.GetAllquestionPapers();
    // this.alltest.push({"testId" : "fc94065f-b544-4fa0-adfa-dd159da4fd87","testName" : "hello Test","minimumDurationInMinutes" : 45, "totalDurationInMinutes": 50});
    
@@ -43,7 +57,7 @@ export class TestsComponent implements OnInit {
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
-    console.log("this.selection.selected==",this.selection.selected);
+   // console.log("this.selection.selected==",this.selection.selected);
     return numSelected === numRows;
   }
 
@@ -71,6 +85,7 @@ export class TestsComponent implements OnInit {
         model.totalDurationInMinutes = +result?.duration;
         model.minimumDurationInMinutes = +result?.duration;
         model.name =  result?.testName;
+        model.instructions = result?.description;
         debugger;
         this.testConfigService
           .createQuestionPaper(model)
@@ -247,6 +262,82 @@ export class TestsComponent implements OnInit {
 
 
 
+
+
+
+startTest(element) {
+  Swal.fire({
+    title: 'Want to start test?',
+    text: element.instructions,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#277da1',
+    cancelButtonColor: '#d33',
+    cancelButtonText: 'Close',
+    confirmButtonText: 'Start Test'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const dialogRef = this.dialog.open(TestLiveComponent, {
+        maxWidth: '1700px',
+        width: '100%',
+        minHeight: '100vh',
+        height: 'auto',
+        hasBackdrop: false,
+        backdropClass: 'dialog-backdrop',
+        data : {testData : element}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        this.GetAllquestionPapers();
+      });
+    }
+  })
+
+  // this.testConfigService
+  //   .getSudentSubmissionState(
+  //     element.questionPaperId,
+  //     this.userName
+  //   )
+  //   .subscribe(
+  //     (res: any) => {
+  //       if(res.submitted){
+  //         this.router.navigate(['/home/tests/show-result/' +  element.questionPaperId]);
+  //       }
+  //       else{
+  //         Swal.fire({
+  //           title: 'Want to start test?',
+  //           text: element.instructions,
+  //           icon: 'warning',
+  //           showCancelButton: true,
+  //           confirmButtonColor: '#277da1',
+  //           cancelButtonColor: '#d33',
+  //           cancelButtonText: 'Close',
+  //           confirmButtonText: 'Start Test'
+  //         }).then((result) => {
+  //           if (result.isConfirmed) {
+  //             const dialogRef = this.dialog.open(TestLiveComponent, {
+  //               maxWidth: '1700px',
+  //               width: '100%',
+  //               minHeight: '100vh',
+  //               height: 'auto',
+  //               hasBackdrop: false,
+  //               backdropClass: 'dialog-backdrop',
+  //               data : {testData : element}
+  //             });
+  //             dialogRef.afterClosed().subscribe(result => {
+  //               this.GetAllquestionPapers();
+  //             });
+  //           }
+  //         })
+  //       }
+  //     },
+  //     (error) => {
+  //       this.toastrService.error(
+  //         error?.error?.message ? error?.error?.message : error?.message,
+  //         'Error'
+  //       );
+  //     }
+  //   );
+}
 
 
 }

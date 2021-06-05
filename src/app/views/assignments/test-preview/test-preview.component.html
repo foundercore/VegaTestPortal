@@ -5,7 +5,7 @@
             <div class="col-md-7 p-0 d-flex align-items-center">
                 <img src="https://png.pngtree.com/element_our/20190523/ourmid/pngtree-hand-painted-small-fresh-female-high-school-student-image_1086346.jpg" width="80" height="49" class="mr-3" alt="">
                 <h4 class="ml-5">
-                    {{testname}}
+                    {{testdata?.name}}
                 </h4> 
             </div>
             <div class="col-md-5 d-flex">
@@ -25,11 +25,28 @@
         <!-- main body content start here -->
         <mat-tab-group class="pt-2">
             <!-- one -->
-            <mat-tab label="First"> 
+            <span *ngFor="let section of testdata?.sections">
+                <span (click)="selectSection(section?.id)">
+            <mat-tab label="{{section?.name}}" > 
                 <div class="row mx-0 scroll__box">
                     <div class="col-lg-8 position-relative">
                         <div class="left__content inner__scroll">
-                            <p>
+                            <h3 [innerHTML]="question?.name"></h3>
+                            <p [innerHTML]="question?.explanation">
+                            </p>
+                            <p [innerHTML]="question?.description">
+                            </p>
+                            <mat-radio-group aria-label="Select an option">
+                                <mat-radio-button value="{{opt?.key}}" *ngFor="let opt of question?.options"    >
+                                    <span [innerHTML]="opt?.value">
+                                    </span>
+                                </mat-radio-button> <br>
+                                <!-- <mat-radio-button value="2">Option 2</mat-radio-button> <br>
+                                <mat-radio-button value="3">Option 3</mat-radio-button> <br>
+                                <mat-radio-button value="4">Option 4</mat-radio-button> <br>
+                                <mat-radio-button value="5">Option 5</mat-radio-button> <br> -->
+                            </mat-radio-group>
+                            <!-- <p>
                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati, numquam. Unde eius commodi ut consequuntur nulla deserunt laboriosam assumenda adipisci, similique, tempora excepturi, nam recusandae eum quod. Et velit tempora blanditiis corporis accusantium aspernatur ipsam iste eveniet ullam, quisquam id.
                             </p>
                             <p>
@@ -41,20 +58,7 @@
                                 <mat-radio-button value="3">Option 3</mat-radio-button> <br>
                                 <mat-radio-button value="4">Option 4</mat-radio-button> <br>
                                 <mat-radio-button value="5">Option 5</mat-radio-button> <br>
-                            </mat-radio-group>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati, numquam. Unde eius commodi ut consequuntur nulla deserunt laboriosam assumenda adipisci, similique, tempora excepturi, nam recusandae eum quod. Et velit tempora blanditiis corporis accusantium aspernatur ipsam iste eveniet ullam, quisquam id.
-                            </p>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati, numquam. Unde eius commodi ut consequuntur nulla deserunt laboriosam assumenda adipisci, similique, tempora excepturi, nam recusandae eum quod. Et velit tempora blanditiis corporis accusantium aspernatur ipsam iste eveniet ullam, quisquam id.
-                            </p>
-                            <mat-radio-group aria-label="Select an option">
-                                <mat-radio-button value="1">Option 1</mat-radio-button> <br>
-                                <mat-radio-button value="2">Option 2</mat-radio-button> <br>
-                                <mat-radio-button value="3">Option 3</mat-radio-button> <br>
-                                <mat-radio-button value="4">Option 4</mat-radio-button> <br>
-                                <mat-radio-button value="5">Option 5</mat-radio-button> <br>
-                            </mat-radio-group>
+                            </mat-radio-group> -->
                               
 
                         </div>
@@ -66,26 +70,37 @@
                         </div>
                     </div>
                     <div class="col-lg-4 mh">
-                        <h3 class="text-center">LEGEND</h3>
+                        <h3 class="text-center">Questions</h3>
                         <ul class="list-unstyled question__scroll">
-                            <li>
-                                <button class="auto-btn" mat-raised-button>1</button>
-                                <span>Current Question</span>
+                            <li *ngFor="let ques of sectionsWithPapers; let i=index">
+                                <button class="auto-btn" mat-raised-button (click)="getQuestion(ques)" [ngStyle]="{
+                                    background: getactiveRandomColorStatus(
+                                        ques?.iscolorActive
+                                    )
+                                  }">{{i + 1}}</button>
+                                <span [innerHTML]="ques?.name"></span>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <button class="auto-btn" mat-raised-button>2</button>
                                 <span>Current Question 2</span>
-                            </li>
+                            </li> -->
                         </ul>
 
                         <div class="btn__bo pb-3 pt-5">
-                            <button class="auto-btn" mat-raised-button>1</button>
-                            <button class="auto-btn" mat-raised-button>2</button>
+                            <button class="auto-btn" mat-raised-button *ngFor="let ques of sectionsWithPapers; let i=index"
+                            [ngStyle]="{
+                                color : 'white',
+                                background: getmarkedRandomColorStatus(
+                                    ques?.ismarked
+                                )
+                              }"
+                            >{{i + 1}}</button>
+                            <!-- <button class="auto-btn" mat-raised-button>2</button>
                             <button class="auto-btn" mat-raised-button>3</button>
                             <button class="auto-btn" mat-raised-button>4</button>
                             <button class="auto-btn" mat-raised-button>5</button>
                             <button class="auto-btn" mat-raised-button>7</button>
-                            <button class="auto-btn" mat-raised-button>8</button> 
+                            <button class="auto-btn" mat-raised-button>8</button>  -->
                             <div class="text-center py-3">
                                 <button class="add-btn btn-add save__btn w-50 mx-auto" mat-raised-button>SAVE</button>
                             </div>
@@ -93,9 +108,10 @@
                     </div>
                 </div> 
             </mat-tab>
-
+                </span>
+            </span>
             <!-- two -->
-            <mat-tab label="Second"> 
+            <!-- <mat-tab label="Second"> 
                 <div class="row mx-0 scroll__box">
                     <div class="col-lg-8 position-relative">
                         <div class="left__content inner__scroll">
@@ -115,7 +131,7 @@
                              
                         </div>
 
-                        <!-- footer button box -->
+                      
                         <div class="btn__box d-flex justify-content-space-between pb-3 pt-3">
                             <button class="add-btn btn-add" mat-raised-button>MARK FOR REVIEW</button>
                             <button class="add-btn btn-danger" mat-raised-button>CLEAR FOR RESPONSE</button>
@@ -181,10 +197,10 @@
                         </div>
                     </div>
                 </div> 
-            </mat-tab>
+            </mat-tab> -->
 
             <!-- three -->
-            <mat-tab label="Third"> 
+            <!-- <mat-tab label="Third"> 
                 <div class="row mx-0 scroll__box">
                     <div class="col-lg-8 position-relative">
                         <div class="left__content inner__scroll">
@@ -217,7 +233,6 @@
                               
 
                         </div>
-                        <!-- footer button box -->
                         <div class="btn__box d-flex justify-content-space-between pb-3 pt-3">
                             <button class="add-btn btn-add" mat-raised-button>MARK FOR REVIEW</button>
                             <button class="add-btn btn-danger" mat-raised-button>CLEAR FOR RESPONSE</button>
@@ -251,7 +266,7 @@
                         </div>
                     </div>
                 </div> 
-            </mat-tab>
+            </mat-tab> -->
 
 
  
