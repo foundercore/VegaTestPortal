@@ -259,6 +259,11 @@ mat-checkbox span { white-space: pre-wrap; }
   }
 }
 
+.btn-primary:hover {
+  background-color: #448dc4;
+  border-color: #448dc4;
+}
+
 .mat-btn {
   height: 45px !important;
 }

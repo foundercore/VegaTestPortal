@@ -13,6 +13,9 @@ import { CalculatorComponent } from './popups/calculator/calculator.component';
 import { CountdownModule } from 'ngx-countdown';
 import { TestconfigComponent } from './popups/test-config/test-config.component';
 import { QuestionslistComponent } from './popups/questions-list/questions-list.component';
+import { TestLiveComponent } from './popups/test-live/test-live.component';
+import { ShowResultComponent } from './show-result/show-result.component';
+
 
 @NgModule({
   declarations: [
@@ -23,7 +26,9 @@ import { QuestionslistComponent } from './popups/questions-list/questions-list.c
     TestPreviewComponent,
     CalculatorComponent,
     TestconfigComponent,
-    QuestionslistComponent
+    QuestionslistComponent,
+    TestLiveComponent,
+    ShowResultComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +45,8 @@ import { QuestionslistComponent } from './popups/questions-list/questions-list.c
     SectionComponent,
     CalculatorComponent,
     TestconfigComponent,
-    QuestionslistComponent
+    QuestionslistComponent,
+    TestLiveComponent
   ]
 })
 export class AssignmentsModule { }

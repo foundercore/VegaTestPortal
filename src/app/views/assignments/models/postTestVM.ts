@@ -3,4 +3,6 @@ export class TestVM{
     name : string = "";
     totalDurationInMinutes : number = 0;
     testId : string = "";
+    instructions : string ="";
+
 }

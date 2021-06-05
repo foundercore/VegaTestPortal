@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -17,7 +17,8 @@ export class AssessmentEditorComponent implements OnInit {
   ngOnInit(): void {
     this.testForm = new FormGroup({
       testName: new FormControl('', [Validators.required]),
-      duration: new FormControl('', [Validators.required])
+      duration: new FormControl('', [Validators.required]),
+      description: new FormControl('', [Validators.required])
     });
   }
   public hasError = (controlName: string, errorName: string) => {

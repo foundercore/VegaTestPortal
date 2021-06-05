@@ -1,0 +1,160 @@
+
+
+.left__col.col-md-6 {
+    width: calc(100% - 476px); 
+}
+
+.right__col.col-md-6 {
+    width: 476px; 
+}
+
+
+.col-md-7 {
+    flex: 0 0 auto;
+    width: calc(100% - 400px);
+}
+
+.col-md-5 {
+    flex: 0 0 auto;
+    width: 400px;
+}
+
+.container-fluid {
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+.time {
+    background-color: rgb(255, 235, 193);
+}
+
+.time h4 {
+    margin-left: 1rem;
+    font-size: 1.125rem;
+}
+h5 {
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+ 
+.student__box {
+    padding-left: 2rem;
+}
+
+.auto-btn {
+    min-width: auto;
+    margin: 10px;
+}
+ 
+
+.inner__scroll {
+    height: calc(100vh - 243px);
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(218, 218, 218) #fff;
+}
+
+.question__scroll {
+    min-height: 300px; 
+    max-height: 300px; 
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(218, 218, 218) #fff;
+}
+
+.left__content {
+    position: relative;
+    padding: 0 1.5rem;
+}
+
+.mh {
+    min-height: 580px;
+    position: relative;
+}
+.save__btn{
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+}
+
+ 
+
+@media (max-width: 767.99px) {
+    .col-md-7 {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+    
+    .col-md-5 {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+    .btn__box.d-flex {
+        display: block !important;
+        text-align: center;
+    }
+    .add-btn {
+        height: 38px; 
+        font-size: .9rem;
+        margin: 5px;
+    }
+    .mh {
+        margin-top: 1rem;
+    }
+    .left__col.col-md-6 {
+        width: 100%; 
+    }
+    
+    .right__col.col-md-6 {
+        width: 100%; 
+    }
+}
+
+.question__box {
+    position: absolute;
+    top: 20px;
+    right: 18px; 
+}
+
+
+.mat-radio-button {
+    display: block !important;
+}  
+
+.close__btn { 
+    margin-top: -56px;
+    margin-right: -10px;
+}
+
+
+
+
+@media (max-width: 991.99px) {
+    .scroll__box {
+        height: calc(100vh - 200px);
+        overflow-y: auto;
+    }
+
+    .mh {
+        min-height: auto;
+    }
+    .save__btn {
+        position: unset;
+        bottom: 1.5rem;
+        left: 50%;
+        transform: translateX(0%);
+        -webkit-transform: translateX(0%);
+        -moz-transform: translateX(0%);
+        -ms-transform: translateX(0%);
+        -o-transform: translateX(0%);
+    }
+}
+.positive{
+    background-color: salmon;
+}
