@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prodbuild": "ng build --configuration=production "
+    "buildProd": "ng build --configuration=production ",
+    "buildStage": " ng build --prod --aot --configuration=staging"
 
   },
   "private": true,
