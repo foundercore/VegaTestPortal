@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class BaseService {
-  public BASE_SERVICE_URL = 'http://13.233.119.112:5501';
+  // public BASE_SERVICE_URL = 'http://13.233.119.112:5501';
+  public BASE_SERVICE_URL = environment.apiUrl;
 
   constructor() {
   }
