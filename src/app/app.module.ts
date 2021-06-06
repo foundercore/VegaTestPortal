@@ -58,6 +58,7 @@ import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClient} from '@angular/common/http';
 import { QuestionMigrateUploadDialogComponent } from './views/questions/question-migrate-upload-dialog/question-migrate-upload-dialog.component';
+import { DialogConformationComponent } from './shared/components/dialog-conformation/dialog-conformation.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -95,7 +96,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     PieChartComponent,
     SingleLayerGaugeComponent,
     BulkUploadBatchStudentsComponent,
-    QuestionMigrateUploadDialogComponent
+    QuestionMigrateUploadDialogComponent,
+    DialogConformationComponent
   ],
 
   imports: [

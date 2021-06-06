@@ -101,6 +101,7 @@ export class AddUserDialogComponent implements OnInit {
       lastName:  this.userFormGroup.controls.lastname.value,
       roles:  this.userFormGroup.controls.roles.value,
       state:  this.userFormGroup.controls.state.value,
+      email: this.userFormGroup.controls.email.value,
       enabled: this.data.enabled
     }
     this.userService.updateUsers(user,this.data.userName).subscribe(resp => {
