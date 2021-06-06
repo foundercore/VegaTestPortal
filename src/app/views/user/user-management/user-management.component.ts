@@ -108,7 +108,7 @@ export class UserManagementComponent implements OnInit, AfterViewInit  {
 
   deleteBulkUser(): void {
     if (this.selection.selected.length == 0) {
-      this.toastr.error('Please select atleast one Question');
+      this.toastr.error('Please select atleast one user');
     } else {
       let userIdList = this.selection.selected.map(
         (x) => x.userName

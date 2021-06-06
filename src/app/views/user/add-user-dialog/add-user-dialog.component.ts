@@ -6,6 +6,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MustMatch } from '../change-password/change-password.component';
 import { TranslateService } from '@ngx-translate/core';
+import { PasswordPolicy } from '../change-password/password-policy';
 
 
 
@@ -26,7 +27,21 @@ export class AddUserDialogComponent implements OnInit {
     address: new FormControl('',[Validators.required]),
     state: new FormControl('',[Validators.required]),
     email: new FormControl('',[Validators.required,Validators.email]  ),
-    password: new FormControl('',[Validators.required,Validators.minLength(6)]),
+    password: new FormControl('',[
+      // 1. Password Field is Required
+      Validators.required,
+      // 2. check whether the entered password has a number
+      PasswordPolicy.patternValidator(/\d/, { hasNumber: true }),
+      // 3. check whether the entered password has upper case letter
+      PasswordPolicy.patternValidator(/[A-Z]/, { hasCapitalCase: true }),
+      // 4. check whether the entered password has a lower-case letter
+      PasswordPolicy.patternValidator(/[a-z]/, { hasSmallCase: true }),
+      // 5. check whether the entered password has a special character
+      PasswordPolicy.patternValidator(/[*@!#%&()^~{}]+/, { hasSpecialCharacters: true }),
+      // 6. Has a minimum length of 8 characters
+      Validators.minLength(8)
+
+    ]),
     confirmPassword: new FormControl('',[Validators.required]),
   },MustMatch)
 
@@ -52,6 +67,7 @@ export class AddUserDialogComponent implements OnInit {
         this.userFormGroup.controls.email.setValue(this.data.email);
         this.userFormGroup.controls.password.setValidators([]);
         this.userFormGroup.controls.confirmPassword.setValidators([]);
+        this.userFormGroup.controls.email.disable();
         if(this.data.isView){
           this.userFormGroup.controls.firstname.disable();
           this.userFormGroup.controls.address.disable();
@@ -101,7 +117,6 @@ export class AddUserDialogComponent implements OnInit {
       lastName:  this.userFormGroup.controls.lastname.value,
       roles:  this.userFormGroup.controls.roles.value,
       state:  this.userFormGroup.controls.state.value,
-      email: this.userFormGroup.controls.email.value,
       enabled: this.data.enabled
     }
     this.userService.updateUsers(user,this.data.userName).subscribe(resp => {

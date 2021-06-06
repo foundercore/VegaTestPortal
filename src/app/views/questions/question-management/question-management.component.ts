@@ -35,7 +35,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'select',
     'name',
-    'subject',
+    'fileName',
     'explanation_added',
     'tags',
     'actions',
@@ -118,7 +118,6 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
         map((data) => {
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
-          this.totalNumberOfRecords = data.totalRecords;
           return data.questions.map((x) => {
             x.explanation_added = x.explanation?.length != 0 ? 'Yes' : 'No';
             return x;
@@ -206,6 +205,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
       this.sort.active,
       this.sort.direction
     );
+    this.totalNumberOfRecords = this.paginator.pageSize;
 
     if(this.isFilterApply){
       if(this.filterGroup.controls['filterNameValue'].value !== null && this.filterGroup.controls['filterNameValue'].value.length !== 0)

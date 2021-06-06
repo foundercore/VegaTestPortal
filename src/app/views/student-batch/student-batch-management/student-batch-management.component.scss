@@ -34,8 +34,24 @@
 .action-btn{
   margin-right: 10px;
   cursor: pointer;
+
 }
 
 .mat-column-actions{
-  max-width: 50px;
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+}
+
+
+.mat-column-name{
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+}
+
+.mat-column-student_count{
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
 }
