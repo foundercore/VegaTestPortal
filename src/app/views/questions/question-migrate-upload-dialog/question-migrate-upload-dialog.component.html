@@ -16,6 +16,11 @@
       </div>
     </div>
   </div>
+
+  <div>
+    <mat-checkbox class="" 
+    [(ngModel)]="removeHtmlContent" [checked]="removeHtmlContent">Remove Html Content</mat-checkbox>
+  </div>
 </div>
 <div mat-dialog-actions class="bulk-upload-bottom">
   <button class="upload-cls"  mat-raised-button   (click)="uploadTemplate()" [disabled]="!file">

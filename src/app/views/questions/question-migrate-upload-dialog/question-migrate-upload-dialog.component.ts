@@ -27,6 +27,8 @@ export class QuestionMigrateUploadDialogComponent {
 
   public fileName = 'Choose file';
 
+  public removeHtmlContent: boolean = false;
+
   constructor(
     private questionManagementService: QuestionManagementService,
     private toastr: ToastrService,
@@ -55,10 +57,12 @@ export class QuestionMigrateUploadDialogComponent {
     }
   }
 
-  downloadConvertedJson(data,file) {
-     let link = document.createElement('a');
-     link.download = file!.data.name + 'output.csv';
-    var blob = new Blob([data], { type: 'text/csv' });
+  downloadConvertedJson(data, file) {
+    var fileName = file!.data.name;
+    fileName = fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
+    let link = document.createElement('a');
+    link.download = fileName + '.xlsx';
+    var blob = new Blob([data], { type: 'application/vnd.ms-excel' });
     link.href =  window.URL.createObjectURL(blob);
     link.click();
   }
@@ -66,7 +70,7 @@ export class QuestionMigrateUploadDialogComponent {
   uploadTemplate() {
 
     this.file!.inProgress = true;
-    this.file!.sub = this.questionManagementService.migrateQuestion(this.file).pipe(
+    this.file!.sub = this.questionManagementService.migrateQuestion(this.file, this.removeHtmlContent).pipe(
         map((event : any) => {
           switch (event.type) {
             case HttpEventType.UploadProgress:

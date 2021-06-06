@@ -57,10 +57,10 @@ export class QuestionManagementService  extends BaseService {
      return this.http.request(req);
   }
 
-  migrateQuestion(file: any){
+  migrateQuestion(file: any, removeHtmlContent: boolean){
     const fd = new FormData();
     fd.append('file', file!.data);
-    const url = `${this.BASE_SERVICE_URL}/api/v1/migration/question`;
+    const url = `${this.BASE_SERVICE_URL}/api/v1/migration/question?removeHtmlContent=${removeHtmlContent}`;
 
     const req = new HttpRequest('POST', url, fd, {
       reportProgress: true,
