@@ -52,6 +52,16 @@ import { StudentReportComponent } from './views/reports/student-report/student-r
 import { VerticalBarChartComponent } from './views/charts/vertical-bar-chart/vertical-bar-chart.component';
 import { PieChartComponent } from './views/charts/pie-chart/pie-chart.component';
 import { SingleLayerGaugeComponent } from './views/charts/single-layer-gauge/single-layer-gauge.component';
+import { BulkUploadBatchStudentsComponent } from './views/student-batch/bulk-upload-batch-students/bulk-upload-batch-students.component';
+// import ngx-translate and the http loader
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {HttpClient} from '@angular/common/http';
+import { QuestionMigrateUploadDialogComponent } from './views/questions/question-migrate-upload-dialog/question-migrate-upload-dialog.component';
+
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -83,7 +93,9 @@ import { SingleLayerGaugeComponent } from './views/charts/single-layer-gauge/sin
     VerticalBarChartComponent,
     GroupVerticalBarChartComponent,
     PieChartComponent,
-    SingleLayerGaugeComponent
+    SingleLayerGaugeComponent,
+    BulkUploadBatchStudentsComponent,
+    QuestionMigrateUploadDialogComponent
   ],
 
   imports: [
@@ -106,7 +118,14 @@ import { SingleLayerGaugeComponent } from './views/charts/single-layer-gauge/sin
     }),
     EffectsModule.forRoot([AuthEffects]),
     ToastrModule.forRoot(),
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+      }
+  })
   ],
   providers: [
     AuthGuard,
@@ -117,6 +136,7 @@ import { SingleLayerGaugeComponent } from './views/charts/single-layer-gauge/sin
       useClass: TokenInterceptor,
       multi: true,
     },
+    TranslateService
   ],
   bootstrap: [AppComponent],
 })

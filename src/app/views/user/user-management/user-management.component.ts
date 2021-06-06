@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { IUserModel } from 'src/app/models/user/user-model';
@@ -21,9 +22,9 @@ export class UserManagementComponent implements OnInit, AfterViewInit  {
 
   displayedColumns: string[] = [
     'select',
-    'name',
+    'displayName',
     'email',
-    'phone_number',
+    'roles',
     'batch',
     'actions'
   ];
@@ -43,7 +44,8 @@ export class UserManagementComponent implements OnInit, AfterViewInit  {
   constructor(
     private userService: UserService,
     public dialog: MatDialog,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public translate: TranslateService
   ) {
 
   }

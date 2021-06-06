@@ -1,5 +1,5 @@
 <h1 mat-dialog-title class="title">
-  <span >Add Student In Batch</span>
+  <span >Tag Student In Batch ({{data.name}})</span>
   <button mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
@@ -13,7 +13,13 @@
 <div class="example-container">
 
   <span>List of All Student which are NOT in the batch selected</span>
-
+  <div style="    margin: 10px;">
+    <mat-checkbox (change)="$event ? masterLeftSelectionToggle() : null"
+    [checked]="leftSideSelection.hasValue() && isAllLeftSelected()"
+    [indeterminate]="leftSideSelection.hasValue() && !isAllLeftSelected()"
+    [aria-label]="leftCheckboxLabel()">
+    </mat-checkbox>
+    Select all Student</div>
   <div
     cdkDropList
     #todoList="cdkDropList"
@@ -21,22 +27,31 @@
     [cdkDropListConnectedTo]="[doneList]"
     class="example-list"
     (cdkDropListDropped)="drop($event)">
-    <div class="example-box" *ngFor="let item of availableStudentList" cdkDrag>{{item}}</div>
+    <div class="example-box" *ngFor="let item of availableStudentList" cdkDrag>
+      <mat-checkbox (change)="$event ? leftSideSelection.toggle(item) : null"
+      [checked]="leftSideSelection.isSelected(item)" >{{item}}</mat-checkbox>
+    </div>
   </div>
 </div>
 
 <div style="align-self: center;margin: 0px 20px;">
   <div>
-    <i class="fas fa-long-arrow-alt-right fa-5x" style="cursor:pointer"></i>
+    <i class="fas fa-long-arrow-alt-right fa-5x" style="cursor:pointer" (click)="moveItemRightSide()"></i>
   </div>
   <div>
-    <i class="fas fa-long-arrow-alt-left fa-5x" style="cursor:pointer"></i>
+    <i class="fas fa-long-arrow-alt-left fa-5x" style="cursor:pointer" (click)="moveItemLeftSide()"></i>
   </div>
 </div>
 
 <div class="example-container">
   <span>List of All Student which are in the batch selected</span>
-
+  <div style="    margin: 10px;">
+    <mat-checkbox (change)="$event ? masterRightSelectionToggle() : null"
+    [checked]="rightSideSelection.hasValue() && isAllRightSelected()"
+    [indeterminate]="rightSideSelection.hasValue() && !isAllRightSelected()"
+    [aria-label]="rightCheckboxLabel()">
+    </mat-checkbox>
+    Select all Student</div>
   <div
     cdkDropList
     #doneList="cdkDropList"
@@ -44,13 +59,16 @@
     [cdkDropListConnectedTo]="[todoList]"
     class="example-list"
     (cdkDropListDropped)="drop($event)">
-    <div class="example-box" *ngFor="let student of taggedStudentList" cdkDrag>{{student}}</div>
+    <div class="example-box" *ngFor="let student of taggedStudentList" cdkDrag>
+      <mat-checkbox (change)="$event ? rightSideSelection.toggle(student) : null"
+      [checked]="rightSideSelection.isSelected(student)" >{{student}}</mat-checkbox>
+    </div>
   </div>
 </div>
 
     </div>
     <div class="btn-grp-cls">
-      <button   mat-raised-button class="save-btn-cls" (click)="addStudent()">Save</button>
+      <button   mat-raised-button class="save-btn-cls" (click)="addStudent()">{{ 'COMMON_TAG.SAVE' | translate }}</button>
     </div>
   </div>
 </div>

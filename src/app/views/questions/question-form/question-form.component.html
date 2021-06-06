@@ -10,21 +10,15 @@
         <div class="w-100-div flex-container">
              <mat-form-field appearance="outline" class="w-25-field form-field-padding">
               <mat-label>Subject</mat-label>
-              <mat-select formControlName="subject" >
-                <mat-option *ngFor="let subject of subjectList" [value]="subject">{{subject}}</mat-option>
-              </mat-select>
+              <input matInput type="text" formControlName="subject">
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-25-field form-field-padding">
               <mat-label>Topic</mat-label>
-              <mat-select formControlName="topic" >
-                <mat-option *ngFor="let topic of topicList" [value]="topic">{{topic}}</mat-option>
-              </mat-select>
+              <input matInput type="text" formControlName="topic">
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-25-field form-field-padding">
               <mat-label>Sub Topic</mat-label>
-              <mat-select formControlName="subTopic" >
-                <mat-option *ngFor="let subTopic of subTopicList" [value]="subTopic">{{subTopic}}</mat-option>
-              </mat-select>
+              <input matInput type="text" formControlName="subTopic">
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-25-field form-field-padding">
               <mat-label>Difficulty Level</mat-label>
@@ -44,8 +38,8 @@
           </div>
         </div>
         <div>
-          <button mat-button (click)="cancel()"  class="cancel-btn">Cancel</button>
-          <button mat-button matStepperNext class="next-save-btn">Next</button>
+          <button mat-button (click)="cancel()"  class="cancel-btn">{{ 'COMMON_TAG.CANCEL' | translate }}</button>
+          <button mat-button matStepperNext class="next-save-btn">{{ 'COMMON_TAG.NEXT' | translate }}</button>
         </div>
       </form>
     </mat-step>
@@ -73,9 +67,9 @@
           </div>
         </div>
         <div>
-          <button mat-button (click)="cancel()" class="cancel-btn" >Cancel</button>
-          <button mat-button matStepperPrevious class="back-btn">Back</button>
-          <button mat-button matStepperNext class="next-save-btn">Next</button>
+          <button mat-button (click)="cancel()" class="cancel-btn" >{{ 'COMMON_TAG.CANCEL' | translate }}</button>
+          <button mat-button matStepperPrevious class="back-btn">{{ 'COMMON_TAG.BACK' | translate }}</button>
+          <button mat-button matStepperNext class="next-save-btn">{{ 'COMMON_TAG.NEXT' | translate }}</button>
         </div>
       </form>
     </mat-step>
@@ -89,12 +83,6 @@
               <mat-option *ngFor="let questionType of questionTypeList" [value]="questionType">{{questionType}}</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field appearance="outline" class="w-25-field form-field-padding">
-            <mat-label>Tags</mat-label>
-            <mat-select formControlName="tags" multiple>
-              <mat-option *ngFor="let tag of tags" [value]="tag">{{tag}}</mat-option>
-            </mat-select>
-          </mat-form-field>
           <mat-form-field appearance="outline" class="w-50-field form-field-padding">
             <mat-label>Explanation</mat-label>
             <input matInput type="text" formControlName="explanation">
@@ -102,6 +90,18 @@
           <mat-form-field appearance="outline" class="w-50-field form-field-padding">
             <mat-label>Book Reference</mat-label>
             <input matInput type="text" formControlName="bookReference">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-100-field form-field-padding">
+            <mat-label>Tags</mat-label>
+            <mat-chip-list #chipList aria-label="Tag selection">
+              <mat-chip *ngFor="let tag of tags" [selectable]="true" [removable]="true" (removed)="removeTag(tag)">
+                {{tag}}
+                <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="New tag..." [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                (matChipInputTokenEnd)="addTag($event)">
+            </mat-chip-list>
           </mat-form-field>
         </div>
         <div class="w-100-div" style="margin-bottom: 20px;">
@@ -135,9 +135,9 @@
 
       </div>
       <div>
-        <button mat-button (click)="cancel()" class="cancel-btn">Cancel</button>
-        <button mat-button matStepperPrevious class="back-btn">Back</button>
-        <button mat-button matStepperNext class="next-save-btn">Next</button>
+        <button mat-button (click)="cancel()" class="cancel-btn">{{ 'COMMON_TAG.CANCEL' | translate }}</button>
+        <button mat-button matStepperPrevious class="back-btn">{{ 'COMMON_TAG.BACK' | translate }}</button>
+        <button mat-button matStepperNext class="next-save-btn">{{ 'COMMON_TAG.NEXT' | translate }}</button>
       </div>
 
     </mat-step>
@@ -161,10 +161,10 @@
         </div>
 
       <div>
-        <button mat-button (click)="cancel()" class="cancel-btn">Cancel</button>
-        <button mat-button matStepperPrevious class="back-btn">Back</button>
-        <button *ngIf="isNewForm" mat-button (click)="createQuestion()" class="next-save-btn">Save</button>
-        <button *ngIf="!isNewForm" mat-button (click)="updateQuestion()" class="next-save-btn">Update</button>
+        <button mat-button (click)="cancel()" class="cancel-btn">{{ 'COMMON_TAG.CANCEL' | translate }}</button>
+        <button mat-button matStepperPrevious class="back-btn">{{ 'COMMON_TAG.BACK' | translate }}</button>
+        <button *ngIf="isNewForm" mat-button (click)="createQuestion()" class="next-save-btn">{{ 'COMMON_TAG.SAVE' | translate }}</button>
+        <button *ngIf="!isNewForm" mat-button (click)="updateQuestion()" class="next-save-btn">{{ 'COMMON_TAG.UPDATE' | translate }}</button>
 
       </div>
     </mat-step>

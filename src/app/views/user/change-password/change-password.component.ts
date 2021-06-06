@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/services/users/users.service';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 export function MustMatch(g: FormGroup) {
 
@@ -49,6 +50,7 @@ export class ChangePasswordComponent implements OnInit {
   constructor( private userService: UserService,
     private tosterService: ToastrService,
     private store: Store<AppState>,
+    public translate: TranslateService,
     public dialogRef: MatDialogRef<AddUserDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 

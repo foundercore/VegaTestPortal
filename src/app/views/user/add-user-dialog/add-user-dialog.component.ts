@@ -4,6 +4,8 @@ import { UserService } from 'src/app/services/users/users.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MustMatch } from '../change-password/change-password.component';
+import { TranslateService } from '@ngx-translate/core';
 
 
 
@@ -25,11 +27,13 @@ export class AddUserDialogComponent implements OnInit {
     state: new FormControl('',[Validators.required]),
     email: new FormControl('',[Validators.required,Validators.email]  ),
     password: new FormControl('',[Validators.required,Validators.minLength(6)]),
-  })
+    confirmPassword: new FormControl('',[Validators.required]),
+  },MustMatch)
 
   constructor(
     private userService: UserService,
     private tosterService: ToastrService,
+    public translate: TranslateService,
     public dialogRef: MatDialogRef<AddUserDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -47,6 +51,7 @@ export class AddUserDialogComponent implements OnInit {
         this.userFormGroup.controls.state.setValue(this.data.state);
         this.userFormGroup.controls.email.setValue(this.data.email);
         this.userFormGroup.controls.password.setValidators([]);
+        this.userFormGroup.controls.confirmPassword.setValidators([]);
         if(this.data.isView){
           this.userFormGroup.controls.firstname.disable();
           this.userFormGroup.controls.address.disable();

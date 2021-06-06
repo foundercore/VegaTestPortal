@@ -10,13 +10,16 @@ export class SearchQuestion {
   subject: string | undefined;
   tags: [] | undefined;
   type: string| undefined;
+  subTopic: string | undefined;
+  topic: string | undefined;
   updateEndTime: string | undefined;
   updateStartTime: string | undefined;
+
 
   constructor(pageNumber:string,pageSizeValue:number,sortColumn?:string,sortOrder?:string,) {
     this.pageNumber = pageNumber;
     this.pageSize = pageSizeValue;
-    this.sortColumn = sortColumn;
+    this.sortColumn = sortColumn? sortColumn:'lastUpdatedOn';
     this.sortOrder = sortOrder;
   }
 

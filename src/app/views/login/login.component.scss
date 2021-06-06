@@ -94,7 +94,7 @@
   color: var(--success-color);
   font-weight: bold;
   text-align: left;
-  left: 25% !important;
+  left: 5% !important;
 }
 
 .loginButton button:disabled,
@@ -106,6 +106,9 @@
 
 .loginMicrosoftButton {
   margin: 5px;
+}
+.loginIcon {
+  padding-right: 5px;
 }
 .loginMicrosoftButton button {
   width: 200px;

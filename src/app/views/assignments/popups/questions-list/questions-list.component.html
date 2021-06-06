@@ -6,7 +6,7 @@
     </button>
   </div>
   <div class="card-body">
-   
+
     <div class="row py-3 ">
       <div class="col-lg-6">
         <form action="" class="search__box">
@@ -28,14 +28,14 @@
         </form>
       </div>
       <div class="col-lg-6">
-        <div class="btn__group text-right"> 
-          <button mat-raised-button class="btn-save add-btn mx-2" (click)="saveQuestions()"> <mat-icon>save</mat-icon><span>Save</span></button>
+        <div class="btn__group text-right">
+          <button mat-raised-button class="btn-save add-btn mx-2" (click)="saveQuestions()"> <mat-icon>save</mat-icon><span>{{ 'COMMON_TAG.SAVE' | translate }}</span></button>
         </div>
       </div>
     </div>
- 
+
     <div class="shadow__box data__table mt-3">
-    
+
       <table
         mat-table
         [dataSource]="dataSource"
@@ -43,7 +43,7 @@
         class="mat-elevation-z8"
         style="width: 100%"
       >
-      
+
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox
@@ -63,7 +63,7 @@
             </mat-checkbox>
           </td>
         </ng-container>
-      
+
         <ng-container matColumnDef="quesName">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
           <td
@@ -73,7 +73,7 @@
           ></td>
         </ng-container>
 
-      
+
         <ng-container matColumnDef="negativeMark">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             Negative Mark
@@ -87,7 +87,7 @@
           </td>
         </ng-container>
 
-       
+
         <ng-container matColumnDef="positiveMark">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             Positive Mark
@@ -101,7 +101,7 @@
           </td>
         </ng-container>
 
-      
+
         <ng-container matColumnDef="skipMark">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Skip Mark</th>
           <td mat-cell *matCellDef="let element">
@@ -125,6 +125,6 @@
       [pageSizeOptions]="pageOptions"
     ></mat-paginator>
     </div>
-   
+
   </div>
 </div>

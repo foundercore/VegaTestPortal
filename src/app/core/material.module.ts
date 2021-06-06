@@ -43,6 +43,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { CardsModule, WavesModule } from 'angular-bootstrap-md';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   exports: [
@@ -89,7 +90,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MatTreeModule,
     PortalModule,
     ScrollingModule,
-    NgxChartsModule
+    NgxChartsModule,
+    TranslateModule
   ],
   imports: [
     A11yModule,

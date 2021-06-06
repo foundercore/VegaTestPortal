@@ -94,12 +94,23 @@
         </mat-error>
       </mat-form-field>
 
+      <mat-form-field appearance="outline"  *ngIf="!this.data">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput formControlName="confirmPassword"  required />
+        <mat-error *ngIf="userFormGroup.controls.confirmPassword.hasError('required')">
+          Confirm Password is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="userFormGroup.controls.confirmPassword.hasError('mustMatch')">
+          Passwords must match
+        </mat-error>
+      </mat-form-field>
+
 
     </div>
     <div class="btn-grp-cls">
-      <button *ngIf="!data" mat-raised-button class="save-btn-cls" (click)="createUser()">Save</button>
-      <button *ngIf="data && !data.isView" mat-raised-button class="save-btn-cls" (click)="updateUser()">Update</button>
-      <button *ngIf="!data" mat-raised-button class="reset-btn-cls" (click)="reset()">Reset</button>
+      <button *ngIf="!data" mat-raised-button class="save-btn-cls" (click)="createUser()">{{ 'COMMON_TAG.SAVE' | translate }}</button>
+      <button *ngIf="data && !data.isView" mat-raised-button class="save-btn-cls" (click)="updateUser()">{{ 'COMMON_TAG.UPDATE' | translate }}</button>
+      <button *ngIf="!data" mat-raised-button class="reset-btn-cls" (click)="reset()">{{ 'COMMON_TAG.RESET' | translate }}</button>
     </div>
   </div>
 </div>

@@ -2,19 +2,19 @@
   <div class="page-options">
     <div class="user-actions">
       <button mat-raised-button (click)="deleteBulkUser()">
-        <mat-icon>delete_forever</mat-icon> Delete
+        <mat-icon>delete_forever</mat-icon> {{ 'COMMON_TAG.DELETE' | translate }}
       </button>
       <button mat-raised-button (click)="performGridAction('add')">
-        <mat-icon>add_circle</mat-icon> Add
+        <mat-icon>add_circle</mat-icon> {{ 'COMMON_TAG.ADD' | translate }}
       </button>
       <button mat-raised-button (click)="performGridAction('upload')">
-        <mat-icon>cloud_upload</mat-icon> Upload
+        <mat-icon>cloud_upload</mat-icon>{{ 'COMMON_TAG.UPLOAD' | translate }}
       </button>
     </div>
 
     <div class="user-search-bar">
       <mat-form-field style="width: 600px" appearance="outline">
-        <mat-label>Filter</mat-label>
+        <mat-label> {{ 'COMMON_TAG.FILTER' | translate }}</mat-label>
         <input matInput placeholder="Search" #input  (keyup)="applyFilter($event)" />
       </mat-form-field>
     </div>
@@ -27,7 +27,7 @@
       </div>
       <div class="mat-elevation-z8">
         <div >
-          <table mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear>
+          <table mat-table [dataSource]="dataSource" matSort matSortActive="displayName" matSortDisableClear>
               <!-- Checkbox Column -->
             <ng-container matColumnDef="select">
               <th mat-header-cell *matHeaderCellDef>
@@ -47,34 +47,34 @@
             </ng-container>
 
             <!-- Name Column -->
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <ng-container matColumnDef="displayName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'USER_MANAGEMENT_TAG.NAME' | translate }}</th>
               <td mat-cell *matCellDef="let row">{{ row.displayName }}</td>
             </ng-container>
 
             <!-- Email Column -->
             <ng-container matColumnDef="email">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'USER_MANAGEMENT_TAG.EMAIL' | translate }}</th>
               <td mat-cell *matCellDef="let row">{{ row.email }}</td>
             </ng-container>
 
             <!-- Explanation Column -->
-            <ng-container matColumnDef="phone_number">
-              <th mat-header-cell *matHeaderCellDef>Phone Number</th>
+            <ng-container matColumnDef="roles">
+              <th mat-header-cell *matHeaderCellDef>{{ 'USER_MANAGEMENT_TAG.ROLES_TAG' | translate }}</th>
               <td mat-cell *matCellDef="let row">
-                {{ row.phone || 99889988889 }}
+                {{ row.roles }}
               </td>
             </ng-container>
 
             <!-- Tag Column -->
             <ng-container matColumnDef="batch" >
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Batch</th>
-              <td mat-cell *matCellDef="let row">{{ row.batch || 2021 }}</td>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'USER_MANAGEMENT_TAG.BATCH' | translate }}</th>
+              <td mat-cell *matCellDef="let row">{{ row.batch }}</td>
             </ng-container>
 
              <!-- actions Column -->
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <th mat-header-cell *matHeaderCellDef>{{ 'COMMON_TAG.ACTIONS' | translate }}</th>
               <td mat-cell *matCellDef="let row">
                 <span class="action-btn" matTooltip="View" (click)="performGridAction('view',row)">
                   <mat-icon>remove_red_eye</mat-icon>

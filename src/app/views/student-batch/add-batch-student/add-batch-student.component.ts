@@ -7,6 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { AddUserDialogComponent } from '../../user/add-user-dialog/add-user-dialog.component';
 import { StudentBatchModel } from 'src/app/models/student-batch/student-batch-model';
 import { forkJoin } from 'rxjs';
+import { SelectionModel } from '@angular/cdk/collections';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-batch-student',
@@ -23,10 +25,15 @@ export class AddBatchStudentComponent implements OnInit {
   availableStudentList = [
   ];
 
+
+  leftSideSelection = new SelectionModel<string>(true, []);
+  rightSideSelection = new SelectionModel<string>(true, []);
+
   constructor(
     private studentBatchService: StudentBatchService,
     private userService : UserService,
     private tosterService: ToastrService,
+    public translate: TranslateService,
     public dialogRef: MatDialogRef<AddUserDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: StudentBatchModel
   ) { }
@@ -65,11 +72,72 @@ export class AddBatchStudentComponent implements OnInit {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+      this.leftSideSelection.clear();
+      this.rightSideSelection.clear();
       transferArrayItem(event.previousContainer.data,
                         event.container.data,
                         event.previousIndex,
                         event.currentIndex);
     }
+  }
+
+  moveItemRightSide(){
+    this.leftSideSelection.selected.forEach(x => this.taggedStudentList.push(x));
+    this.availableStudentList = this.availableStudentList.filter(x => !this.leftSideSelection.selected.includes(x));
+    this.leftSideSelection.clear();
+  }
+
+  moveItemLeftSide(){
+    this.rightSideSelection.selected.forEach(x => this.availableStudentList.push(x));
+    this.taggedStudentList = this.taggedStudentList.filter(x => !this.rightSideSelection.selected.includes(x));
+    this.rightSideSelection.clear();
+  }
+
+
+  //Left side selection
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllLeftSelected() {
+    const numSelected = this.leftSideSelection.selected.length;
+    const numRows =  this.availableStudentList.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterLeftSelectionToggle() {
+    this.isAllLeftSelected() ?
+        this.leftSideSelection.clear() :
+        this.availableStudentList.forEach(row => this.leftSideSelection.select(row));
+  }
+
+  /** The label for the checkbox on the passed row */
+  leftCheckboxLabel(row?: any): string {
+    if (!row) {
+      return `${this.isAllLeftSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.leftSideSelection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+  }
+
+  //right side selection
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllRightSelected() {
+    const numSelected = this.rightSideSelection.selected.length;
+    const numRows =  this.taggedStudentList.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterRightSelectionToggle() {
+    this.isAllRightSelected() ?
+        this.rightSideSelection.clear() :
+        this.taggedStudentList.forEach(row => this.rightSideSelection.select(row));
+  }
+
+  /** The label for the checkbox on the passed row */
+  rightCheckboxLabel(row?: any): string {
+    if (!row) {
+      return `${this.isAllRightSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.rightSideSelection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
 }

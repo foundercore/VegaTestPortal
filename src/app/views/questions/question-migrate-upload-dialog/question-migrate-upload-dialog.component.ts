@@ -1,30 +1,19 @@
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from '@angular/animations';
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpEventType,
-  HttpRequest,
-} from '@angular/common/http';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { HttpEventType, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
-import { catchError, last, map, tap } from 'rxjs/operators';
+import { map, tap, last, catchError } from 'rxjs/operators';
 import { FileUploadModel } from 'src/app/models/file/file-upload-model';
-import { BaseService } from 'src/app/services/base.service';
 import { QuestionManagementService } from 'src/app/services/question-management/question-management.service';
+import { QuestionBulkUploadDialogComponent } from '../question-bulk-upload-dialog/question-bulk-upload-dialog.component';
 
 @Component({
-  selector: 'app-question-bulk-upload-dialog',
-  templateUrl: './question-bulk-upload-dialog.component.html',
-  styleUrls: ['./question-bulk-upload-dialog.component.scss'],
+  selector: 'app-question-migrate-upload-dialog',
+  templateUrl: './question-migrate-upload-dialog.component.html',
+  styleUrls: ['./question-migrate-upload-dialog.component.scss'],
   animations: [
     trigger('fadeInOut', [
       state('in', style({ opacity: 100 })),
@@ -32,7 +21,8 @@ import { QuestionManagementService } from 'src/app/services/question-management/
     ]),
   ],
 })
-export class QuestionBulkUploadDialogComponent extends BaseService {
+export class QuestionMigrateUploadDialogComponent {
+
   public file: FileUploadModel | undefined;
 
   public fileName = 'Choose file';
@@ -43,7 +33,7 @@ export class QuestionBulkUploadDialogComponent extends BaseService {
     public translate: TranslateService,
     private dialogRef: MatDialogRef<QuestionBulkUploadDialogComponent>
   ) {
-    super();
+
   }
 
   ngOnInit() {}
@@ -65,17 +55,18 @@ export class QuestionBulkUploadDialogComponent extends BaseService {
     }
   }
 
-  downloadTemplate() {
-    let link = document.createElement('a');
-    link.download = 'question_bulk_upload_sample.csv';
-    link.href = 'assets/templates/question_bulk_upload_sample.csv';
+  downloadConvertedJson(data,file) {
+     let link = document.createElement('a');
+     link.download = file!.data.name + 'output.csv';
+    var blob = new Blob([data], { type: 'text/csv' });
+    link.href =  window.URL.createObjectURL(blob);
     link.click();
   }
 
   uploadTemplate() {
 
     this.file!.inProgress = true;
-    this.file!.sub = this.questionManagementService.bulkUploadQuestion(this.file).pipe(
+    this.file!.sub = this.questionManagementService.migrateQuestion(this.file).pipe(
         map((event : any) => {
           switch (event.type) {
             case HttpEventType.UploadProgress:
@@ -101,8 +92,10 @@ export class QuestionBulkUploadDialogComponent extends BaseService {
       .subscribe((event: any) => {
         if (typeof event === 'object') {
           this.toastr.success(`${this.file!.data.name} upload successfully.`);
-          this.file = undefined;
           this.fileName = 'Choose file';
+          console.log(event.headers.get('content-disposition'));
+          this.downloadConvertedJson(event.body,this.file);
+          this.file = undefined;
           this.dialogRef.close();
         }
       });

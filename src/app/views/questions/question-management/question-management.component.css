@@ -64,6 +64,11 @@ table {
   max-width: 150px;
 }
 
+.mat-column-select{
+  width:50px;
+  max-width: 50px;
+}
+
 .question-list-grid{
   margin: 20px;
 
@@ -111,6 +116,10 @@ table {
   width: 50%;
 }
 
+.w-100-field{
+  width: 100%;
+}
+
 .form-field-padding{
   padding-right: 20px;
   width: -webkit-fill-available;
@@ -127,7 +136,7 @@ table {
 
 .reset-btn-cls{
   position: absolute;
-  right: 100px;
+  right: 120px;
   bottom: 20px;
   background: red;
   color: white;

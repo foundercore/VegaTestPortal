@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { IUserUpdateRequestModel } from 'src/app/models/user/user-model';
 import { UserService } from 'src/app/services/users/users.service';
@@ -34,6 +35,7 @@ export class ProfileComponent implements OnInit {
   constructor(
     private userService: UserService,
     private tosterService: ToastrService,
+    public translate: TranslateService,
     public dialogRef: MatDialogRef<AddUserDialogComponent>
     ) {
 

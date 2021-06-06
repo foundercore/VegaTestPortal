@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { QuestionModel } from 'src/app/models/questions/question-model';
 import { QuestionManagementService } from 'src/app/services/question-management/question-management.service';
 
@@ -37,6 +38,7 @@ export class QuestionFormPreviewComponent implements OnInit {
   constructor(
     private router: Router,
     private activateRouter: ActivatedRoute,
+    public translate: TranslateService,
     private questionManagementService: QuestionManagementService
     ) { }
 

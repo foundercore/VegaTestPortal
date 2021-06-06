@@ -1,0 +1,41 @@
+<h1 mat-dialog-title class="title">
+  <span>Bulk Student tags to Batch</span>
+  <button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h1>
+<div mat-dialog-content>
+  <div class="upload-batch-content">
+    <div class="example-container"  [formGroup]="batchFormGroup">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Batch Name</mat-label>
+        <mat-select  formControlName="name" required>
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let batch of batchList" [value]="batch">
+            {{batch.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="batchFormGroup.controls.name.hasError('required')">
+          Batch Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field style="width: 660px !important" appearance="outline">
+        <mat-label>Student Emails</mat-label>
+        <textarea matInput  required formControlName="listOfStudent" ></textarea>
+        <mat-error *ngIf="batchFormGroup.controls.listOfStudent.hasError('required')">
+          Student Emails is <strong>required</strong>
+        </mat-error>
+        <!-- <mat-error *ngIf="batchFormGroup.controls.listOfStudent.hasError('pattern')">
+          Student Emails should be valid and separated by comma
+        </mat-error> -->
+        <mat-hint>Separated by comma(,)</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div class="btn-grp-cls">
+      <button  [disabled]="batchFormGroup.invalid" mat-raised-button class="save-btn-cls" (click)="upload()">{{ 'COMMON_TAG.UPLOAD' | translate }}</button>
+    </div>
+  </div>
+</div>
