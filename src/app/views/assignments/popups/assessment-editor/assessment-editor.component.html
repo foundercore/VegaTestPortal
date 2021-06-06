@@ -37,11 +37,13 @@
                 <mat-error *ngIf="hasError('duration', 'required')">Duration is required</mat-error>
               </mat-form-field>
 
-              <label for="description" class="label mt-4">Description</label>
-              <mat-form-field appearance="outline" style="width: 100%;">
-                  <input matInput placeholder="Description" formControlName="description">
-                  <mat-error *ngIf="hasError('description', 'required')">Description is required</mat-error>
-                </mat-form-field>
+              <label for="description" class="label mt-4">Instruction</label>
+              <angular-editor id="name_editor" formControlName="description" [config]="descriptionEditorconfig">
+            </angular-editor>
+              <!-- <mat-form-field appearance="outline" style="width: 100%;">
+                  <input matInput placeholder="Instruction" formControlName="description">
+                  <mat-error *ngIf="hasError('description', 'required')">Instruction is required</mat-error>
+                </mat-form-field> -->
 
             <div class="text-center pt-4">  
                 <button mat-raised-button class="mat-btn save-btn mx-1" (click)="submit()">

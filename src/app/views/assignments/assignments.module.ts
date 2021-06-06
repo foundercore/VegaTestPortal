@@ -15,6 +15,7 @@ import { TestconfigComponent } from './popups/test-config/test-config.component'
 import { QuestionslistComponent } from './popups/questions-list/questions-list.component';
 import { TestLiveComponent } from './popups/test-live/test-live.component';
 import { ShowResultComponent } from './show-result/show-result.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { ShowResultComponent } from './show-result/show-result.component';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    CountdownModule
+    CountdownModule,
+    AngularEditorModule
 
   ],
   entryComponents : [

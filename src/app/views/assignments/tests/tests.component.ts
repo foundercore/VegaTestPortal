@@ -73,7 +73,7 @@ export class TestsComponent implements OnInit {
 
   createTest(){
     const dialogRef = this.dialog.open(AssessmentEditorComponent, {
-      maxWidth: '500px',
+      maxWidth: '900px',
       width: '100%',
       height: 'auto',
       hasBackdrop: false,
