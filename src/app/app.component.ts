@@ -37,7 +37,7 @@ export class AppComponent {
     console.log("Processing before unload...");
     this.store.select('appState').subscribe(data =>
       {
-        localStorage.setItem('state', JSON.stringify(data))
+        sessionStorage.setItem('state', JSON.stringify(data))
       });
   }
 

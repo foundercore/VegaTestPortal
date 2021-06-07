@@ -21,14 +21,14 @@ export const initialState: State  = {
 
 
 export function ChangeAuthInfoState(user: any,password: string){
-  localStorage.setItem('authInfo', btoa(user.email+':'+ password));
+  sessionStorage.setItem('authInfo', btoa(user.email+':'+ password));
   return  new UserModel(user, btoa(user.email+':'+ password),user.authorities);
 }
 
 export function retriceState(state){
-  if(localStorage.getItem('state')){
-    var oldState = JSON.parse(localStorage.getItem('state'))
-    localStorage.removeItem('state');
+  if(sessionStorage.getItem('state')){
+    var oldState = JSON.parse(sessionStorage.getItem('state'))
+    sessionStorage.removeItem('state');
     return {
       ...state,
       user: oldState.user,

@@ -8,6 +8,7 @@ import { UserService } from 'src/app/services/users/users.service';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
+import { PasswordPolicy } from './password-policy';
 
 export function MustMatch(g: FormGroup) {
 
@@ -41,7 +42,20 @@ export function MustMatch(g: FormGroup) {
 export class ChangePasswordComponent implements OnInit {
 
   changePasswordFormGroup = new FormGroup({
-    password  : new FormControl ('', [Validators.required, Validators.minLength(6)]),
+    password  : new FormControl ('', Validators.compose([
+            // 1. Password Field is Required
+            Validators.required,
+            // 2. check whether the entered password has a number
+            PasswordPolicy.patternValidator(/\d/, { hasNumber: true }),
+            // 3. check whether the entered password has upper case letter
+            PasswordPolicy.patternValidator(/[A-Z]/, { hasCapitalCase: true }),
+            // 4. check whether the entered password has a lower-case letter
+            PasswordPolicy.patternValidator(/[a-z]/, { hasSmallCase: true }),
+            // 5. check whether the entered password has a special character
+            PasswordPolicy.patternValidator(/[*@!#%&()^~{}]+/, { hasSpecialCharacters: true }),
+            // 6. Has a minimum length of 8 characters
+            Validators.minLength(8)
+    ])),
     confirmPassword: new FormControl ('',  [Validators.required]),
   },MustMatch)
 
