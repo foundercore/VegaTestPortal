@@ -8,7 +8,6 @@ import { SectionComponent } from './popups/section/section.component';
 import { VegaMaterialModule } from 'src/app/core/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { TestPreviewComponent } from './test-preview/test-preview.component';
 import { CalculatorComponent } from './popups/calculator/calculator.component';
 import { CountdownModule } from 'ngx-countdown';
 import { TestconfigComponent } from './popups/test-config/test-config.component';
@@ -24,7 +23,6 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     UpdateTestContentComponent,
     AssessmentEditorComponent,
     SectionComponent,
-    TestPreviewComponent,
     CalculatorComponent,
     TestconfigComponent,
     QuestionslistComponent,

@@ -33,8 +33,9 @@ export class UpdateTestContentComponent implements OnInit {
   controlparms : TestConfigurationVM;
   dataSource = new MatTableDataSource<any>();
   selection = new SelectionModel<any>(true, []);
-  displayedColumns: string[] = ['select', 'negative', 'positive', 'skip'];
+  displayedColumns: string[] = ['select','name', 'negative', 'positive', 'skip'];
   sectionId : string = "";
+  searchText : string = "";
   constructor(public dialog: MatDialog,private route: ActivatedRoute,
     private testConfigService : TestConfigService,private toastrService : ToastrService) { }
 
@@ -117,12 +118,12 @@ export class UpdateTestContentComponent implements OnInit {
 
   openQuestionList(){
     const dialogRef = this.dialog.open(QuestionslistComponent, {
-      maxWidth: '1200px',
+      maxWidth: '1300px',
       width: '100%',
       height: 'auto',
       hasBackdrop: false,
       backdropClass: 'dialog-backdrop',
-      data:{testId : this.route.snapshot.paramMap.get('id'), section : this.section}
+      data:{testId : this.route.snapshot.paramMap.get('id'), section : this.section , selectedques : this.ques}
      
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -146,19 +147,34 @@ export class UpdateTestContentComponent implements OnInit {
   }
 
 
-
+  ques2 = [];
   getSectionId(section : Section){
   this.section = section;
   if(section != null){
     this.ques = section?.questions;
+    this.ques2 = section?.questions;
     this.dataSource = new MatTableDataSource(this.ques);
     this.dataSource.sort = this.sort;   
     this.dataSource.paginator = this.paginator;
   }
-
-
-
   }
+
+  searchtest(){
+    if(this.searchText != "" && this.searchText != null && this.searchText != undefined && this.searchText.length > 3){
+      this.ques = this.ques.filter((x)=> x.name.toLowerCase().includes(this.searchText) || x.name.toUpperCase().includes(this.searchText));
+      this.dataSource = new MatTableDataSource(this.ques);
+      this.dataSource.sort = this.sort;   
+      this.dataSource.paginator = this.paginator;
+    }
+    else{
+        this.dataSource = new MatTableDataSource(this.ques2);
+        this.dataSource.sort = this.sort;   
+        this.dataSource.paginator = this.paginator;
+    }
+  }
+
+
+
  
   removeSection(section : Section){
     Swal.fire({

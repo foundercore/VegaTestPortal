@@ -36,7 +36,7 @@ export class TestLiveComponent implements OnInit {
   submissionData: any;
   currentSectionSubmittedData: any;
   studentName: string = '';
-
+  userType : string ="";
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<TestLiveComponent>,
@@ -50,8 +50,9 @@ export class TestLiveComponent implements OnInit {
   ngOnInit(): void {
     // //debugger;
     this.store.select('appState').subscribe((data) => {
-      this.userName = data.user.lastUpdatedBy;
+      this.userName = data.user.userName;
       this.studentName = data.user.firstName + ' ' + data.user.lastName;
+      this.userType = data?.user?.authorities[0]?.authority;
       console.log('data', data);
     });
     this.testid = this._data.testData.questionPaperId;

@@ -58,6 +58,104 @@ table {
   background-color: red;
 }
 
-.mat-elevation-z8 {
-  box-shadow: none !important;
+/* Structure */
+.example-container {
+  position: relative;
+  min-height: 200px;
 }
+
+.example-table-container {
+  position: relative;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.example-loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-rate-limit-reached {
+  color: #980000;
+  max-width: 360px;
+  text-align: center;
+}
+
+/* Column Widths */
+.mat-column-subject,
+.mat-column-tags {
+  width:200px;
+}
+
+.mat-column-explanation_added {
+  width:100px;
+}
+
+.mat-column-description {
+  padding-left: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mat-column-name {
+  max-width: 400px;
+  width: 400px;
+  padding-left: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mat-column-actions{
+  width:150px;
+  max-width: 150px;
+}
+
+.mat-column-select{
+  width:50px;
+  max-width: 50px;
+}
+
+.question-list-grid{
+  margin: 20px;
+
+}
+
+.question-list-title{
+  margin: 20px;
+}
+
+.question-grid-search-bar{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.question-grid-action{
+  float: right;
+  margin: 20px;
+}
+
+
+.question-grid-action button {
+  margin: 0px 10px;
+}
+
+
+
+
+
+
+
+

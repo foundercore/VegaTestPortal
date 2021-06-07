@@ -38,13 +38,16 @@ export class TestsComponent implements OnInit {
   userName: string = '';
   currentSectionSubmittedData: any;
   studentName: string = '';
+  userType : string = "";
+  buttontext : string ="";
   constructor(private testConfigService : TestConfigService, public dialog : MatDialog,public toastrService : ToastrService,
     private router : Router, private store: Store<AppState>) { }
 
   ngOnInit(): void {
     this.store.select('appState').subscribe((data) => {
-      this.userName = data.user.lastUpdatedBy;
+      this.userName = data.user.userName;
       this.studentName = data.user.firstName + ' ' + data.user.lastName;
+      this.userType = data?.user?.authorities[0]?.authority;
       console.log('data', data);
     });
     this.GetAllquestionPapers();
@@ -92,14 +95,14 @@ export class TestsComponent implements OnInit {
           .subscribe(
             (res: any) => {
               //if (res.isSuccess) {
-                this.toastrService.success("Record created successfully");
+                this.toastrService.success("Record Saved successfully");
                 this.GetAllquestionPapers()
                 console.log("this.createdtest==",res);
              // }
             },
             (error) => {
               if(error.status == 200){
-                this.toastrService.success("Record created successfully");
+                this.toastrService.success("Record Saved successfully");
                 this.GetAllquestionPapers()
               }
               else{
@@ -246,8 +249,9 @@ export class TestsComponent implements OnInit {
 
 
   searchtest(){
-    if(this.searchText != "" && this.searchText != null && this.searchText != undefined){
-      this.alltest = this.alltest.filter((x)=>  x.name.includes(this.searchText));
+    if(this.searchText != "" && this.searchText != null && this.searchText != undefined && this.searchText.length > 3){
+      this.alltest = this.alltest.filter((x) =>
+      x.name.toLowerCase().includes(this.searchText) || x.name.toUpperCase().includes(this.searchText));
       this.dataSource = new MatTableDataSource(this.alltest);
       this.dataSource.sort = this.sort;   
       this.dataSource.paginator = this.paginator;
@@ -266,6 +270,12 @@ export class TestsComponent implements OnInit {
 
 
 startTest(element) {
+  if(this.userType === "ROLE_USER_ADMIN"){
+    this.buttontext = "Preview Test";
+  }
+  else{
+    this.buttontext = "Start Test";
+  }
   Swal.fire({
     title: 'Want to start test?',
     text: element.instructions,
@@ -274,7 +284,7 @@ startTest(element) {
     confirmButtonColor: '#277da1',
     cancelButtonColor: '#d33',
     cancelButtonText: 'Close',
-    confirmButtonText: 'Start Test'
+    confirmButtonText: this.buttontext
   }).then((result) => {
     if (result.isConfirmed) {
       const dialogRef = this.dialog.open(TestLiveComponent, {
@@ -284,7 +294,7 @@ startTest(element) {
         height: 'auto',
         hasBackdrop: false,
         backdropClass: 'dialog-backdrop',
-        data : {testData : element}
+        data : {testData : element,userType : this.userType}
       });
       dialogRef.afterClosed().subscribe(result => {
         this.GetAllquestionPapers();
