@@ -11,15 +11,22 @@
         <button class="auto-btn m-1" mat-raised-button (click)="calculate()">
           C
         </button>
-        <div class="student__box d-flex align-items-center">
-          <h5>Total Time</h5>
-        </div>
-        <div class="time d-flex p-2 align-items-center">
-          <img src="assets/images/clock.png" width="auto" height="30" alt="" />
-          <h4 class="mb-0 ml-5">
-            <countdown [config]="{ leftTime: timeSeconds }"></countdown>
-          </h4>
-        </div>
+        <span *ngIf="userType !== 'ROLE_USER_ADMIN'">
+          <div class="student__box d-flex align-items-center">
+            <h5>Total Time</h5>
+          </div>
+          <div class="time d-flex p-2 align-items-center">
+            <img
+              src="assets/images/clock.png"
+              width="auto"
+              height="30"
+              alt=""
+            />
+            <h4 class="mb-0 ml-5">
+              <countdown [config]="{ leftTime: timeSeconds }"></countdown>
+            </h4>
+          </div>
+        </span>
         <div class="student__box d-flex align-items-center">
           <h5>{{ studentName }}</h5>
           <!-- <img src="https://png.pngtree.com/element_our/20190523/ourmid/pngtree-hand-painted-small-fresh-female-high-school-student-image_1086346.jpg" width="40" class="rounded-circle" alt=""> -->
@@ -76,29 +83,46 @@
               <!-- footer button box -->
               <div
                 class="btn__box d-flex justify-content-space-between pb-3 pt-3"
+                
               >
                 <button
                   class="btn-primary"
                   mat-raised-button
                   (click)="setQuestionAsMarkerdForReview()"
                 >
-                  MARK FOR REVIEW
+                  Mark For Review
                 </button>
                 <button
                   class="btn-danger"
                   mat-raised-button
                   (click)="clearResponse()"
                 >
-                  CLEAR FOR RESPONSE
+                  Clear Response
                 </button>
                 <button
                   class="btn-primary"
                   mat-raised-button
                   (click)="SaveandNextAnswers()"
                 >
-                  SAVE AND NEXT
+                  Save And Next
                 </button>
               </div>
+
+              <!-- admin disabled buttons -->
+              <!-- <div
+                class="btn__box d-flex justify-content-space-between pb-3 pt-3"
+                *ngIf="userType === 'ROLE_USER_ADMIN'"
+              >
+                <button class="btn-primary" mat-raised-button disabled>
+                  Mark For Review
+                </button>
+                <button class="btn-danger" mat-raised-button disabled>
+                  Clear Response
+                </button>
+                <button class="btn-primary" mat-raised-button disabled>
+                  Save And Next
+                </button>
+              </div> -->
             </div>
             <div class="col-lg-4 mh">
               <h3 class="text-center">Current Question</h3>
@@ -137,15 +161,29 @@
                 >
                   {{ i + 1 }}
                 </button>
-                <div class="text-center py-3">
+                <div
+                  class="text-center py-3"
+                >
                   <button
                     class="btn-primary save__btn w-50 mx-auto"
                     mat-raised-button
                     (click)="SaveandExit()"
                   >
-                    SAVE AND EXIT
+                    Save And Exit
                   </button>
                 </div>
+                <!-- <div
+                  class="text-center py-3"
+                  *ngIf="userType === 'ROLE_USER_ADMIN'"
+                >
+                  <button
+                    class="btn-primary save__btn w-50 mx-auto"
+                    mat-raised-button
+                    disabled
+                  >
+                    Save And Exit
+                  </button>
+                </div> -->
               </div>
             </div>
           </div>

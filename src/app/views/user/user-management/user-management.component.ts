@@ -7,9 +7,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
-import { PAGE_OPTIONS } from 'src/app/core/constants';
+import { PAGE_OPTIONS, Role } from 'src/app/core/constants';
 import { IUserModel } from 'src/app/models/user/user-model';
+import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
 import { UserService } from 'src/app/services/users/users.service';
+import { DialogConformationComponent } from 'src/app/shared/components/dialog-conformation/dialog-conformation.component';
 import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
 import { UserBulkUploadDialogComponent } from '../user-bulk-upload-dialog/user-bulk-upload-dialog.component';
 
@@ -45,7 +47,8 @@ export class UserManagementComponent implements OnInit, AfterViewInit  {
     private userService: UserService,
     public dialog: MatDialog,
     private toastr: ToastrService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public authorizationService: AuthorizationService
   ) {
 
   }
@@ -105,7 +108,7 @@ export class UserManagementComponent implements OnInit, AfterViewInit  {
 
   deleteBulkUser(): void {
     if (this.selection.selected.length == 0) {
-      this.toastr.error('Please select atleast one Question');
+      this.toastr.error('Please select atleast one user');
     } else {
       let userIdList = this.selection.selected.map(
         (x) => x.userName
@@ -161,6 +164,11 @@ export class UserManagementComponent implements OnInit, AfterViewInit  {
   }
 
   openEditUserdDialog(row: any) {
+    if(this.authorizationService.isStaffRole() && row.roles.includes(Role.ADMIN)){
+      this.toastr.error("You don't have access to change info of Admin user.");
+      return;
+    }
+
     row.isView = false;
     const dialogRef = this.dialog.open(AddUserDialogComponent, { disableClose: true, data: row });
     dialogRef.afterClosed().subscribe((result) => {
@@ -177,12 +185,17 @@ export class UserManagementComponent implements OnInit, AfterViewInit  {
   }
 
   deleteUser(user: any){
-    this.userService.deleteUser(user.userName).subscribe(resp => {
-      this.refreshUserList();
-      this.toastr.success(`User removed.`);
-    },error =>{
-      this.toastr.error('Unable to delete user');
-    })
+    const dialogRef = this.dialog.open(DialogConformationComponent, { disableClose: true});
+    dialogRef.afterClosed().subscribe((result) => {
+      if(result == 'delete'){
+        this.userService.deleteUser(user.userName).subscribe(resp => {
+          this.refreshUserList();
+          this.toastr.success(`User removed.`);
+        },error =>{
+          this.toastr.error('Unable to delete user');
+        })
+      }
+    });
   }
 
 }

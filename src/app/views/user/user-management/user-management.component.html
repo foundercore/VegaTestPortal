@@ -118,9 +118,14 @@
                 </span>
                 <span
                   class="action-btn"
-                  style="visibility: hidden"
                   matTooltip="Delete"
                   (click)="performGridAction('delete', row)"
+                  *ngIf="
+                    !(
+                      this.authorizationService.isStaffRole() &&
+                      row.roles.includes('ROLE_USER_ADMIN')
+                    )
+                  "
                 >
                   <mat-icon>delete_forever</mat-icon>
                 </span>

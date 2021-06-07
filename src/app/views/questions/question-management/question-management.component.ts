@@ -23,6 +23,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { SearchQuestion } from 'src/app/models/questions/search-question-model';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { TranslateService } from '@ngx-translate/core';
+import { DialogConformationComponent } from 'src/app/shared/components/dialog-conformation/dialog-conformation.component';
 
 @Component({
   selector: 'app-question-management',
@@ -34,7 +35,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'select',
     'name',
-    'subject',
+    'fileName',
     'explanation_added',
     'tags',
     'actions',
@@ -117,7 +118,6 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
         map((data) => {
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
-          this.totalNumberOfRecords = data.totalRecords;
           return data.questions.map((x) => {
             x.explanation_added = x.explanation?.length != 0 ? 'Yes' : 'No';
             return x;
@@ -205,6 +205,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
       this.sort.active,
       this.sort.direction
     );
+    this.totalNumberOfRecords = this.paginator.pageSize;
 
     if(this.isFilterApply){
       if(this.filterGroup.controls['filterNameValue'].value !== null && this.filterGroup.controls['filterNameValue'].value.length !== 0)
@@ -265,34 +266,44 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   }
 
   deleteQuestion(row: QuestionModel) {
-    this.questionService.deletQuestion(row.id?.questionId).subscribe(
-      (resp) => {
-        this.toastr.success('Question Delete SuccessFully');
-        this.resetFilter();
-      },
-      (error) => {
-        this.toastr.error(error.error.apierror.message);
+    const dialogRef = this.dialog.open(DialogConformationComponent, { disableClose: true});
+    dialogRef.afterClosed().subscribe((result) => {
+      if(result == 'delete'){
+        this.questionService.deletQuestion(row.id?.questionId).subscribe(
+          (resp) => {
+            this.toastr.success('Question Delete SuccessFully');
+            this.resetFilter();
+          },
+          (error) => {
+            this.toastr.error(error.error.apierror.message);
+          }
+        );
       }
-    );
+    });
   }
 
   bulkDeletQuestions() {
     if (this.selection.selected.length == 0) {
       this.toastr.error('Please select atleast one Question');
     } else {
-      let questionIdlList = this.selection.selected.map(
-        (x) => x.id?.questionId
-      );
-      this.questionService.bulkDeletQuestions(questionIdlList).subscribe(
-        (resp) => {
-          this.toastr.success('Question Delete SuccessFully');
-          this.selection.clear();
-          this.resetFilter();
-        },
-        (error) => {
-          this.toastr.error(error.error.apierror.message);
+      const dialogRef = this.dialog.open(DialogConformationComponent, { disableClose: true});
+      dialogRef.afterClosed().subscribe((result) => {
+        if(result == 'delete'){
+          let questionIdlList = this.selection.selected.map(
+            (x) => x.id?.questionId
+          );
+          this.questionService.bulkDeletQuestions(questionIdlList).subscribe(
+            (resp) => {
+              this.toastr.success('Question Delete SuccessFully');
+              this.selection.clear();
+              this.resetFilter();
+            },
+            (error) => {
+              this.toastr.error(error.error.apierror.message);
+            }
+          );
         }
-      );
+      });
     }
   }
 }
