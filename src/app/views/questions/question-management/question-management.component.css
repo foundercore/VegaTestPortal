@@ -34,7 +34,7 @@ table {
 }
 
 /* Column Widths */
-.mat-column-subject,
+.mat-column-fileName,
 .mat-column-tags {
   width:200px;
 }
@@ -60,7 +60,8 @@ table {
 }
 
 .mat-column-actions{
-  width:150px;
+  width: 150px;
+  min-width: 150px;
   max-width: 150px;
 }
 
