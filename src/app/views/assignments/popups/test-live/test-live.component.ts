@@ -38,12 +38,12 @@ export class TestLiveComponent implements OnInit {
   currentSectionSubmittedData: any;
   studentName: string = '';
   userType: string = '';
-    // scrollbar
-    disabled = false;
-    compact = false;
-    invertX = false;
-    invertY = false; 
-    shown: 'native' | 'hover' | 'always' = 'native';
+  // scrollbar
+  disabled = false;
+  compact = false;
+  invertX = false;
+  invertY = false;
+  shown: 'native' | 'hover' | 'always' = 'native';
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<TestLiveComponent>,
@@ -149,6 +149,7 @@ export class TestLiveComponent implements OnInit {
   }
 
   goToNextQuestion() {
+    this.optionsSelected = [];
     if (this.currentQuestionIndex < this.sectionsWithPapers.length - 1) {
       this.currentQuestionIndex = this.currentQuestionIndex + 1;
       this.question = this.sectionsWithPapers[this.currentQuestionIndex];
@@ -190,6 +191,7 @@ export class TestLiveComponent implements OnInit {
   }
 
   async getUserSubmissionData() {
+    debugger;
     await this.testConfigService
       .getSudentSubmissionState(
         this._data.testData.questionPaperId,
@@ -217,6 +219,7 @@ export class TestLiveComponent implements OnInit {
           console.error(
             "Error in fetching user submitted data => Reasons can be: 1)This user doesn't has any submitted data 2). Internet connectivity issue"
           );
+          this.setColoursForQuestionNavigationButtons();
         }
       );
     // this.testConfigService
@@ -389,7 +392,7 @@ export class TestLiveComponent implements OnInit {
         (res: any) => {
           this.testdata = res;
           console.log('this.testdata==', res);
-          this.GetQuestionPapers();
+          if (res.sections !== null) this.GetQuestionPapers();
           //  if (res.isSuccess) {
 
           // }
@@ -469,77 +472,16 @@ export class TestLiveComponent implements OnInit {
     });
 
     this.getUserSubmissionData();
+    this.setColoursForQuestionNavigationButtons();
 
     console.log('question =>', this.question);
   }
-
-  // getNextQuestion(ques: any) {
-  //   //debugger;
-  //   this.question = this.sectionsWithPapers.find(
-  //     (x) =>
-  //       x.id.questionId == ques.id.questionId && x.sectionId == ques.sectionId
-  //   );
-  //   this.sectionsWithPapers.forEach((element) => {
-  //     if (ques.id.questionId == element.id.questionId) {
-  //       element.iscolorActive = true;
-  //     } else {
-  //       element.iscolorActive = false;
-  //     }
-  //   });
-
-  //   this.getUserSubmissionData();
-
-  //   console.log('question =>', this.question);
-  // }
-
-  // getactiveRandomColorStatus(value) {
-  //   //debugger;
-  //   if (value == true) {
-  //     return value != '' ? 'green' : 'green';
-  //   } else {
-  //     return value != '' ? 'grey' : 'grey';
-  //   }
-
-  //   // //debugger;
-  //   // if (value == "Not Created") {
-  //   //   return value != "" ? "grey" : "grey";
-  //   // }
-  //   // if (value == "In-Progress") {
-  //   //   return value != "" ? "blue" : "blue";
-  //   // }
-  //   // if (value == "Rejected") {
-  //   //   return value != "" ? "red" : "red";
-  //   // }
-  //   // if (value == true) {
-  //   //   return value != "" ? "green" : "green";
-  //   // }
-  // }
-
-  // getmarkedRandomColorStatus(value = true) {
-  //   if (value === true) {
-  //     return value ? 'blue' : 'blue';
-  //   } else {
-  //     return value ? 'blue' : 'blue';
-  //   }
-  //   // //debugger;
-  //   // if (value == "Not Created") {
-  //   //   return value != "" ? "grey" : "grey";
-  //   // }
-  //   // if (value == "In-Progress") {
-  //   //   return value != "" ? "blue" : "blue";
-  //   // }
-  //   // if (value == "Rejected") {
-  //   //   return value != "" ? "red" : "red";
-  //   // }
-  //   // if (value == true) {
-  //   //   return value != "" ? "green" : "green";
-  //   // }
-  // }
 
   selectSection1(id: string = '') {
     console.log('Current section id =>', id);
     this.currentSectionId = id;
     // this.currentQuestionIndex = 0;
+    this.optionsSelected = [];
     this.setCurrentQuestionSelectedOption();
     this.setColoursForQuestionNavigationButtons();
     this.sectionsWithPapers = this.sections.filter((x) => x.sectionId == id);
@@ -676,6 +618,39 @@ export class TestLiveComponent implements OnInit {
             }
           });
       });
+
+      this.sectionsWithPapers.map((ques, i) => {
+        //this.currentSectionSubmittedData will always be a array of length 1 0r 0
+
+        // console.log('524 line sub_data=>', sub_ans);
+
+        //current ques is not in saved data so apply button color
+        //green if its current ques
+        //grey if not current ques
+        if (ques.id.questionId === this.question?.id.questionId) {
+          //the ques is current question
+          console.log(
+            'current green color question is =>',
+            this.question?.name
+          );
+          if (!colorAppliedIndexesArray[i]) {
+            //set color green
+            this.setButtonColor(i, 'green');
+            colorAppliedIndexesArray[i] = true;
+          }
+        } else {
+          //current ques is in saved data
+          //check if mark for review is true then orange else grey
+
+          //the ques is in sub_data but not marked for review and
+          //not current question too so set grey
+          if (!colorAppliedIndexesArray[i]) {
+            //set color grey
+            this.setButtonColor(i, 'grey');
+            colorAppliedIndexesArray[i] = true;
+          }
+        }
+      });
     }
 
     this.sectionsWithPapers.map((sec, i) => {
@@ -686,13 +661,16 @@ export class TestLiveComponent implements OnInit {
   //on click of switch sections tab buttons
   selectSection(event) {
     //debugger;
+    this.currentQuestionIndex = 0;
     var section = this.testdata?.sections.find(
       (x) => x.name == event.tab.textLabel
     );
     console.log('Currect section object =>', section);
+    this.optionsSelected = [];
     // this.setColoursForQuestionNavigationButtons();
     this.currentSectionId = section.id;
     this.getUserSubmissionData();
+
     if (section != null) {
       this.sectionsWithPapers = this.sections.filter(
         (x) => x.sectionId == section.id
