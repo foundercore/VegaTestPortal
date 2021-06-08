@@ -153,7 +153,19 @@ table {
 }
 
 
+th.mat-header-cell {
+  text-align: left;
+  padding-left: 25px !important;
+}
 
+tr.mat-row td {
+  padding-left: 25px;
+  white-space: normal;
+}
+
+tr.mat-row td > p {
+  margin-bottom: 0;
+}
 
 
 

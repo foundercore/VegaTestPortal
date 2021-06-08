@@ -36,6 +36,7 @@ export class UpdateTestContentComponent implements OnInit {
   displayedColumns: string[] = ['select','name', 'negative', 'positive', 'skip'];
   sectionId : string = "";
   searchText : string = "";
+  ques2 = [];
   constructor(public dialog: MatDialog,private route: ActivatedRoute,
     private testConfigService : TestConfigService,private toastrService : ToastrService) { }
 
@@ -111,7 +112,6 @@ export class UpdateTestContentComponent implements OnInit {
       data : {testId : this.route.snapshot.paramMap.get('id') , controlParms :  this.controlparms}
     });
     dialogRef.afterClosed().subscribe(result => {
-     
     });
   }
 
@@ -124,7 +124,6 @@ export class UpdateTestContentComponent implements OnInit {
       hasBackdrop: false,
       backdropClass: 'dialog-backdrop',
       data:{testId : this.route.snapshot.paramMap.get('id'), section : this.section , selectedques : this.ques}
-     
     });
     dialogRef.afterClosed().subscribe(result => {
      this.getQuestionPaperbyId();
@@ -142,12 +141,10 @@ export class UpdateTestContentComponent implements OnInit {
              console.log("this.gettest==",res);
           })
     }
-   
-    
   }
 
 
-  ques2 = [];
+
   getSectionId(section : Section){
   this.section = section;
   if(section != null){

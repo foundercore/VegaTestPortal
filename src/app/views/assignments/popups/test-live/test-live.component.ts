@@ -7,6 +7,7 @@ import {
 } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { id } from '@swimlane/ngx-charts';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
 import { AppState } from 'src/app/state_management/_states/auth.state';
@@ -36,7 +37,13 @@ export class TestLiveComponent implements OnInit {
   submissionData: any;
   currentSectionSubmittedData: any;
   studentName: string = '';
-  userType : string ="";
+  userType: string = '';
+    // scrollbar
+    disabled = false;
+    compact = false;
+    invertX = false;
+    invertY = false; 
+    shown: 'native' | 'hover' | 'always' = 'native';
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<TestLiveComponent>,
@@ -44,7 +51,7 @@ export class TestLiveComponent implements OnInit {
     private testConfigService: TestConfigService,
     private toastrService: ToastrService,
     private store: Store<AppState>,
-    private router : Router
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -70,7 +77,7 @@ export class TestLiveComponent implements OnInit {
     quesForMarkedAsReview.assignmentId = this._data.testData.questionPaperId;
     quesForMarkedAsReview.questionId = this.question.id.questionId;
     quesForMarkedAsReview.sectionId = this.question.sectionId;
-    quesForMarkedAsReview.selectedOptions = [this.getSelectedOption()];
+    quesForMarkedAsReview.selectedOptions = <any>this.getSelectedOption();
     quesForMarkedAsReview.timeElapsedInSec = this.timeSeconds;
     console.log(
       'questionMarkedForReview object=>',
@@ -101,7 +108,7 @@ export class TestLiveComponent implements OnInit {
     quesForMarkedAsReview.assignmentId = this._data.testData.questionPaperId;
     quesForMarkedAsReview.questionId = this.question.id.questionId;
     quesForMarkedAsReview.sectionId = this.question.sectionId;
-    quesForMarkedAsReview.selectedOptions = [this.getSelectedOption()];
+    quesForMarkedAsReview.selectedOptions = <any>this.getSelectedOption();
     quesForMarkedAsReview.timeElapsedInSec = this.timeSeconds;
     console.log(
       'Save and next => questionSaveAndNext object=>',
@@ -121,13 +128,34 @@ export class TestLiveComponent implements OnInit {
         (err) => console.log('Error while making the question for save', err)
       );
   }
+  getSelectedOption() {
+    // console.log('optionsSelected=>', this.optionsSelected);
+    var optionsSelectedArray = [];
+    for (var i = 0; i < this.optionsSelected.length; i++) {
+      if (this.optionsSelected[i]) optionsSelectedArray.push(String(i));
+    }
+    if (optionsSelectedArray.length > 0) {
+      console.log(
+        'optionsSelectedArray after analyzing boolean array=>',
+        optionsSelectedArray
+      );
+      return optionsSelectedArray;
+    } else {
+      console.log('No option selected in getSelectedOption function');
+      return null;
+    }
+    // return null;
+    // return this.optionsSelected;
+  }
 
   goToNextQuestion() {
     if (this.currentQuestionIndex < this.sectionsWithPapers.length - 1) {
       this.currentQuestionIndex = this.currentQuestionIndex + 1;
       this.question = this.sectionsWithPapers[this.currentQuestionIndex];
     } else {
-      this.toastrService.error('You are already at last question');
+      this.toastrService.error(
+        'You are already at last question of this section.'
+      );
     }
   }
 
@@ -146,10 +174,13 @@ export class TestLiveComponent implements OnInit {
         this.testConfigService
           .saveandExit(this._data.testData.questionPaperId)
           .subscribe(
-            (res : any) => {
+            (res: any) => {
               this.toastrService.success('Test submitted successfully');
               this.close();
-              this.router.navigate(['/home/tests/show-result/' + this._data.testData.questionPaperId]);
+              this.router.navigate([
+                '/home/tests/show-result/' +
+                  this._data.testData.questionPaperId,
+              ]);
             },
             (err) =>
               console.log('Error while making the question for save', err)
@@ -173,14 +204,18 @@ export class TestLiveComponent implements OnInit {
             ' current question=>',
             this.question
           );
+          this.optionsSelected = [];
           this.setCurrentQuestionSelectedOption();
           this.setColoursForQuestionNavigationButtons();
           // this.setColoursForQuestionNavigationButtons();
         },
         (error) => {
-          this.toastrService.error(
-            error?.error?.message ? error?.error?.message : error?.message,
-            'Error'
+          // this.toastrService.error(
+          //   error?.error?.message ? error?.error?.message : error?.message,
+          //   'Error while fetching user submitted data : '
+          // );
+          console.error(
+            "Error in fetching user submitted data => Reasons can be: 1)This user doesn't has any submitted data 2). Internet connectivity issue"
           );
         }
       );
@@ -208,7 +243,7 @@ export class TestLiveComponent implements OnInit {
     questionForClearResponse.markForReview = false;
     questionForClearResponse.questionId = this.question.id.questionId;
     questionForClearResponse.sectionId = this.question.sectionId;
-    questionForClearResponse.selectedOptions = [this.getSelectedOption()];
+    questionForClearResponse.selectedOptions = <any>this.getSelectedOption();
     questionForClearResponse.timeElapsedInSec = this.timeSeconds;
     console.log('questionForClearResponse object=>', questionForClearResponse);
     await this.testConfigService
@@ -229,14 +264,6 @@ export class TestLiveComponent implements OnInit {
       );
   }
 
-  getSelectedOption() {
-    //console.log('optionsSelected=>', this.optionsSelected);
-    for (var i = 0; i < this.optionsSelected.length; i++) {
-      if (this.optionsSelected[i]) return String(i + 1);
-    }
-    return null;
-  }
-
   // setCurrentQuestionNumberButtonColor(questionNumberIndex: number) {
   //   this.sectionsWithPapers.map((sec, i) => {
   //     if (i == questionNumberIndex) this.sectionsWithPapers[i].color = 'green';
@@ -250,23 +277,35 @@ export class TestLiveComponent implements OnInit {
 
   setCurrentQuestionSelectedOption() {
     const fetchedSubmissionState = this.submissionData;
-    // console.log('Inside the setting current selected option function');
-    // console.log('we are in the section id =>', this.currentSectionId);
+    console.log('Inside the setting current selected option function');
+    console.log('we are in the section id =>', this.currentSectionId);
     fetchedSubmissionState?.sections.map((section) => {
-      // console.log('Section inside fetched state =>', section.sectionId);
+      console.log('Section inside fetched state =>', section.sectionId);
+      //section match
       if (section.sectionId === this.currentSectionId) {
         section.answers.map((ans) => {
-          // console.log('answers in the section=>', ans);
-          // console.log('ans.questionId in the section=>', ans.questionId);
-          // console.log('current question=>', this.question?.id.questionId);
+          console.log('answers in the section=>', ans);
+          console.log('ans.questionId in the section=>', ans.questionId);
+          console.log('current question=>', this.question?.id.questionId);
+          //current question match
           if (ans?.questionId === this.question?.id.questionId) {
-            try {
-              if (ans?.options[0] !== null)
-                this.setOptionSelectedAfterFetchingData(Number(ans.options[0]));
-              else this.setOptionSelectedAfterFetchingData(0);
-            } catch {
-              console.log('No option selected');
-              this.setOptionSelectedAfterFetchingData(0);
+            // try {
+            //   if (ans?.options[0] !== null)
+            //     this.setOptionSelectedAfterFetchingData(Number(ans.options[0]));
+            //   else this.setOptionSelectedAfterFetchingData(0);
+            // } catch {
+            //   console.log('No option selected');
+            //   this.setOptionSelectedAfterFetchingData(0);
+            // }
+            var selectedOptions = ans.selectedOptions;
+            console.log(
+              'Fethched selectedOptions for the current question =>',
+              selectedOptions
+            );
+            this.optionsSelected = [];
+            if (selectedOptions !== null) {
+              //ans?.selectOptions is an array
+              this.setOptionSelectedAfterFetchingData(selectedOptions);
             }
           }
         });
@@ -275,21 +314,35 @@ export class TestLiveComponent implements OnInit {
   }
 
   setOptionSelectedAfterFetchingData(selected) {
-    // console.log(
-    //   'this.sectionWithPapers for button color setting',
-    //   this.sectionsWithPapers
-    // );
-    this.optionsSelected = [];
-    if (selected === 0) {
-      for (var i = 0; i < this.question?.options.length; i++) {
-        this.optionsSelected[i] = false;
-      }
-    } else {
-      for (var i = 0; i < this.question?.options.length; i++) {
-        if (i != selected - 1) this.optionsSelected[i] = false;
-      }
-      this.optionsSelected[selected - 1] = true;
+    console.log(
+      'Fethched selectedOptions for the current question passed to function =>',
+      selected
+    );
+    try {
+      selected.map((optIndex) => {
+        this.optionsSelected[Number(optIndex)] = true;
+      });
+      console.log(
+        'After settingt the fetched selectedOptions , this.selectedOptions =>',
+        this.optionsSelected
+      );
+    } catch (exception) {
+      console.log(
+        'Error while setting the fetched selected options for current question =>',
+        exception
+      );
     }
+
+    // if (selected === 0) {
+    //   for (var i = 0; i < this.question?.options.length; i++) {
+    //     this.optionsSelected[i] = false;
+    //   }
+    // } else {
+    //   for (var i = 0; i < this.question?.options.length; i++) {
+    //     if (i != selected - 1) this.optionsSelected[i] = false;
+    //   }
+    //   this.optionsSelected[selected - 1] = true;
+    // }
     // console.log(
     //   'Setting Option Selected acc to fetched data=>',
     //   selected,
@@ -299,15 +352,22 @@ export class TestLiveComponent implements OnInit {
   }
 
   setOptionSelected(selected) {
-    this.optionsSelected = [];
-    for (var i = 0; i < this.question?.options.length; i++) {
-      if (i != selected) this.optionsSelected[i] = false;
+    //this.optionsSelected = [];
+    // for (var i = 0; i < this.question?.options.length; i++) {
+    //   if (i != selected) this.optionsSelected[i] = false;
+    // }
+    if (
+      this.optionsSelected[selected - 1] === true ||
+      this.optionsSelected[selected - 1] === false
+    ) {
+      this.optionsSelected[selected - 1] = !this.optionsSelected[selected - 1];
+    } else {
+      this.optionsSelected[selected - 1] = true;
     }
-    this.optionsSelected[selected] = true;
     console.log(
       'Option Selected by user =>',
       selected,
-      'options selected=>',
+      ' , options selected=>',
       this.optionsSelected
     );
   }
@@ -394,6 +454,7 @@ export class TestLiveComponent implements OnInit {
   getQuestion(ques: any, currentQuestionIndex: number) {
     //debugger;
     this.currentQuestionIndex = currentQuestionIndex;
+    this.optionsSelected = [];
     // this.setCurrentQuestionNumberButtonColor(currentQuestionIndex);
     this.question = this.sectionsWithPapers.find(
       (x) =>
@@ -517,7 +578,7 @@ export class TestLiveComponent implements OnInit {
       colorAppliedIndexesArray[i] = false;
       this.questionNavigationButtonColorArray[i] = 'grey';
     });
-    debugger;
+    //debugger;
     this.submissionData?.sections.map((section) => {
       if (section.sectionId === this.currentSectionId) {
         this.currentSectionSubmittedData = section.answers;
@@ -527,14 +588,69 @@ export class TestLiveComponent implements OnInit {
     if (this.sectionsWithPapers?.length > 0) {
       this.sectionsWithPapers.map((ques, i) => {
         //this.currentSectionSubmittedData will always be a array of length 1 0r 0
+        if (this.currentSectionSubmittedData)
+          this.currentSectionSubmittedData.map((sub_ans) => {
+            //console.log('524 line sub_data=>', sub_ans);
 
-        this.currentSectionSubmittedData.map((sub_ans) => {
-          //console.log('524 line sub_data=>', sub_ans);
+            // All comparisions will be done between ques and sub_ans
+            if (ques.id.questionId == sub_ans.questionId) {
+              //if current ques status /data is submitted then apply colors
+              //if its current question then green else
+              if (ques.id.questionId === this.question?.id.questionId) {
+                //the ques is current question
+                console.log(
+                  'current green color question is =>',
+                  this.question?.name
+                );
+                if (!colorAppliedIndexesArray[i]) {
+                  //set color green
+                  this.setButtonColor(i, 'green');
+                  colorAppliedIndexesArray[i] = true;
+                }
+              } else {
+                //current ques is in saved data
+                //check if mark for review is true then orange else if answered then blue else grey
+                if (sub_ans.markForReview && sub_ans.selectedOptions !== null) {
+                  if (!colorAppliedIndexesArray[i]) {
+                    //set color violet
+                    this.setButtonColor(i, 'violet');
+                    colorAppliedIndexesArray[i] = true;
+                  }
+                } else if (sub_ans.markForReview) {
+                  if (!colorAppliedIndexesArray[i]) {
+                    //set color orange
+                    this.setButtonColor(i, 'orange');
+                    colorAppliedIndexesArray[i] = true;
+                  }
+                } else if (sub_ans.selectedOptions !== null) {
+                  if (!colorAppliedIndexesArray[i]) {
+                    //set color grey
+                    this.setButtonColor(i, 'lightblue');
+                    colorAppliedIndexesArray[i] = true;
+                  }
+                } else {
+                  //the ques is in sub_data but not marked for review and
+                  //not current question too so set grey
+                  if (!colorAppliedIndexesArray[i]) {
+                    //set color grey
+                    this.setButtonColor(i, 'grey');
+                    colorAppliedIndexesArray[i] = true;
+                  }
+                }
+              }
+            }
+          });
+      });
 
-          // All comparisions will be done between ques and sub_ans
-          if (ques.id.questionId == sub_ans.questionId) {
-            //if current ques status /data is submitted then apply colors
-            //if its current question then green else
+      this.sectionsWithPapers.map((ques, i) => {
+        //this.currentSectionSubmittedData will always be a array of length 1 0r 0
+        if (this.currentSectionSubmittedData)
+          this.currentSectionSubmittedData.map((sub_ans) => {
+            // console.log('524 line sub_data=>', sub_ans);
+
+            //current ques is not in saved data so apply button color
+            //green if its current ques
+            //grey if not current ques
             if (ques.id.questionId === this.question?.id.questionId) {
               //the ques is current question
               console.log(
@@ -549,139 +665,18 @@ export class TestLiveComponent implements OnInit {
             } else {
               //current ques is in saved data
               //check if mark for review is true then orange else grey
-              if (sub_ans.markForReview) {
-                if (!colorAppliedIndexesArray[i]) {
-                  //set color orange
-                  this.setButtonColor(i, 'orange');
-                  colorAppliedIndexesArray[i] = true;
-                }
-              } else if (sub_ans.options !== null) {
-                if (!colorAppliedIndexesArray[i]) {
-                  //set color grey
-                  this.setButtonColor(i, 'lightblue');
-                  colorAppliedIndexesArray[i] = true;
-                }
-              } else {
-                //the ques is in sub_data but not marked for review and
-                //not current question too so set grey
-                if (!colorAppliedIndexesArray[i]) {
-                  //set color grey
-                  this.setButtonColor(i, 'grey');
-                  colorAppliedIndexesArray[i] = true;
-                }
+
+              //the ques is in sub_data but not marked for review and
+              //not current question too so set grey
+              if (!colorAppliedIndexesArray[i]) {
+                //set color grey
+                this.setButtonColor(i, 'grey');
+                colorAppliedIndexesArray[i] = true;
               }
             }
-          }
-        });
-      });
-
-      this.sectionsWithPapers.map((ques, i) => {
-        //this.currentSectionSubmittedData will always be a array of length 1 0r 0
-        this.currentSectionSubmittedData.map((sub_ans) => {
-          // console.log('524 line sub_data=>', sub_ans);
-
-          //current ques is not in saved data so apply button color
-          //green if its current ques
-          //grey if not current ques
-          if (ques.id.questionId === this.question?.id.questionId) {
-            //the ques is current question
-            console.log(
-              'current green color question is =>',
-              this.question?.name
-            );
-            if (!colorAppliedIndexesArray[i]) {
-              //set color green
-              this.setButtonColor(i, 'green');
-              colorAppliedIndexesArray[i] = true;
-            }
-          } else {
-            //current ques is in saved data
-            //check if mark for review is true then orange else grey
-
-            //the ques is in sub_data but not marked for review and
-            //not current question too so set grey
-            if (!colorAppliedIndexesArray[i]) {
-              //set color grey
-              this.setButtonColor(i, 'grey');
-              colorAppliedIndexesArray[i] = true;
-            }
-          }
-        });
+          });
       });
     }
-
-    // this.sectionsWithPapers.map((sec, i) => {
-    //   this.currentSectionSubmittedData.map((c_sec, j) => {
-    //     c_sec.answers.map((ans_saved, k) => {
-    //       // debugger;
-    //       if (sec.id.questionId === ans_saved.questionId) {
-    //         //if questions submitted then change color buttons acc to state
-    //         if (this.currentQuestionIndex !== i) {
-    //           if (ans_saved.markForReview === true) {
-    //             console.log(
-    //               'question index ',
-    //               i,
-    //               ' is marked for review , current questionIndex =>',
-    //               this.currentQuestionIndex,
-    //               ' colorAppliedIndexesArray =>',
-    //               colorAppliedIndexesArray,
-    //               ' currentSectionSubmittedData=>',
-    //               this.currentSectionSubmittedData
-    //             );
-    //             if (colorAppliedIndexesArray[i] === false) {
-    //               // this.setButtonColor(i, 'orange');
-    //               console.log(
-    //                 'For color orange in 1st if question index ',
-    //                 i,
-    //                 ' is marked for review , current questionIndex =>',
-    //                 this.currentQuestionIndex,
-    //                 ' colorAppliedIndexesArray =>',
-    //                 colorAppliedIndexesArray,
-    //                 ' currentSectionSubmittedData=>',
-    //                 this.currentSectionSubmittedData
-    //               );
-    //               this.setButtonColor(i, 'orange');
-    //               colorAppliedIndexesArray[i] = true;
-    //             }
-    //           }
-    //         } else {
-    //           if (colorAppliedIndexesArray[i] === false) {
-    //             this.setButtonColor(i, 'green');
-    //             colorAppliedIndexesArray[i] = true;
-    //           }
-    //         }
-    //       } else {
-    //         //if questions not in submitted database
-    //         if (this.currentQuestionIndex == i) {
-    //           if (colorAppliedIndexesArray[i] === false) {
-    //             this.setButtonColor(i, 'green');
-    //             colorAppliedIndexesArray[i] = true;
-    //           }
-    //         } //else if (ans_saved.markForReview === true) {
-    //         //   console.log(
-    //         //     'For color orange in 2nd if question index ',
-    //         //     i,
-    //         //     ' is marked for review , current questionIndex =>',
-    //         //     this.currentQuestionIndex,
-    //         //     ' colorAppliedIndexesArray =>',
-    //         //     colorAppliedIndexesArray,
-    //         //     ' currentSectionSubmittedData=>',
-    //         //     this.currentSectionSubmittedData
-    //         //   );
-    //         //   this.setButtonColor(i, 'orange');
-    //         //   colorAppliedIndexesArray[i] = true;
-    //         // }
-    //         else if (
-    //           colorAppliedIndexesArray[i] === false &&
-    //           ans_saved.markForReview === false
-    //         ) {
-    //           this.setButtonColor(i, 'grey');
-    //           colorAppliedIndexesArray[i] = true;
-    //         }
-    //       }
-    //     });
-    //   });
-    // });
 
     this.sectionsWithPapers.map((sec, i) => {
       colorAppliedIndexesArray[i] = false;
@@ -697,6 +692,7 @@ export class TestLiveComponent implements OnInit {
     console.log('Currect section object =>', section);
     // this.setColoursForQuestionNavigationButtons();
     this.currentSectionId = section.id;
+    this.getUserSubmissionData();
     if (section != null) {
       this.sectionsWithPapers = this.sections.filter(
         (x) => x.sectionId == section.id

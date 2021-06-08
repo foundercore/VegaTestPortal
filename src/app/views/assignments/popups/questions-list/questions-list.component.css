@@ -111,7 +111,7 @@ table {
 
 .question-filter-panel{
   margin-left: 20px;
-  margin-top: 100px;
+  margin-top: 10px;
   margin-right: 20px;
 }
 
@@ -150,4 +150,34 @@ table {
   background: red;
   color: white;
   margin-right: 10px;
+}
+
+
+
+th.mat-header-cell {
+  text-align: left;
+  padding-left: 15px !important;
+}
+
+tr.mat-row td {
+  padding-left: 15px;
+  white-space: normal;
+}
+
+th.mat-header-cell:nth-child(2) { 
+  padding-left: 5px !important;
+}
+
+tr.mat-row td:nth-child(2) {
+  padding-left: 5px; 
+}
+
+.scroll_box {
+  max-height: 586px;
+  overflow-y: auto;
+}
+
+.save__btn__box {
+  padding-right: 20px;
+  padding-bottom: 15px;
 }

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AssignmentsRoutingModule } from './assignments-routing.module';
 import { TestsComponent } from './tests/tests.component';
@@ -15,6 +15,7 @@ import { QuestionslistComponent } from './popups/questions-list/questions-list.c
 import { TestLiveComponent } from './popups/test-live/test-live.component';
 import { ShowResultComponent } from './show-result/show-result.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     ReactiveFormsModule,
     RouterModule,
     CountdownModule,
-    AngularEditorModule
+    AngularEditorModule,
+    NgScrollbarModule
 
   ],
   entryComponents : [
@@ -47,6 +49,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     TestconfigComponent,
     QuestionslistComponent,
     TestLiveComponent
-  ]
+  ],
+  schemas:[NO_ERRORS_SCHEMA]
 })
 export class AssignmentsModule { }
