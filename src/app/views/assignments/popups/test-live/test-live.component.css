@@ -76,7 +76,7 @@ ul > li {
 }
 
 .scoll_height {
-  height: 366px;
+  height: 344px;
 }
 
 @media (max-width: 767.99px) {
@@ -226,3 +226,11 @@ ul > li {
     max-height: 100px;
     overflow-y: auto;
 } */
+
+.mat-checkbox {
+  align-items: center !important;
+  display: flex !important;
+}
+.mat-checkbox-layout .mat-checkbox-label p {
+  margin-bottom: 0 !important;
+}

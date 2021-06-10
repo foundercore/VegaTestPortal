@@ -50,6 +50,7 @@ export class TestsComponent implements OnInit {
   studentName: string = '';
   userType: string = '';
   buttontext: string = '';
+  createdId : string = "";
   constructor(
     private testConfigService: TestConfigService,
     public dialog: MatDialog,
@@ -103,14 +104,17 @@ export class TestsComponent implements OnInit {
         this.testConfigService.createQuestionPaper(model).subscribe(
           (res: any) => {
             //if (res.isSuccess) {
-            this.toastrService.success('Record Saved successfully');
+            this.toastrService.success('Test created successfully');
             this.GetAllquestionPapers();
             console.log('this.createdtest==', res);
             // }
           },
           (error) => {
+            debugger;
             if (error.status == 200) {
-              this.toastrService.success('Record Saved successfully');
+              this.createdId = error.error.text;
+              this.router.navigate(['/home/tests/update-test/' + this.createdId]);
+              this.toastrService.success('Test created successfully');
               this.GetAllquestionPapers();
             } else {
               this.toastrService.error(
@@ -254,28 +258,28 @@ export class TestsComponent implements OnInit {
       );
   }
 
-  searchtest() {
-    if (
-      this.searchText != '' &&
-      this.searchText != null &&
-      this.searchText != undefined &&
-      this.searchText.length > 3
-    ) {
-      this.alltest = this.alltest.filter(
-        (x) =>
-          x.name.toLowerCase().includes(this.searchText) ||
-          x.name.toUpperCase().includes(this.searchText)
-      );
-      this.dataSource = new MatTableDataSource(this.alltest);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    } else {
-      this.alltest = this.alltest2;
-      this.dataSource = new MatTableDataSource(this.alltest);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }
-  }
+  // searchtest() {
+  //   if (
+  //     this.searchText != '' &&
+  //     this.searchText != null &&
+  //     this.searchText != undefined &&
+  //     this.searchText.length > 3
+  //   ) {
+  //     this.alltest = this.alltest.filter(
+  //       (x) =>
+  //         x.name.toLowerCase().includes(this.searchText) ||
+  //         x.name.toUpperCase().includes(this.searchText)
+  //     );
+  //     this.dataSource = new MatTableDataSource(this.alltest);
+  //     this.dataSource.sort = this.sort;
+  //     this.dataSource.paginator = this.paginator;
+  //   } else {
+  //     this.alltest = this.alltest2;
+  //     this.dataSource = new MatTableDataSource(this.alltest);
+  //     this.dataSource.sort = this.sort;
+  //     this.dataSource.paginator = this.paginator;
+  //   }
+  // }
 
   extractContent(s) {
     var span = document.createElement('span');
@@ -361,4 +365,11 @@ export class TestsComponent implements OnInit {
     //     }
     //   );
   }
+
+  applyFilter() {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
+
+
+
 }

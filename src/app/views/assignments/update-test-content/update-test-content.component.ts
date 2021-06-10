@@ -280,27 +280,27 @@ export class UpdateTestContentComponent implements OnInit {
     }
   }
 
-  searchtest() {
-    if (
-      this.searchText != '' &&
-      this.searchText != null &&
-      this.searchText != undefined &&
-      this.searchText.length > 3
-    ) {
-      this.ques = this.ques.filter(
-        (x) =>
-          x.name.toLowerCase().includes(this.searchText) ||
-          x.name.toUpperCase().includes(this.searchText)
-      );
-      this.dataSource = new MatTableDataSource(this.ques);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    } else {
-      this.dataSource = new MatTableDataSource(this.ques2);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }
-  }
+  // searchtest() {
+  //   if (
+  //     this.searchText != '' &&
+  //     this.searchText != null &&
+  //     this.searchText != undefined &&
+  //     this.searchText.length > 3
+  //   ) {
+  //     this.ques = this.ques.filter(
+  //       (x) =>
+  //         x.name.toLowerCase().includes(this.searchText) ||
+  //         x.name.toUpperCase().includes(this.searchText)
+  //     );
+  //     this.dataSource = new MatTableDataSource(this.ques);
+  //     this.dataSource.sort = this.sort;
+  //     this.dataSource.paginator = this.paginator;
+  //   } else {
+  //     this.dataSource = new MatTableDataSource(this.ques2);
+  //     this.dataSource.sort = this.sort;
+  //     this.dataSource.paginator = this.paginator;
+  //   }
+  // }
 
   removeSection(section: Section) {
     Swal.fire({
@@ -329,4 +329,12 @@ export class UpdateTestContentComponent implements OnInit {
       }
     });
   }
+
+
+  applyFilter() {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
+
+
+
 }

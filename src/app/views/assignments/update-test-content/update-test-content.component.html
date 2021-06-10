@@ -86,7 +86,7 @@
                   placeholder="Search anything ..."
                   [(ngModel)]="searchText"
                   [ngModelOptions]="{ standalone: true }"
-                  (keyup)="searchtest()"
+                  (keyup)="applyFilter()"
                   aria-label="search"
                   aria-describedby="search"
                 />
@@ -100,7 +100,7 @@
                 class="add-btn mx-2"
                 (click)="openQuestionList()"
               >
-                <mat-icon>add_circle</mat-icon><span class="ml-2">Add que</span>
+                <mat-icon>add_circle</mat-icon><span class="ml-2">Add</span>
               </button>
               <button
                 mat-raised-button
@@ -108,7 +108,7 @@
                 (click)="deleteQuestionFromSection()"
               >
                 <mat-icon>delete</mat-icon
-                ><span class="ml-2">Delete selected questions</span>
+                ><span class="ml-2">Delete</span>
               </button>
             </div>
           </div>

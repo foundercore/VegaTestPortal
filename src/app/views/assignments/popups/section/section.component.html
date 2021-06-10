@@ -26,10 +26,12 @@
           matInput
           placeholder="Duration"
           formControlName="duration"
+          (input)="checkdurationInput()"
         />
-        <mat-error *ngIf="hasError('duration', 'required')"
+        <mat-error *ngIf="hasError('duration', 'required') && !isInputzero"
           >Duration is required</mat-error
         >
+        <span *ngIf="isInputzero" class="duration__err">Duration should be greater than 0</span>
       </mat-form-field>
       <div class="text-center pt-4">
         <button
