@@ -122,7 +122,9 @@ export class QuestionslistComponent implements OnInit {
 
   getQuestions() {
     debugger;
-    let model = new SearchQuestionPaperVM()
+    this.questions = [];
+    this.questions2 = [];
+    let model = new SearchQuestionPaperVM();
     this.testConfigService
       .getQuestionList(model)
       .pipe(
