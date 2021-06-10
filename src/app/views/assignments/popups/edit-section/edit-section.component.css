@@ -1,0 +1,13 @@
+/* Create two equal columns that floats next to each other */
+.col {
+  float: left;
+  width: 30%;
+  padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}

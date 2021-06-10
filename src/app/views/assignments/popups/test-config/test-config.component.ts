@@ -37,16 +37,44 @@ config = new TestConfigurationVM();
       )
       .subscribe(
         (res: any) => {
-         
+         this.toastrService.success("Test configured successfully");
         },
         (error) => {
+          debugger;
           this.toastrService.error(error?.error?.message ? error?.error?.message : error?.message, 'Error');
         }
       )
     }
   }
 
+  getQuestionPaperbyId() {
+    this.testConfigService
+      .getQuestionPaper(this._data?.testId)
+      .pipe(finalize(() => {}))
+      .subscribe(
+        (res: any) => {
+          this.config = res.controlParam;
+          this.toastrService.success("Reset successfully");
+          console.log('this.gettest==', res);
+          // }
+        },
+        (error) => {
+          this.toastrService.error(
+            error?.error?.message ? error?.error?.message : error?.message,
+            'Error'
+          );
+        }
+      );
+  }
 
+
+
+
+
+
+
+
+ 
 
 
   close(){

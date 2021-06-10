@@ -33,8 +33,9 @@
 
             <label for="name" class="label mt-4">Duration (Mins)</label>
             <mat-form-field appearance="outline" style="width: 100%;">
-                <input matInput placeholder="Duration" formControlName="duration">
-                <mat-error *ngIf="hasError('duration', 'required')">Duration is required</mat-error>
+                <input type="number" matInput placeholder="Duration" formControlName="duration" (input)="checkdurationInput()">
+                <mat-error *ngIf="hasError('duration', 'required') && !isInputzero">Duration is required</mat-error>
+                <span *ngIf="isInputzero" class="duration__err">Duration should be greater than 0</span>
               </mat-form-field>
 
               <label for="description" class="label mt-4">Instruction</label>
