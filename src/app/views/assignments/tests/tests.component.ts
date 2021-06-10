@@ -100,6 +100,7 @@ export class TestsComponent implements OnInit {
         model.minimumDurationInMinutes = +result?.duration;
         model.name = result?.testName;
         model.instructions = result?.description;
+        model.status = "DRAFT";
         debugger;
         this.testConfigService.createQuestionPaper(model).subscribe(
           (res: any) => {
