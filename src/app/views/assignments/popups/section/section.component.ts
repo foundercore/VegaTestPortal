@@ -23,7 +23,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SectionComponent implements OnInit {
   public sectionForm: FormGroup;
-
+  isInputzero : boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<SectionComponent>,
@@ -149,5 +149,17 @@ export class SectionComponent implements OnInit {
 
   close() {
     this.dialogRef.close();
+  }
+
+  checkdurationInput(){
+    if(this.sectionForm.value.duration <= 0){
+      this.isInputzero = true;
+    }
+    else if(this.sectionForm.value.duration == ""){
+      this.isInputzero = false;
+    }
+    else{
+      this.isInputzero = false;
+    }
   }
 }

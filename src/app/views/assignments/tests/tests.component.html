@@ -7,7 +7,7 @@
                         <div class="input-group-prepend border-0">
                             <span class="input-group-text border-0" id="search"><i class="fa fa-search"></i></span>
                         </div>
-                        <input type="text" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" (keyup)="searchtest()" class="form-control border-0" placeholder="Search anything ..."
+                        <input type="text" [(ngModel)]="searchText"  (keyup)="applyFilter()" [ngModelOptions]="{standalone: true}" class="form-control border-0" placeholder="Search anything ..."
                             >
                     </div>
                 </form>

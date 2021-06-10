@@ -1,0 +1,9 @@
+
+
+.duration__err {
+    position: absolute;
+    top: 108%;
+    left: 0;
+    font-size: 12px;
+    color: red;
+}

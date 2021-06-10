@@ -11,7 +11,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 })
 export class AssessmentEditorComponent implements OnInit {
   public testForm: FormGroup;
-
+  isInputzero : boolean = false;
   constructor( @Inject(MAT_DIALOG_DATA) public _data: any,public dialogRef: MatDialogRef<AssessmentEditorComponent>,
   public dialog: MatDialog) { }
   descriptionEditorconfig: AngularEditorConfig = {
@@ -71,6 +71,20 @@ export class AssessmentEditorComponent implements OnInit {
   close(){
     this.dialogRef.close();
   }
+
+
+checkdurationInput(){
+  if(this.testForm.value.duration <= 0){
+    this.isInputzero = true;
+  }
+  else if(this.testForm.value.duration == ""){
+    this.isInputzero = false;
+  }
+  else{
+    this.isInputzero = false;
+  }
+}
+
 
 
 

@@ -63,9 +63,11 @@ tr.mat-header-row {
 }
 
 /* Structure */
-.example-container {
+
+.example-table-container{
   position: relative;
-  min-height: 200px;
+  max-height: 400px;
+  overflow: auto;
 }
 
 .example-table-container {
