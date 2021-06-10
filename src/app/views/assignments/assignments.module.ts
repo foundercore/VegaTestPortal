@@ -16,6 +16,7 @@ import { TestLiveComponent } from './popups/test-live/test-live.component';
 import { ShowResultComponent } from './show-result/show-result.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { EditSectionComponent } from './popups/edit-section/edit-section.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     TestconfigComponent,
     QuestionslistComponent,
     TestLiveComponent,
-    ShowResultComponent
+    ShowResultComponent,
+    EditSectionComponent
   ],
   imports: [
     CommonModule,

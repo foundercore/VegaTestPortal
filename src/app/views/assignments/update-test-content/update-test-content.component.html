@@ -53,6 +53,14 @@
             ><p>{{ section.durationInMinutes }} mins</p></mat-panel-description
           >
           <button
+            class="edit__btn"
+            mat-mini-fab
+            color=""
+            (click)="editSection(section)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
             class="remove__btn"
             mat-mini-fab
             color=""
@@ -92,7 +100,15 @@
                 class="add-btn mx-2"
                 (click)="openQuestionList()"
               >
-                <mat-icon>add_circle</mat-icon><span class="ml-2">Add</span>
+                <mat-icon>add_circle</mat-icon><span class="ml-2">Add que</span>
+              </button>
+              <button
+                mat-raised-button
+                class="add-btn mx-2"
+                (click)="deleteQuestionFromSection()"
+              >
+                <mat-icon>delete</mat-icon
+                ><span class="ml-2">Delete selected questions</span>
               </button>
             </div>
           </div>
