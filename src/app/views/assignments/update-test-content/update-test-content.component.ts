@@ -48,6 +48,7 @@ export class UpdateTestContentComponent implements OnInit {
   searchText: string = '';
   ques2 = [];
   questionPaper = {};
+  quest : any;
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
@@ -256,6 +257,7 @@ export class UpdateTestContentComponent implements OnInit {
         .getQuestionPaper(this.route.snapshot.paramMap.get('id'))
         .subscribe((res: any) => {
           this.questionPaper = res;
+          this.quest = res;
           this.controlparms = res?.controlParam;
           this.modelsections = res?.sections;
           this.totalTestDuration = res?.totalDurationInMinutes;

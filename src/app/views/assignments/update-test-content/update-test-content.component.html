@@ -1,5 +1,6 @@
 <section class="update__sec py-5">
   <div class="container">
+  
     <div class="text-right py-4">
       <button mat-raised-button class="add-btn mx-2" routerLink="/home/tests">
         <mat-icon>arrow_back</mat-icon><span class="ml-2">Go Back</span>
@@ -26,9 +27,16 @@
       <button mat-raised-button class="add-btn mx-2" (click)="addSection()">
         <mat-icon>add_circle</mat-icon><span class="ml-2">Add Section</span>
       </button> -->
+    
       <div class="row text-right">
-        <div class="col-3"></div>
-        <div class="col-2"></div>
+
+      
+        <div class="col-5" style="text-align: left;">
+          <button class="btn btn-primary d-inline-block border-0" *ngIf="quest != null">
+            {{quest?.status}}
+          </button>
+        </div>
+    
         <div class="col-4">
           <h5>
             Total Duration of sections : {{ totalDurationOfSections }} mins

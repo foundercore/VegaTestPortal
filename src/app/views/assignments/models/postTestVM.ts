@@ -4,5 +4,6 @@ export class TestVM{
     totalDurationInMinutes : number = 0;
     testId : string = "";
     instructions : string ="";
+    status : string = "";
 
 }
