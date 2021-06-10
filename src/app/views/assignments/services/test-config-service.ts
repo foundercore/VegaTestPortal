@@ -54,6 +54,24 @@ export class TestConfigService extends BaseService {
     return this.http.post<any>(Url, model, this.headers);
   }
 
+  editSection(
+    test_id: string,
+    section_id: string,
+    model: Section
+  ): Observable<any> {
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${test_id}/section/${section_id}/update-metadata`;
+    return this.http.post<any>(Url, model, this.headers);
+  }
+
+  deleteQuestionFromSection(
+    test_id: string,
+    section_id: string,
+    model
+  ): Observable<any> {
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${test_id}/section/${section_id}/question/remove`;
+    return this.http.post<any>(Url, model, this.headers);
+  }
+
   updateQuestionPaperSectionMeta(
     model: QuestionsViewModel[],
     sectionId: string = '',
@@ -97,7 +115,7 @@ export class TestConfigService extends BaseService {
     return this.http.post<any>(Url, body);
   }
 
-  saveandExit(assignmentId: string=""): Observable<any> {
+  saveandExit(assignmentId: string = ''): Observable<any> {
     const Url = `${this.BASE_SERVICE_URL}/api/v1/test/assignment/submission/${assignmentId}/submit`;
     return this.http.post<any>(Url, assignmentId, this.headers);
   }
@@ -109,7 +127,4 @@ export class TestConfigService extends BaseService {
     const Url = `${this.BASE_SERVICE_URL}/api/v1/test/assignment/submission/${assignment_id}/clear-answer`;
     return this.http.post<any>(Url, body);
   }
-
-
-
 }

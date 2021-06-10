@@ -1,32 +1,37 @@
-
-
 .btn__group {
-    text-align: right;
+  text-align: right;
 }
 
 .btn__group .btn {
-    margin: 0 3px;
+  margin: 0 3px;
 }
 
 .add-btn span {
-  padding-left: .5rem;
+  padding-left: 0.5rem;
 }
 
 .add-btn:hover {
   background-color: #5bc4e1;
   color: #fff;
 }
+.edit__btn {
+  margin-right: 3rem;
+}
+.edit__btn:hover {
+  background-color: rgb(0, 153, 255);
+  color: #fff;
+}
 table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  thead{
-    background: #ECECEC !important;
-  }
-  tr.mat-header-row {
-    height: 45px;
-  }
-  /* th {
+  width: 100%;
+  border-collapse: collapse;
+}
+thead {
+  background: #ececec !important;
+}
+tr.mat-header-row {
+  height: 45px;
+}
+/* th {
     background: #3a4248;
     color: #fff !important;
   }
@@ -42,15 +47,14 @@ table {
   background-color: red;
   color: #fff;
 }
- 
 
 .data__table td .action-btn {
   cursor: pointer;
-  margin: 0 .3rem;
+  margin: 0 0.3rem;
 }
 
 .mat__action_btn:hover {
-  background-color: #275 ;
+  background-color: #275;
   color: #fff;
 }
 
@@ -95,11 +99,11 @@ table {
 /* Column Widths */
 .mat-column-subject,
 .mat-column-tags {
-  width:200px;
+  width: 200px;
 }
 
 .mat-column-explanation_added {
-  width:100px;
+  width: 100px;
 }
 
 .mat-column-description {
@@ -118,40 +122,37 @@ table {
   text-overflow: ellipsis;
 }
 
-.mat-column-actions{
-  width:150px;
+.mat-column-actions {
+  width: 150px;
   max-width: 150px;
 }
 
-.mat-column-select{
-  width:50px;
+.mat-column-select {
+  width: 50px;
   max-width: 50px;
 }
 
-.question-list-grid{
-  margin: 20px;
-
-}
-
-.question-list-title{
+.question-list-grid {
   margin: 20px;
 }
 
-.question-grid-search-bar{
+.question-list-title {
+  margin: 20px;
+}
+
+.question-grid-search-bar {
   display: flex;
   flex-wrap: wrap;
 }
 
-.question-grid-action{
+.question-grid-action {
   float: right;
   margin: 20px;
 }
 
-
 .question-grid-action button {
   margin: 0px 10px;
 }
-
 
 th.mat-header-cell {
   text-align: left;
@@ -166,8 +167,3 @@ tr.mat-row td {
 tr.mat-row td > p {
   margin-bottom: 0;
 }
-
-
-
-
-

@@ -14,6 +14,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
+import { EditSectionComponent } from '../popups/edit-section/edit-section.component';
+import { QuestionModel } from 'src/app/models/questions/question-model';
 
 @Component({
   selector: 'app-update-test-content',
@@ -32,7 +34,7 @@ export class UpdateTestContentComponent implements OnInit {
   testId: string = '';
   controlparms: TestConfigurationVM;
   dataSource = new MatTableDataSource<any>();
-  selection = new SelectionModel<any>(true, []);
+  selection = new SelectionModel<QuestionModel>(true, []);
   displayedColumns: string[] = [
     'select',
     'name',
@@ -95,10 +97,116 @@ export class UpdateTestContentComponent implements OnInit {
     });
   }
 
+  editSection(section: Section) {
+    const dialogRef = this.dialog.open(EditSectionComponent, {
+      maxWidth: '1700px',
+      width: 'fit-content',
+      minHeight: '15vh',
+      height: 'fit-content',
+      hasBackdrop: false,
+      backdropClass: 'dialog-backdrop',
+      data: {
+        section: section,
+        testId: this.testId,
+        questionPaper: this.questionPaper,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('Result accepted from edit-section dialog box =>', result);
+      console.log(
+        'Details rreq for edit => this.testId=>',
+        this.testId,
+        ' this.sectionId=>',
+        this.sectionId
+      );
+      if (result != null) {
+        let model = new Section();
+        model.durationInMinutes = +result?.duration;
+        model.name = result?.sectionName;
+        model.instructions = result?.instructions;
+        model.difficultyLevel = result?.difficultyLevel;
+        model.testId = this.route.snapshot.paramMap.get('id');
+        var sectionId = result?.sectionId;
+        //debugger;
+        this.testConfigService
+          .editSection(model.testId, sectionId, model)
+          .subscribe(
+            (res: string = '') => {
+              this.getQuestionPaperbyId();
+              this.toastrService.success('Section updated successfully');
+            },
+            (error) => {
+              if (error.status == 200) {
+                this.getQuestionPaperbyId();
+                this.toastrService.success('Section updated successfully');
+              } else {
+                this.toastrService.error(
+                  error?.error?.message
+                    ? error?.error?.message
+                    : error?.message,
+                  'Error'
+                );
+              }
+            }
+          );
+      }
+    });
+  }
+
+  deleteQuestionFromSection() {
+    var sectionId = this.section.id;
+    var testId = this.testId;
+    console.log(
+      'Delete question from section =>',
+      sectionId,
+      ' from testId=>',
+      testId,
+      ' selections=>',
+      this.selection
+    );
+    var deleteQuestionIdArray = [];
+    this.selection.selected.map((sel) => {
+      console.log('Sel=>', sel);
+      deleteQuestionIdArray.push(sel.id);
+    });
+    console.log('DeleteQuestionIdArray=>', deleteQuestionIdArray);
+
+    if (deleteQuestionIdArray.length > 0) {
+      this.testConfigService
+        .deleteQuestionFromSection(testId, sectionId, deleteQuestionIdArray)
+        .subscribe(
+          (res) => {
+            this.getQuestionPaperbyId();
+            this.toastrService.success(
+              'Selected Questions deleted successfully'
+            );
+            this.selection = new SelectionModel<QuestionModel>(true, []);
+          },
+          (err) => {
+            this.getQuestionPaperbyId();
+            this.toastrService.error('Error while deteing questions=>' + err);
+            console.log(
+              'Error while deleting=>',
+              deleteQuestionIdArray,
+              ' with err=>',
+              err
+            );
+          }
+        );
+    } else {
+      this.toastrService.error(
+        'Please select the questions you want to delete'
+      );
+    }
+  }
+
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    if (this.dataSource) {
+      const numSelected = this.selection.selected.length;
+      const numRows = this.dataSource?.data.length;
+      return numSelected === numRows;
+    }
+    return false;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
