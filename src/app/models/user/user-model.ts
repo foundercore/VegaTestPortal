@@ -74,11 +74,11 @@ export interface IUserCommonModel {
   roles: string[];
   state?: string;
   userName?: string;
+  email?: string;
 }
 
 export interface IUserCreateRequestModel extends IUserCommonModel {
   password?: string;
-  email?: string;
 }
 
 export interface IUserResponseModel extends IUserCommonModel{
@@ -86,7 +86,6 @@ export interface IUserResponseModel extends IUserCommonModel{
   lastUpdatedBy: Date;
   lastUpdatedOn: Date;
   userName: string;
-  email?: string;
 }
 
 export interface IUserUpdateRequestModel extends IUserCommonModel{

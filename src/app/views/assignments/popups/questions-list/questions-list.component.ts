@@ -1,14 +1,18 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { QuestionModel } from 'src/app/models/questions/question-model';
+import { SearchQuestion } from 'src/app/models/questions/search-question-model';
+import { QuestionManagementService } from 'src/app/services/question-management/question-management.service';
 import { QuestionsViewModel } from '../../models/questionsVM';
 import { SearchQuestionPaperVM } from '../../models/searchQuestionVM';
 import { TestConfigService } from '../../services/test-config-service';
@@ -33,14 +37,45 @@ export class QuestionslistComponent implements OnInit {
   dataSource = new MatTableDataSource<QuestionModel>();
   selection = new SelectionModel<QuestionModel>(true, []);
   //selection = new SelectionModel<QuestionModel>(true, []);
+  filterGroup = new FormGroup({
+    filterNameValue: new FormControl(),
+    questionTypeCntrl: new FormControl(),
+    subjectCntrl: new FormControl(),
+    tagCntrl: new FormControl(),
+    topicCntrl: new FormControl(),
+    substopicCntrl: new FormControl(),
+    fileNameCntrl: new FormControl(),
+  });
 
+  isFilterApply = false;
+  subjectList: string[] = [];
+  topicList: string[] = [];
+  subTopicList: string[] = [];
+  tags: string[] | undefined = [];
+  questionTypeList: string[] = [];
+  isLoadingResults = true;
+  isRateLimitReached = false;
+  searchText : string = "";
   constructor(@Inject(MAT_DIALOG_DATA) public _data: any, public dialogRef: MatDialogRef<QuestionslistComponent>,
-    public dialog: MatDialog, private testConfigService: TestConfigService, private toastrService: ToastrService) { }
+    public dialog: MatDialog, private testConfigService: TestConfigService, private toastrService: ToastrService, private questionService: QuestionManagementService) {
+      forkJoin([
+        this.questionService.getQuestionType(),
+        this.questionService.getQuestionTags(),
+        this.questionService.getQuestionSubjects(),
+        this.questionService.getQuestionTopics(),
+        this.questionService.getQuestionSubtopics(),
+      ]).subscribe((results) => {
+        this.questionTypeList = results[0];
+        this.tags = results[1];
+        this.subjectList = results[2];
+        this.topicList = results[3];
+        this.subTopicList = results[4];
+      });
+
+     }
 
   ngOnInit(): void {
     this.getQuestions();
-    //this.questions.push({"testId" : "fc94065f-b544-4fa0-adfa-dd159da4fd87","testName" : "hello Test","minimumDurationInMinutes" : 45, "totalDurationInMinutes": 50});
-
   }
 
 
@@ -86,7 +121,10 @@ export class QuestionslistComponent implements OnInit {
 
 
   getQuestions() {
-    let model = new SearchQuestionPaperVM()
+    debugger;
+    this.questions = [];
+    this.questions2 = [];
+    let model = new SearchQuestionPaperVM();
     this.testConfigService
       .getQuestionList(model)
       .pipe(
@@ -96,6 +134,18 @@ export class QuestionslistComponent implements OnInit {
       .subscribe(
         (res: any) => {
           if (res?.questions.length > 0) {
+            if(this._data.selectedques != null && this._data.selectedques.length > 0){
+            //  res?.questions.forEach(element => {
+                this._data?.selectedques.forEach(element2 => {
+                 // if(element.id == element2.id){
+                    let index = res.questions.findIndex(x => x.id.questionId == element2.id);
+                    if (index != -1) {
+                      res?.questions.splice(index, 1);
+                    }
+                  //}
+                });
+             // });
+            }
             this.questions = res?.questions;
             this.questions2 = res?.questions;
             this.dataSource = new MatTableDataSource(this.questions);
@@ -151,9 +201,9 @@ export class QuestionslistComponent implements OnInit {
     }
   }
 
-  searchText : string = "";
+
   searchtest(){
-    if(this.searchText != "" && this.searchText != null && this.searchText != undefined){
+    if(this.searchText != "" && this.searchText != null && this.searchText != undefined && this.searchText.length > 3){
       this.questions = this.questions.filter((x)=> x.name.includes(this.searchText));
       this.dataSource = new MatTableDataSource(this.questions);
       this.dataSource.sort = this.sort;   
@@ -167,11 +217,76 @@ export class QuestionslistComponent implements OnInit {
     }
   }
 
+  applyFilter() {
+    this.isFilterApply = true;
+    this.isLoadingResults = true;
+    this.resetPaging();
+    const searchQuestion =  this.createSearchObject();
+    this.refreshQuestionData(searchQuestion);
+    this.isLoadingResults = false;
+    this.isRateLimitReached = false;
+  }
 
+  resetFilter() {
+    this.filterGroup.controls['filterNameValue'].reset();
+    this.filterGroup.controls['questionTypeCntrl'].reset();
+    this.filterGroup.controls['subjectCntrl'].reset();
+    this.filterGroup.controls['tagCntrl'].reset();
+    this.filterGroup.controls['topicCntrl'].reset();
+    this.filterGroup.controls['substopicCntrl'].reset();
+    this.filterGroup.controls['fileNameCntrl'].reset();
+    this.isFilterApply = false;
+    this.resetPaging();
+    const searchQuestion =  this.createSearchObject();
+    this.refreshQuestionData(searchQuestion);
+  }
 
+  refreshQuestionData(searchQuestion: SearchQuestion){
+    this.questionService.getQuestionList(searchQuestion).subscribe(data => {
+      this.isLoadingResults = false;
+      this.isRateLimitReached = false;
+      this.totalNumberOfRecords = data.totalRecords;
+      data.questions.map((x) => {
+        x.explanation_added = x.explanation?.length != 0 ? 'Yes' : 'No';
+        return x;
+      });
+      this.dataSource.data = data.questions;
+    },error => {
+      this.isLoadingResults = false;
+      this.isRateLimitReached = true;
+    })
+  }
 
+  resetPaging(): void {
+    this.paginator.pageIndex = 0;
+  }
 
+  createSearchObject(){
+    const searchQuestion = new SearchQuestion(
+      String(this.paginator.pageIndex + 1),
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction
+    );
 
+    if(this.isFilterApply){
+      if(this.filterGroup.controls['filterNameValue'].value !== null && this.filterGroup.controls['filterNameValue'].value.length !== 0)
+      searchQuestion.nameRegexPattern = this.filterGroup.controls['filterNameValue'].value;
+      else if(this.filterGroup.controls['questionTypeCntrl'].value !== null && this.filterGroup.controls['questionTypeCntrl'].value.length !== 0)
+      searchQuestion.type = this.filterGroup.controls['questionTypeCntrl'].value;
+      else if(this.filterGroup.controls['subjectCntrl'].value !== null && this.filterGroup.controls['subjectCntrl'].value.length !== 0)
+      searchQuestion.subject = this.filterGroup.controls['subjectCntrl'].value;
+      else if(this.filterGroup.controls['tagCntrl'].value !== null && this.filterGroup.controls['tagCntrl'].value.length !== 0)
+      searchQuestion.tags = this.filterGroup.controls['tagCntrl'].value;
+      else if(this.filterGroup.controls['topicCntrl'].value !== null && this.filterGroup.controls['topicCntrl'].value.length !== 0)
+      searchQuestion.topic = this.filterGroup.controls['topicCntrl'].value;
+      else if(this.filterGroup.controls['substopicCntrl'].value !== null && this.filterGroup.controls['substopicCntrl'].value.length !== 0)
+      searchQuestion.subTopic = this.filterGroup.controls['substopicCntrl'].value;
+      else if(this.filterGroup.controls['fileNameCntrl'].value !== null && this.filterGroup.controls['fileNameCntrl'].value.length !== 0)
+      searchQuestion.filename = this.filterGroup.controls['fileNameCntrl'].value;
+    }
+    return searchQuestion;
+  }
 
 
   close() {

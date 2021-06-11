@@ -39,4 +39,8 @@ export class AuthorizationService   {
     return this.accessRoleList.includes("ROLE_STAFF");
   }
 
+  public isStaffRole() {
+    return this.accessRoleList.includes("ROLE_STAFF");
+  }
+
 }

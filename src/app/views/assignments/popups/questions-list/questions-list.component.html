@@ -7,35 +7,101 @@
   </div>
   <div class="card-body">
 
-    <div class="row py-3 ">
+    <!-- <div class="row py-3 ">
       <div class="col-lg-6">
-        <form action="" class="search__box">
-          <div class="input-group">
-            <div class="input-group-prepend border-0">
-              <span class="input-group-text border-0" id="search"
-                ><i class="fa fa-search"></i
-              ></span>
-            </div>
-            <input
-              type="text"
-              [(ngModel)]="searchText"
-              [ngModelOptions]="{ standalone: true }"
-              (keyup)="searchtest()"
-              class="form-control border-0"
-              placeholder="Search anything ..."
-            />
-          </div>
-        </form>
+      
       </div>
       <div class="col-lg-6">
         <div class="btn__group text-right">
           <button mat-raised-button class="btn-save add-btn mx-2" (click)="saveQuestions()"> <mat-icon>save</mat-icon><span>{{ 'COMMON_TAG.SAVE' | translate }}</span></button>
         </div>
       </div>
+    </div> -->
+    <div class="text-right save__btn__box">
+      <button mat-raised-button (click)="saveQuestions()">
+        <mat-icon>save</mat-icon> {{ 'COMMON_TAG.SAVE' | translate }}
+      </button>
     </div>
 
-    <div class="shadow__box data__table mt-3">
+    <div class="scroll_box">
+    <!-- filter Record -->
+    <div class="question-filter-panel">
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Search
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
+          <div class="question-grid-search-bar" [formGroup]="filterGroup">
+            <div class="w-50-field">
+              <mat-form-field appearance="outline" class="form-field-padding">
+                <mat-label>Name & Description</mat-label>
+                <input matInput placeholder="Name & Description" formControlName="filterNameValue">
+              </mat-form-field>
+            </div>
+            <div  class="w-25-field">
+              <mat-form-field appearance="outline" class="form-field-padding">
+                <mat-label>Question Type</mat-label>
+                <mat-select formControlName="questionTypeCntrl">
+                  <mat-option *ngFor="let questionType of questionTypeList" [value]="questionType">{{questionType}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="w-25-field">
+              <mat-form-field appearance="outline" class=" form-field-padding">
+                <mat-label>Subject</mat-label>
+                <mat-select  formControlName="subjectCntrl">
+                  <mat-option *ngFor="let subject of subjectList" [value]="subject">{{subject}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="w-25-field">
+              <mat-form-field appearance="outline" class=" form-field-padding">
+                <mat-label>Tags</mat-label>
+                <mat-select multiple formControlName="tagCntrl">
+                  <mat-option *ngFor="let tag of tags" [value]="tag">{{tag}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="w-25-field">
+              <mat-form-field appearance="outline" class=" form-field-padding">
+                <mat-label >Topic</mat-label>
+                <mat-select formControlName="topicCntrl">
+                  <mat-option *ngFor="let topic of topicList" [value]="topic">{{topic}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="w-25-field">
+              <mat-form-field appearance="outline" class=" form-field-padding">
+                <mat-label >Sub Topic</mat-label>
+                <mat-select formControlName="substopicCntrl">
+                  <mat-option *ngFor="let subtopic of subTopicList" [value]="subtopic">{{subtopic}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="w-25-field">
+              <mat-form-field appearance="outline" class=" form-field-padding">
+                <mat-label >File Name</mat-label>
+                <input matInput placeholder="File Name" formControlName="fileNameCntrl">
+              </mat-form-field>
+            </div>
+            <div  class="w-100-field" style="height: 40px;">
+              <button mat-raised-button class="filter-btn-cls" (click)="applyFilter()">{{ 'COMMON_TAG.SEARCH' | translate }}</button>
+              <button mat-raised-button class="reset-btn-cls" (click)="resetFilter()">{{ 'COMMON_TAG.RESET' | translate }}</button>
+            </div>
+          </div>
+
+
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+ 
+    <div class="question-list-grid shadow__box">
+      <div class="example-table-container">
       <table
         mat-table
         [dataSource]="dataSource"
@@ -120,11 +186,12 @@
           (click)="selection.toggle(row)"
         ></tr>
       </table>
+    </div>
       <mat-paginator
       [length]="totalNumberOfRecords"
       [pageSizeOptions]="pageOptions"
     ></mat-paginator>
     </div>
-
+  </div>
   </div>
 </div>

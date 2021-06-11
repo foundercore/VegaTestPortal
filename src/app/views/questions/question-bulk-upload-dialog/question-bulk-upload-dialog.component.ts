@@ -61,22 +61,23 @@ export class QuestionBulkUploadDialogComponent extends BaseService {
       this.fileName = event.target.files[0].name;
     } else {
       this.fileName = 'Choose file';
-      this.file  = undefined;
+      this.file = undefined;
     }
   }
 
   downloadTemplate() {
     let link = document.createElement('a');
-    link.download = 'question_bulk_upload_sample.csv';
-    link.href = 'assets/templates/question_bulk_upload_sample.csv';
+    link.download = 'question_bulk_upload_sample.xlsx';
+    link.href = 'assets/templates/question_bulk_upload_sample.xlsx';
     link.click();
   }
 
   uploadTemplate() {
-
     this.file!.inProgress = true;
-    this.file!.sub = this.questionManagementService.bulkUploadQuestion(this.file).pipe(
-        map((event : any) => {
+    this.file!.sub = this.questionManagementService
+      .bulkUploadQuestion(this.file)
+      .pipe(
+        map((event: any) => {
           switch (event.type) {
             case HttpEventType.UploadProgress:
               this.file!.progress = Math.round(

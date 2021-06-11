@@ -53,7 +53,11 @@ export class AddBatchComponent implements OnInit {
       this.tosterService.success('Batch is created successfully');
       this.dialogRef.close();
     },error => {
-      this.tosterService.error(error.error.apierror.message);
+      if(error.error.apierror.subErrors){
+        this.tosterService.error(error.error.apierror.subErrors[0].field + " " + error.error.apierror.subErrors[0].message);
+      }else {
+        this.tosterService.error(error.error.apierror.message);
+      }
     });
   }
 

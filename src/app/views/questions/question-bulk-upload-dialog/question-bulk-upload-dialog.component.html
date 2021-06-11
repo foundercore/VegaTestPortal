@@ -1,4 +1,5 @@
-<h1 mat-dialog-title class="bulk-upload-title">Bulk Upload - Question
+<h1 mat-dialog-title class="bulk-upload-title">
+  Bulk Upload - Question
   <button mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
@@ -7,21 +8,34 @@
   <div class="bulk-upload-content">
     <p>Question file:</p>
     <div class="custom-file mb-3">
-      <input type="file" accept=".csv" class="custom-file-input" id="customFile" name="filename"  (change)="onFileChange($event)" >
-      <label class="custom-file-label" for="customFile">{{fileName}}</label>
+      <input
+        type="file"
+        accept=".xlsx"
+        class="custom-file-input"
+        id="customFile"
+        name="filename"
+        (change)="onFileChange($event)"
+      />
+      <label class="custom-file-label" for="customFile">{{ fileName }}</label>
     </div>
     <div *ngIf="file?.inProgress">
-      <div  [@fadeInOut]="file?.state" >
+      <div [@fadeInOut]="file?.state">
         <mat-progress-bar [value]="file?.progress"></mat-progress-bar>
       </div>
     </div>
   </div>
 </div>
 <div mat-dialog-actions class="bulk-upload-bottom">
-  <button class="download-cls" mat-raised-button  (click)="downloadTemplate()">
-    <mat-icon>cloud_download</mat-icon> {{ 'COMMON_TAG.DOWNLOAD_TEMPLATE' | translate }}
+  <button class="download-cls" mat-raised-button (click)="downloadTemplate()">
+    <mat-icon>cloud_download</mat-icon>
+    {{ "COMMON_TAG.DOWNLOAD_TEMPLATE" | translate }}
   </button>
-  <button class="upload-cls"  mat-raised-button   (click)="uploadTemplate()" [disabled]="!file">
-    <mat-icon>cloud_upload</mat-icon> {{ 'COMMON_TAG.UPLOAD' | translate }}
+  <button
+    class="upload-cls"
+    mat-raised-button
+    (click)="uploadTemplate()"
+    [disabled]="!file"
+  >
+    <mat-icon>cloud_upload</mat-icon> {{ "COMMON_TAG.UPLOAD" | translate }}
   </button>
 </div>

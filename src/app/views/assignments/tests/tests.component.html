@@ -1,5 +1,5 @@
 <section class="data__table">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row py-5">
             <div class="col-lg-6">
                 <form action="" class="search__box">
@@ -7,28 +7,33 @@
                         <div class="input-group-prepend border-0">
                             <span class="input-group-text border-0" id="search"><i class="fa fa-search"></i></span>
                         </div>
-                        <input type="text" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" (keyup)="searchtest()" class="form-control border-0" placeholder="Search anything ..."
+                        <input type="text" [(ngModel)]="searchText"  (keyup)="applyFilter()" [ngModelOptions]="{standalone: true}" class="form-control border-0" placeholder="Search anything ..."
                             >
                     </div>
                 </form>
             </div>
             <div class="col-lg-6">
                 <div class="btn__group text-right">
-                    <button class="mx-2 mat__action_btn" mat-raised-button routerLink="/home/tests/test-preview">
-                        <mat-icon>remove_red_eye</mat-icon> View</button>
+                    <!-- <button class="mx-2 mat__action_btn" mat-raised-button routerLink="/home/tests/test-preview">
+                        <mat-icon>remove_red_eye</mat-icon> View</button> -->
                     <button class="mx-2 mat__action_btn delete" mat-raised-button (click)="deleteSelectedTestsId()">
                       <mat-icon>delete_forever</mat-icon> Delete
                     </button>
                     <button class="mx-2 mat__action_btn" mat-raised-button (click)="createTest()">
                       <mat-icon>add_circle</mat-icon> Add
                     </button>
-                    <button class="mx-2 mat__action_btn" mat-raised-button >
+                    <!-- <button class="mx-2 mat__action_btn" mat-raised-button >
                       <mat-icon>cloud_download</mat-icon> Download
-                    </button>
+                    </button> -->
                   </div>
             </div>
         </div>
-        <div class="shadow__box">
+        <!-- Question Filter -->
+       
+
+
+        <div class="question-list-grid shadow__box">
+          <div class="example-table-container">
         <table mat-table [dataSource]="dataSource" class="mat__data__table mb-0"  matSort class="mat-elevation-z8 border custom_table border-right">
            
             <ng-container matColumnDef="select">
@@ -86,7 +91,8 @@
             </tr>
               
           </table>
-          <mat-paginator [length]="totalNumberOfRecords" [pageSizeOptions]="pageOptions"></mat-paginator>
           </div>
+          <mat-paginator class="pagination__box" [length]="totalNumberOfRecords" [pageSizeOptions]="pageOptions"></mat-paginator>
+        </div>
     </div>
 </section>

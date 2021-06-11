@@ -2,7 +2,6 @@
   <div class="card-header d-flex bg-transparent p-0 border-0">
     <div class="row w-100 mx-0 align-items-center border-bottom">
       <div class="col-md-6 left__col p-0 d-flex align-items-center">
-        <!-- <img src="https://png.pngtree.com/element_our/20190523/ourmid/pngtree-hand-painted-small-fresh-female-high-school-student-image_1086346.jpg" width="80" height="49" class="mr-3" alt=""> -->
         <h4 class="ml-5">
           {{ testdata?.name }}
         </h4>
@@ -11,14 +10,21 @@
         <button class="auto-btn m-1" mat-raised-button (click)="calculate()">
           C
         </button>
-        <div class="student__box d-flex align-items-center">
-          <h5>Total Time</h5>
-        </div>
-        <div class="time d-flex p-2 align-items-center">
-          <img src="assets/images/clock.png" width="auto" height="30" alt="" />
-          <h4 class="mb-0 ml-5">
-            <countdown [config]="{ leftTime: timeSeconds }"></countdown>
-          </h4>
+        <div class="d-flex">
+          <div class="student__box d-flex align-items-center">
+            <h5>Total Time</h5>
+          </div>
+          <div class="time d-flex p-2 align-items-center">
+            <img
+              src="assets/images/clock.png"
+              width="auto"
+              height="30"
+              alt=""
+            />
+            <h4 class="mb-0 ml-5">
+              <countdown [config]="{ leftTime: timeSeconds }"></countdown>
+            </h4>
+          </div>
         </div>
         <div class="student__box d-flex align-items-center">
           <h5>{{ studentName }}</h5>
@@ -47,18 +53,47 @@
     <!-- main body content start here -->
     <mat-tab-group class="pt-2" (selectedTabChange)="selectSection($event)">
       <!-- one -->
-      <span *ngFor="let section of testdata?.sections">
-        <mat-tab label="{{ section?.name }}">
-          <div class="row mx-0 scroll__box">
-            <div class="col-lg-8 position-relative">
-              <div class="left__content inner__scroll">
-                <!-- <h3
+      <div *ngIf="testdata?.sections">
+        <span *ngFor="let section of testdata?.sections">
+          <mat-tab label="{{ section?.name }}">
+            <div class="row mx-0 scroll__box">
+              <div class="col-lg-8 position-relative divider">
+                <div class="left__content inner__scroll">
+                  <ng-scrollbar
+                    #scrollable
+                    [invertX]="invertX"
+                    [invertY]="invertY"
+                    [trackX]="true"
+                    [compact]="compact"
+                    [shown]="shown"
+                    [disabled]="disabled"
+                  >
+                    <!-- <h3
                   [innerHTML]="currentQuestionIndex + 1 + question?.name"
                 ></h3> -->
-                <h3 [innerHTML]="question?.name"></h3>
-                <p [innerHTML]="question?.explanation"></p>
-                <p [innerHTML]="question?.description"></p>
-                <mat-radio-group
+                    <div *ngIf="question?.name">
+                      <p class="lead" style="font-weight: 500;" [innerHTML]="question?.name"></p>
+                      <p [innerHTML]="question?.explanation"></p>
+                      <p [innerHTML]="question?.description"></p>
+                      <ul>
+                        <li *ngFor="let opt of question?.options">
+                          <!-- value="{{ opt?.key }}" -->
+                          <!-- [checked]="optionsSelected[opt?.key]" -->
+                          <mat-checkbox
+                            [checked]="optionsSelected[opt?.key - 1]"
+                            (change)="setOptionSelected(opt?.key)"
+                          >
+                            <span [innerHTML]="opt?.value"> </span>
+                          </mat-checkbox>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="testLive__NoQuestion" *ngIf="!question?.name">
+                      <div class="testLive__NoQuestion_text">
+                        No question added !!!
+                      </div>
+                    </div>
+                    <!-- <mat-radio-group
                   aria-label="Select an option"
                   class="radio__button"
                 >
@@ -71,86 +106,164 @@
                     <span [innerHTML]="opt?.value"> </span>
                   </mat-radio-button>
                   <br />
-                </mat-radio-group>
-              </div>
-              <!-- footer button box -->
-              <div
-                class="btn__box d-flex justify-content-space-between pb-3 pt-3"
-              >
-                <button
-                  class="btn-primary"
-                  mat-raised-button
-                  (click)="setQuestionAsMarkerdForReview()"
+                </mat-radio-group> -->
+                  </ng-scrollbar>
+                </div>
+                <!-- footer button box -->
+                <div
+                  class="
+                    btn__box
+                    d-flex
+                    justify-content-space-between
+                    pb-3
+                    pt-3
+                  "
                 >
-                  MARK FOR REVIEW
-                </button>
-                <button
-                  class="btn-danger"
-                  mat-raised-button
-                  (click)="clearResponse()"
-                >
-                  CLEAR FOR RESPONSE
-                </button>
-                <button
-                  class="btn-primary"
-                  mat-raised-button
-                  (click)="SaveandNextAnswers()"
-                >
-                  SAVE AND NEXT
-                </button>
-              </div>
-            </div>
-            <div class="col-lg-4 mh">
-              <h3 class="text-center">Current Question</h3>
-              <ul class="list-unstyled">
-                <!-- <li *ngFor="let ques of sectionsWithPapers; let i=index">
-                                <button class=""  mat-mini-fab (click)="getQuestion(ques)" [ngStyle]="{
-                                    background: getactiveRandomColorStatus(
-                                        ques?.iscolorActive
-                                    )
-                                  }">{{i + 1}}</button>
-
-                            </li> -->
-                <span
-                  [innerHTML]="question?.name"
-                  style="padding-left: 5px"
-                ></span>
-              </ul>
-
-              <div class="btn__bo pb-3 pt-5">
-                <!-- <button class="auto-btn" mat-raised-button *ngFor="let ques of sectionsWithPapers; let i=index"
-                            [ngStyle]="{
-                                color : 'white',
-                                background: getmarkedRandomColorStatus(
-                                    ques?.ismarked
-                                )
-                              }"
-                            >{{i + 1}}</button> -->
-                <button
-                  class="auto-btn"
-                  mat-raised-button
-                  *ngFor="let ques of sectionsWithPapers; let i = index"
-                  (click)="getQuestion(ques, i)"
-                  [ngStyle]="{
-                    background: questionNavigationButtonColorArray[i]
-                  }"
-                >
-                  {{ i + 1 }}
-                </button>
-                <div class="text-center py-3">
                   <button
-                    class="btn-primary save__btn w-50 mx-auto"
+                    class="btn-primary"
+                    mat-raised-button
+                    (click)="setQuestionAsMarkerdForReview()"
+                  >
+                    Mark For Review
+                  </button>
+                  <button
+                    class="btn-danger"
+                    mat-raised-button
+                    (click)="clearResponse()"
+                  >
+                    Clear Response
+                  </button>
+                  <button
+                    class="btn-primary"
+                    mat-raised-button
+                    (click)="SaveandNextAnswers()"
+                  >
+                    Save And Next
+                  </button>
+                </div>
+
+                <!-- admin disabled buttons -->
+                <!-- <div
+                class="btn__box d-flex justify-content-space-between pb-3 pt-3"
+                *ngIf="userType === 'ROLE_USER_ADMIN'"
+              >
+                <button class="btn-primary" mat-raised-button disabled>
+                  Mark For Review
+                </button>
+                <button class="btn-danger" mat-raised-button disabled>
+                  Clear Response
+                </button>
+                <button class="btn-primary" mat-raised-button disabled>
+                  Save And Next
+                </button>
+              </div> -->
+              </div>
+
+              <div class="col-lg-4 mh">
+                <div class="scoll_height">
+                  <ng-scrollbar
+                    #scrollable
+                    [invertX]="invertX"
+                    [invertY]="invertY"
+                    [trackX]="true"
+                    [compact]="compact"
+                    [shown]="shown"
+                    [disabled]="disabled"
+                  > 
+                    <ul class="list-unstyled">
+                      <!-- <li *ngFor="let ques of sectionsWithPapers; let i=index">
+                                  <button class=""  mat-mini-fab (click)="getQuestion(ques)" [ngStyle]="{
+                                      background: getactiveRandomColorStatus(
+                                          ques?.iscolorActive
+                                      )
+                                    }">{{i + 1}}</button>
+
+                              </li> -->
+                      <span
+                        [innerHTML]="question?.name"
+                        style="padding-left: 5px"
+                        *ngIf="question?.name"
+                      ></span>
+                      <div
+                        class="testLive__NoQuestion1"
+                        *ngIf="!question?.name"
+                      >
+                        <div class="testLive__NoQuestion_text1">
+                          No question added !!!
+                        </div>
+                      </div>
+                    </ul>
+
+                    <div class="num__box">
+                      <!-- <button class="auto-btn" mat-raised-button *ngFor="let ques of sectionsWithPapers; let i=index"
+                              [ngStyle]="{
+                                  color : 'white',
+                                  background: getmarkedRandomColorStatus(
+                                      ques?.ismarked
+                                  )
+                                }"
+                              >{{i + 1}}</button> -->
+                      <button
+                        class="auto-btn"
+                        mat-raised-button
+                        *ngFor="let ques of sectionsWithPapers; let i = index"
+                        (click)="getQuestion(ques, i)"
+                        [ngStyle]="{
+                          background: questionNavigationButtonColorArray[i]
+                        }"
+                      >
+                        {{ i + 1 }}
+                      </button>
+                      <!-- <div
+                    class="text-center py-3"
+                    *ngIf="userType === 'ROLE_USER_ADMIN'"
+                  >
+                    <button
+                      class="btn-primary save__btn w-50 mx-auto"
+                      mat-raised-button
+                      disabled
+                    >
+                      Save And Exit
+                    </button>
+                  </div> -->
+                    </div>
+                  </ng-scrollbar>
+                </div>
+                <ul class="border index__box list-unstyled mb-2">
+                  <li class="p-b2 text-center lead">Question Color Index</li>
+                  <li class="btn btn-primary d-inline-block border-0">
+                    Current Question
+                  </li>
+                  <li class="btn btn-warning d-inline-block border-0">
+                    Marked Question.
+                  </li>
+                  <li class="btn btn-secondary d-inline-block border-0">
+                    Saved Question.
+                  </li>
+                  <li class="btn btn-success d-inline-block border-0">
+                    Not Attempted.
+                  </li>
+                  <li class="btn btn_marked_and_ans d-inline-block border-0">
+                    Attempted & marked.
+                  </li>
+                </ul>
+                <div class="text-center save__btn- pt-1">
+                  <button
+                    class="btn-primary save__btn- w-50 mx-auto"
                     mat-raised-button
                     (click)="SaveandExit()"
                   >
-                    SAVE AND EXIT
+                    Save And Exit
                   </button>
                 </div>
               </div>
             </div>
-          </div>
-        </mat-tab>
-      </span>
+          </mat-tab>
+        </span>
+      </div>
     </mat-tab-group>
+    <div class="testLive__NoSections" *ngIf="testdata?.sections === null">
+      No Sections added !!!
+    </div>
   </div>
 </div>
