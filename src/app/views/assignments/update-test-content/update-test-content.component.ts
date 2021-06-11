@@ -16,6 +16,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { EditSectionComponent } from '../popups/edit-section/edit-section.component';
 import { QuestionModel } from 'src/app/models/questions/question-model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-update-test-content',
@@ -53,7 +54,8 @@ export class UpdateTestContentComponent implements OnInit {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private testConfigService: TestConfigService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -200,6 +202,13 @@ export class UpdateTestContentComponent implements OnInit {
       );
     }
   }
+
+  viewAssignment(){
+    this.router.navigate([
+      'home/tests/update-test/' + this.testId + '/view-assignment',
+    ]);
+  }
+
 
   isAllSelected() {
     if (this.dataSource) {

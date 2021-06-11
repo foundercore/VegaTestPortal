@@ -1,0 +1,117 @@
+<div class="content">
+  <div class="page-options">
+    <div class="user-actions">
+      <button mat-raised-button (click)="performGridAction('add')">
+        <mat-icon>add_circle</mat-icon> {{ "COMMON_TAG.ADD" | translate }}
+      </button>
+      <button mat-raised-button (click)="performGridAction('back')">
+        <mat-icon>arrow_back</mat-icon>Go Back
+      </button>
+    </div>
+
+    <div class="user-search-bar">
+      <mat-form-field style="width: 600px" appearance="outline">
+        <mat-label> {{ "COMMON_TAG.FILTER" | translate }}</mat-label>
+        <input
+          matInput
+          placeholder="Search"
+          #input
+          (keyup)="applyFilter($event)"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="question-list-grid">
+    <div class="mat-elevation-z8">
+      <div class="loading-container" *ngIf="isLoading">
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+      </div>
+      <div class="mat-elevation-z8">
+        <div>
+          <table
+            mat-table
+            [dataSource]="dataSource"
+            matSort
+            matSortActive="displayName"
+            matSortDisableClear
+          >
+
+
+             <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Description
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.description }}</td>
+            </ng-container>
+
+             <ng-container matColumnDef="releaseDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Release Date
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.releaseDate | date : 'mediumDate'}}</td>
+            </ng-container>
+
+             <ng-container matColumnDef="passcode">
+              <th mat-header-cell *matHeaderCellDef>
+                Passcode
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.passcode }}
+              </td>
+            </ng-container>
+
+             <ng-container matColumnDef="validFrom">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Valid From
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.validFrom | date : 'mediumDate'}}</td>
+            </ng-container>
+
+              <ng-container matColumnDef="validTo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Valid To
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.validTo | date : 'mediumDate' }}</td>
+            </ng-container>
+
+
+            <!-- actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "COMMON_TAG.ACTIONS" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <span
+                  class="action-btn"
+                  matTooltip="Edit"
+                  (click)="performGridAction('edit', row)"
+                >
+                  <mat-icon>edit</mat-icon>
+                </span>
+                <span
+                  class="action-btn"
+                  matTooltip="Delete"
+                  (click)="performGridAction('delete', row)"
+                  *ngIf="
+                    !(
+                      this.authorizationService.isStaffRole() &&
+                      row.roles.includes('ROLE_USER_ADMIN')
+                    )
+                  "
+                >
+                  <mat-icon>delete_forever</mat-icon>
+                </span>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+
+        <mat-paginator [pageSizeOptions]="pageOptions"></mat-paginator>,
+      </div>
+    </div>
+  </div>
+</div>
