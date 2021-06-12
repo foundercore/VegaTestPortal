@@ -1,6 +1,6 @@
 export interface AssignmentRequest {
   assignedToBatch?: [];
-  assignedToStudent?: [];
+  assignedToStudent?: any [];
   description: string;
   passcode: string;
   releaseDate: string;

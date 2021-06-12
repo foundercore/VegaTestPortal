@@ -21,8 +21,7 @@ import { formatDate } from '@angular/common';
 })
 export class AssignmentFormComponent implements  OnInit,AfterViewInit {
   batchList: StudentBatchModel[] = [];
-  studentList: IUserResponseModel[] = [];
-  locale = 'en-US';
+   locale = 'en-US';
 
   assignmentFormGroup ;
 
@@ -36,9 +35,7 @@ export class AssignmentFormComponent implements  OnInit,AfterViewInit {
      @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.studentBatchService.getStudentBatchList().subscribe(data => this.batchList = data);
-    this.userService.getUserList().subscribe(data => {
-      this.studentList = data.filter((x) => x.roles.includes('ROLE_STUDENT'));
-    });
+
 
   }
   ngAfterViewInit(): void {
@@ -57,26 +54,24 @@ export class AssignmentFormComponent implements  OnInit,AfterViewInit {
 
       this.assignmentFormGroup = new FormGroup(
         {
-          passcode: new FormControl(this.data.data.passcode, [Validators.required]),
+          passcode: new FormControl(this.data.data.passcode),
           description: new FormControl(this.data.data.description, [Validators.required]),
           releaseDate: new FormControl(this.data.data.releaseDate, [Validators.required]),
           validFrom: new FormControl(this.data.data.validFrom, [Validators.required]),
           validTo: new FormControl(this.data.data.validTo, [Validators.required]),
           assignedToBatch: new FormControl(this.data.data.assignedToBatch, [Validators.required]),
-          assignedToStudent: new FormControl(this.data.data.assignedToStudent, [Validators.required]),
-        }
+         }
       );
     } else {
       this.assignmentFormGroup = new FormGroup(
         {
-          passcode: new FormControl('', [Validators.required]),
+          passcode: new FormControl(''),
           description: new FormControl('', [Validators.required]),
           releaseDate: new FormControl('', [Validators.required]),
           validFrom: new FormControl('', [Validators.required]),
           validTo: new FormControl('', [Validators.required]),
           assignedToBatch: new FormControl([], [Validators.required]),
-          assignedToStudent: new FormControl([], [Validators.required]),
-        }
+         }
       );
     }
 
@@ -95,8 +90,7 @@ export class AssignmentFormComponent implements  OnInit,AfterViewInit {
       validFrom: formatDate(this.assignmentFormGroup.controls.validFrom.value, 'yyyy-MM-dd hh:mm:ss', this.locale),
       validTo: formatDate(this.assignmentFormGroup.controls.validTo.value, 'yyyy-MM-dd hh:mm:ss', this.locale),
       assignedToBatch:this.assignmentFormGroup.controls.assignedToBatch.value,
-      assignedToStudent:this.assignmentFormGroup.controls.assignedToStudent.value,
-    }
+     }
 
     this.testAssignmentService.addAssignment(assignmentObj).subscribe(
       (resp) => {
@@ -121,8 +115,7 @@ export class AssignmentFormComponent implements  OnInit,AfterViewInit {
       validFrom: formatDate(this.assignmentFormGroup.controls.validFrom.value, 'yyyy-MM-dd hh:mm:ss', this.locale),
       validTo: formatDate(this.assignmentFormGroup.controls.validTo.value, 'yyyy-MM-dd hh:mm:ss', this.locale),
       assignedToBatch:this.assignmentFormGroup.controls.assignedToBatch.value,
-      assignedToStudent:this.assignmentFormGroup.controls.assignedToStudent.value,
-    }
+     }
     this.testAssignmentService.updateAssignment(this.data.data.assignmentId, assignmentObj).subscribe(
       (resp) => {
         this.tosterService.success('Assignment is updated successfully');
