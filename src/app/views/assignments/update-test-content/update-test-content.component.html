@@ -18,9 +18,9 @@
       <button *ngIf="quest?.status == 'PUBLISHED'" mat-raised-button class="add-btn mx-2" (click)="archive()">
         <span class="ml-2">Archive</span>
       </button>
-      <button *ngIf="quest?.status == 'ARCHIVED'" mat-raised-button class="add-btn mx-2" (click)="restore()">
+      <!-- <button *ngIf="quest?.status == 'ARCHIVED'" mat-raised-button class="add-btn mx-2" (click)="restore()">
         <span class="ml-2">Restore</span>
-      </button>
+      </button> -->
       <button mat-raised-button class="add-btn mx-2" 
       *ngIf="status == 'PUBLISHED'"
       (click)="viewAssignment()">

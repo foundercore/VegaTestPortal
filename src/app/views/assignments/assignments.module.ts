@@ -21,6 +21,7 @@ import { RejectstatusComponent } from './popups/reject-status/reject-status.comp
 import { CloneAssignmentComponent } from './clone-assignment/clone-assignment.component';
 
 
+
 @NgModule({
   declarations: [
     TestsComponent,
@@ -33,7 +34,7 @@ import { CloneAssignmentComponent } from './clone-assignment/clone-assignment.co
     TestLiveComponent,
     ShowResultComponent,
     EditSectionComponent,
-    RejectstatusComponent
+    RejectstatusComponent,
     CloneAssignmentComponent
   ],
   imports: [
