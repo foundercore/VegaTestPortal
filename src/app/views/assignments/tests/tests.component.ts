@@ -18,6 +18,7 @@ import { AppState } from 'src/app/state_management/_states/auth.state';
 import Swal from 'sweetalert2';
 import { TestVM } from '../models/postTestVM';
 import { SearchQuestionPaperVM } from '../models/searchQuestionVM';
+import { Status } from '../models/statusEnum';
 import { AssessmentEditorComponent } from '../popups/assessment-editor/assessment-editor.component';
 import { TestLiveComponent } from '../popups/test-live/test-live.component';
 import { TestConfigService } from '../services/test-config-service';
@@ -39,6 +40,7 @@ export class TestsComponent implements OnInit {
   displayedColumns: string[] = [
     'select',
     'testName',
+    'status',
     'minimumDurationInMinutes',
     'totalDurationInMinutes',
     'actions',
@@ -100,8 +102,7 @@ export class TestsComponent implements OnInit {
         model.minimumDurationInMinutes = +result?.duration;
         model.name = result?.testName;
         model.instructions = result?.description;
-        model.status = "DRAFT";
-        debugger;
+        model.status = Status.DRAFT;
         this.testConfigService.createQuestionPaper(model).subscribe(
           (res: any) => {
             //if (res.isSuccess) {

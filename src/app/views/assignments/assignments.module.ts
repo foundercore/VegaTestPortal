@@ -17,6 +17,7 @@ import { ShowResultComponent } from './show-result/show-result.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { EditSectionComponent } from './popups/edit-section/edit-section.component';
+import { RejectstatusComponent } from './popups/reject-status/reject-status.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { EditSectionComponent } from './popups/edit-section/edit-section.compone
     QuestionslistComponent,
     TestLiveComponent,
     ShowResultComponent,
-    EditSectionComponent
+    EditSectionComponent,
+    RejectstatusComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +52,8 @@ import { EditSectionComponent } from './popups/edit-section/edit-section.compone
     CalculatorComponent,
     TestconfigComponent,
     QuestionslistComponent,
-    TestLiveComponent
+    TestLiveComponent,
+    RejectstatusComponent
   ],
   schemas:[NO_ERRORS_SCHEMA]
 })

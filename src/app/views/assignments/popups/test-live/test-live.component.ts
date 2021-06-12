@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import { QuestionMarkedForReviewModel } from '../../models/questionMarkedForReview';
 import { TestConfigService } from '../../services/test-config-service';
 import { CalculatorComponent } from '../calculator/calculator.component';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-test-live',
@@ -66,8 +67,46 @@ export class TestLiveComponent implements OnInit {
     this.timeSeconds = this.convertminutestoseconds(
       this._data?.testData?.totalDurationInMinutes
     );
+
     this.getQuestionPaperbyId();
     this.getUserSubmissionData();
+    this.observableTimer();
+  }
+
+  CountDownTimerValue: string = '--:--:--';
+  timerSource;
+  observableTimer() {
+    const source = timer(1000, 1000);
+    this.timerSource = source.subscribe((val) => {
+      //console.log(val, '-');
+      var leftSecs = this.timeSeconds - val;
+      if (leftSecs > 0)
+        this.CountDownTimerValue = new Date(leftSecs * 1000)
+          .toISOString()
+          .substr(11, 8);
+      else if (leftSecs == 0) {
+        this.timerSource.unsubscribe();
+        Swal.fire({
+          icon: 'success',
+          title: 'Test Duration Completed',
+        }).finally(() => {
+          this.testConfigService
+            .saveandExit(this._data.testData.questionPaperId)
+            .subscribe(
+              (res: any) => {
+                this.toastrService.success('Test submitted successfully');
+                this.close();
+                this.router.navigate([
+                  '/home/tests/show-result/' +
+                    this._data.testData.questionPaperId,
+                ]);
+              },
+              (err) =>
+                console.log('Error while making the question for save', err)
+            );
+        });
+      }
+    });
   }
 
   async setQuestionAsMarkerdForReview() {
@@ -125,7 +164,21 @@ export class TestLiveComponent implements OnInit {
           this.getUserSubmissionData();
           this.goToNextQuestion();
         },
-        (err) => console.log('Error while making the question for save', err)
+        (err) => {
+          if (
+            String(err.error.apierror.message).includes(
+              'already submitted by student'
+            )
+          )
+            Swal.fire({
+              icon: 'error',
+              title: 'Error while saving question !!!',
+              text: 'This test is already submitted. You cant save the question after submitting test',
+            });
+          else
+            this.toastrService.error('Error - ' + err.error.apierror.message);
+          console.log('Error while making the question for save', err);
+        }
       );
   }
   getSelectedOption() {
@@ -191,7 +244,7 @@ export class TestLiveComponent implements OnInit {
   }
 
   async getUserSubmissionData() {
-    debugger;
+    //debugger;
     await this.testConfigService
       .getSudentSubmissionState(
         this._data.testData.questionPaperId,
@@ -280,16 +333,16 @@ export class TestLiveComponent implements OnInit {
 
   setCurrentQuestionSelectedOption() {
     const fetchedSubmissionState = this.submissionData;
-    console.log('Inside the setting current selected option function');
-    console.log('we are in the section id =>', this.currentSectionId);
+    //console.log('Inside the setting current selected option function');
+    //console.log('we are in the section id =>', this.currentSectionId);
     fetchedSubmissionState?.sections.map((section) => {
-      console.log('Section inside fetched state =>', section.sectionId);
+      //console.log('Section inside fetched state =>', section.sectionId);
       //section match
       if (section.sectionId === this.currentSectionId) {
         section.answers.map((ans) => {
-          console.log('answers in the section=>', ans);
-          console.log('ans.questionId in the section=>', ans.questionId);
-          console.log('current question=>', this.question?.id.questionId);
+          //console.log('answers in the section=>', ans);
+          //console.log('ans.questionId in the section=>', ans.questionId);
+          //console.log('current question=>', this.question?.id.questionId);
           //current question match
           if (ans?.questionId === this.question?.id.questionId) {
             // try {
@@ -301,10 +354,10 @@ export class TestLiveComponent implements OnInit {
             //   this.setOptionSelectedAfterFetchingData(0);
             // }
             var selectedOptions = ans.selectedOptions;
-            console.log(
-              'Fethched selectedOptions for the current question =>',
-              selectedOptions
-            );
+            // console.log(
+            //   'Fethched selectedOptions for the current question =>',
+            //   selectedOptions
+            // );
             this.optionsSelected = [];
             if (selectedOptions !== null) {
               //ans?.selectOptions is an array
@@ -503,17 +556,17 @@ export class TestLiveComponent implements OnInit {
   }
 
   setColoursForQuestionNavigationButtons() {
-    console.log(' setColoursForQuestionNavigationButtons called');
-    console.log(
-      ' this.sectionsWithPapers =>',
-      this.sectionsWithPapers,
-      'this.currentSectionSubmittedData =>',
-      this.currentSectionSubmittedData,
-      ' submissionData=>',
-      this.submissionData,
-      ' currentSectionId=>',
-      this.currentSectionId
-    );
+    // console.log(' setColoursForQuestionNavigationButtons called');
+    // console.log(
+    //   ' this.sectionsWithPapers =>',
+    //   this.sectionsWithPapers,
+    //   'this.currentSectionSubmittedData =>',
+    //   this.currentSectionSubmittedData,
+    //   ' submissionData=>',
+    //   this.submissionData,
+    //   ' currentSectionId=>',
+    //   this.currentSectionId
+    // );
     var colorAppliedIndexesArray = [];
     //prepare color array with all false
     this.sectionsWithPapers.map((sec, i) => {
@@ -540,10 +593,10 @@ export class TestLiveComponent implements OnInit {
               //if its current question then green else
               if (ques.id.questionId === this.question?.id.questionId) {
                 //the ques is current question
-                console.log(
-                  'current green color question is =>',
-                  this.question?.name
-                );
+                // console.log(
+                //   'current green color question is =>',
+                //   this.question?.name
+                // );
                 if (!colorAppliedIndexesArray[i]) {
                   //set color green
                   this.setButtonColor(i, 'green');
@@ -595,10 +648,10 @@ export class TestLiveComponent implements OnInit {
             //grey if not current ques
             if (ques.id.questionId === this.question?.id.questionId) {
               //the ques is current question
-              console.log(
-                'current green color question is =>',
-                this.question?.name
-              );
+              // console.log(
+              //   'current green color question is =>',
+              //   this.question?.name
+              // );
               if (!colorAppliedIndexesArray[i]) {
                 //set color green
                 this.setButtonColor(i, 'green');
@@ -629,10 +682,10 @@ export class TestLiveComponent implements OnInit {
         //grey if not current ques
         if (ques.id.questionId === this.question?.id.questionId) {
           //the ques is current question
-          console.log(
-            'current green color question is =>',
-            this.question?.name
-          );
+          // console.log(
+          //   'current green color question is =>',
+          //   this.question?.name
+          // );
           if (!colorAppliedIndexesArray[i]) {
             //set color green
             this.setButtonColor(i, 'green');
@@ -722,17 +775,18 @@ export class TestLiveComponent implements OnInit {
 
   close() {
     this.dialogRef.close();
+    this.timerSource.unsubscribe();
   }
 
   setButtonColor(buttonNumber?, color?) {
-    console.log(
-      'SetButton color is called with  sectionsWithPapers=>',
-      this.sectionsWithPapers,
-      ' index=>',
-      buttonNumber,
-      ' color=>',
-      color
-    );
+    // console.log(
+    //   'SetButton color is called with  sectionsWithPapers=>',
+    //   this.sectionsWithPapers,
+    //   ' index=>',
+    //   buttonNumber,
+    //   ' color=>',
+    //   color
+    // );
 
     this.sectionsWithPapers.map((sec, i) => {
       if (i === buttonNumber) {

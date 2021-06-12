@@ -16,6 +16,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { EditSectionComponent } from '../popups/edit-section/edit-section.component';
 import { QuestionModel } from 'src/app/models/questions/question-model';
+import { RejectstatusComponent } from '../popups/reject-status/reject-status.component';
+import { TestVM } from '../models/postTestVM';
+import { Status } from '../models/statusEnum';
 
 @Component({
   selector: 'app-update-test-content',
@@ -48,13 +51,13 @@ export class UpdateTestContentComponent implements OnInit {
   searchText: string = '';
   ques2 = [];
   questionPaper = {};
-  quest : any;
+  quest: any;
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private testConfigService: TestConfigService,
     private toastrService: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.testId = this.route.snapshot.paramMap.get('id');
@@ -100,10 +103,9 @@ export class UpdateTestContentComponent implements OnInit {
 
   editSection(section: Section) {
     const dialogRef = this.dialog.open(EditSectionComponent, {
-      maxWidth: '1700px',
-      width: 'fit-content',
-      minHeight: '15vh',
-      height: 'fit-content',
+      maxWidth: '700px',
+      width: '100%',
+      height: 'auto',
       hasBackdrop: false,
       backdropClass: 'dialog-backdrop',
       data: {
@@ -230,7 +232,7 @@ export class UpdateTestContentComponent implements OnInit {
         controlParms: this.controlparms,
       },
     });
-    dialogRef.afterClosed().subscribe((result) => {});
+    dialogRef.afterClosed().subscribe((result) => { });
   }
 
   openQuestionList() {
@@ -282,27 +284,6 @@ export class UpdateTestContentComponent implements OnInit {
     }
   }
 
-  // searchtest() {
-  //   if (
-  //     this.searchText != '' &&
-  //     this.searchText != null &&
-  //     this.searchText != undefined &&
-  //     this.searchText.length > 3
-  //   ) {
-  //     this.ques = this.ques.filter(
-  //       (x) =>
-  //         x.name.toLowerCase().includes(this.searchText) ||
-  //         x.name.toUpperCase().includes(this.searchText)
-  //     );
-  //     this.dataSource = new MatTableDataSource(this.ques);
-  //     this.dataSource.sort = this.sort;
-  //     this.dataSource.paginator = this.paginator;
-  //   } else {
-  //     this.dataSource = new MatTableDataSource(this.ques2);
-  //     this.dataSource.sort = this.sort;
-  //     this.dataSource.paginator = this.paginator;
-  //   }
-  // }
 
   removeSection(section: Section) {
     Swal.fire({
@@ -331,6 +312,168 @@ export class UpdateTestContentComponent implements OnInit {
       }
     });
   }
+
+  initiateVerification() {
+    if (this.route.snapshot.paramMap.get('id') != null) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'want to update status.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#277da1',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Close',
+        confirmButtonText: 'Update',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.testConfigService
+            .initiateVerification(this.route.snapshot.paramMap.get('id'))
+            .subscribe((res: any) => {
+              this.toastrService.success("Status updated successfully");
+              this.getQuestionPaperbyId();
+            });
+        }
+      });
+    }
+  }
+
+
+
+  publishstatus() {
+    if (this.route.snapshot.paramMap.get('id') != null) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'want to update status.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#277da1',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Close',
+        confirmButtonText: 'Update',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.testConfigService
+            .publish(this.route.snapshot.paramMap.get('id'))
+            .subscribe((res: any) => {
+              this.toastrService.success("Status updated successfully");
+              this.getQuestionPaperbyId();
+            });
+        }
+      });
+    }
+  }
+
+  archive() {
+    if (this.route.snapshot.paramMap.get('id') != null) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'want to update status.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#277da1',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Close',
+        confirmButtonText: 'Update',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.testConfigService
+            .archive(this.route.snapshot.paramMap.get('id'))
+            .subscribe((res: any) => {
+              this.toastrService.success("Status updated successfully");
+              this.getQuestionPaperbyId();
+            });
+        }
+      });
+    }
+  }
+
+
+  verifyReject() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'want to update status.',
+      icon: 'warning',
+      showDenyButton: true,
+      confirmButtonColor: '#277da1',
+      showCancelButton: true,
+      confirmButtonText: `Verify`,
+      denyButtonText: `Reject`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (this.route.snapshot.paramMap.get('id') != null) {
+          this.testConfigService
+            .verify(this.route.snapshot.paramMap.get('id'))
+            .subscribe((res: any) => {
+              this.toastrService.success("Status updated successfully");
+              this.getQuestionPaperbyId();
+            });
+        }
+      } else if (result.isDenied) {
+        const dialogRef = this.dialog.open(RejectstatusComponent, {
+          maxWidth: '500px',
+          width: '100%',
+          height: 'auto',
+          hasBackdrop: false,
+          backdropClass: 'dialog-backdrop',
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result != null) {
+            var data = {
+              rejectionReason: result.reason
+            }
+            this.testConfigService
+              .rejectionVerification(this.route.snapshot.paramMap.get('id'), data)
+              .subscribe((res: any) => {
+                this.toastrService.success("Status updated successfully");
+                this.getQuestionPaperbyId();
+              });
+          }
+        });
+      }
+    })
+  }
+
+
+  restore() {
+    if (this.route.snapshot.paramMap.get('id') != null) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'want to restore.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#277da1',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Close',
+        confirmButtonText: 'Submit',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let model = new TestVM();
+          model.status = Status.DRAFT;
+          model.testId = this.route.snapshot.paramMap.get('id');
+          this.testConfigService.updateQuestionPaper(model).subscribe(
+            (res: any) => {
+              this.toastrService.success("Status updated successfully");
+              this.getQuestionPaperbyId();
+            },
+            (error) => {
+              debugger;
+              if (error.status == 200) {
+                this.toastrService.success("Status updated successfully");
+                this.getQuestionPaperbyId();
+              } else {
+                this.toastrService.error(
+                  error?.error?.message ? error?.error?.message : error?.message,
+                  'Error'
+                );
+              }
+            }
+          );
+        }
+      });
+    }
+  }
+
+
 
 
   applyFilter() {
