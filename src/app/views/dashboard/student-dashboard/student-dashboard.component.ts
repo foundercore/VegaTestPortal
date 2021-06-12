@@ -3,6 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
+import { TestAssignmentServiceService } from 'src/app/services/assignment/test-assignment-service.service';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -51,13 +52,16 @@ export class StudentDashboardComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
-  constructor(    public translate: TranslateService,
+  constructor(
+    public translate: TranslateService,
+    private testAssignmentService: TestAssignmentServiceService,
     ) {
 
   }
 
 
   ngOnInit(): void {
+    this.testAssignmentService.getMyAssignment().subscribe(resp => console.log(resp));
   }
 
   viewResult(row:any ){
