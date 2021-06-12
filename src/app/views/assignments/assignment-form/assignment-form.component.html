@@ -45,7 +45,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Passcode</mat-label>
-        <input matInput required formControlName="passcode" />
+        <input matInput formControlName="passcode" />
         <mat-error *ngIf="assignmentFormGroup.controls.passcode.hasError('required')">
           Passcode is <strong>required</strong>
         </mat-error>
@@ -62,7 +62,7 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <!-- <mat-form-field appearance="outline">
         <mat-label>Assign Student</mat-label>
         <mat-select required formControlName="assignedToStudent" multiple>
           <mat-option
@@ -71,7 +71,7 @@
             >{{ student.displayName }}</mat-option
           >
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> -->
 
 
       <mat-form-field appearance="outline">
