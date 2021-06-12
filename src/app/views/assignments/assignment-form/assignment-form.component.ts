@@ -44,13 +44,6 @@ export class AssignmentFormComponent implements  OnInit,AfterViewInit {
 
   ngOnInit(): void {
     if (this.data.data) {
-      // this.assignmentFormGroup.controls.passcode.setValue(this.data.data.passcode);
-      // this.assignmentFormGroup.controls.description.setValue(this.data.data.description);
-      // this.assignmentFormGroup.controls.releaseDate.setValue(this.data.data.releaseDate);
-      // this.assignmentFormGroup.controls.validFrom.setValue(this.data.data.validFrom);
-      // this.assignmentFormGroup.controls.validTo.setValue(this.data.data.validTo);
-      // this.assignmentFormGroup.controls.assignedToBatch.patchValue(this.data.data.assignedToBatch);
-      // this.assignmentFormGroup.controls.assignedToStudent.patchValue(this.data.data.assignedToStudent);
 
       this.assignmentFormGroup = new FormGroup(
         {
