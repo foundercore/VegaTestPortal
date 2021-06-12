@@ -320,52 +320,6 @@ export class TestsComponent implements OnInit {
         });
       }
     });
-
-    // this.testConfigService
-    //   .getSudentSubmissionState(
-    //     element.questionPaperId,
-    //     this.userName
-    //   )
-    //   .subscribe(
-    //     (res: any) => {
-    //       if(res.submitted){
-    //         this.router.navigate(['/home/tests/show-result/' +  element.questionPaperId]);
-    //       }
-    //       else{
-    //         Swal.fire({
-    //           title: 'Want to start test?',
-    //           text: element.instructions,
-    //           icon: 'warning',
-    //           showCancelButton: true,
-    //           confirmButtonColor: '#277da1',
-    //           cancelButtonColor: '#d33',
-    //           cancelButtonText: 'Close',
-    //           confirmButtonText: 'Start Test'
-    //         }).then((result) => {
-    //           if (result.isConfirmed) {
-    //             const dialogRef = this.dialog.open(TestLiveComponent, {
-    //               maxWidth: '1700px',
-    //               width: '100%',
-    //               minHeight: '100vh',
-    //               height: 'auto',
-    //               hasBackdrop: false,
-    //               backdropClass: 'dialog-backdrop',
-    //               data : {testData : element}
-    //             });
-    //             dialogRef.afterClosed().subscribe(result => {
-    //               this.GetAllquestionPapers();
-    //             });
-    //           }
-    //         })
-    //       }
-    //     },
-    //     (error) => {
-    //       this.toastrService.error(
-    //         error?.error?.message ? error?.error?.message : error?.message,
-    //         'Error'
-    //       );
-    //     }
-    //   );
   }
 
   applyFilter() {

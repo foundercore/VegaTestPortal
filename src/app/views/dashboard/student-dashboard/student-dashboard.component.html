@@ -40,7 +40,7 @@
             <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let row">
               <span *ngIf="row.attempted" class="action-btn" matTooltip="View Result" (click)="viewResult(row)"><mat-icon>assignment</mat-icon></span>
-              <span *ngIf="!row.attempted" class="action-btn" matTooltip="Take Test" (click)="takeTest(row)"><mat-icon>play_circle_filled</mat-icon></span>
+              <span *ngIf="!row.attempted" class="action-btn" matTooltip="Take Test" (click)="startTest(row)"><mat-icon>play_circle_filled</mat-icon></span>
             </td>
           </ng-container>
 

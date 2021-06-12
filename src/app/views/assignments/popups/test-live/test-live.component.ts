@@ -44,7 +44,10 @@ export class TestLiveComponent implements OnInit {
   compact = false;
   invertX = false;
   invertY = false;
+  CountDownTimerValue: string = '--:--:--';
+  timerSource;
   shown: 'native' | 'hover' | 'always' = 'native';
+  assignmentId: string = "";
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<TestLiveComponent>,
@@ -63,18 +66,18 @@ export class TestLiveComponent implements OnInit {
       this.userType = data?.user?.authorities[0]?.authority;
       console.log('data', data);
     });
-    this.testid = this._data.testData.questionPaperId;
-    this.timeSeconds = this.convertminutestoseconds(
-      this._data?.testData?.totalDurationInMinutes
-    );
-
+    if(this._data.testData.questionPaperId != null && this._data.testData.questionPaperId != undefined){
+      this.testid = this._data.testData.questionPaperId;
+    }
+    else{
+      this.testid = this._data.testData.testId;
+      this.assignmentId = this._data.testData.assignmentId;
+    }
     this.getQuestionPaperbyId();
     this.getUserSubmissionData();
-    this.observableTimer();
   }
 
-  CountDownTimerValue: string = '--:--:--';
-  timerSource;
+
   observableTimer() {
     const source = timer(1000, 1000);
     this.timerSource = source.subscribe((val) => {
@@ -91,14 +94,14 @@ export class TestLiveComponent implements OnInit {
           title: 'Test Duration Completed',
         }).finally(() => {
           this.testConfigService
-            .saveandExit(this._data.testData.questionPaperId)
+            .saveandExit(this.testid)
             .subscribe(
               (res: any) => {
                 this.toastrService.success('Test submitted successfully');
                 this.close();
                 this.router.navigate([
                   '/home/tests/show-result/' +
-                    this._data.testData.questionPaperId,
+                  this.testid,
                 ]);
               },
               (err) =>
@@ -113,7 +116,7 @@ export class TestLiveComponent implements OnInit {
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
     quesForMarkedAsReview.answerText = null;
     quesForMarkedAsReview.markForReview = true;
-    quesForMarkedAsReview.assignmentId = this._data.testData.questionPaperId;
+    quesForMarkedAsReview.assignmentId = this.assignmentId;
     quesForMarkedAsReview.questionId = this.question.id.questionId;
     quesForMarkedAsReview.sectionId = this.question.sectionId;
     quesForMarkedAsReview.selectedOptions = <any>this.getSelectedOption();
@@ -144,7 +147,7 @@ export class TestLiveComponent implements OnInit {
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
     quesForMarkedAsReview.answerText = null;
     quesForMarkedAsReview.markForReview = false;
-    quesForMarkedAsReview.assignmentId = this._data.testData.questionPaperId;
+    quesForMarkedAsReview.assignmentId = this.assignmentId;
     quesForMarkedAsReview.questionId = this.question.id.questionId;
     quesForMarkedAsReview.sectionId = this.question.sectionId;
     quesForMarkedAsReview.selectedOptions = <any>this.getSelectedOption();
@@ -226,15 +229,14 @@ export class TestLiveComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.testConfigService
-          .saveandExit(this._data.testData.questionPaperId)
+          .saveandExit(this.assignmentId)
           .subscribe(
             (res: any) => {
-              this.toastrService.success('Test submitted successfully');
-              this.close();
               this.router.navigate([
                 '/home/tests/show-result/' +
-                  this._data.testData.questionPaperId,
+                this.assignmentId,
               ]);
+              this.toastrService.success('Test submitted successfully');
             },
             (err) =>
               console.log('Error while making the question for save', err)
@@ -247,7 +249,7 @@ export class TestLiveComponent implements OnInit {
     //debugger;
     await this.testConfigService
       .getSudentSubmissionState(
-        this._data.testData.questionPaperId,
+        this.assignmentId,
         this.userName
       )
       .subscribe(
@@ -295,7 +297,7 @@ export class TestLiveComponent implements OnInit {
     const questionForClearResponse = new QuestionMarkedForReviewModel();
 
     questionForClearResponse.answerText = null;
-    questionForClearResponse.assignmentId = this._data.testData.questionPaperId;
+    questionForClearResponse.assignmentId = this.assignmentId;
     questionForClearResponse.markForReview = false;
     questionForClearResponse.questionId = this.question.id.questionId;
     questionForClearResponse.sectionId = this.question.sectionId;
@@ -304,7 +306,7 @@ export class TestLiveComponent implements OnInit {
     console.log('questionForClearResponse object=>', questionForClearResponse);
     await this.testConfigService
       .clearQuestionResponse(
-        this._data.testData.questionPaperId,
+        this.testid,
         questionForClearResponse
       )
       .subscribe(
@@ -444,6 +446,11 @@ export class TestLiveComponent implements OnInit {
       .subscribe(
         (res: any) => {
           this.testdata = res;
+          this.timeSeconds = this.convertminutestoseconds(
+            this.testdata.totalDurationInMinutes
+          );
+          this.observableTimer();
+
           console.log('this.testdata==', res);
           if (res.sections !== null) this.GetQuestionPapers();
           //  if (res.isSuccess) {
