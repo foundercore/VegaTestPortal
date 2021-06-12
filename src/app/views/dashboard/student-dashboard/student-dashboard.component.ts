@@ -24,14 +24,7 @@ export class StudentDashboardComponent implements OnInit {
     },
   ];
 
- resultData: any[] = [
-    {name: 'Test 1', totalScore: 100, markObtained: 30,percentage: 30 ,status:'Pass',color:'green'},
-    {name: 'Test 2', totalScore: 100, markObtained: 30,percentage: 30 ,status:'Pass',color:'green'},
-    {name: 'Test 3', totalScore: 100, markObtained: 30,percentage: 30 ,status:'Pass',color:'green'},
-    {name: 'Test 4', totalScore: 100, markObtained: 30,percentage: 30 ,status:'Pass',color:'green'},
-    {name: 'Test 5', totalScore: 100, markObtained: 30,percentage: 30 ,status:'Fail',color:'red'},
-    {name: 'Test 6', totalScore: 100, markObtained: 30,percentage: 30 ,status:'Fail',color:'red'},
-  ];
+ resultData: any[] = [  ];
 
   single: any[] | undefined;
   // options
@@ -46,9 +39,9 @@ export class StudentDashboardComponent implements OnInit {
 
   public pageOptions = PAGE_OPTIONS;
 
-  displayedColumns: string[] = ['name', 'totalScore', 'markObtained','percentage','status','actions'];
+  displayedColumns: string[] = ['testName', 'attempted',  'actions'];
 
-  dataSource = new MatTableDataSource<any>(this.resultData);
+  dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
@@ -61,10 +54,19 @@ export class StudentDashboardComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.testAssignmentService.getMyAssignment().subscribe(resp => console.log(resp));
+    this.testAssignmentService.getMyAssignment().subscribe(resp => {
+      this.resultData = resp
+      this.dataSource = new MatTableDataSource<any>(this.resultData);
+      this.dataSource.paginator = this.paginator;
+
+    });
   }
 
   viewResult(row:any ){
+
+  }
+
+  takeTest(row:any ){
 
   }
 }
