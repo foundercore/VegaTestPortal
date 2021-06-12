@@ -104,7 +104,6 @@ export class QuestionslistComponent implements OnInit {
   }
 
   checkList(event : MatCheckboxChange,row){
-    debugger;
     let isChecked = event.checked;
     if(!isChecked){
      // if(this.selection?.selected?.length > 0){
@@ -121,7 +120,6 @@ export class QuestionslistComponent implements OnInit {
 
 
   getQuestions() {
-    debugger;
     this.questions = [];
     this.questions2 = [];
     let model = new SearchQuestionPaperVM();
