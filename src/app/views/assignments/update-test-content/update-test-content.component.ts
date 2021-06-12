@@ -6,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { TestconfigComponent } from '../popups/test-config/test-config.component';
 import { QuestionslistComponent } from '../popups/questions-list/questions-list.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TestConfigService } from '../services/test-config-service';
 import { ToastrService } from 'ngx-toastr';
 import { TestConfigurationVM } from '../models/test-configuration';
@@ -52,11 +52,13 @@ export class UpdateTestContentComponent implements OnInit {
   ques2 = [];
   questionPaper = {};
   quest: any;
+  status : string;
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private testConfigService: TestConfigService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private router : Router
   ) { }
 
   ngOnInit(): void {
@@ -203,6 +205,13 @@ export class UpdateTestContentComponent implements OnInit {
     }
   }
 
+  viewAssignment(){
+    this.router.navigate([
+      'home/tests/update-test/' + this.testId + '/view-assignment',
+    ]);
+  }
+
+
   isAllSelected() {
     if (this.dataSource) {
       const numSelected = this.selection.selected.length;
@@ -263,6 +272,7 @@ export class UpdateTestContentComponent implements OnInit {
           this.controlparms = res?.controlParam;
           this.modelsections = res?.sections;
           this.totalTestDuration = res?.totalDurationInMinutes;
+          this.status = res?.status;
           var dur = 0;
           res.sections.map((sec) => {
             dur += sec.durationInMinutes;

@@ -18,6 +18,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { EditSectionComponent } from './popups/edit-section/edit-section.component';
 import { RejectstatusComponent } from './popups/reject-status/reject-status.component';
+import { CloneAssignmentComponent } from './clone-assignment/clone-assignment.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { RejectstatusComponent } from './popups/reject-status/reject-status.comp
     ShowResultComponent,
     EditSectionComponent,
     RejectstatusComponent
+    CloneAssignmentComponent
   ],
   imports: [
     CommonModule,

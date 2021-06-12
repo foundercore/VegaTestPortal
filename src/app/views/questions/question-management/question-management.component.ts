@@ -47,6 +47,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   selection = new SelectionModel<QuestionModel>(true, []);
 
   totalNumberOfRecords = 0;
+  actualTotalNumberOfRecords = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
 
@@ -118,6 +119,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
         map((data) => {
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
+          this.actualTotalNumberOfRecords = data.totalRecords;
           return data.questions.map((x) => {
             x.explanation_added = x.explanation?.length != 0 ? 'Yes' : 'No';
             return x;
@@ -187,6 +189,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
       this.isLoadingResults = false;
       this.isRateLimitReached = false;
       this.totalNumberOfRecords = data.totalRecords;
+      this.actualTotalNumberOfRecords = data.totalRecords;
       data.questions.map((x) => {
         x.explanation_added = x.explanation?.length != 0 ? 'Yes' : 'No';
         return x;

@@ -16,6 +16,7 @@ import { finalize } from 'rxjs/operators';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import Swal from 'sweetalert2';
+import { CloneAssignmentComponent } from '../clone-assignment/clone-assignment.component';
 import { TestVM } from '../models/postTestVM';
 import { SearchQuestionPaperVM } from '../models/searchQuestionVM';
 import { Status } from '../models/statusEnum';
@@ -112,7 +113,6 @@ export class TestsComponent implements OnInit {
             // }
           },
           (error) => {
-            debugger;
             if (error.status == 200) {
               this.createdId = error.error.text;
               this.router.navigate(['/home/tests/update-test/' + this.createdId]);
@@ -372,6 +372,51 @@ export class TestsComponent implements OnInit {
     this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
+  cloneTest(assignment: any) {
+    const dialogRef = this.dialog.open(CloneAssignmentComponent, { disableClose: true });
+    dialogRef.afterClosed().subscribe((result) => {
+      debugger;
+      if (result != null && result?.testName && result?.testName !== '') {
+        this.testConfigService
+          .getQuestionPaper(assignment?.questionPaperId)
+          .pipe(finalize(() => { }))
+          .subscribe(
+            (res: any) => {
+               if (res) {
+                 res.name = result?.testName;
+                 this.testConfigService.createQuestionPaper(res).subscribe(
+                   (res: any) => {
+                     //if (res.isSuccess) {
+                     this.toastrService.success('Test cloned successfully');
+                     this.GetAllquestionPapers();
+                     // }
+                   },
+                   (error) => {
+                     if (error.status == 200) {
+                       this.createdId = error.error.text;
+                       this.router.navigate(['/home/tests/update-test/' + this.createdId]);
+                       this.toastrService.success('Test cloned successfully ');
+                       this.GetAllquestionPapers();
+                     } else {
+                       this.toastrService.error(
+                         error?.error?.message ? error?.error?.message : error?.message,
+                         'Error'
+                       );
+                     }
+                   }
+                 );
 
+              }
+            },
+            (error) => {
+              this.toastrService.error(
+                error?.error?.message ? error?.error?.message : error?.message,
+                'Error'
+              );
+            }
+          );
+      }
+    });
+  }
 
 }
