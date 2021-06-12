@@ -1,5 +1,5 @@
 <h1 mat-dialog-title class="title">
-  <span>Tag Student In Batch ({{ data.name }})</span>
+  <span>Tag Student In Assignment</span>
   <button mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
@@ -11,11 +11,10 @@
   <div class="add-student-batch-content">
     <div class="add-student-batch-content-container">
       <div class="example-container">
-        <span>List of All Student which are NOT in the batch selected</span>
+        <span>List of All Student which are NOT in the assignment selected</span>
         <div style="margin: 10px">
           <mat-checkbox
-            [disabled]="!isUserAdmin"
-            (change)="$event ? masterLeftSelectionToggle() : null"
+             (change)="$event ? masterLeftSelectionToggle() : null"
             [checked]="leftSideSelection.hasValue() && isAllLeftSelected()"
             [indeterminate]="
               leftSideSelection.hasValue() && !isAllLeftSelected()
@@ -37,13 +36,11 @@
             class="example-box"
             *ngFor="let item of availableStudentList"
             cdkDrag
-            [cdkDragDisabled]="!isUserAdmin"
-          >
+           >
             <mat-checkbox
-              [disabled]="!isUserAdmin"
-              (change)="$event ? leftSideSelection.toggle(item) : null"
+               (change)="$event ? leftSideSelection.toggle(item) : null"
               [checked]="leftSideSelection.isSelected(item)"
-              >{{ item }}</mat-checkbox
+              >{{ item.displayName }}</mat-checkbox
             >
           </div>
         </div>
@@ -67,10 +64,9 @@
       </div>
 
       <div class="example-container">
-        <span>List of All Student which are in the batch selected</span>
+        <span>List of All Student which are in the assignment selected</span>
         <div style="margin: 10px">
           <mat-checkbox
-            [disabled]="!isUserAdmin"
             (change)="$event ? masterRightSelectionToggle() : null"
             [checked]="rightSideSelection.hasValue() && isAllRightSelected()"
             [indeterminate]="
@@ -93,13 +89,11 @@
             class="example-box"
             *ngFor="let student of taggedStudentList"
             cdkDrag
-            [cdkDragDisabled]="!isUserAdmin"
-          >
+           >
             <mat-checkbox
-              [disabled]="!isUserAdmin"
-              (change)="$event ? rightSideSelection.toggle(student) : null"
+               (change)="$event ? rightSideSelection.toggle(student) : null"
               [checked]="rightSideSelection.isSelected(student)"
-              >{{ student }}</mat-checkbox
+              >{{ student.displayName }}</mat-checkbox
             >
           </div>
         </div>

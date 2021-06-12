@@ -1,5 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { formatDate } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -27,6 +28,8 @@ export class AddStudentsComponent implements OnInit {
 
   isUserAdmin = false;
 
+  locale = 'en-US';
+
   leftSideSelection = new SelectionModel<string>(true, []);
   rightSideSelection = new SelectionModel<string>(true, []);
 
@@ -42,13 +45,17 @@ export class AddStudentsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.taggedStudentList = this.data.data.assignedToStudent == null? []:  this.data.data.assignedToStudent;
+    let assignedStudent= this.data.data.assignedToStudent == null? []:  this.data.data.assignedToStudent;
 
     this.userService.getUserList().subscribe((resp) => {
       this.availableStudentList = resp
         .filter((x) => x.roles.includes('ROLE_STUDENT'))
-        .map((x) => x.email)
-        .filter((x) => !this.taggedStudentList.includes(x));
+        .filter((x) => !assignedStudent.includes(x.userName));
+
+      this.taggedStudentList = resp
+        .filter((x) => x.roles.includes('ROLE_STUDENT'))
+        .filter((x) => assignedStudent.includes(x.userName));
+
     });
 
 
@@ -66,12 +73,12 @@ export class AddStudentsComponent implements OnInit {
     const assignmentObj : AssignmentRequest = {
       description : this.data.data.description,
       passcode: this.data.data.passcode.value,
-      releaseDate: this.data.data.releaseDate ,
+      releaseDate: formatDate(this.data.data.releaseDate, 'yyyy-MM-dd hh:mm:ss', this.locale) ,
       testId: this.data.testId,
-      validFrom:this.data.data.validFrom ,
-      validTo: this.data.data.validTo ,
+      validFrom:formatDate(this.data.data.validFrom , 'yyyy-MM-dd hh:mm:ss', this.locale),
+      validTo: formatDate(this.data.data.validTo, 'yyyy-MM-dd hh:mm:ss', this.locale) ,
       assignedToBatch:this.data.data.assignedToBatch,
-      assignedToStudent:[]
+      assignedToStudent:this.taggedStudentList.map(x => x.userName)
      }
     this.testAssignmentService.updateAssignment(this.data.data.assignmentId, assignmentObj).subscribe(
       (resp) => {
