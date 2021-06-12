@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseService } from '../base.service';
 import { Observable } from 'rxjs';
@@ -20,7 +20,7 @@ export class TestAssignmentServiceService extends BaseService {
 
   addAssignment(assignmentModel:AssignmentRequest): Observable<any> {
     const url = `${this.BASE_SERVICE_URL}/api/v1/test/assignment/create`;
-    return this.http.post<any>(url,assignmentModel);
+    return this.http.post(url, assignmentModel, { responseType: 'text' });
   }
 
   updateAssignment(assignmentId:string, assignmentModel:AssignmentRequest): Observable<any> {
