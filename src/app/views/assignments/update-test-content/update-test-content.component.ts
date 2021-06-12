@@ -49,7 +49,8 @@ export class UpdateTestContentComponent implements OnInit {
   searchText: string = '';
   ques2 = [];
   questionPaper = {};
-  quest : any;
+  quest: any;
+  status: string = '';
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
@@ -270,6 +271,7 @@ export class UpdateTestContentComponent implements OnInit {
           this.controlparms = res?.controlParam;
           this.modelsections = res?.sections;
           this.totalTestDuration = res?.totalDurationInMinutes;
+          this.status = res?.status;
           var dur = 0;
           res.sections.map((sec) => {
             dur += sec.durationInMinutes;
