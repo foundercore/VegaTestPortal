@@ -1,3 +1,4 @@
+import { AddStudentsComponent } from './../add-students/add-students.component';
 import { TestAssignmentServiceService } from './../../../services/assignment/test-assignment-service.service';
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -111,6 +112,9 @@ export class ViewAssignmentComponent implements OnInit {
       case 'back':
           this.back();
           break;
+      case 'add_student':
+          this.addStudent(row);
+          break;
       default:
         break;
     }
@@ -133,6 +137,15 @@ export class ViewAssignmentComponent implements OnInit {
     });
   }
 
+  addStudent(row: any){
+    row.isView = false;
+    const dialogRef = this.dialog.open(AddStudentsComponent, { disableClose: true, data: {
+        data:row,
+        testId:this.testId   }});
+    dialogRef.afterClosed().subscribe((result) => {
+      this.refreshAssignmentList();
+    });
+  }
   delete(assignment: any){
     const dialogRef = this.dialog.open(DialogConformationComponent, { disableClose: true});
     dialogRef.afterClosed().subscribe((result) => {

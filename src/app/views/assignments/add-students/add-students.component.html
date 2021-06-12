@@ -1,0 +1,114 @@
+<h1 mat-dialog-title class="title">
+  <span>Tag Student In Batch ({{ data.name }})</span>
+  <button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h1>
+<div mat-dialog-content>
+  <div style="text-align: center; margin-bottom: 10px; color: red">
+    Drag and Drop between list
+  </div>
+  <div class="add-student-batch-content">
+    <div class="add-student-batch-content-container">
+      <div class="example-container">
+        <span>List of All Student which are NOT in the batch selected</span>
+        <div style="margin: 10px">
+          <mat-checkbox
+            [disabled]="!isUserAdmin"
+            (change)="$event ? masterLeftSelectionToggle() : null"
+            [checked]="leftSideSelection.hasValue() && isAllLeftSelected()"
+            [indeterminate]="
+              leftSideSelection.hasValue() && !isAllLeftSelected()
+            "
+            [aria-label]="leftCheckboxLabel()"
+          >
+          </mat-checkbox>
+          Select all Student
+        </div>
+        <div
+          cdkDropList
+          #todoList="cdkDropList"
+          [cdkDropListData]="availableStudentList"
+          [cdkDropListConnectedTo]="[doneList]"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <div
+            class="example-box"
+            *ngFor="let item of availableStudentList"
+            cdkDrag
+            [cdkDragDisabled]="!isUserAdmin"
+          >
+            <mat-checkbox
+              [disabled]="!isUserAdmin"
+              (change)="$event ? leftSideSelection.toggle(item) : null"
+              [checked]="leftSideSelection.isSelected(item)"
+              >{{ item }}</mat-checkbox
+            >
+          </div>
+        </div>
+      </div>
+
+      <div style="align-self: center; margin: 0px 20px">
+        <div>
+          <i
+            class="fas fa-long-arrow-alt-right fa-5x"
+            style="cursor: pointer"
+            (click)="moveItemRightSide()"
+          ></i>
+        </div>
+        <div>
+          <i
+            class="fas fa-long-arrow-alt-left fa-5x"
+            style="cursor: pointer"
+            (click)="moveItemLeftSide()"
+          ></i>
+        </div>
+      </div>
+
+      <div class="example-container">
+        <span>List of All Student which are in the batch selected</span>
+        <div style="margin: 10px">
+          <mat-checkbox
+            [disabled]="!isUserAdmin"
+            (change)="$event ? masterRightSelectionToggle() : null"
+            [checked]="rightSideSelection.hasValue() && isAllRightSelected()"
+            [indeterminate]="
+              rightSideSelection.hasValue() && !isAllRightSelected()
+            "
+            [aria-label]="rightCheckboxLabel()"
+          >
+          </mat-checkbox>
+          Select all Student
+        </div>
+        <div
+          cdkDropList
+          #doneList="cdkDropList"
+          [cdkDropListData]="taggedStudentList"
+          [cdkDropListConnectedTo]="[todoList]"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <div
+            class="example-box"
+            *ngFor="let student of taggedStudentList"
+            cdkDrag
+            [cdkDragDisabled]="!isUserAdmin"
+          >
+            <mat-checkbox
+              [disabled]="!isUserAdmin"
+              (change)="$event ? rightSideSelection.toggle(student) : null"
+              [checked]="rightSideSelection.isSelected(student)"
+              >{{ student }}</mat-checkbox
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-grp-cls">
+      <button mat-raised-button class="save-btn-cls" (click)="addStudent()">
+        {{ "COMMON_TAG.SAVE" | translate }}
+      </button>
+    </div>
+  </div>
+</div>
