@@ -17,6 +17,7 @@ import { ShowResultComponent } from './show-result/show-result.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { EditSectionComponent } from './popups/edit-section/edit-section.component';
+import { CloneAssignmentComponent } from './clone-assignment/clone-assignment.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { EditSectionComponent } from './popups/edit-section/edit-section.compone
     QuestionslistComponent,
     TestLiveComponent,
     ShowResultComponent,
-    EditSectionComponent
+    EditSectionComponent,
+    CloneAssignmentComponent
   ],
   imports: [
     CommonModule,
