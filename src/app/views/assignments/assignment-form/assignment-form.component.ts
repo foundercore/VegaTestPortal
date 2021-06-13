@@ -1,5 +1,5 @@
 import { AssignmentRequest } from './../../../models/test-assignment/test-assignment-request';
-import { Component, OnInit, ChangeDetectionStrategy, Inject, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Inject, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,8 +20,12 @@ import { formatDate } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssignmentFormComponent implements  OnInit,AfterViewInit {
+
   batchList: StudentBatchModel[] = [];
-   locale = 'en-US';
+
+  locale = 'en-US';
+
+  @ViewChild('aForm') aForm: ElementRef;
 
   assignmentFormGroup ;
 
@@ -39,12 +43,12 @@ export class AssignmentFormComponent implements  OnInit,AfterViewInit {
 
   }
   ngAfterViewInit(): void {
-
+    const ele = this.aForm.nativeElement['validFrom'];
+    ele.focus();
   }
 
   ngOnInit(): void {
     if (this.data.data) {
-
       this.assignmentFormGroup = new FormGroup(
         {
           passcode: new FormControl(this.data.data.passcode),
