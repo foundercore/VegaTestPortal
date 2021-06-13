@@ -42,7 +42,6 @@ export class TestsComponent implements OnInit {
     'select',
     'testName',
     'status',
-    'minimumDurationInMinutes',
     'totalDurationInMinutes',
     'actions',
   ];

@@ -103,3 +103,8 @@ table {
 .pagination__box {
    position: relative;
 }
+
+
+.mat-column-actions {
+    flex: 0 0 10%;
+}
