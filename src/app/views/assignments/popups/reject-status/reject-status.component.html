@@ -1,0 +1,26 @@
+<div class="card border-0">
+    <div class="card-header d-flex bg-transparent p-0 border-0">
+        <h4>Reject Status</h4>
+        <button class="btn close__btn" (click)="close()"><span class="position-center">&times;</span></button>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="rejectForm" autocomplete="off">
+            <label for="name" class="label">Rejection Reason</label>
+            <mat-form-field appearance="outline" style="width: 100%;">
+                <textarea matInput placeholder="" rows="2" formControlName="reason"> </textarea>
+                <mat-error *ngIf="hasError('reason', 'required')">Rejection reason is required</mat-error>
+              </mat-form-field>
+
+            <div class="text-center pt-4">  
+                <button mat-raised-button class="mat-btn save-btn mx-1" (click)="submit()">
+                    <mat-icon>save</mat-icon>
+                    Submit
+                </button>
+                <button mat-raised-button class="mat-btn reset mx-1" (click)="Reset()">
+                    <mat-icon>cached</mat-icon>
+                    Reset
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

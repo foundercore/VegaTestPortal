@@ -61,6 +61,7 @@ import { QuestionMigrateUploadDialogComponent } from './views/questions/question
 import { DialogConformationComponent } from './shared/components/dialog-conformation/dialog-conformation.component';
 import { AssignmentFormComponent } from './views/assignments/assignment-form/assignment-form.component';
 import { ViewAssignmentComponent } from './views/assignments/view-assignment/view-assignment.component';
+import { CountdownModule } from 'ngx-countdown';
 import { AddStudentsComponent } from './views/assignments/add-students/add-students.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -133,7 +134,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
           useFactory: HttpLoaderFactory,
           deps: [HttpClient]
       }
-  })
+  }),
+  CountdownModule
   ],
   providers: [
     AuthGuard,

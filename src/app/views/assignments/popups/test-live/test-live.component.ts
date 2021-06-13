@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import { QuestionMarkedForReviewModel } from '../../models/questionMarkedForReview';
 import { TestConfigService } from '../../services/test-config-service';
 import { CalculatorComponent } from '../calculator/calculator.component';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-test-live',
@@ -43,7 +44,10 @@ export class TestLiveComponent implements OnInit {
   compact = false;
   invertX = false;
   invertY = false;
+  CountDownTimerValue: string = '--:--:--';
+  timerSource;
   shown: 'native' | 'hover' | 'always' = 'native';
+  assignmentId: string = "";
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<TestLiveComponent>,
@@ -62,19 +66,57 @@ export class TestLiveComponent implements OnInit {
       this.userType = data?.user?.authorities[0]?.authority;
       console.log('data', data);
     });
-    this.testid = this._data.testData.questionPaperId;
-    this.timeSeconds = this.convertminutestoseconds(
-      this._data?.testData?.totalDurationInMinutes
-    );
+    if(this._data.testData.questionPaperId != null && this._data.testData.questionPaperId != undefined){
+      this.testid = this._data.testData.questionPaperId;
+    }
+    else{
+      this.testid = this._data.testData.testId;
+      this.assignmentId = this._data.testData.assignmentId;
+    }
     this.getQuestionPaperbyId();
     this.getUserSubmissionData();
+  }
+
+
+  observableTimer() {
+    const source = timer(1000, 1000);
+    this.timerSource = source.subscribe((val) => {
+      //console.log(val, '-');
+      var leftSecs = this.timeSeconds - val;
+      if (leftSecs > 0)
+        this.CountDownTimerValue = new Date(leftSecs * 1000)
+          .toISOString()
+          .substr(11, 8);
+      else if (leftSecs == 0) {
+        this.timerSource.unsubscribe();
+        Swal.fire({
+          icon: 'success',
+          title: 'Test Duration Completed',
+        }).finally(() => {
+          this.testConfigService
+            .saveandExit(this.testid)
+            .subscribe(
+              (res: any) => {
+                this.toastrService.success('Test submitted successfully');
+                this.close();
+                this.router.navigate([
+                  '/home/tests/show-result/' +
+                  this.testid,
+                ]);
+              },
+              (err) =>
+                console.log('Error while making the question for save', err)
+            );
+        });
+      }
+    });
   }
 
   async setQuestionAsMarkerdForReview() {
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
     quesForMarkedAsReview.answerText = null;
     quesForMarkedAsReview.markForReview = true;
-    quesForMarkedAsReview.assignmentId = this._data.testData.questionPaperId;
+    quesForMarkedAsReview.assignmentId = this.assignmentId;
     quesForMarkedAsReview.questionId = this.question.id.questionId;
     quesForMarkedAsReview.sectionId = this.question.sectionId;
     quesForMarkedAsReview.selectedOptions = <any>this.getSelectedOption();
@@ -105,7 +147,7 @@ export class TestLiveComponent implements OnInit {
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
     quesForMarkedAsReview.answerText = null;
     quesForMarkedAsReview.markForReview = false;
-    quesForMarkedAsReview.assignmentId = this._data.testData.questionPaperId;
+    quesForMarkedAsReview.assignmentId = this.assignmentId;
     quesForMarkedAsReview.questionId = this.question.id.questionId;
     quesForMarkedAsReview.sectionId = this.question.sectionId;
     quesForMarkedAsReview.selectedOptions = <any>this.getSelectedOption();
@@ -125,7 +167,21 @@ export class TestLiveComponent implements OnInit {
           this.getUserSubmissionData();
           this.goToNextQuestion();
         },
-        (err) => console.log('Error while making the question for save', err)
+        (err) => {
+          if (
+            String(err.error.apierror.message).includes(
+              'already submitted by student'
+            )
+          )
+            Swal.fire({
+              icon: 'error',
+              title: 'Error while saving question !!!',
+              text: 'This test is already submitted. You cant save the question after submitting test',
+            });
+          else
+            this.toastrService.error('Error - ' + err.error.apierror.message);
+          console.log('Error while making the question for save', err);
+        }
       );
   }
   getSelectedOption() {
@@ -173,15 +229,14 @@ export class TestLiveComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.testConfigService
-          .saveandExit(this._data.testData.questionPaperId)
+          .saveandExit(this.assignmentId)
           .subscribe(
             (res: any) => {
-              this.toastrService.success('Test submitted successfully');
-              this.close();
               this.router.navigate([
                 '/home/tests/show-result/' +
-                  this._data.testData.questionPaperId,
+                this.assignmentId,
               ]);
+              this.toastrService.success('Test submitted successfully');
             },
             (err) =>
               console.log('Error while making the question for save', err)
@@ -191,10 +246,10 @@ export class TestLiveComponent implements OnInit {
   }
 
   async getUserSubmissionData() {
-    debugger;
+    //debugger;
     await this.testConfigService
       .getSudentSubmissionState(
-        this._data.testData.questionPaperId,
+        this.assignmentId,
         this.userName
       )
       .subscribe(
@@ -242,7 +297,7 @@ export class TestLiveComponent implements OnInit {
     const questionForClearResponse = new QuestionMarkedForReviewModel();
 
     questionForClearResponse.answerText = null;
-    questionForClearResponse.assignmentId = this._data.testData.questionPaperId;
+    questionForClearResponse.assignmentId = this.assignmentId;
     questionForClearResponse.markForReview = false;
     questionForClearResponse.questionId = this.question.id.questionId;
     questionForClearResponse.sectionId = this.question.sectionId;
@@ -251,7 +306,7 @@ export class TestLiveComponent implements OnInit {
     console.log('questionForClearResponse object=>', questionForClearResponse);
     await this.testConfigService
       .clearQuestionResponse(
-        this._data.testData.questionPaperId,
+        this.testid,
         questionForClearResponse
       )
       .subscribe(
@@ -280,16 +335,16 @@ export class TestLiveComponent implements OnInit {
 
   setCurrentQuestionSelectedOption() {
     const fetchedSubmissionState = this.submissionData;
-    console.log('Inside the setting current selected option function');
-    console.log('we are in the section id =>', this.currentSectionId);
+    //console.log('Inside the setting current selected option function');
+    //console.log('we are in the section id =>', this.currentSectionId);
     fetchedSubmissionState?.sections.map((section) => {
-      console.log('Section inside fetched state =>', section.sectionId);
+      //console.log('Section inside fetched state =>', section.sectionId);
       //section match
       if (section.sectionId === this.currentSectionId) {
         section.answers.map((ans) => {
-          console.log('answers in the section=>', ans);
-          console.log('ans.questionId in the section=>', ans.questionId);
-          console.log('current question=>', this.question?.id.questionId);
+          //console.log('answers in the section=>', ans);
+          //console.log('ans.questionId in the section=>', ans.questionId);
+          //console.log('current question=>', this.question?.id.questionId);
           //current question match
           if (ans?.questionId === this.question?.id.questionId) {
             // try {
@@ -301,10 +356,10 @@ export class TestLiveComponent implements OnInit {
             //   this.setOptionSelectedAfterFetchingData(0);
             // }
             var selectedOptions = ans.selectedOptions;
-            console.log(
-              'Fethched selectedOptions for the current question =>',
-              selectedOptions
-            );
+            // console.log(
+            //   'Fethched selectedOptions for the current question =>',
+            //   selectedOptions
+            // );
             this.optionsSelected = [];
             if (selectedOptions !== null) {
               //ans?.selectOptions is an array
@@ -391,6 +446,11 @@ export class TestLiveComponent implements OnInit {
       .subscribe(
         (res: any) => {
           this.testdata = res;
+          this.timeSeconds = this.convertminutestoseconds(
+            this.testdata.totalDurationInMinutes
+          );
+          this.observableTimer();
+
           console.log('this.testdata==', res);
           if (res.sections !== null) this.GetQuestionPapers();
           //  if (res.isSuccess) {
@@ -503,17 +563,17 @@ export class TestLiveComponent implements OnInit {
   }
 
   setColoursForQuestionNavigationButtons() {
-    console.log(' setColoursForQuestionNavigationButtons called');
-    console.log(
-      ' this.sectionsWithPapers =>',
-      this.sectionsWithPapers,
-      'this.currentSectionSubmittedData =>',
-      this.currentSectionSubmittedData,
-      ' submissionData=>',
-      this.submissionData,
-      ' currentSectionId=>',
-      this.currentSectionId
-    );
+    // console.log(' setColoursForQuestionNavigationButtons called');
+    // console.log(
+    //   ' this.sectionsWithPapers =>',
+    //   this.sectionsWithPapers,
+    //   'this.currentSectionSubmittedData =>',
+    //   this.currentSectionSubmittedData,
+    //   ' submissionData=>',
+    //   this.submissionData,
+    //   ' currentSectionId=>',
+    //   this.currentSectionId
+    // );
     var colorAppliedIndexesArray = [];
     //prepare color array with all false
     this.sectionsWithPapers.map((sec, i) => {
@@ -540,10 +600,10 @@ export class TestLiveComponent implements OnInit {
               //if its current question then green else
               if (ques.id.questionId === this.question?.id.questionId) {
                 //the ques is current question
-                console.log(
-                  'current green color question is =>',
-                  this.question?.name
-                );
+                // console.log(
+                //   'current green color question is =>',
+                //   this.question?.name
+                // );
                 if (!colorAppliedIndexesArray[i]) {
                   //set color green
                   this.setButtonColor(i, 'green');
@@ -595,10 +655,10 @@ export class TestLiveComponent implements OnInit {
             //grey if not current ques
             if (ques.id.questionId === this.question?.id.questionId) {
               //the ques is current question
-              console.log(
-                'current green color question is =>',
-                this.question?.name
-              );
+              // console.log(
+              //   'current green color question is =>',
+              //   this.question?.name
+              // );
               if (!colorAppliedIndexesArray[i]) {
                 //set color green
                 this.setButtonColor(i, 'green');
@@ -629,10 +689,10 @@ export class TestLiveComponent implements OnInit {
         //grey if not current ques
         if (ques.id.questionId === this.question?.id.questionId) {
           //the ques is current question
-          console.log(
-            'current green color question is =>',
-            this.question?.name
-          );
+          // console.log(
+          //   'current green color question is =>',
+          //   this.question?.name
+          // );
           if (!colorAppliedIndexesArray[i]) {
             //set color green
             this.setButtonColor(i, 'green');
@@ -722,17 +782,18 @@ export class TestLiveComponent implements OnInit {
 
   close() {
     this.dialogRef.close();
+    this.timerSource.unsubscribe();
   }
 
   setButtonColor(buttonNumber?, color?) {
-    console.log(
-      'SetButton color is called with  sectionsWithPapers=>',
-      this.sectionsWithPapers,
-      ' index=>',
-      buttonNumber,
-      ' color=>',
-      color
-    );
+    // console.log(
+    //   'SetButton color is called with  sectionsWithPapers=>',
+    //   this.sectionsWithPapers,
+    //   ' index=>',
+    //   buttonNumber,
+    //   ' color=>',
+    //   color
+    // );
 
     this.sectionsWithPapers.map((sec, i) => {
       if (i === buttonNumber) {

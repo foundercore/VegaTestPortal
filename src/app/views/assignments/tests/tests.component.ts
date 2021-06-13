@@ -19,6 +19,7 @@ import Swal from 'sweetalert2';
 import { CloneAssignmentComponent } from '../clone-assignment/clone-assignment.component';
 import { TestVM } from '../models/postTestVM';
 import { SearchQuestionPaperVM } from '../models/searchQuestionVM';
+import { Status } from '../models/statusEnum';
 import { AssessmentEditorComponent } from '../popups/assessment-editor/assessment-editor.component';
 import { TestLiveComponent } from '../popups/test-live/test-live.component';
 import { TestConfigService } from '../services/test-config-service';
@@ -40,6 +41,7 @@ export class TestsComponent implements OnInit {
   displayedColumns: string[] = [
     'select',
     'testName',
+    'status',
     'minimumDurationInMinutes',
     'totalDurationInMinutes',
     'actions',
@@ -101,7 +103,7 @@ export class TestsComponent implements OnInit {
         model.minimumDurationInMinutes = +result?.duration;
         model.name = result?.testName;
         model.instructions = result?.description;
-        model.status = "DRAFT";
+        model.status = Status.DRAFT;
         this.testConfigService.createQuestionPaper(model).subscribe(
           (res: any) => {
             //if (res.isSuccess) {
@@ -318,52 +320,6 @@ export class TestsComponent implements OnInit {
         });
       }
     });
-
-    // this.testConfigService
-    //   .getSudentSubmissionState(
-    //     element.questionPaperId,
-    //     this.userName
-    //   )
-    //   .subscribe(
-    //     (res: any) => {
-    //       if(res.submitted){
-    //         this.router.navigate(['/home/tests/show-result/' +  element.questionPaperId]);
-    //       }
-    //       else{
-    //         Swal.fire({
-    //           title: 'Want to start test?',
-    //           text: element.instructions,
-    //           icon: 'warning',
-    //           showCancelButton: true,
-    //           confirmButtonColor: '#277da1',
-    //           cancelButtonColor: '#d33',
-    //           cancelButtonText: 'Close',
-    //           confirmButtonText: 'Start Test'
-    //         }).then((result) => {
-    //           if (result.isConfirmed) {
-    //             const dialogRef = this.dialog.open(TestLiveComponent, {
-    //               maxWidth: '1700px',
-    //               width: '100%',
-    //               minHeight: '100vh',
-    //               height: 'auto',
-    //               hasBackdrop: false,
-    //               backdropClass: 'dialog-backdrop',
-    //               data : {testData : element}
-    //             });
-    //             dialogRef.afterClosed().subscribe(result => {
-    //               this.GetAllquestionPapers();
-    //             });
-    //           }
-    //         })
-    //       }
-    //     },
-    //     (error) => {
-    //       this.toastrService.error(
-    //         error?.error?.message ? error?.error?.message : error?.message,
-    //         'Error'
-    //       );
-    //     }
-    //   );
   }
 
   applyFilter() {
