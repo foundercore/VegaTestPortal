@@ -22,7 +22,8 @@
               alt=""
             />
             <h4 class="mb-0 ml-5">
-              <countdown [config]="{ leftTime: timeSeconds }"></countdown>
+              <!-- <countdown [config]="{ leftTime: timeSeconds }"></countdown> -->
+              {{ CountDownTimerValue }}
             </h4>
           </div>
         </div>
@@ -72,7 +73,11 @@
                   [innerHTML]="currentQuestionIndex + 1 + question?.name"
                 ></h3> -->
                     <div *ngIf="question?.name">
-                      <p class="lead" style="font-weight: 500;" [innerHTML]="question?.name"></p>
+                      <p
+                        class="lead"
+                        style="font-weight: 500"
+                        [innerHTML]="question?.name"
+                      ></p>
                       <p [innerHTML]="question?.explanation"></p>
                       <p [innerHTML]="question?.description"></p>
                       <ul>
@@ -169,7 +174,7 @@
                     [compact]="compact"
                     [shown]="shown"
                     [disabled]="disabled"
-                  > 
+                  >
                     <ul class="list-unstyled">
                       <!-- <li *ngFor="let ques of sectionsWithPapers; let i=index">
                                   <button class=""  mat-mini-fab (click)="getQuestion(ques)" [ngStyle]="{

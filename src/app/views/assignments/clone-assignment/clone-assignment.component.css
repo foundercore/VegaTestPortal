@@ -1,0 +1,10 @@
+.save-btn-cls {
+  background: rgb(106, 106, 250);
+  color: white;
+  margin: 20px;
+}
+
+.reset-btn-cls {
+  background: red;
+  color: white;
+}

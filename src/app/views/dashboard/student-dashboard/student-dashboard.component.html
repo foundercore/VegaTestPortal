@@ -1,5 +1,5 @@
 <div class="student-dash-main">
-  <h2 style="width: 100%;">Student DashBoard</h2>
+  <!-- <h2 style="width: 100%;">Student DashBoard</h2>
   <mat-card class="student-dash-card">
     <mat-card-header>
       <mat-card-title>Total Test Taken</mat-card-title>
@@ -9,7 +9,7 @@
         [gradient]="gradient">
       </ngx-charts-advanced-pie-chart>
     </mat-card-content>
-  </mat-card>
+  </mat-card> -->
 
   <div class="student-dash-list-grid">
     <div class="student-result-container mat-elevation-z8">
@@ -24,36 +24,23 @@
 
         <table mat-table [dataSource]="dataSource" class="example-table">
 
-          <ng-container matColumnDef="name">
+          <ng-container matColumnDef="testName">
             <th mat-header-cell *matHeaderCellDef>Test Name</th>
-            <td mat-cell *matCellDef="let row">{{row.name}}</td>
+            <td mat-cell *matCellDef="let row">{{row.testName}}</td>
           </ng-container>
 
-          <ng-container matColumnDef="totalScore">
-            <th mat-header-cell *matHeaderCellDef>Total Score</th>
-            <td mat-cell *matCellDef="let row">{{row.totalScore}}</td>
+          <ng-container matColumnDef="attempted">
+            <th mat-header-cell *matHeaderCellDef>Attempted</th>
+            <td mat-cell *matCellDef="let row">{{row.attempted}}</td>
           </ng-container>
 
-          <ng-container matColumnDef="markObtained">
-            <th mat-header-cell *matHeaderCellDef >Mark Obtained</th>
-            <td mat-cell *matCellDef="let row">{{row.markObtained}}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="percentage">
-            <th mat-header-cell *matHeaderCellDef>Percentage</th>
-            <td mat-cell *matCellDef="let row">{{row.percentage}}%</td>
-          </ng-container>
-
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let row" [style.color]="row.color">{{row.status}}</td>
-          </ng-container>
 
            <!-- actions Column -->
            <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let row">
-              <span class="action-btn" matTooltip="View Result" (click)="viewResult(row)"><mat-icon>remove_red_eye</mat-icon></span>
+              <span *ngIf="row.attempted" class="action-btn" matTooltip="View Result" (click)="viewResult(row)"><mat-icon>assignment</mat-icon></span>
+              <span *ngIf="!row.attempted" class="action-btn" matTooltip="Take Test" (click)="startTest(row)"><mat-icon>play_circle_filled</mat-icon></span>
             </td>
           </ng-container>
 

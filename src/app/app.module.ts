@@ -59,6 +59,10 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClient} from '@angular/common/http';
 import { QuestionMigrateUploadDialogComponent } from './views/questions/question-migrate-upload-dialog/question-migrate-upload-dialog.component';
 import { DialogConformationComponent } from './shared/components/dialog-conformation/dialog-conformation.component';
+import { AssignmentFormComponent } from './views/assignments/assignment-form/assignment-form.component';
+import { ViewAssignmentComponent } from './views/assignments/view-assignment/view-assignment.component';
+import { CountdownModule } from 'ngx-countdown';
+import { AddStudentsComponent } from './views/assignments/add-students/add-students.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -97,7 +101,10 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     SingleLayerGaugeComponent,
     BulkUploadBatchStudentsComponent,
     QuestionMigrateUploadDialogComponent,
-    DialogConformationComponent
+    DialogConformationComponent,
+    ViewAssignmentComponent,
+    AssignmentFormComponent,
+    AddStudentsComponent
   ],
 
   imports: [
@@ -127,7 +134,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
           useFactory: HttpLoaderFactory,
           deps: [HttpClient]
       }
-  })
+  }),
+  CountdownModule
   ],
   providers: [
     AuthGuard,

@@ -21,6 +21,9 @@
   background-color: rgb(0, 153, 255);
   color: #fff;
 }
+.sectionDuration__p {
+  margin-right: 8rem;
+}
 table {
   width: 100%;
   border-collapse: collapse;
@@ -64,7 +67,7 @@ tr.mat-header-row {
 
 /* Structure */
 
-.example-table-container{
+.example-table-container {
   position: relative;
   max-height: 400px;
   overflow: auto;

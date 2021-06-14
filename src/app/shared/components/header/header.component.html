@@ -10,7 +10,7 @@
       <li *ngIf="authorizationService.isAdminAndStaff">
         <a [routerLink]="['./questionmanagement']">Question</a>
       </li>
-      <li>
+      <li *ngIf="authorizationService.isAdminAndStaff">
         <a [routerLink]="['./tests']">Tests</a>
       </li>
       <li class="navbar-dropdown" *ngIf="authorizationService.isAdminAndStaff">
@@ -22,9 +22,9 @@
           <a [routerLink]="['./batch']">Batch</a>
         </div>
       </li>
-      <li *ngIf="authorizationService.isAdminAndStaff">
+      <!-- <li *ngIf="authorizationService.isAdminAndStaff">
         <a [routerLink]="['./reports']">Reports</a>
-      </li>
+      </li> -->
     </ul>
   </div>
   <div style="top: 15px; color: white">

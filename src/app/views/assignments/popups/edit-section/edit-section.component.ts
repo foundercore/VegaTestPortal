@@ -23,6 +23,7 @@ import { CalculatorComponent } from '../calculator/calculator.component';
 import { TestLiveComponent } from '../test-live/test-live.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SearchQuestionPaperVM } from '../../models/searchQuestionVM';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'app-edit-section',
@@ -35,9 +36,36 @@ export class EditSectionComponent implements OnInit {
   sectionDuration: 0;
   sectionInstructions: '';
   sectionDifficultyLevel: '';
-
+  showSpinner: boolean = false;
   public sectionForm: FormGroup;
-
+  descriptionEditorconfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    minHeight: '5rem',
+    maxHeight: '5rem',
+    placeholder: 'Enter Instruction here...',
+    translate: 'no',
+    sanitize: false,
+    enableToolbar: true,
+    showToolbar: true,
+    toolbarPosition: 'top',
+    defaultFontName: 'Arial',
+    customClasses: [
+      {
+        name: 'quote',
+        class: 'quote',
+      },
+      {
+        name: 'redText',
+        class: 'redText'
+      },
+      {
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
+      },
+    ]
+  };
   constructor(
     @Inject(MAT_DIALOG_DATA) public editSection_data: any,
     public dialogRef: MatDialogRef<EditSectionComponent>,
@@ -81,13 +109,14 @@ export class EditSectionComponent implements OnInit {
 
   Update_SectionWithDurationCheck() {
     let model = new SearchQuestionPaperVM();
+    this.showSpinner = true;
     this.testConfigService
       .getAllQuestionPaper(model)
       .pipe(finalize(() => {}))
       .subscribe(
         (res: any) => {
           //if (res.isSuccess) {
-
+          this.showSpinner = false;
           console.log('this.listtest ==', res);
           if (res.tests !== null) {
             res.tests?.map((test) => {
@@ -130,6 +159,7 @@ export class EditSectionComponent implements OnInit {
             error?.error?.message ? error?.error?.message : error?.message,
             'Error'
           );
+          this.showSpinner = false;
         }
       );
     // this.getQuestionPaperbyId();

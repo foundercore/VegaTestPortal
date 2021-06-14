@@ -7,10 +7,8 @@
   </div>
   <div class="card-body">
     <form [formGroup]="sectionForm" autocomplete="off">
-      <div class="row">
-        <div class="col">
-          <label for="name" class="label mt-4">Section Name</label>
-          <mat-form-field appearance="outline">
+          <label for="name" class="label">Section Name</label>
+          <mat-form-field appearance="outline" style="width: 100%">
             <input
               matInput
               placeholder="Section Name"
@@ -20,10 +18,10 @@
               >Section Name is required</mat-error
             >
           </mat-form-field>
-        </div>
-        <div class="col">
-          <label for="name" class="label mt-4">Duration (Mins)</label>
-          <mat-form-field appearance="outline">
+        
+       
+          <label for="name" class="label">Duration (Mins)</label>
+          <mat-form-field appearance="outline" style="width: 100%">
             <input
               type="number"
               matInput
@@ -34,9 +32,9 @@
               >Duration is required</mat-error
             >
           </mat-form-field>
-        </div>
-        <div class="col">
-          <label for="name" class="label mt-4">Difficulty Level</label>
+       
+       
+          <label for="name" class="label">Difficulty Level</label>
           <mat-form-field appearance="outline" style="width: 100%">
             <input
               type="text"
@@ -48,23 +46,23 @@
               >Difficulty Level is required</mat-error
             > -->
           </mat-form-field>
-        </div>
-      </div>
+      
+    
 
-      <div class="row">
-        <label for="name" class="label mt-4">Instructions</label>
-        <mat-form-field appearance="outline" style="width: 100%">
+    
+        <label for="name" class="label">Instructions</label>
+        <angular-editor id="instructions" formControlName="instructions" [config]="descriptionEditorconfig">
+        </angular-editor>
+        <!-- <mat-form-field appearance="outline" style="width: 100%">
           <input
             type="text"
             matInput
             placeholder="Instructions"
             formControlName="instructions"
           />
-          <!-- <mat-error *ngIf="hasError('instructions', 'required')"
-            >Instructions is required</mat-error
-          > -->
-        </mat-form-field>
-      </div>
+       
+        </mat-form-field> -->
+     
 
       <div class="text-center pt-4">
         <button
@@ -75,10 +73,13 @@
           <mat-icon>save</mat-icon>
           Save
         </button>
+
         <button mat-raised-button class="mat-btn reset mx-1" (click)="Reset()">
           <mat-icon>cached</mat-icon>
           Reset
         </button>
+        <mat-spinner *ngIf="showSpinner" color="primary" [diameter]="30">
+        </mat-spinner>
       </div>
     </form>
   </div>
