@@ -8,7 +8,7 @@
       </div>
       <div class="col-md-6 right__col d-flex">
         <button class="auto-btn m-1" mat-raised-button (click)="calculate()">
-          C
+          <mat-icon>calculate</mat-icon>
         </button>
         <div class="d-flex">
           <div class="student__box d-flex align-items-center">
@@ -185,11 +185,11 @@
                                     }">{{i + 1}}</button>
 
                               </li> -->
-                      <span
+                      <!-- <span
                         [innerHTML]="question?.name"
                         style="padding-left: 5px"
                         *ngIf="question?.name"
-                      ></span>
+                      ></span> -->
                       <div
                         class="testLive__NoQuestion1"
                         *ngIf="!question?.name"
@@ -269,8 +269,9 @@
                   *ngIf="this.userType === 'ROLE_STUDENT'"
                   class="text-center save__btn- pt-1"
                 >
+                  <!-- <div class="text-center save__btn- pt-1"> -->
                   <button
-                    class="btn-primary save__btn- w-50 mx-auto"
+                    class="btn-primary save__btn- w-50 mx-auto bg-danger"
                     mat-raised-button
                     (click)="SaveandExit()"
                   >

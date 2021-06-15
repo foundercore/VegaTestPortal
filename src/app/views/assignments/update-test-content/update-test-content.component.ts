@@ -30,6 +30,7 @@ export class UpdateTestContentComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   totalNumberOfRecords = 0;
   public pageOptions = PAGE_OPTIONS;
+  currentOpenedSection;
   panelOpenState: boolean = false;
   modelsections: any = ([] = []);
   section = new Section();
@@ -52,14 +53,15 @@ export class UpdateTestContentComponent implements OnInit {
   ques2 = [];
   questionPaper = {};
   quest: any;
-  status : string;
+  status: string;
+  expandedStateArray = [];
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private testConfigService: TestConfigService,
     private toastrService: ToastrService,
-    private router : Router
-  ) { }
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.testId = this.route.snapshot.paramMap.get('id');
@@ -189,7 +191,9 @@ export class UpdateTestContentComponent implements OnInit {
           },
           (err) => {
             this.getQuestionPaperbyId();
-            this.toastrService.error('Error while deteing questions=>' + err);
+            this.toastrService.error(
+              'Error while deteing questions=>' + err.error.apierror.message
+            );
             console.log(
               'Error while deleting=>',
               deleteQuestionIdArray,
@@ -205,12 +209,11 @@ export class UpdateTestContentComponent implements OnInit {
     }
   }
 
-  viewAssignment(){
+  viewAssignment() {
     this.router.navigate([
       'home/tests/update-test/' + this.testId + '/view-assignment',
     ]);
   }
-
 
   isAllSelected() {
     if (this.dataSource) {
@@ -241,7 +244,7 @@ export class UpdateTestContentComponent implements OnInit {
         controlParms: this.controlparms,
       },
     });
-    dialogRef.afterClosed().subscribe((result) => { });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 
   openQuestionList() {
@@ -271,6 +274,7 @@ export class UpdateTestContentComponent implements OnInit {
           this.quest = res;
           this.controlparms = res?.controlParam;
           this.modelsections = res?.sections;
+
           this.totalTestDuration = res?.totalDurationInMinutes;
           this.status = res?.status;
           var dur = 0;
@@ -279,11 +283,62 @@ export class UpdateTestContentComponent implements OnInit {
           });
           this.totalDurationOfSections = dur;
           console.log('this.gettest==', res);
+          this.setDataSourceOfPaginator(res?.sections);
+          this.prepareExpandedStateArray(false, res?.sections.length);
         });
     }
   }
 
-  getSectionId(section: Section) {
+  setDataSourceOfPaginator(sections) {
+    sections.map((sec) => {
+      if (sec.id === this.currentOpenedSection.id) {
+        this.currentOpenedSection = sec;
+      }
+    });
+    console.log(
+      'Setting paginator datasource with section=>',
+      this.currentOpenedSection
+    );
+    this.ques = this.currentOpenedSection?.questions;
+    this.ques2 = this.currentOpenedSection?.questions;
+    this.dataSource = new MatTableDataSource(this.ques);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
+  prepareExpandedStateArray(state, length?, index?) {
+    console.log(
+      'prepareExpandedStateArray => state=>',
+      state,
+      ' length=>',
+      length,
+      ' index=>',
+      index
+    );
+    console.log(
+      'currentOpenedSection=>',
+      this.currentOpenedSection,
+      ' datasource of paginator=>',
+      this.dataSource.data
+    );
+    if (index >= 0) {
+      for (var i = 0; i < length; i++) {
+        if (index == i)
+          this.expandedStateArray[i] = !this.expandedStateArray[i];
+        else this.expandedStateArray[i] = false;
+      }
+      console.log('expandedStateArray first=>', this.expandedStateArray);
+      return;
+    }
+    for (var i = 0; i < length; i++) {
+      if (!this.expandedStateArray[i]) this.expandedStateArray[i] = state;
+    }
+    console.log('expandedStateArray second=>', this.expandedStateArray);
+  }
+
+  getSectionId(section?: Section, index?) {
+    this.currentOpenedSection = section;
+
     this.section = section;
     if (section != null) {
       this.ques = section?.questions;
@@ -292,8 +347,9 @@ export class UpdateTestContentComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }
-  }
 
+    this.prepareExpandedStateArray(true, this.modelsections?.length, index);
+  }
 
   removeSection(section: Section) {
     Swal.fire({
@@ -339,19 +395,13 @@ export class UpdateTestContentComponent implements OnInit {
           this.testConfigService
             .initiateVerification(this.route.snapshot.paramMap.get('id'))
             .subscribe((res: any) => {
-              this.toastrService.success("Status updated successfully");
+              this.toastrService.success('Status updated successfully');
               this.getQuestionPaperbyId();
-            },
-            error => {
-              this.toastrService.error("Status updated failed");
-             
             });
         }
       });
     }
   }
-
-
 
   publishstatus() {
     if (this.route.snapshot.paramMap.get('id') != null) {
@@ -369,13 +419,9 @@ export class UpdateTestContentComponent implements OnInit {
           this.testConfigService
             .publish(this.route.snapshot.paramMap.get('id'))
             .subscribe((res: any) => {
-              this.toastrService.success("Status updated successfully");
+              this.toastrService.success('Status updated successfully');
               this.getQuestionPaperbyId();
-            },
-              error => {
-                this.toastrService.error("Status updated failed");
-
-              });
+            });
         }
       });
     }
@@ -397,18 +443,13 @@ export class UpdateTestContentComponent implements OnInit {
           this.testConfigService
             .archive(this.route.snapshot.paramMap.get('id'))
             .subscribe((res: any) => {
-              this.toastrService.success("Status updated successfully");
+              this.toastrService.success('Status updated successfully');
               this.getQuestionPaperbyId();
-            },
-              error => {
-                this.toastrService.error("Status updated failed");
-
-              });
+            });
         }
       });
     }
   }
-
 
   verifyReject() {
     Swal.fire({
@@ -426,13 +467,9 @@ export class UpdateTestContentComponent implements OnInit {
           this.testConfigService
             .verify(this.route.snapshot.paramMap.get('id'))
             .subscribe((res: any) => {
-              this.toastrService.success("Status updated successfully");
+              this.toastrService.success('Status updated successfully');
               this.getQuestionPaperbyId();
-            },
-              error => {
-                this.toastrService.error("Status updated failed");
-
-              });
+            });
         }
       } else if (result.isDenied) {
         const dialogRef = this.dialog.open(RejectstatusComponent, {
@@ -445,24 +482,22 @@ export class UpdateTestContentComponent implements OnInit {
         dialogRef.afterClosed().subscribe((result) => {
           if (result != null) {
             var data = {
-              rejectionReason: result.reason
-            }
+              rejectionReason: result.reason,
+            };
             this.testConfigService
-              .rejectionVerification(this.route.snapshot.paramMap.get('id'), data)
+              .rejectionVerification(
+                this.route.snapshot.paramMap.get('id'),
+                data
+              )
               .subscribe((res: any) => {
-                this.toastrService.success("Status updated successfully");
+                this.toastrService.success('Status updated successfully');
                 this.getQuestionPaperbyId();
-              },
-                error => {
-                  this.toastrService.error("Status updated failed");
-
-                });
+              });
           }
         });
       }
-    })
+    });
   }
-
 
   restore() {
     if (this.route.snapshot.paramMap.get('id') != null) {
@@ -482,17 +517,19 @@ export class UpdateTestContentComponent implements OnInit {
           model.testId = this.route.snapshot.paramMap.get('id');
           this.testConfigService.updateQuestionPaper(model).subscribe(
             (res: any) => {
-              this.toastrService.success("Status updated successfully");
+              this.toastrService.success('Status updated successfully');
               this.getQuestionPaperbyId();
             },
             (error) => {
               debugger;
               if (error.status == 200) {
-                this.toastrService.success("Status updated successfully");
+                this.toastrService.success('Status updated successfully');
                 this.getQuestionPaperbyId();
               } else {
                 this.toastrService.error(
-                  error?.error?.message ? error?.error?.message : error?.message,
+                  error?.error?.message
+                    ? error?.error?.message
+                    : error?.message,
                   'Error'
                 );
               }
@@ -503,13 +540,7 @@ export class UpdateTestContentComponent implements OnInit {
     }
   }
 
-
-
-
   applyFilter() {
     this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
-
-
-
 }
