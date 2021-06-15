@@ -1,5 +1,7 @@
 <section class="update__sec py-3">
   <div class="container">
+    <div><b>{{quest.name}}</b></div>
+
     <div class="row py-3">
       <div class="col-lg-6">
           <button mat-raised-button class="add-btn mx-2" routerLink="/home/tests">
@@ -35,7 +37,7 @@
               mat-raised-button
               class="add-btn mx-2"
               (click)="addSection()"
-              *ngIf="totalDurationOfSections < totalTestDuration"
+              *ngIf="totalDurationOfSections < totalTestDuration &&  status == 'DRAFT'"
             >
               <mat-icon>add_circle</mat-icon><span class="ml-2">Add Section</span>
             </button>
@@ -94,8 +96,6 @@
             <mat-icon>delete</mat-icon>
           </button>
         </mat-expansion-panel-header>
-        <h2 class="text-center">Question List</h2>
-
         <div class="row py-5">
           <div class="col-lg-6">
             <form action="" class="search__box">
