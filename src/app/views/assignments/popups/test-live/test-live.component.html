@@ -123,6 +123,7 @@
                     pb-3
                     pt-3
                   "
+                  *ngIf="this.userType === 'ROLE_STUDENT'"
                 >
                   <button
                     class="btn-primary"
@@ -239,20 +240,35 @@
                   <li class="btn btn-primary d-inline-block border-0">
                     Current Question
                   </li>
-                  <li class="btn btn-warning d-inline-block border-0">
+                  <li
+                    *ngIf="this.userType === 'ROLE_STUDENT'"
+                    class="btn btn-warning d-inline-block border-0"
+                  >
                     Marked Question.
                   </li>
-                  <li class="btn btn-secondary d-inline-block border-0">
+                  <li
+                    *ngIf="this.userType === 'ROLE_STUDENT'"
+                    class="btn btn-secondary d-inline-block border-0"
+                  >
                     Saved Question.
                   </li>
-                  <li class="btn btn-success d-inline-block border-0">
+                  <li
+                    *ngIf="this.userType === 'ROLE_STUDENT'"
+                    class="btn btn-success d-inline-block border-0"
+                  >
                     Not Attempted.
                   </li>
-                  <li class="btn btn_marked_and_ans d-inline-block border-0">
+                  <li
+                    *ngIf="this.userType === 'ROLE_STUDENT'"
+                    class="btn btn_marked_and_ans d-inline-block border-0"
+                  >
                     Attempted & marked.
                   </li>
                 </ul>
-                <div class="text-center save__btn- pt-1">
+                <div
+                  *ngIf="this.userType === 'ROLE_STUDENT'"
+                  class="text-center save__btn- pt-1"
+                >
                   <button
                     class="btn-primary save__btn- w-50 mx-auto"
                     mat-raised-button

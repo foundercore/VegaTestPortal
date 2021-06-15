@@ -24,6 +24,11 @@ export class TestConfigService extends BaseService {
     return this.http.get<any>(Url, this.headers);
   }
 
+  getStudentAssignmentResult(assignment_id, username): Observable<any> {
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/assignment/submission/${assignment_id}/${username}/view-assignment-result`;
+    return this.http.get<any>(Url, this.headers);
+  }
+
   deleteQuestionPaper(testId: string = ''): Observable<any> {
     const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${testId}/remove`;
     return this.http.delete<any>(Url, this.headers);
@@ -148,22 +153,13 @@ export class TestConfigService extends BaseService {
     return this.http.post<any>(Url, testId, this.headers);
   }
 
-  rejectionVerification(
-    testId: string = "",
-    body: any
-  ): Observable<any> {
+  rejectionVerification(testId: string = '', body: any): Observable<any> {
     const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${testId}/reject-verification`;
     return this.http.post<any>(Url, body);
   }
-
 
   updateQuestionPaper(model: TestVM): Observable<any> {
     const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${model.testId}/update-metadata`;
     return this.http.post<any>(Url, model, this.headers);
   }
-
-
-
-
 }
-
