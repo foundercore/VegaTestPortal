@@ -127,4 +127,43 @@ export class TestConfigService extends BaseService {
     const Url = `${this.BASE_SERVICE_URL}/api/v1/test/assignment/submission/${assignment_id}/clear-answer`;
     return this.http.post<any>(Url, body);
   }
+
+  initiateVerification(testId: string = ''): Observable<any> {
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${testId}/initiate-verification`;
+    return this.http.post<any>(Url, testId, this.headers);
+  }
+
+  verify(testId: string = ''): Observable<any> {
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${testId}/verify`;
+    return this.http.post<any>(Url, testId, this.headers);
+  }
+
+  publish(testId: string = ''): Observable<any> {
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${testId}/publish`;
+    return this.http.post<any>(Url, testId, this.headers);
+  }
+
+  archive(testId: string = ''): Observable<any> {
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${testId}/archive`;
+    return this.http.post<any>(Url, testId, this.headers);
+  }
+
+  rejectionVerification(
+    testId: string = "",
+    body: any
+  ): Observable<any> {
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${testId}/reject-verification`;
+    return this.http.post<any>(Url, body);
+  }
+
+
+  updateQuestionPaper(model: TestVM): Observable<any> {
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${model.testId}/update-metadata`;
+    return this.http.post<any>(Url, model, this.headers);
+  }
+
+
+
+
 }
+

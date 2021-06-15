@@ -5,6 +5,9 @@
 .right__col.col-md-6 {
   width: 476px;
 }
+.count_down_timer {
+  min-width: 100px;
+}
 
 .col-md-7 {
   flex: 0 0 auto;
@@ -23,6 +26,8 @@
 
 .time {
   background-color: rgb(255, 235, 193);
+  min-width: 148px;
+  border-radius: 10px;
 }
 
 .time h4 {

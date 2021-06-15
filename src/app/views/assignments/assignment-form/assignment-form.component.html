@@ -1,0 +1,99 @@
+<h1 mat-dialog-title class="title">
+  <span *ngIf="!this.data.data">Add Assignment</span>
+  <span *ngIf="this.data.data">Edit Assignment</span>
+
+  <button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h1>
+<div mat-dialog-content>
+  <div class="add-user-content">
+    <form class="example-container"  [formGroup]="assignmentFormGroup" #aForm>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Valid From</mat-label>
+        <input matInput required [matDatepicker]="validfrom_datepicker" formControlName="validFrom" name="validFrom" >
+        <mat-datepicker-toggle matSuffix [for]="validfrom_datepicker"></mat-datepicker-toggle>
+        <mat-datepicker #validfrom_datepicker>
+          <mat-datepicker-actions>
+            <button mat-button matDatepickerCancel>Cancel</button>
+            <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+          </mat-datepicker-actions>
+        </mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Valid To</mat-label>
+        <input matInput required [matDatepicker]="validto_datepicker" formControlName="validTo">
+        <mat-datepicker-toggle matSuffix [for]="validto_datepicker"></mat-datepicker-toggle>
+        <mat-datepicker #validto_datepicker>
+          <mat-datepicker-actions>
+            <button mat-button matDatepickerCancel>Cancel</button>
+            <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+          </mat-datepicker-actions>
+        </mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input matInput required  formControlName="description" />
+        <mat-error *ngIf="assignmentFormGroup.controls.description.hasError('required')">
+          Description is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>Passcode</mat-label>
+        <input matInput formControlName="passcode" />
+        <mat-error *ngIf="assignmentFormGroup.controls.passcode.hasError('required')">
+          Passcode is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Assign Batch</mat-label>
+        <mat-select required formControlName="assignedToBatch" multiple>
+          <mat-option
+            *ngFor="let batch of batchList"
+            [value]="batch.id.batchId"
+            >{{ batch.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>Assign Student</mat-label>
+        <mat-select required formControlName="assignedToStudent" multiple>
+          <mat-option
+            *ngFor="let student of studentList"
+            [value]="student.userName"
+            >{{ student.displayName }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field> -->
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>Release Date</mat-label>
+        <input matInput required [matDatepicker]="release_datepicker" formControlName="releaseDate">
+        <mat-datepicker-toggle matSuffix [for]="release_datepicker"></mat-datepicker-toggle>
+        <mat-datepicker #release_datepicker>
+          <mat-datepicker-actions>
+            <button mat-button matDatepickerCancel>Cancel</button>
+            <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+          </mat-datepicker-actions>
+        </mat-datepicker>
+      </mat-form-field>
+
+
+
+
+    </form>
+    <div class="btn-grp-cls">
+      <button *ngIf="!data.data" mat-raised-button class="save-btn-cls" (click)="add()">{{ 'COMMON_TAG.SAVE' | translate }}</button>
+      <button *ngIf="data.data && !data.isView" mat-raised-button class="save-btn-cls" (click)="edit()">{{ 'COMMON_TAG.UPDATE' | translate }}</button>
+      <button *ngIf="!data.data" mat-raised-button class="reset-btn-cls" (click)="reset()">{{ 'COMMON_TAG.RESET' | translate }}</button>
+    </div>
+  </div>
+</div>
