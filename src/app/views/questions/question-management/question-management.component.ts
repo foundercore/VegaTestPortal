@@ -41,7 +41,6 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     'actions',
   ];
 
-
   dataSource = new MatTableDataSource<QuestionModel>();
 
   selection = new SelectionModel<QuestionModel>(true, []);
@@ -52,7 +51,6 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   isRateLimitReached = false;
 
   public pageOptions = PAGE_OPTIONS;
-
 
   filterGroup = new FormGroup({
     filterNameValue: new FormControl(),
@@ -106,9 +104,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit() {
-    merge(
-      this.sort.sortChange,
-      this.paginator.page    )
+    merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
         switchMap(() => {
@@ -131,7 +127,10 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
           return observableOf([]);
         })
       )
-      .subscribe((data) => (this.dataSource.data = data));
+      .subscribe((data) => {
+        this.dataSource.data = data;
+        console.log('This.datasource=', this.dataSource);
+      });
   }
 
   resetPaging(): void {
@@ -155,7 +154,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
       this.deleteQuestion(row);
     } else if (type === 'bulk_delete') {
       this.bulkDeletQuestions();
-    } else if(type === 'migrate'){
+    } else if (type === 'migrate') {
       this.openMigrateUploadDialog();
     }
   }
@@ -164,7 +163,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     this.isFilterApply = true;
     this.isLoadingResults = true;
     this.resetPaging();
-    const searchQuestion =  this.createSearchObject();
+    const searchQuestion = this.createSearchObject();
     this.refreshQuestionData(searchQuestion);
     this.isLoadingResults = false;
     this.isRateLimitReached = false;
@@ -180,28 +179,31 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     this.filterGroup.controls['fileNameCntrl'].reset();
     this.isFilterApply = false;
     this.resetPaging();
-    const searchQuestion =  this.createSearchObject();
+    const searchQuestion = this.createSearchObject();
     this.refreshQuestionData(searchQuestion);
   }
 
-  refreshQuestionData(searchQuestion: SearchQuestion){
-    this.questionService.getQuestionList(searchQuestion).subscribe(data => {
-      this.isLoadingResults = false;
-      this.isRateLimitReached = false;
-      this.totalNumberOfRecords = data.totalRecords;
-      this.actualTotalNumberOfRecords = data.totalRecords;
-      data.questions.map((x) => {
-        x.explanation_added = x.explanation?.length != 0 ? 'Yes' : 'No';
-        return x;
-      });
-      this.dataSource.data = data.questions;
-    },error => {
-      this.isLoadingResults = false;
-      this.isRateLimitReached = true;
-    })
+  refreshQuestionData(searchQuestion: SearchQuestion) {
+    this.questionService.getQuestionList(searchQuestion).subscribe(
+      (data) => {
+        this.isLoadingResults = false;
+        this.isRateLimitReached = false;
+        this.totalNumberOfRecords = data.totalRecords;
+        this.actualTotalNumberOfRecords = data.totalRecords;
+        data.questions.map((x) => {
+          x.explanation_added = x.explanation?.length != 0 ? 'Yes' : 'No';
+          return x;
+        });
+        this.dataSource.data = data.questions;
+      },
+      (error) => {
+        this.isLoadingResults = false;
+        this.isRateLimitReached = true;
+      }
+    );
   }
 
-  createSearchObject(){
+  createSearchObject() {
     const searchQuestion = new SearchQuestion(
       String(this.paginator.pageIndex + 1),
       this.paginator.pageSize,
@@ -210,21 +212,47 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     );
     this.totalNumberOfRecords = this.paginator.pageSize;
 
-    if(this.isFilterApply){
-      if(this.filterGroup.controls['filterNameValue'].value !== null && this.filterGroup.controls['filterNameValue'].value.length !== 0)
-      searchQuestion.nameRegexPattern = this.filterGroup.controls['filterNameValue'].value;
-      else if(this.filterGroup.controls['questionTypeCntrl'].value !== null && this.filterGroup.controls['questionTypeCntrl'].value.length !== 0)
-      searchQuestion.type = this.filterGroup.controls['questionTypeCntrl'].value;
-      else if(this.filterGroup.controls['subjectCntrl'].value !== null && this.filterGroup.controls['subjectCntrl'].value.length !== 0)
-      searchQuestion.subject = this.filterGroup.controls['subjectCntrl'].value;
-      else if(this.filterGroup.controls['tagCntrl'].value !== null && this.filterGroup.controls['tagCntrl'].value.length !== 0)
-      searchQuestion.tags = this.filterGroup.controls['tagCntrl'].value;
-      else if(this.filterGroup.controls['topicCntrl'].value !== null && this.filterGroup.controls['topicCntrl'].value.length !== 0)
-      searchQuestion.topic = this.filterGroup.controls['topicCntrl'].value;
-      else if(this.filterGroup.controls['substopicCntrl'].value !== null && this.filterGroup.controls['substopicCntrl'].value.length !== 0)
-      searchQuestion.subTopic = this.filterGroup.controls['substopicCntrl'].value;
-      else if(this.filterGroup.controls['fileNameCntrl'].value !== null && this.filterGroup.controls['fileNameCntrl'].value.length !== 0)
-      searchQuestion.filename = this.filterGroup.controls['fileNameCntrl'].value;
+    if (this.isFilterApply) {
+      if (
+        this.filterGroup.controls['filterNameValue'].value !== null &&
+        this.filterGroup.controls['filterNameValue'].value.length !== 0
+      )
+        searchQuestion.nameRegexPattern =
+          this.filterGroup.controls['filterNameValue'].value;
+      else if (
+        this.filterGroup.controls['questionTypeCntrl'].value !== null &&
+        this.filterGroup.controls['questionTypeCntrl'].value.length !== 0
+      )
+        searchQuestion.type =
+          this.filterGroup.controls['questionTypeCntrl'].value;
+      else if (
+        this.filterGroup.controls['subjectCntrl'].value !== null &&
+        this.filterGroup.controls['subjectCntrl'].value.length !== 0
+      )
+        searchQuestion.subject =
+          this.filterGroup.controls['subjectCntrl'].value;
+      else if (
+        this.filterGroup.controls['tagCntrl'].value !== null &&
+        this.filterGroup.controls['tagCntrl'].value.length !== 0
+      )
+        searchQuestion.tags = this.filterGroup.controls['tagCntrl'].value;
+      else if (
+        this.filterGroup.controls['topicCntrl'].value !== null &&
+        this.filterGroup.controls['topicCntrl'].value.length !== 0
+      )
+        searchQuestion.topic = this.filterGroup.controls['topicCntrl'].value;
+      else if (
+        this.filterGroup.controls['substopicCntrl'].value !== null &&
+        this.filterGroup.controls['substopicCntrl'].value.length !== 0
+      )
+        searchQuestion.subTopic =
+          this.filterGroup.controls['substopicCntrl'].value;
+      else if (
+        this.filterGroup.controls['fileNameCntrl'].value !== null &&
+        this.filterGroup.controls['fileNameCntrl'].value.length !== 0
+      )
+        searchQuestion.filename =
+          this.filterGroup.controls['fileNameCntrl'].value;
     }
 
     return searchQuestion;
@@ -261,17 +289,17 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     });
   }
 
-  openMigrateUploadDialog(){
+  openMigrateUploadDialog() {
     const dialogRef = this.dialog.open(QuestionMigrateUploadDialogComponent);
-    dialogRef.afterClosed().subscribe((result) => {
-
-    });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 
   deleteQuestion(row: QuestionModel) {
-    const dialogRef = this.dialog.open(DialogConformationComponent, { disableClose: true});
+    const dialogRef = this.dialog.open(DialogConformationComponent, {
+      disableClose: true,
+    });
     dialogRef.afterClosed().subscribe((result) => {
-      if(result == 'delete'){
+      if (result == 'delete') {
         this.questionService.deletQuestion(row.id?.questionId).subscribe(
           (resp) => {
             this.toastr.success('Question Delete SuccessFully');
@@ -289,9 +317,11 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     if (this.selection.selected.length == 0) {
       this.toastr.error('Please select atleast one Question');
     } else {
-      const dialogRef = this.dialog.open(DialogConformationComponent, { disableClose: true});
+      const dialogRef = this.dialog.open(DialogConformationComponent, {
+        disableClose: true,
+      });
       dialogRef.afterClosed().subscribe((result) => {
-        if(result == 'delete'){
+        if (result == 'delete') {
           let questionIdlList = this.selection.selected.map(
             (x) => x.id?.questionId
           );
