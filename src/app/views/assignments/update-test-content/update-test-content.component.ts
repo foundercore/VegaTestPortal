@@ -341,6 +341,10 @@ export class UpdateTestContentComponent implements OnInit {
             .subscribe((res: any) => {
               this.toastrService.success("Status updated successfully");
               this.getQuestionPaperbyId();
+            },
+            error => {
+              this.toastrService.error("Status updated failed");
+             
             });
         }
       });
@@ -367,7 +371,11 @@ export class UpdateTestContentComponent implements OnInit {
             .subscribe((res: any) => {
               this.toastrService.success("Status updated successfully");
               this.getQuestionPaperbyId();
-            });
+            },
+              error => {
+                this.toastrService.error("Status updated failed");
+
+              });
         }
       });
     }
@@ -391,7 +399,11 @@ export class UpdateTestContentComponent implements OnInit {
             .subscribe((res: any) => {
               this.toastrService.success("Status updated successfully");
               this.getQuestionPaperbyId();
-            });
+            },
+              error => {
+                this.toastrService.error("Status updated failed");
+
+              });
         }
       });
     }
@@ -416,7 +428,11 @@ export class UpdateTestContentComponent implements OnInit {
             .subscribe((res: any) => {
               this.toastrService.success("Status updated successfully");
               this.getQuestionPaperbyId();
-            });
+            },
+              error => {
+                this.toastrService.error("Status updated failed");
+
+              });
         }
       } else if (result.isDenied) {
         const dialogRef = this.dialog.open(RejectstatusComponent, {
@@ -436,7 +452,11 @@ export class UpdateTestContentComponent implements OnInit {
               .subscribe((res: any) => {
                 this.toastrService.success("Status updated successfully");
                 this.getQuestionPaperbyId();
-              });
+              },
+                error => {
+                  this.toastrService.error("Status updated failed");
+
+                });
           }
         });
       }
