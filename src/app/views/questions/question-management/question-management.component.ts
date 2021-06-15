@@ -127,7 +127,10 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
           return observableOf([]);
         })
       )
-      .subscribe((data) => (this.dataSource.data = data));
+      .subscribe((data) => {
+        this.dataSource.data = data;
+        console.log('This.datasource=', this.dataSource);
+      });
   }
 
   resetPaging(): void {
@@ -207,6 +210,8 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
       this.sort.active,
       this.sort.direction
     );
+    this.totalNumberOfRecords = this.paginator.pageSize;
+
     if (this.isFilterApply) {
       if (
         this.filterGroup.controls['filterNameValue'].value !== null &&

@@ -14,6 +14,7 @@ import { QuestionFormComponent } from '../views/questions/question-form/question
 import { UserManagementComponent } from '../views/user/user-management/user-management.component';
 import { RoleGuard } from '../guard/role.guard';
 import { Role } from './constants';
+import { StudentReportComponent } from '../views/reports/student-report/student-report.component';
 
 const routes: Routes = [
   {
@@ -33,59 +34,69 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent,
-
       },
       {
         path: 'questionmanagement',
-        children:[
+        children: [
           {
             path: '',
             component: QuestionManagementComponent,
             canActivate: [RoleGuard],
-            data: { roles: [Role.ADMIN, Role.STAFF] }
+            data: { roles: [Role.ADMIN, Role.STAFF] },
           },
           {
             path: ':id/edit',
             component: QuestionFormComponent,
             canActivate: [RoleGuard],
-            data: { roles: [Role.ADMIN, Role.STAFF] }
+            data: { roles: [Role.ADMIN, Role.STAFF] },
           },
           {
             path: ':id/view',
             component: QuestionFormPreviewComponent,
             canActivate: [RoleGuard],
-            data: { roles: [Role.ADMIN, Role.STAFF] }
+            data: { roles: [Role.ADMIN, Role.STAFF] },
           },
           {
             path: 'add',
             component: QuestionFormComponent,
             canActivate: [RoleGuard],
-            data: { roles: [Role.ADMIN, Role.STAFF] }
-          }
+            data: { roles: [Role.ADMIN, Role.STAFF] },
+          },
         ],
-       },
+      },
       {
         path: 'reports',
         component: ReportsComponent,
         canActivate: [RoleGuard],
-        data: { roles: [Role.ADMIN, Role.STAFF] }
+        data: { roles: [Role.ADMIN, Role.STAFF] },
       },
-      { path: 'tests', canActivate: [RoleGuard], 
-      data: { roles: [Role.ADMIN, Role.STAFF] },
-      loadChildren: () => import('../views/assignments/assignments.module').then(m => m.AssignmentsModule)},
+      {
+        path: 'assignment_report/:id',
+        component: StudentReportComponent,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.ADMIN, Role.STAFF, Role.STUDENT] },
+      },
+      {
+        path: 'tests',
+        canActivate: [RoleGuard],
+        data: { roles: [Role.ADMIN, Role.STAFF] },
+        loadChildren: () =>
+          import('../views/assignments/assignments.module').then(
+            (m) => m.AssignmentsModule
+          ),
+      },
       {
         path: 'users',
         component: UserManagementComponent,
         canActivate: [RoleGuard],
-        data: { roles: [Role.ADMIN, Role.STAFF] }
+        data: { roles: [Role.ADMIN, Role.STAFF] },
       },
       {
         path: 'batch',
         component: StudentBatchManagementComponent,
         canActivate: [RoleGuard],
-        data: { roles: [Role.ADMIN, Role.STAFF] }
+        data: { roles: [Role.ADMIN, Role.STAFF] },
       },
-     
     ],
     canActivate: [AuthGuard],
   },
