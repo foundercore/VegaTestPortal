@@ -117,7 +117,8 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
           this.isRateLimitReached = false;
           this.actualTotalNumberOfRecords = data.totalRecords;
           return data.questions.map((x) => {
-            x.explanation_added = x.explanation?.length != 0 ? 'Yes' : 'No';
+            x.explanation_added =
+              x.explanation && x.explanation.length ? 'Yes' : 'No';
             return x;
           });
         }),
