@@ -20,11 +20,12 @@
 }
 
 .text-area-div {
-  min-height: 10rem;
-  max-height: 10rem;
+  min-height: 14rem;
+  max-height: 14rem;
   border: 1px solid rgba(0, 0, 0, 0.06);
   margin-right: 20px;
   border-radius: 5px;
+  overflow-y: auto;
 }
 
 .w-100-div {
