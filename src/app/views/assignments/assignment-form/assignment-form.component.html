@@ -8,11 +8,11 @@
 </h1>
 <div mat-dialog-content>
   <div class="add-user-content">
-    <div class="example-container"  [formGroup]="assignmentFormGroup">
+    <form class="example-container"  [formGroup]="assignmentFormGroup" #aForm>
 
       <mat-form-field appearance="outline">
         <mat-label>Valid From</mat-label>
-        <input matInput required [matDatepicker]="validfrom_datepicker" formControlName="validFrom">
+        <input matInput required [matDatepicker]="validfrom_datepicker" formControlName="validFrom" name="validFrom" >
         <mat-datepicker-toggle matSuffix [for]="validfrom_datepicker"></mat-datepicker-toggle>
         <mat-datepicker #validfrom_datepicker>
           <mat-datepicker-actions>
@@ -89,7 +89,7 @@
 
 
 
-    </div>
+    </form>
     <div class="btn-grp-cls">
       <button *ngIf="!data.data" mat-raised-button class="save-btn-cls" (click)="add()">{{ 'COMMON_TAG.SAVE' | translate }}</button>
       <button *ngIf="data.data && !data.isView" mat-raised-button class="save-btn-cls" (click)="edit()">{{ 'COMMON_TAG.UPDATE' | translate }}</button>

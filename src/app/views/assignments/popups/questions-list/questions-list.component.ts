@@ -123,6 +123,8 @@ export class QuestionslistComponent implements OnInit {
     this.questions = [];
     this.questions2 = [];
     let model = new SearchQuestionPaperVM();
+    // TOD : this is temp till we fix the pagination Issue
+    model.pageSize = 1000;
     this.testConfigService
       .getQuestionList(model)
       .pipe(

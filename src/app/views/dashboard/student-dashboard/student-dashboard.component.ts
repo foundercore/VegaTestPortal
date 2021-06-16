@@ -1,7 +1,13 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
@@ -9,27 +15,27 @@ import { TestAssignmentServiceService } from 'src/app/services/assignment/test-a
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import Swal from 'sweetalert2';
 import { TestLiveComponent } from '../../assignments/popups/test-live/test-live.component';
+import { TestConfigService } from '../../assignments/services/test-config-service';
 
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.component.html',
   styleUrls: ['./student-dashboard.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StudentDashboardComponent implements OnInit {
-
-  resultStats =[
+  resultStats = [
     {
-      "name": "Passed",
-      "value": 60
+      name: 'Passed',
+      value: 60,
     },
     {
-      "name": "Failed",
-      "value": 30
+      name: 'Failed',
+      value: 30,
     },
   ];
 
- resultData: any[] = [  ];
+  resultData: any[] = [];
 
   single: any[] | undefined;
   // options
@@ -44,15 +50,15 @@ export class StudentDashboardComponent implements OnInit {
   studentName: string = '';
   userType: string = '';
   buttontext: string = '';
-  createdId : string = "";
+  createdId: string = '';
 
   colorScheme = {
-    domain: [ '#52D726', '#FF0000']
+    domain: ['#52D726', '#FF0000'],
   };
 
   public pageOptions = PAGE_OPTIONS;
 
-  displayedColumns: string[] = ['testName', 'attempted',  'actions'];
+  displayedColumns: string[] = ['testName', 'attempted', 'actions'];
 
   dataSource = new MatTableDataSource<any>();
 
@@ -61,12 +67,11 @@ export class StudentDashboardComponent implements OnInit {
   constructor(
     public translate: TranslateService,
     private testAssignmentService: TestAssignmentServiceService,
-    public dialog : MatDialog,
-    private store: Store<AppState>
-    ) {
-
-  }
-
+    public dialog: MatDialog,
+    private store: Store<AppState>,
+    private testConfigService: TestConfigService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.store.select('appState').subscribe((data) => {
@@ -78,20 +83,14 @@ export class StudentDashboardComponent implements OnInit {
     this.getMyAssignments();
   }
 
-
-getMyAssignments(){
-  this.testAssignmentService.getMyAssignment().subscribe(resp => {
-    this.resultData = resp;
-    console.log("this.resultData==",this.resultData);
-    this.dataSource = new MatTableDataSource<any>(this.resultData);
-    this.dataSource.paginator = this.paginator;
-  });
-}
-
-
-
-
-
+  getMyAssignments() {
+    this.testAssignmentService.getMyAssignment().subscribe((resp) => {
+      this.resultData = resp;
+      console.log('this.resultData==', this.resultData);
+      this.dataSource = new MatTableDataSource<any>(this.resultData);
+      this.dataSource.paginator = this.paginator;
+    });
+  }
 
   extractContent(s) {
     var span = document.createElement('span');
@@ -132,15 +131,25 @@ getMyAssignments(){
     });
   }
 
-
-
-
-
-  viewResult(row:any ){
-
+  viewResult(row: any) {
+    console.log('View Result function received parameters=>', row);
+    this.testConfigService
+      .getStudentAssignmentResult(row.assignmentId, this.userName)
+      .subscribe(
+        (res) => {
+          console.log('Fetched Student assignment result =>', res);
+          this.router
+            .navigate(['/home/assignment_report/' + row.assignmentId])
+            .then(() => console.log('Navigate to score card'))
+            .catch((err) =>
+              console.log('Error=> Navigate to score card=>', err)
+            );
+        },
+        (err) => {
+          console.log('Error while Fetching Student assignment result =>', err);
+        }
+      );
   }
 
-  takeTest(row:any ){
-
-  }
+  takeTest(row: any) {}
 }
