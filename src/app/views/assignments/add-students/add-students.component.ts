@@ -63,12 +63,11 @@ export class AddStudentsComponent implements OnInit {
 
   addStudent() {
 
-    const addStudentList = this.taggedStudentList.filter(
-      (x) => !this.previousStudentList.includes(x)
-    );
-    const removeStudentList = this.previousStudentList.filter(
-      (x) => !this.taggedStudentList.includes(x)
-    );
+    if(this.taggedStudentList.length == 0){
+      this.tosterService.error('Atleast one student should be tagged');
+      return;
+    }
+
 
     const assignmentObj : AssignmentRequest = {
       description : this.data.data.description,
