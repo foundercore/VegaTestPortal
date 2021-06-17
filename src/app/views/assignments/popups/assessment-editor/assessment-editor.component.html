@@ -1,12 +1,12 @@
-
-
 <div class="card border-0">
-    <div class="card-header d-flex bg-transparent p-0 border-0">
-        <h4>Assessment Editor</h4>
-        <button class="btn close__btn" (click)="close()"><span class="position-center">&times;</span></button>
-    </div>
-    <div class="card-body">
-        <!-- <form action="">
+  <div class="card-header d-flex bg-transparent p-0 border-0">
+    <h4>Assessment Editor</h4>
+    <button class="btn close__btn" (click)="close()">
+      <span class="position-center">&times;</span>
+    </button>
+  </div>
+  <div class="card-body">
+    <!-- <form action="">
             <label for="name" class="label">Test Name</label>
             <input type="text" name="name" class="form-control">
 
@@ -24,41 +24,64 @@
                 </button>
             </div>
         </form> -->
-        <form [formGroup]="testForm" autocomplete="off">
-            <label for="name" class="label">Test Name</label>
-            <mat-form-field appearance="outline" style="width: 100%;">
-                <input matInput placeholder="Test Name" formControlName="testName">
-                <mat-error *ngIf="hasError('testName', 'required')">Test Name is required</mat-error>
-              </mat-form-field>
+    <form [formGroup]="testForm" autocomplete="off">
+      <label for="name" class="label">Test Name</label>
+      <mat-form-field appearance="outline" style="width: 100%">
+        <input matInput placeholder="Test Name" formControlName="testName" />
+        <mat-error *ngIf="hasError('testName', 'required')"
+          >Test Name is required</mat-error
+        >
+      </mat-form-field>
 
-            <label for="name" class="label mt-4">Duration (Mins)</label>
-            <mat-form-field appearance="outline" style="width: 100%;">
-                <input type="number" matInput placeholder="Duration" formControlName="duration" (input)="checkdurationInput()">
-                <mat-error *ngIf="hasError('duration', 'required') && !isInputzero">Duration is required</mat-error>
-                <span *ngIf="isInputzero" class="duration__err">Duration should be greater than 0</span>
-              </mat-form-field>
+      <label for="name" class="label mt-4">Duration (Mins)</label>
+      <mat-form-field appearance="outline" style="width: 100%">
+        <input
+          type="number"
+          matInput
+          placeholder="Duration"
+          formControlName="duration"
+          (input)="checkdurationInput()"
+        />
+        <mat-error *ngIf="hasError('duration', 'required') && !isInputzero"
+          >Duration is required</mat-error
+        >
+        <span *ngIf="isInputzero" class="duration__err"
+          >Duration should be greater than 0</span
+        >
+      </mat-form-field>
 
-              <label for="description" class="label mt-4">Instruction</label>
-              <angular-editor id="name_editor" formControlName="description" [config]="descriptionEditorconfig">
-            </angular-editor>
-              <!-- <mat-form-field appearance="outline" style="width: 100%;">
+      <label for="description" class="label mt-4">Instruction</label>
+
+      <angular-editor
+        id="name_editor"
+        matInput
+        formControlName="description"
+        [config]="descriptionEditorconfig"
+      >
+      </angular-editor>
+      <mat-error *ngIf="hasError('description', 'required')"
+        >Instruction is required</mat-error
+      >
+
+      <!-- <mat-form-field appearance="outline" style="width: 100%;">
                   <input matInput placeholder="Instruction" formControlName="description">
                   <mat-error *ngIf="hasError('description', 'required')">Instruction is required</mat-error>
                 </mat-form-field> -->
 
-            <div class="text-center pt-4">  
-                <button mat-raised-button class="mat-btn save-btn mx-1" (click)="submit()">
-                    <mat-icon>save</mat-icon>
-                    Save
-                </button>
-                <button mat-raised-button class="mat-btn reset mx-1" (click)="Reset()">
-                    <mat-icon>cached</mat-icon>
-                    Reset
-                </button>
-            </div>
-        </form>
-    
-    
-    
-    </div>
+      <div class="text-center pt-4">
+        <button
+          mat-raised-button
+          class="mat-btn save-btn mx-1"
+          (click)="submit()"
+        >
+          <mat-icon>save</mat-icon>
+          Save
+        </button>
+        <button mat-raised-button class="mat-btn reset mx-1" (click)="Reset()">
+          <mat-icon>cached</mat-icon>
+          Reset
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

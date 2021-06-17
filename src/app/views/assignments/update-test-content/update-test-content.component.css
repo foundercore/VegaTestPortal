@@ -15,7 +15,7 @@
   color: #fff;
 }
 .edit__btn {
-  margin-right: 3rem;
+  margin-right: 0.2rem;
 }
 .edit__btn:hover {
   background-color: rgb(0, 153, 255);
@@ -44,7 +44,7 @@ tr.mat-header-row {
   } */
 
 .remove__btn {
-  margin-right: 3rem;
+  margin-right: 0rem;
 }
 .remove__btn:hover {
   background-color: red;
@@ -171,4 +171,8 @@ tr.mat-row td {
 
 tr.mat-row td > p {
   margin-bottom: 0;
+}
+
+li {
+  cursor: auto;
 }

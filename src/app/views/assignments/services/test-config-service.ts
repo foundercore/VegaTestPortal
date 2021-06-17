@@ -8,6 +8,7 @@ import { TestConfigurationVM } from '../models/test-configuration';
 import { Section } from '../models/sections';
 import { QuestionsViewModel } from '../models/questionsVM';
 import { QuestionMarkedForReviewModel } from '../models/questionMarkedForReview';
+import { EditTestMetaData } from '../models/editTestMetaData';
 
 @Injectable({
   providedIn: 'root',
@@ -65,6 +66,14 @@ export class TestConfigService extends BaseService {
     model: Section
   ): Observable<any> {
     const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${test_id}/section/${section_id}/update-metadata`;
+    return this.http.post<any>(Url, model, this.headers);
+  }
+
+  updateTestMetaData(
+    test_id: string,
+    model: EditTestMetaData
+  ): Observable<any> {
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${test_id}/update-metadata`;
     return this.http.post<any>(Url, model, this.headers);
   }
 
