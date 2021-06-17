@@ -1,8 +1,19 @@
 <section class="update__sec py-5">
   <div class="container">
+    <div class="row">
+      <h2 class="col-10">{{ questionPaper.name }}</h2>
+      <h5 class="col-2 align-bottom mt-3">
+        Marks:{{ questionPaper.totalMarks }}
+      </h5>
+    </div>
+
+    <hr />
     <div class="text-left">
       <button mat-raised-button class="add-btn mx-2" routerLink="/home/tests">
         <mat-icon>arrow_back</mat-icon><span class="ml-2">Go Back</span>
+      </button>
+      <button mat-raised-button class="add-btn mx-2" (click)="editTest()">
+        <mat-icon>edit</mat-icon><span class="ml-2">Edit Test</span>
       </button>
     </div>
     <div class="text-right py-4">

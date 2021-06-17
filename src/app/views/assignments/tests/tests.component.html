@@ -107,14 +107,14 @@
             <td class="actions_container" mat-cell *matCellDef="let element">
               <span
                 class="action-btn"
-                matTooltip="View Question"
+                matTooltip="View Test"
                 (click)="startTest(element)"
               >
                 <mat-icon>remove_red_eye</mat-icon>
               </span>
               <span
                 class="action-btn"
-                matTooltip="Edit Question"
+                matTooltip="Edit Test"
                 routerLink="/home/tests/update-test/{{
                   element?.questionPaperId
                 }}"
@@ -123,14 +123,14 @@
               </span>
               <span
                 class="action-btn"
-                matTooltip="Delete Question"
+                matTooltip="Delete Test"
                 (click)="deleteQuestionPaperbyId(element?.questionPaperId)"
               >
                 <mat-icon>delete_forever</mat-icon>
               </span>
               <span
                 class="action-btn"
-                matTooltip="Clone Question"
+                matTooltip="Clone Test"
                 (click)="cloneTest(element)"
               >
                 <mat-icon>file_copy</mat-icon>

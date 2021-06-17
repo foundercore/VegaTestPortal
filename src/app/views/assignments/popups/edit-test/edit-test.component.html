@@ -1,0 +1,85 @@
+<div class="card border-0">
+  <div class="card-header d-flex bg-transparent p-0 border-0">
+    <h4>Edit Test</h4>
+    <button class="btn close__btn" (click)="close()">
+      <span class="position-center">&times;</span>
+    </button>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="testForm" autocomplete="off">
+      <label for="name" class="label">Test Name</label>
+      <mat-form-field appearance="outline" style="width: 100%">
+        <input matInput placeholder="Test Name" formControlName="testName" />
+        <mat-error *ngIf="hasError('testName', 'required')"
+          >Test Name is required</mat-error
+        >
+      </mat-form-field>
+
+      <label for="name" class="label">Duration (Mins)</label>
+      <mat-form-field appearance="outline" style="width: 100%">
+        <input
+          type="number"
+          matInput
+          placeholder="Duration"
+          formControlName="duration"
+        />
+        <mat-error *ngIf="hasError('duration', 'required')"
+          >Duration is required</mat-error
+        >
+      </mat-form-field>
+
+      <label for="name" class="label">Total Marks</label>
+      <mat-form-field appearance="outline" style="width: 100%">
+        <input
+          type="number"
+          matInput
+          placeholder="Total Marks"
+          formControlName="totalMarks"
+        />
+        <mat-error *ngIf="hasError('totalMarks', 'required')"
+          >Total Marks is required</mat-error
+        >
+      </mat-form-field>
+
+      <label for="name" class="label">Instructions</label>
+      <angular-editor
+        id="name_editor"
+        matInput
+        formControlName="instructions"
+        [config]="descriptionEditorconfig"
+        [required]="true"
+      >
+      </angular-editor>
+      <mat-error *ngIf="hasError('instructions', 'required')"
+        >Instruction is required</mat-error
+      >
+      <!-- <mat-form-field appearance="outline" style="width: 100%">
+          <input
+            type="text"
+            matInput
+            placeholder="Instructions"
+            formControlName="instructions"
+          />
+
+        </mat-form-field> -->
+
+      <div class="text-center pt-4">
+        <button
+          mat-raised-button
+          class="mat-btn save-btn mx-1"
+          (click)="UpdatetestWithDurationCheck()"
+        >
+          <mat-icon>save</mat-icon>
+          Save
+        </button>
+
+        <button mat-raised-button class="mat-btn reset mx-1" (click)="Reset()">
+          <mat-icon>cached</mat-icon>
+          Reset
+        </button>
+        <mat-spinner *ngIf="showSpinner" color="primary" [diameter]="30">
+        </mat-spinner>
+      </div>
+    </form>
+  </div>
+</div>

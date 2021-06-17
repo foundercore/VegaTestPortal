@@ -19,6 +19,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { EditSectionComponent } from './popups/edit-section/edit-section.component';
 import { RejectstatusComponent } from './popups/reject-status/reject-status.component';
 import { CloneAssignmentComponent } from './clone-assignment/clone-assignment.component';
+import { EditTestComponent } from './popups/edit-test/edit-test.component';
 
 
 
@@ -35,7 +36,8 @@ import { CloneAssignmentComponent } from './clone-assignment/clone-assignment.co
     ShowResultComponent,
     EditSectionComponent,
     RejectstatusComponent,
-    CloneAssignmentComponent
+    CloneAssignmentComponent,
+    EditTestComponent
   ],
   imports: [
     CommonModule,

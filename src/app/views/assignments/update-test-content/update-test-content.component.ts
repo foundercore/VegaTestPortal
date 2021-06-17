@@ -19,6 +19,8 @@ import { QuestionModel } from 'src/app/models/questions/question-model';
 import { RejectstatusComponent } from '../popups/reject-status/reject-status.component';
 import { TestVM } from '../models/postTestVM';
 import { Status } from '../models/statusEnum';
+import { EditTestComponent } from '../popups/edit-test/edit-test.component';
+import { EditTestMetaData } from '../models/editTestMetaData';
 
 @Component({
   selector: 'app-update-test-content',
@@ -51,7 +53,7 @@ export class UpdateTestContentComponent implements OnInit {
   sectionId: string = '';
   searchText: string = '';
   ques2 = [];
-  questionPaper = {};
+  questionPaper = new EditTestMetaData();
   quest: any;
   status: string;
   expandedStateArray = [];
@@ -160,6 +162,85 @@ export class UpdateTestContentComponent implements OnInit {
     });
   }
 
+  editTest() {
+    console.log(
+      'Edit test testId=>',
+      this.testId,
+      ' this.questionPaper=>',
+      this.questionPaper
+    );
+    const dialogRef = this.dialog.open(EditTestComponent, {
+      maxWidth: '700px',
+      width: '100%',
+      height: 'auto',
+      hasBackdrop: false,
+      backdropClass: 'dialog-backdrop',
+      data: {
+        testId: this.testId,
+        questionPaper: this.questionPaper,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('Result accepted from edit-test dialog box =>', result);
+      //this.toastrService.success('Test details updated successfully');
+      this.getQuestionPaperbyId();
+
+      // var model = this.questionPaper;
+      // model.name = result.testName;
+      // model.instructions = result.instructions;
+      // model.totalDurationInMinutes = result.duration;
+      // model.totalMarks = result.totalMarks;
+      // this.testConfigService.updateTestMetaData(result.testId, model).subscribe(
+      //   (res) => {
+      //     this.toastrService.success('Test details updated successfully');
+      //     this.getQuestionPaperbyId();
+      //   },
+      //   (err) => {
+      //     this.toastrService.error('Error in test details updating');
+      //     this.getQuestionPaperbyId();
+      //     console.log('Error while updating test meta data=>', err);
+      //   }
+      // );
+      // console.log(
+      //   'Details req for edit => this.testId=>',
+      //   this.testId,
+      //   ' this.sectionId=>',
+      //   this.sectionId
+      // );
+      // if (result != null) {
+      //   let model = new Section();
+      //   model.durationInMinutes = +result?.duration;
+      //   model.name = result?.sectionName;
+      //   model.instructions = result?.instructions;
+      //   model.difficultyLevel = result?.difficultyLevel;
+      //   model.testId = this.route.snapshot.paramMap.get('id');
+      //   var sectionId = result?.sectionId;
+      //   //debugger;
+      //   this.testConfigService
+      //     .editSection(model.testId, sectionId, model)
+      //     .subscribe(
+      //       (res: string = '') => {
+      //         this.getQuestionPaperbyId();
+      //         this.toastrService.success('Test updated successfully');
+      //       },
+      //       (error) => {
+      //         if (error.status == 200) {
+      //           this.getQuestionPaperbyId();
+      //           this.toastrService.success('Test updated successfully');
+      //         } else {
+      //           this.toastrService.error(
+      //             error?.error?.message
+      //               ? error?.error?.message
+      //               : error?.message,
+      //             'Error'
+      //           );
+      //         }
+      //       }
+      //     );
+      // }
+    });
+  }
+
   deleteQuestionFromSection() {
     var sectionId = this.section.id;
     var testId = this.testId;
@@ -192,7 +273,7 @@ export class UpdateTestContentComponent implements OnInit {
           (err) => {
             this.getQuestionPaperbyId();
             this.toastrService.error(
-              'Error while deteing questions=>' + err.error.apierror.message
+              'Error while deleting questions=>' + err.error.apierror.message
             );
             console.log(
               'Error while deleting=>',
@@ -394,10 +475,16 @@ export class UpdateTestContentComponent implements OnInit {
         if (result.isConfirmed) {
           this.testConfigService
             .initiateVerification(this.route.snapshot.paramMap.get('id'))
-            .subscribe((res: any) => {
-              this.toastrService.success('Status updated successfully');
-              this.getQuestionPaperbyId();
-            });
+            .subscribe(
+              (res: any) => {
+                this.toastrService.success('Status updated successfully');
+                this.getQuestionPaperbyId();
+              },
+              (err) => {
+                this.toastrService.success('Status updation failed');
+                this.getQuestionPaperbyId();
+              }
+            );
         }
       });
     }

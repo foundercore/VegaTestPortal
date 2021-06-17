@@ -16,6 +16,7 @@ import { AppState } from 'src/app/state_management/_states/auth.state';
 import Swal from 'sweetalert2';
 import { TestLiveComponent } from '../../assignments/popups/test-live/test-live.component';
 import { TestConfigService } from '../../assignments/services/test-config-service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -70,7 +71,8 @@ export class StudentDashboardComponent implements OnInit {
     public dialog: MatDialog,
     private store: Store<AppState>,
     private testConfigService: TestConfigService,
-    private router: Router
+    private router: Router,
+    private toastrService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -115,20 +117,47 @@ export class StudentDashboardComponent implements OnInit {
       confirmButtonText: this.buttontext,
     }).then((result) => {
       if (result.isConfirmed) {
-        const dialogRef = this.dialog.open(TestLiveComponent, {
-          maxWidth: '1700px',
-          width: '100%',
-          minHeight: '100vh',
-          height: 'auto',
-          hasBackdrop: false,
-          backdropClass: 'dialog-backdrop',
-          data: { testData: element, userType: this.userType },
-        });
-        dialogRef.afterClosed().subscribe((result) => {
-          this.getMyAssignments();
-        });
+        if (element.passcode !== null) this.verifyPasscode(element);
+        else this.openTestPopup(element);
       }
     });
+  }
+
+  openTestPopup(element) {
+    const dialogRef = this.dialog.open(TestLiveComponent, {
+      maxWidth: '1700px',
+      width: '100%',
+      minHeight: '100vh',
+      height: 'auto',
+      hasBackdrop: false,
+      backdropClass: 'dialog-backdrop',
+      data: { testData: element, userType: this.userType },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getMyAssignments();
+    });
+  }
+
+  verifyPasscode(element) {
+    console.log('VerifyPasscode received element=>', element);
+    if (element.passcode !== null) {
+      //popup to ask for passcode and verify it
+      console.log(
+        'VerifyPasscode received element.passcode=>',
+        element.passcode
+      );
+      Swal.fire({
+        title: 'Verify Passcode',
+        text: 'Enter Passcode:',
+        input: 'text',
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.value && result.value == element.passcode) {
+          this.openTestPopup(element);
+          this.toastrService.success('Passcode Verified successfully');
+        } else this.toastrService.error('Invalid Passcode');
+      });
+    }
   }
 
   viewResult(row: any) {
