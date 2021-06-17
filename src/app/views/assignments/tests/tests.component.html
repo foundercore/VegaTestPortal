@@ -53,6 +53,9 @@
           [dataSource]="dataSource"
           class="mat__data__table mb-0"
           matSort
+          matSortDisableClear
+          matSortDirection="desc"
+          (matSortChange)="resetPaging()"
           class="mat-elevation-z8 border custom_table border-right"
         >
           <ng-container matColumnDef="select">
@@ -150,6 +153,8 @@
         class="pagination__box"
         [length]="totalNumberOfRecords"
         [pageSizeOptions]="pageOptions"
+        (page)="getPaginatorData($event)"
+        showFirstLastButtons="true"
       ></mat-paginator>
     </div>
   </div>
