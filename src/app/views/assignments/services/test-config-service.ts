@@ -9,6 +9,7 @@ import { Section } from '../models/sections';
 import { QuestionsViewModel } from '../models/questionsVM';
 import { QuestionMarkedForReviewModel } from '../models/questionMarkedForReview';
 import { EditTestMetaData } from '../models/editTestMetaData';
+import { SearchQuestion } from 'src/app/models/questions/search-question-model';
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +46,7 @@ export class TestConfigService extends BaseService {
     return this.http.post<any>(Url, model, this.headers);
   }
 
-  getQuestionList(model: SearchQuestionPaperVM): Observable<any> {
+  getQuestionList(model: SearchQuestion): Observable<any> {
     const url = `${this.BASE_SERVICE_URL}/api/v1/question/search`;
     return this.http.post<any>(url, model, this.headers);
   }

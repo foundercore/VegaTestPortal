@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import {
@@ -27,7 +27,7 @@ import { AssessmentEditorComponent } from '../assessment-editor/assessment-edito
   templateUrl: './questions-list.component.html',
   styleUrls: ['./questions-list.component.css'],
 })
-export class QuestionslistComponent implements OnInit {
+export class QuestionslistComponent implements OnInit, AfterViewInit {
   panelOpenState: boolean = false;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -89,9 +89,11 @@ export class QuestionslistComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
+  }
+  ngAfterViewInit() {
     this.getQuestions();
   }
-
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
@@ -132,7 +134,10 @@ export class QuestionslistComponent implements OnInit {
   getQuestions() {
     this.questions = [];
     this.questions2 = [];
-    let model = new SearchQuestionPaperVM();
+    let model = new SearchQuestion(String(this.paginator.pageIndex + 1),
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction);
     this.testConfigService
       .getQuestionList(model)
       .pipe(finalize(() => {}))
