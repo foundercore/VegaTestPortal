@@ -25,6 +25,11 @@ export class AssignmentFormComponent implements  OnInit,AfterViewInit {
 
   assignmentFormGroup ;
 
+  minValidDateTo: Date;
+
+  minReleaseDate: Date;
+  maxReleaseDate:Date;
+
   constructor(
     private userService: UserService,
     private tosterService: ToastrService,
@@ -44,7 +49,9 @@ export class AssignmentFormComponent implements  OnInit,AfterViewInit {
 
   ngOnInit(): void {
     if (this.data.data) {
-
+      this.minReleaseDate = this.data.data.validFrom;
+      this.maxReleaseDate = this.data.data.validTo;
+      this.minValidDateTo = this.data.data.validFrom;
       this.assignmentFormGroup = new FormGroup(
         {
           passcode: new FormControl(this.data.data.passcode),
@@ -56,12 +63,14 @@ export class AssignmentFormComponent implements  OnInit,AfterViewInit {
          }
       );
     } else {
+      this.minValidDateTo = new Date();
+      this.minReleaseDate = this.minValidDateTo;
       this.assignmentFormGroup = new FormGroup(
         {
           passcode: new FormControl(''),
           description: new FormControl('', [Validators.required]),
           releaseDate: new FormControl('', [Validators.required]),
-          validFrom: new FormControl('', [Validators.required]),
+          validFrom: new FormControl(new Date(), [Validators.required]),
           validTo: new FormControl('', [Validators.required]),
           assignedToBatch: new FormControl([], [Validators.required]),
          }
@@ -124,4 +133,12 @@ export class AssignmentFormComponent implements  OnInit,AfterViewInit {
     this.assignmentFormGroup.reset();
   }
 
+  validDateFromChangeTrigger(event){
+      this.minValidDateTo = event.value;
+      this.minReleaseDate =  event.value;
+  }
+
+  validDateToChangeTrigger(event){
+    this.maxReleaseDate =  event.value;
+}
 }
