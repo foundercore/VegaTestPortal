@@ -241,14 +241,14 @@ export class TestsComponent implements OnInit {
       .pipe(finalize(() => {}))
       .subscribe(
         (res: any) => {
-          //if (res.isSuccess) {
           if (res?.tests?.length > 0) {
             this.alltest = res?.tests;
             this.alltest2 = res?.tests;
             this.dataSource = new MatTableDataSource(this.alltest);
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
-            console.log('this.listtest==', res);
+            this.totalNumberOfRecords = res?.totalRecords;
+            console.log('this.list test ==', res);
           }
         },
         (error) => {
