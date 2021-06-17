@@ -7,4 +7,5 @@ export class SearchQuestionPaperVM {
   pageSize: number = 25;
   sortColumn: string | 'lastUpdatedOn';
   sortOrder: string | 'asc';
+  nameRegexPattern: string;
 }

@@ -4,9 +4,10 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   ViewChild,
+  AfterViewInit,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -29,7 +30,7 @@ import { TestConfigService } from '../services/test-config-service';
   templateUrl: './tests.component.html',
   styleUrls: ['./tests.component.css'],
 })
-export class TestsComponent implements OnInit {
+export class TestsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   totalNumberOfRecords = 0;
@@ -37,7 +38,6 @@ export class TestsComponent implements OnInit {
   dataSource = new MatTableDataSource<any>();
   selection = new SelectionModel<any>(true, []);
   alltest = [];
-  alltest2 = [];
   displayedColumns: string[] = [
     'select',
     'testName',
@@ -54,6 +54,7 @@ export class TestsComponent implements OnInit {
   userType: string = '';
   buttontext: string = '';
   createdId : string = "";
+  searchQuestionPaperModel = new SearchQuestionPaperVM();
   constructor(
     private testConfigService: TestConfigService,
     public dialog: MatDialog,
@@ -61,6 +62,12 @@ export class TestsComponent implements OnInit {
     private router: Router,
     private store: Store<AppState>
   ) {}
+  ngAfterViewInit(): void {
+    this.dataSource = new MatTableDataSource(this.alltest);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.GetAllquestionPapers();
+  }
 
   ngOnInit(): void {
     this.store.select('appState').subscribe((data) => {
@@ -69,7 +76,6 @@ export class TestsComponent implements OnInit {
       this.userType = data?.user?.authorities[0]?.authority;
       console.log('data', data);
     });
-    this.GetAllquestionPapers();
     // this.alltest.push({"testId" : "fc94065f-b544-4fa0-adfa-dd159da4fd87","testName" : "hello Test","minimumDurationInMinutes" : 45, "totalDurationInMinutes": 50});
   }
 
@@ -235,18 +241,15 @@ export class TestsComponent implements OnInit {
   }
 
   GetAllquestionPapers() {
-    let model = new SearchQuestionPaperVM();
+    this.getSearchTestModel();
     this.testConfigService
-      .getAllQuestionPaper(model)
+      .getAllQuestionPaper(this.searchQuestionPaperModel)
       .pipe(finalize(() => {}))
       .subscribe(
         (res: any) => {
           if (res?.tests?.length > 0) {
             this.alltest = res?.tests;
-            this.alltest2 = res?.tests;
-            this.dataSource = new MatTableDataSource(this.alltest);
-            this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator;
+            this.dataSource.data = this.alltest;
             this.totalNumberOfRecords = res?.totalRecords;
             console.log('this.list test ==', res);
           }
@@ -260,28 +263,21 @@ export class TestsComponent implements OnInit {
       );
   }
 
-  // searchtest() {
-  //   if (
-  //     this.searchText != '' &&
-  //     this.searchText != null &&
-  //     this.searchText != undefined &&
-  //     this.searchText.length > 3
-  //   ) {
-  //     this.alltest = this.alltest.filter(
-  //       (x) =>
-  //         x.name.toLowerCase().includes(this.searchText) ||
-  //         x.name.toUpperCase().includes(this.searchText)
-  //     );
-  //     this.dataSource = new MatTableDataSource(this.alltest);
-  //     this.dataSource.sort = this.sort;
-  //     this.dataSource.paginator = this.paginator;
-  //   } else {
-  //     this.alltest = this.alltest2;
-  //     this.dataSource = new MatTableDataSource(this.alltest);
-  //     this.dataSource.sort = this.sort;
-  //     this.dataSource.paginator = this.paginator;
-  //   }
-  // }
+  private getSearchTestModel() {
+    this.searchQuestionPaperModel.pageNumber = this.paginator.pageIndex + 1;
+    this.searchQuestionPaperModel.pageSize = this.paginator.pageSize;
+    this.searchQuestionPaperModel.sortColumn = this.sort.active ? this.sort.active : 'lastUpdatedOn';
+    this.searchQuestionPaperModel.sortOrder = this.sort.direction ? this.sort.direction : 'desc';
+  }
+
+  resetPaging(): void {
+    this.paginator.pageIndex = 0;
+  }
+
+  getPaginatorData(event: PageEvent) : PageEvent{
+    this.GetAllquestionPapers();
+    return event;
+  }
 
   extractContent(s) {
     var span = document.createElement('span');
@@ -323,7 +319,8 @@ export class TestsComponent implements OnInit {
   }
 
   applyFilter() {
-    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    this.searchQuestionPaperModel.nameRegexPattern = this.searchText.trim().toLowerCase();
+    this.GetAllquestionPapers();
   }
 
   cloneTest(assignment: any) {
