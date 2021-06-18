@@ -221,9 +221,10 @@ export class TestLiveComponent implements OnInit {
   }
   getSelectedOption() {
     // console.log('optionsSelected=>', this.optionsSelected);
+    debugger;
     var optionsSelectedArray = [];
     for (var i = 0; i < this.optionsSelected.length; i++) {
-      if (this.optionsSelected[i]) optionsSelectedArray.push(String(i));
+      if (this.optionsSelected[i]) optionsSelectedArray.push(String(i+1));
     }
     if (optionsSelectedArray.length > 0) {
       console.log(
