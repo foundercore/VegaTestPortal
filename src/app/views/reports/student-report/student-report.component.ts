@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
@@ -39,14 +40,11 @@ export class StudentReportComponent implements OnInit {
   userType: string = '';
   assignmentId: string = '';
 
-  studentScore: number = 0.0;
-  negativeMarking: number = 0.0;
-  avgTimePerQuestionInSec: string = '0';
-  accuracyPercentage: string = '0';
-
   fetchedWholeAssignmentResult;
 
   metrics;
+
+  currentSelection = 'Section Level';
 
   public pageOptions = PAGE_OPTIONS;
 
@@ -62,7 +60,8 @@ export class StudentReportComponent implements OnInit {
     public translate: TranslateService,
     private store: Store<AppState>,
     private testConfigService: TestConfigService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    public _sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -92,20 +91,7 @@ export class StudentReportComponent implements OnInit {
             );
             this.isLoading = false;
             this.metrics = res.summary.difficulty[0].metric;
-            // this.studentScore = metrics.marksReceived;
-            // this.negativeMarking = metrics.negativeMarks;
-            // this.accuracyPercentage =
-            //   Math.round(
-            //     (metrics.correct / metrics.totalQuestions) * 100 * 100
-            //   ) / 100;
-            // this.avgTimePerQuestionInSec = String(
-            //   Math.round((metrics.totalTimeInSec / metrics.attempted) * 100) /
-            //     100
-            // );
-            // if (this.avgTimePerQuestionInSec.includes('Infinity'))
-            //   this.avgTimePerQuestionInSec = '0';
-
-            this.showFilteredData('Section Level');
+            this.showFilteredData(this.currentSelection);
           },
           (err) => {
             console.log('Error while fetching studentReport=>', err);
@@ -116,7 +102,7 @@ export class StudentReportComponent implements OnInit {
   }
 
   showFilteredData(filterMode?) {
-    console.log('Showing filtered data for filterMode=', filterMode);
+    this.currentSelection = filterMode;
     var datas = [];
     var totScore = 0,
       negativeMarks = 0,
@@ -127,8 +113,6 @@ export class StudentReportComponent implements OnInit {
       totalAccuracyPerc = 0,
       noOfRows = 0;
     if (filterMode === 'Section Level') {
-      console.log('preparing dataSource for SectionLevel');
-
       this.fetchedWholeAssignmentResult.summary.sections.map((sec) => {
         var studentReportModel = new StudentReportModel();
         studentReportModel.name = sec.sectionName;
@@ -138,15 +122,15 @@ export class StudentReportComponent implements OnInit {
         studentReportModel.incorrect = sec.metric.incorrect;
         studentReportModel.skipped = sec.metric.skipped;
         studentReportModel.score = sec.metric.marksReceived;
-        //
+
         totScore += sec.metric.marksReceived;
         negativeMarks += sec.metric.negativeMarks;
-        console.log('Negative marks=', sec.metric.negativeMarks);
+
         totalTimeInSecs += sec.metric.marksReceived;
         totalQuestions += sec.metric.totalQuestions;
         totalCorrectQuestions += sec.metric.correct;
         totalAttemptedQuestions += sec.metric.attempted;
-        //
+
         studentReportModel.correct = sec.metric.correct;
         studentReportModel.accuracy =
           Math.round(
@@ -156,9 +140,8 @@ export class StudentReportComponent implements OnInit {
         if (studentReportModel.accuracy > 0) noOfRows++;
         datas.push(studentReportModel);
       });
+      this.dataSource.data = datas;
     } else if (filterMode === 'Topic Level') {
-      console.log('preparing dataSource for TopicLevel');
-
       this.fetchedWholeAssignmentResult.summary.topics.map((sec) => {
         var studentReportModel = new StudentReportModel();
         studentReportModel.name = sec.topic;
@@ -173,7 +156,7 @@ export class StudentReportComponent implements OnInit {
             (sec.metric.correct / sec.metric.totalQuestions) * 100 * 100
           ) / 100;
         studentReportModel.correct = sec.metric.correct;
-        //
+
         totScore += sec.metric.marksReceived;
         negativeMarks += sec.metric.negativeMarks;
         totalTimeInSecs += sec.metric.marksReceived;
@@ -182,11 +165,12 @@ export class StudentReportComponent implements OnInit {
         totalAttemptedQuestions += sec.metric.attempted;
         totalAccuracyPerc += studentReportModel.accuracy;
         if (sec.metric.attempted > 0) noOfRows++;
-        //
+
         datas.push(studentReportModel);
       });
+      this.dataSource.data = datas;
     } else if (filterMode === 'Difficulty Level') {
-      console.log('preparing dataSource for DifficultyLevel');
+
       this.fetchedWholeAssignmentResult.summary.difficulty.map((sec) => {
         var studentReportModel = new StudentReportModel();
         studentReportModel.name = sec.difficultyLevel;
@@ -201,7 +185,7 @@ export class StudentReportComponent implements OnInit {
             (sec.metric.correct / sec.metric.totalQuestions) * 100 * 100
           ) / 100;
         studentReportModel.correct = sec.metric.correct;
-        //
+
         totScore += sec.metric.marksReceived;
         negativeMarks += sec.metric.negativeMarks;
         totalTimeInSecs += sec.metric.marksReceived;
@@ -210,29 +194,15 @@ export class StudentReportComponent implements OnInit {
         totalAttemptedQuestions += sec.metric.attempted;
         totalAccuracyPerc += studentReportModel.accuracy;
         if (studentReportModel.accuracy > 0) noOfRows++;
-        //
+
         datas.push(studentReportModel);
       });
+      this.dataSource.data = datas;
     }
-    this.studentScore = totScore;
-    this.negativeMarking = negativeMarks;
-    this.accuracyPercentage = String(
-      Math.round((totalAccuracyPerc / noOfRows) * 100) / 100
-    );
-    if (
-      this.accuracyPercentage.includes('Infinity') ||
-      this.accuracyPercentage.includes('NaN')
-    )
-      this.accuracyPercentage = '0';
-    this.avgTimePerQuestionInSec = String(
-      Math.round((totalTimeInSecs / totalAttemptedQuestions) * 100) / 100
-    );
-    if (
-      this.avgTimePerQuestionInSec.includes('Infinity') ||
-      this.avgTimePerQuestionInSec.includes('NaN')
-    )
-      this.avgTimePerQuestionInSec = '0';
-    this.dataSource.data = datas;
-    console.log('This.datasource=', this.dataSource);
   }
+
+  public transform(value: string): SafeHtml {
+    return this._sanitizer.bypassSecurityTrustHtml(value);
+  }
+
 }
