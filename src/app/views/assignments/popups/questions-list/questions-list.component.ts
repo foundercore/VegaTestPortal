@@ -1,5 +1,11 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Inject,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import {
@@ -11,14 +17,18 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
-import { forkJoin } from 'rxjs';
+
+import { forkJoin, merge, Observable, of as observableOf, Subject } from 'rxjs';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+
 import { finalize } from 'rxjs/operators';
+
 import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { QuestionModel } from 'src/app/models/questions/question-model';
 import { SearchQuestion } from 'src/app/models/questions/search-question-model';
 import { QuestionManagementService } from 'src/app/services/question-management/question-management.service';
 import { QuestionsViewModel } from '../../models/questionsVM';
-import { SearchQuestionPaperVM } from '../../models/searchQuestionVM';
+//import { SearchQuestionPaperVM } from '../../models/searchQuestionPaperVM';
 import { TestConfigService } from '../../services/test-config-service';
 import { AssessmentEditorComponent } from '../assessment-editor/assessment-editor.component';
 
@@ -36,6 +46,7 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
   questions: QuestionModel[];
   questions2: QuestionModel[];
   quesmodel = [];
+  actualTotalNumberOfRecords = 0;
   displayedColumns: string[] = [
     'select',
     'quesName',
@@ -88,9 +99,7 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void {}
   ngAfterViewInit() {
     this.getQuestions();
   }
@@ -133,49 +142,82 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
 
   getQuestions() {
     this.questions = [];
-    this.questions2 = [];
-    let model = new SearchQuestion(String(this.paginator.pageIndex + 1),
+    let model = new SearchQuestion(
+      String(this.paginator.pageIndex + 1),
       this.paginator.pageSize,
       this.sort.active,
-      this.sort.direction);
-    this.testConfigService
-      .getQuestionList(model)
-      .pipe(finalize(() => {}))
-      .subscribe(
-        (res: any) => {
-          if (res?.questions.length > 0) {
-            if (
-              this._data.selectedques != null &&
-              this._data.selectedques.length > 0
-            ) {
-              //  res?.questions.forEach(element => {
-              this._data?.selectedques.forEach((element2) => {
-                // if(element.id == element2.id){
-                let index = res.questions.findIndex(
-                  (x) => x.id.questionId == element2.id
-                );
-                if (index != -1) {
-                  res?.questions.splice(index, 1);
-                }
-                //}
-              });
-              // });
-            }
-            this.questions = res?.questions;
-            this.questions2 = res?.questions;
-            this.dataSource = new MatTableDataSource(this.questions);
-            this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator;
-            console.log('this.queslist==', res);
-          }
-        },
-        (error) => {
-          this.toastrService.error(
-            error?.error?.message ? error?.error?.message : error?.message,
-            'Error'
-          );
-        }
-      );
+      this.sort.direction
+    );
+    // this.testConfigService
+    //   .getQuestionList(model)
+    //   .pipe(finalize(() => {}))
+    //   .subscribe(
+    //     (res: any) => {
+    //       console.log('this.queslist==', res);
+    //       this.totalNumberOfRecords = res.totalRecords;
+
+    //       if (res?.questions.length > 0) {
+    //         if (
+    //           this._data.selectedques != null &&
+    //           this._data.selectedques.length > 0
+    //         ) {
+    //           //  res?.questions.forEach(element => {
+    //           this._data?.selectedques.forEach((element2) => {
+    //             // if(element.id == element2.id){
+    //             let index = res.questions.findIndex(
+    //               (x) => x.id.questionId == element2.id
+    //             );
+    //             if (index != -1) {
+    //               res?.questions.splice(index, 1);
+    //             }
+    //             //}
+    //           });
+    //           // });
+    //         }
+    //         this.questions = res?.questions;
+    //         //this.questions2 = res?.questions;
+    //         this.dataSource = new MatTableDataSource(this.questions);
+    //         this.dataSource.sort = this.sort;
+    //         this.dataSource.paginator = this.paginator;
+    //       }
+    //     },
+    //     (error) => {
+    //       this.toastrService.error(
+    //         error?.error?.message ? error?.error?.message : error?.message,
+    //         'Error'
+    //       );
+    //     }
+    //   );
+
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoadingResults = true;
+          const searchQuestion = this.createSearchObject();
+          return this.testConfigService.getQuestionList(searchQuestion);
+        }),
+        map((data) => {
+          console.log('data in map=>', data);
+          this.isLoadingResults = false;
+          this.isRateLimitReached = false;
+          this.actualTotalNumberOfRecords = data.totalRecords;
+          return data.questions.map((x) => {
+            x.explanation_added =
+              x.explanation && x.explanation.length ? 'Yes' : 'No';
+            return x;
+          });
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          this.isRateLimitReached = true;
+          return observableOf([]);
+        })
+      )
+      .subscribe((data) => {
+        this.dataSource.data = data;
+        console.log('This.datasource=', this.dataSource);
+      });
   }
 
   saveQuestions() {
@@ -307,6 +349,7 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
       this.sort.active,
       this.sort.direction
     );
+    this.totalNumberOfRecords = this.paginator.pageSize;
 
     if (this.isFilterApply) {
       if (

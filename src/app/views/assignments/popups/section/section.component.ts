@@ -10,7 +10,7 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { SearchQuestionPaperVM } from '../../models/searchQuestionVM';
+import { SearchQuestionPaperVM } from '../../models/searchQuestionPaperVM';
 import { TestConfigService } from '../../services/test-config-service';
 import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
@@ -23,7 +23,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SectionComponent implements OnInit {
   public sectionForm: FormGroup;
-  isInputzero : boolean = false;
+  isInputzero: boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<SectionComponent>,
@@ -54,56 +54,82 @@ export class SectionComponent implements OnInit {
   }
 
   AddSectionWithDurationCheck() {
-    let model = new SearchQuestionPaperVM();
+    //let model = new SearchQuestionPaperVM();
     this.testConfigService
-      .getAllQuestionPaper(model)
-      .pipe(finalize(() => {}))
-      .subscribe(
-        (res: any) => {
-          //if (res.isSuccess) {
+      .getQuestionPaper(this._data.testId)
+      .subscribe((res: any) => {
+        var test = res;
+        var maxDuration = test.totalDurationInMinutes;
+        var totDuration = 0;
+        console.log('MaxDuration for this test=>', maxDuration);
+        if (test.sections !== null) {
+          test.sections.map((section) => {
+            totDuration += section.durationInMinutes;
+          });
+        }
+        totDuration += Number(this.sectionForm.getRawValue().duration);
+        console.log('totDuration of all sections duration', totDuration);
 
-          console.log('this.listtest ==', res);
-          if (res.tests !== null) {
-            res.tests?.map((test) => {
-              //check for currentt section in all tests data with current test
-              if (test.questionPaperId === this._data.testId) {
-                console.log(' test=>', test);
-                var maxDuration = test.totalDurationInMinutes;
-                var totDuration = 0;
-                console.log('MaxDuration for this test=>', maxDuration);
-                if (test.sections !== null) {
-                  test.sections.map((section) => {
-                    totDuration += section.durationInMinutes;
-                  });
-                }
-                totDuration += Number(this.sectionForm.getRawValue().duration);
-                console.log(
-                  'totDuration of all sections duration',
-                  totDuration
-                );
-
-                if (totDuration <= maxDuration) {
-                  console.log(
-                    'totDuration of section < MaxDuration for current test'
-                  );
-                  this.AddSection();
-                } else {
-                  this.toastrService.error(
-                    'You exceeded the maximum duration limit. Please choose durations for each section such that the total will be less or equal to Total duration of test.'
-                  );
-                }
-              }
-            });
-          }
-        },
-        (error) => {
+        if (totDuration <= maxDuration) {
+          console.log('totDuration of section < MaxDuration for current test');
+          this.AddSection();
+        } else {
           this.toastrService.error(
-            error?.error?.message ? error?.error?.message : error?.message,
-            'Error'
+            'You exceeded the maximum duration limit. Please choose durations for each section such that the total will be less or equal to Total duration of test.'
           );
         }
-      );
-    this.getQuestionPaperbyId();
+        console.log('this.gettest==', test);
+      });
+    // this.testConfigService
+    //   .getAllQuestionPaper(model)
+    //   .pipe(finalize(() => {}))
+    //   .subscribe(
+    //     (res: any) => {
+    //       //if (res.isSuccess) {
+
+    //       console.log('this.listtest ==', res);
+    //       if (res.tests !== null) {
+    //         res.tests?.map((test) => {
+    //           //check for currentt section in all tests data with current test
+    //           if (test.questionPaperId === this._data.testId) {
+    //             console.log(' test=>', test);
+    //             var maxDuration = test.totalDurationInMinutes;
+    //             var totDuration = 0;
+    //             console.log('MaxDuration for this test=>', maxDuration);
+    //             if (test.sections !== null) {
+    //               test.sections.map((section) => {
+    //                 totDuration += section.durationInMinutes;
+    //               });
+    //             }
+    //             totDuration += Number(this.sectionForm.getRawValue().duration);
+    //             console.log(
+    //               'totDuration of all sections duration',
+    //               totDuration
+    //             );
+
+    //             if (totDuration <= maxDuration) {
+    //               console.log(
+    //                 'totDuration of section < MaxDuration for current test'
+    //               );
+    //               this.AddSection();
+    //             } else {
+    //               this.toastrService.error(
+    //                 'You exceeded the maximum duration limit. Please choose durations for each section such that the total will be less or equal to Total duration of test.'
+    //               );
+    //             }
+    //           }
+    //         });
+    //       }
+    //     },
+    //     (error) => {
+    //       console.log('Error while checking tot duration=>', error);
+    //       this.toastrService.error(
+    //         error?.error?.message ? error?.error?.message : error?.message,
+    //         'Error'
+    //       );
+    //     }
+    //   );
+    //this.getQuestionPaperbyId();
     // if (this.sectionForm.invalid) {
     //   return;
     // } else {
@@ -111,15 +137,15 @@ export class SectionComponent implements OnInit {
     // }
   }
   getQuestionPaperbyId() {
-    // // if (this.route.snapshot.paramMap.get('id') != null) {
-    // this.testConfigService
-    //   .getQuestionPaper(this.route.snapshot.paramMap.get('id'))
-    //   .subscribe((res: any) => {
-    //     // this.controlparms = res?.controlParam;
-    //     // this.modelsections = res?.sections;
-    //     console.log('this.gettest==', res);
-    //   });
-    // //}
+    // if (this.route.snapshot.paramMap.get('id') != null) {
+    this.testConfigService
+      .getQuestionPaper(this._data.testId)
+      .subscribe((res: any) => {
+        // this.controlparms = res?.controlParam;
+        // this.modelsections = res?.sections;
+        console.log('this.gettest==', res);
+      });
+    //}
     console.log('this._data=>', this._data);
   }
 
@@ -151,14 +177,12 @@ export class SectionComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  checkdurationInput(){
-    if(this.sectionForm.value.duration <= 0){
+  checkdurationInput() {
+    if (this.sectionForm.value.duration <= 0) {
       this.isInputzero = true;
-    }
-    else if(this.sectionForm.value.duration == ""){
+    } else if (this.sectionForm.value.duration == '') {
       this.isInputzero = false;
-    }
-    else{
+    } else {
       this.isInputzero = false;
     }
   }
