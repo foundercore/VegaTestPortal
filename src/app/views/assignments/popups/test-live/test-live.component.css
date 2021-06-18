@@ -73,6 +73,7 @@ ul {
 
 ul > li {
   margin-top: 6px;
+  cursor: auto;
 }
 
 .left__content {

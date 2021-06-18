@@ -22,22 +22,23 @@ import { TestConfigService } from '../../services/test-config-service';
 import { CalculatorComponent } from '../calculator/calculator.component';
 import { TestLiveComponent } from '../test-live/test-live.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SearchQuestionPaperVM } from '../../models/searchQuestionPaperVM';
+// import { SearchQuestionPaperVM } from '../../models/searchQuestionPaperVM';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { EditTestMetaData } from '../../models/editTestMetaData';
 
 @Component({
-  selector: 'app-edit-section',
-  templateUrl: './edit-section.component.html',
-  styleUrls: ['./edit-section.component.css'],
+  selector: 'app-edit-test',
+  templateUrl: './edit-test.component.html',
+  styleUrls: ['./edit-test.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditSectionComponent implements OnInit {
-  sectionName: '';
-  sectionDuration: 0;
-  sectionInstructions: '';
-  sectionDifficultyLevel: '';
+export class EditTestComponent implements OnInit {
+  testName: '';
+  testDuration: 0;
+  testInstructions: '';
+  testDifficultyLevel: '';
   showSpinner: boolean = false;
-  public sectionForm: FormGroup;
+  public testForm: FormGroup;
   descriptionEditorconfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -66,9 +67,10 @@ export class EditSectionComponent implements OnInit {
       },
     ],
   };
+  questionPaper = new EditTestMetaData();
   constructor(
-    @Inject(MAT_DIALOG_DATA) public editSection_data: any,
-    public dialogRef: MatDialogRef<EditSectionComponent>,
+    @Inject(MAT_DIALOG_DATA) public editTest_data: any,
+    public dialogRef: MatDialogRef<EditTestComponent>,
     public dialog: MatDialog,
     private testConfigService: TestConfigService,
     private toastrService: ToastrService,
@@ -77,68 +79,40 @@ export class EditSectionComponent implements OnInit {
   ) {}
 
   hasError = (controlName: string, errorName: string) => {
-    return this.sectionForm.controls[controlName].hasError(errorName);
+    return this.testForm.controls[controlName].hasError(errorName);
   };
 
   ngOnInit(): void {
-    this.sectionForm = new FormGroup({
-      sectionName: new FormControl(this.editSection_data.section.name, [
+    console.log('editTest_data =>', this.editTest_data);
+    this.questionPaper = this.editTest_data.questionPaper;
+    this.testForm = new FormGroup({
+      testName: new FormControl(this.editTest_data.questionPaper.name, [
         Validators.required,
       ]),
       duration: new FormControl(
-        this.editSection_data.section.durationInMinutes,
+        this.editTest_data.questionPaper.totalDurationInMinutes,
         [Validators.required]
       ),
-      instructions: new FormControl(this.editSection_data.section.instructions),
-      difficultyLevel: new FormControl(
-        this.editSection_data.section.difficultyLevel
+      totalMarks: new FormControl(this.editTest_data.questionPaper.totalMarks, [
+        Validators.required,
+      ]),
+      instructions: new FormControl(
+        this.editTest_data.questionPaper.instructions
       ),
-      sectionId: new FormControl(this.editSection_data?.section.id),
+      testId: new FormControl(this.editTest_data?.testId),
     });
-    console.log('editSection_data =>', this.editSection_data);
   }
 
-  UpdateSectionWithDurationCheck() {
+  UpdatetestWithDurationCheck() {
     console.log(
       'Update button pressed with form values =>',
-      this.sectionForm.value
+      this.testForm.value
     );
-    //this.sectionForm.getRawValue().duration
-    this.Update_SectionWithDurationCheck();
-  }
-  Update_SectionWithDurationCheck() {
-    //let model = new SearchQuestionPaperVM();
-    this.testConfigService
-      .getQuestionPaper(this.editSection_data.testId)
-      .subscribe((res: any) => {
-        var test = res;
-        var maxDuration = test.totalDurationInMinutes;
-        var totDuration = 0;
-        console.log('MaxDuration for this test=>', maxDuration);
-        if (test.sections !== null) {
-          test.sections.map((section) => {
-            if (section.id !== this.editSection_data.section.id)
-              totDuration += section.durationInMinutes;
-          });
-        }
-        totDuration += Number(this.sectionForm.getRawValue().duration);
-        console.log('totDuration of all sections duration', totDuration);
-
-        if (totDuration <= maxDuration) {
-          console.log('totDuration of section < MaxDuration for current test');
-          this.UpdateSection();
-        } else {
-          this.toastrService.error(
-            'You exceeded the maximum duration limit by ' +
-              (totDuration - maxDuration) +
-              ' mins.'
-          );
-        }
-        console.log('this.gettest==', test);
-      });
+    this.Updatetest();
+    //this.testForm.getRawValue().duration
   }
 
-  // Update_SectionWithDurationCheck() {
+  // Update_testWithDurationCheck() {
   //   let model = new SearchQuestionPaperVM();
   //   this.showSpinner = true;
   //   this.testConfigService
@@ -151,29 +125,26 @@ export class EditSectionComponent implements OnInit {
   //         console.log('this.listtest ==', res);
   //         if (res.tests !== null) {
   //           res.tests?.map((test) => {
-  //             //check for currentt section in all tests data with current test
-  //             if (test.questionPaperId === this.editSection_data.testId) {
+  //             //check for currentt test in all tests data with current test
+  //             if (test.questionPaperId === this.editTest_data.testId) {
   //               console.log(' test=>', test);
   //               var maxDuration = test.totalDurationInMinutes;
   //               var totDuration = 0;
   //               console.log('MaxDuration for this test=>', maxDuration);
-  //               if (test.sections !== null) {
-  //                 test.sections.map((section) => {
-  //                   if (section.id !== this.editSection_data.section.id)
-  //                     totDuration += section.durationInMinutes;
+  //               if (test.tests !== null) {
+  //                 test.tests.map((test) => {
+  //                   if (test.id !== this.editTest_data.test.id)
+  //                     totDuration += test.durationInMinutes;
   //                 });
   //               }
-  //               totDuration += Number(this.sectionForm.getRawValue().duration);
-  //               console.log(
-  //                 'totDuration of all sections duration',
-  //                 totDuration
-  //               );
+  //               totDuration += Number(this.testForm.getRawValue().duration);
+  //               console.log('totDuration of all tests duration', totDuration);
 
   //               if (totDuration <= maxDuration) {
   //                 console.log(
-  //                   'totDuration of section < MaxDuration for current test'
+  //                   'totDuration of test < MaxDuration for current test'
   //                 );
-  //                 this.UpdateSection();
+  //                 this.Updatetest();
   //               } else {
   //                 this.toastrService.error(
   //                   'You exceeded the maximum duration limit by ' +
@@ -194,23 +165,47 @@ export class EditSectionComponent implements OnInit {
   //       }
   //     );
   //   // this.getQuestionPaperbyId();
-  //   // if (this.sectionForm.invalid) {
+  //   // if (this.testForm.invalid) {
   //   //   return;
   //   // } else {
-  //   //   this.dialogRef.close(this.sectionForm.value);
+  //   //   this.dialogRef.close(this.testForm.value);
   //   // }
   // }
 
-  UpdateSection() {
-    if (this.sectionForm.invalid) {
+  Updatetest() {
+    if (this.testForm.invalid) {
       return;
     } else {
-      this.dialogRef.close(this.sectionForm.value);
+      //this.dialogRef.close(this.testForm.value);
+      this.UpdateTestMetaData();
     }
   }
 
+  UpdateTestMetaData() {
+    var model = this.questionPaper;
+    model.name = this.testForm.value.testName;
+    model.instructions = this.testForm.value.instructions;
+    model.totalDurationInMinutes = this.testForm.value.duration;
+    model.totalMarks = this.testForm.value.totalMarks;
+    this.testConfigService
+      .updateTestMetaData(this.testForm.value.testId, model)
+      .subscribe(
+        (res) => {
+          this.toastrService.success('Test details updated successfully');
+          //this.getQuestionPaperbyId();
+          this.dialogRef.close(true);
+        },
+        (err) => {
+          this.toastrService.error('Error: ' + err.error.apierror.message);
+          //this.getQuestionPaperbyId();
+          //this.dialogRef.close(false);
+          console.log('Error while updating test meta data=>', err);
+        }
+      );
+  }
+
   Reset() {
-    this.sectionForm.reset();
+    this.testForm.reset();
   }
 
   close() {

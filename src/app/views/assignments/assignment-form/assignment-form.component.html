@@ -8,11 +8,11 @@
 </h1>
 <div mat-dialog-content>
   <div class="add-user-content">
-    <form class="example-container"  [formGroup]="assignmentFormGroup" #aForm>
+    <div class="example-container"  [formGroup]="assignmentFormGroup">
 
       <mat-form-field appearance="outline">
         <mat-label>Valid From</mat-label>
-        <input matInput required [matDatepicker]="validfrom_datepicker" formControlName="validFrom" name="validFrom" >
+        <input matInput required [matDatepicker]="validfrom_datepicker" formControlName="validFrom" name="validFrom" (dateChange)=validDateFromChangeTrigger($event)>
         <mat-datepicker-toggle matSuffix [for]="validfrom_datepicker"></mat-datepicker-toggle>
         <mat-datepicker #validfrom_datepicker>
           <mat-datepicker-actions>
@@ -24,7 +24,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Valid To</mat-label>
-        <input matInput required [matDatepicker]="validto_datepicker" formControlName="validTo">
+        <input matInput required [matDatepicker]="validto_datepicker"  [min]="minValidDateTo"  formControlName="validTo" (dateChange)=validDateToChangeTrigger($event)>
         <mat-datepicker-toggle matSuffix [for]="validto_datepicker"></mat-datepicker-toggle>
         <mat-datepicker #validto_datepicker>
           <mat-datepicker-actions>
@@ -32,6 +32,9 @@
             <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
           </mat-datepicker-actions>
         </mat-datepicker>
+        <mat-error *ngIf="assignmentFormGroup.controls.validTo.hasError('matDatepickerMin')">
+          Valid To date should be greater than or equal to <strong>Valid To Date</strong>
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -76,7 +79,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Release Date</mat-label>
-        <input matInput required [matDatepicker]="release_datepicker" formControlName="releaseDate">
+        <input matInput required [matDatepicker]="release_datepicker" [min]="minReleaseDate"  [max]="maxReleaseDate"  formControlName="releaseDate">
         <mat-datepicker-toggle matSuffix [for]="release_datepicker"></mat-datepicker-toggle>
         <mat-datepicker #release_datepicker>
           <mat-datepicker-actions>
@@ -84,12 +87,15 @@
             <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
           </mat-datepicker-actions>
         </mat-datepicker>
+        <mat-error *ngIf="assignmentFormGroup.controls.releaseDate.hasError('matDatepickerMin') || assignmentFormGroup.controls.releaseDate.hasError('matDatepickerMax')">
+          Release Date should be between <strong>Valid from Date</strong> and <strong>Valid To Date</strong>
+        </mat-error>
       </mat-form-field>
 
 
 
 
-    </form>
+    </div>
     <div class="btn-grp-cls">
       <button *ngIf="!data.data" mat-raised-button class="save-btn-cls" (click)="add()">{{ 'COMMON_TAG.SAVE' | translate }}</button>
       <button *ngIf="data.data && !data.isView" mat-raised-button class="save-btn-cls" (click)="edit()">{{ 'COMMON_TAG.UPDATE' | translate }}</button>

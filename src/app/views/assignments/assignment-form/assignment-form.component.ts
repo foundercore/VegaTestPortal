@@ -1,5 +1,5 @@
 import { AssignmentRequest } from './../../../models/test-assignment/test-assignment-request';
-import { Component, OnInit, ChangeDetectionStrategy, Inject, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Inject, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,14 +20,15 @@ import { formatDate } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssignmentFormComponent implements  OnInit,AfterViewInit {
-
   batchList: StudentBatchModel[] = [];
-
-  locale = 'en-US';
-
-  @ViewChild('aForm') aForm: ElementRef;
+   locale = 'en-US';
 
   assignmentFormGroup ;
+
+  minValidDateTo: Date;
+
+  minReleaseDate: Date;
+  maxReleaseDate:Date;
 
   constructor(
     private userService: UserService,
@@ -43,12 +44,14 @@ export class AssignmentFormComponent implements  OnInit,AfterViewInit {
 
   }
   ngAfterViewInit(): void {
-    const ele = this.aForm.nativeElement['validFrom'];
-    ele.focus();
+
   }
 
   ngOnInit(): void {
     if (this.data.data) {
+      this.minReleaseDate = this.data.data.validFrom;
+      this.maxReleaseDate = this.data.data.validTo;
+      this.minValidDateTo = this.data.data.validFrom;
       this.assignmentFormGroup = new FormGroup(
         {
           passcode: new FormControl(this.data.data.passcode),
@@ -60,12 +63,14 @@ export class AssignmentFormComponent implements  OnInit,AfterViewInit {
          }
       );
     } else {
+      this.minValidDateTo = new Date();
+      this.minReleaseDate = this.minValidDateTo;
       this.assignmentFormGroup = new FormGroup(
         {
           passcode: new FormControl(''),
           description: new FormControl('', [Validators.required]),
           releaseDate: new FormControl('', [Validators.required]),
-          validFrom: new FormControl('', [Validators.required]),
+          validFrom: new FormControl(new Date(), [Validators.required]),
           validTo: new FormControl('', [Validators.required]),
           assignedToBatch: new FormControl([], [Validators.required]),
          }
@@ -128,4 +133,12 @@ export class AssignmentFormComponent implements  OnInit,AfterViewInit {
     this.assignmentFormGroup.reset();
   }
 
+  validDateFromChangeTrigger(event){
+      this.minValidDateTo = event.value;
+      this.minReleaseDate =  event.value;
+  }
+
+  validDateToChangeTrigger(event){
+    this.maxReleaseDate =  event.value;
+}
 }

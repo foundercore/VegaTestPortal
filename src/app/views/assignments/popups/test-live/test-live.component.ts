@@ -221,9 +221,10 @@ export class TestLiveComponent implements OnInit {
   }
   getSelectedOption() {
     // console.log('optionsSelected=>', this.optionsSelected);
+    // debugger;
     var optionsSelectedArray = [];
     for (var i = 0; i < this.optionsSelected.length; i++) {
-      if (this.optionsSelected[i]) optionsSelectedArray.push(String(i));
+      if (this.optionsSelected[i]) optionsSelectedArray.push(String(i+1));
     }
     if (optionsSelectedArray.length > 0) {
       console.log(
@@ -265,9 +266,13 @@ export class TestLiveComponent implements OnInit {
       if (result.isConfirmed) {
         this.testConfigService.saveandExit(this.assignmentId).subscribe(
           (res: any) => {
-            this.router.navigate([
-              '/home/tests/show-result/' + this.assignmentId,
-            ]);
+            this.close();
+            this.router
+              .navigate(['/home/assignment_report/' + this.assignmentId])
+              .then(() => console.log('Navigate to score card'))
+              .catch((err) =>
+                console.log('Error=> Navigate to score card=>', err)
+              );
             this.toastrService.success('Test submitted successfully');
           },
           (err) => console.log('Error while making the question for save', err)
@@ -415,30 +420,9 @@ export class TestLiveComponent implements OnInit {
         exception
       );
     }
-
-    // if (selected === 0) {
-    //   for (var i = 0; i < this.question?.options.length; i++) {
-    //     this.optionsSelected[i] = false;
-    //   }
-    // } else {
-    //   for (var i = 0; i < this.question?.options.length; i++) {
-    //     if (i != selected - 1) this.optionsSelected[i] = false;
-    //   }
-    //   this.optionsSelected[selected - 1] = true;
-    // }
-    // console.log(
-    //   'Setting Option Selected acc to fetched data=>',
-    //   selected,
-    //   'options selected=>',
-    //   this.optionsSelected
-    // );
   }
 
   setOptionSelected(selected) {
-    //this.optionsSelected = [];
-    // for (var i = 0; i < this.question?.options.length; i++) {
-    //   if (i != selected) this.optionsSelected[i] = false;
-    // }
     if (
       this.optionsSelected[selected - 1] === true ||
       this.optionsSelected[selected - 1] === false

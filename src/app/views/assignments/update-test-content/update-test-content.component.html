@@ -1,49 +1,85 @@
-<section class="update__sec py-3">
+<section class="update__sec py-5">
   <div class="container">
-    <div><b>{{quest.name}}</b></div>
+    <div class="row">
+      <h2 class="col-10">{{ questionPaper.name }}</h2>
+      <h5 class="col-2 align-bottom mt-3">
+        Marks:{{ questionPaper.totalMarks }}
+      </h5>
+    </div>
 
-    <div class="row py-3">
-      <div class="col-lg-6">
-          <button mat-raised-button class="add-btn mx-2" routerLink="/home/tests">
-          <mat-icon>arrow_back</mat-icon><span class="ml-2">Go Back</span>
-        </button>
-      </div>
-      <div class="col-lg-6">
-        <div class="btn__group text-right">
-          <button *ngIf="quest?.status == 'DRAFT'" mat-raised-button class="add-btn mx-2" (click)="initiateVerification()">
-              <span class="ml-2">Initiate verification</span>
-            </button>
-            <button *ngIf="quest?.status == 'PENDING_VERIFICATION'" mat-raised-button class="add-btn mx-2" (click)="verifyReject()">
-              <span class="ml-2">Verify?</span>
-            </button>
-            <button *ngIf="quest?.status == 'VERIFIED'" mat-raised-button class="add-btn mx-2" (click)="publishstatus()">
-              <span class="ml-2">Publish</span>
-            </button>
-            <button *ngIf="quest?.status == 'PUBLISHED'" mat-raised-button class="add-btn mx-2" (click)="archive()">
-              <span class="ml-2">Archive</span>
-            </button>
-            <!-- <button *ngIf="quest?.status == 'ARCHIVED'" mat-raised-button class="add-btn mx-2" (click)="restore()">
-              <span class="ml-2">Restore</span>
-            </button> -->
-            <button mat-raised-button class="add-btn mx-2" 
-            *ngIf="status == 'PUBLISHED'"
-            (click)="viewAssignment()">
-              <mat-icon>add_circle</mat-icon><span class="ml-2">View Assignment</span>
-            </button>
-            <button mat-raised-button class="add-btn mx-2" (click)="TestConfig()">
-              <mat-icon>add_circle</mat-icon><span class="ml-2">Configure Test</span>
-            </button>
-            <button
-              mat-raised-button
-              class="add-btn mx-2"
-              (click)="addSection()"
-              *ngIf="totalDurationOfSections < totalTestDuration &&  status == 'DRAFT'"
-            >
-              <mat-icon>add_circle</mat-icon><span class="ml-2">Add Section</span>
-            </button>
-        </div>
-      </div>
-
+    <hr />
+    <div  class="row">
+    <div class="col text-left">
+      <button mat-raised-button class="add-btn mx-2" routerLink="/home/tests">
+        <mat-icon>arrow_back</mat-icon><span class="ml-2">Go Back</span>
+      </button>
+      <button mat-raised-button class="add-btn mx-2" (click)="editTest()">
+        <mat-icon>edit</mat-icon><span class="ml-2">Edit Test</span>
+      </button>
+    </div>
+    <div class="col text-right">
+      <button
+        *ngIf="quest?.status == 'DRAFT'"
+        mat-raised-button
+        class="add-btn mx-2"
+        (click)="initiateVerification()"
+      >
+        <span class="ml-2">Initiate verification</span>
+      </button>
+      <button
+        *ngIf="quest?.status == 'PENDING_VERIFICATION'"
+        mat-raised-button
+        class="add-btn mx-2"
+        (click)="verifyReject()"
+      >
+        <span class="ml-2">Verify?</span>
+      </button>
+      <button
+        *ngIf="quest?.status == 'VERIFIED'"
+        mat-raised-button
+        class="add-btn mx-2"
+        (click)="publishstatus()"
+      >
+        <span class="ml-2">Publish</span>
+      </button>
+      <button
+        *ngIf="quest?.status == 'PUBLISHED'"
+        mat-raised-button
+        class="add-btn mx-2"
+        (click)="archive()"
+      >
+        <span class="ml-2">Archive</span>
+      </button>
+      <!-- <button *ngIf="quest?.status == 'ARCHIVED'" mat-raised-button class="add-btn mx-2" (click)="restore()">
+        <span class="ml-2">Restore</span>
+      </button> -->
+      <button
+        mat-raised-button
+        class="add-btn mx-2"
+        *ngIf="status == 'PUBLISHED'"
+        (click)="viewAssignment()"
+      >
+        <mat-icon>add_circle</mat-icon><span class="ml-2">View Assignment</span>
+      </button>
+      <button
+        mat-raised-button
+        class="add-btn mx-2"
+        (click)="TestConfig()"
+        *ngIf="status !== 'PUBLISHED'"
+      >
+        <mat-icon>add_circle</mat-icon><span class="ml-2">Configure Test</span>
+      </button>
+      <button
+        mat-raised-button
+        class="add-btn mx-2"
+        (click)="addSection()"
+        *ngIf="
+          totalDurationOfSections < totalTestDuration && status !== 'PUBLISHED'
+        "
+      >
+        <mat-icon>add_circle</mat-icon><span class="ml-2">Add Section</span>
+      </button>
+    </div>
     </div>
     <div class="text-right py-4">
       <div class="row text-right">
@@ -56,29 +92,184 @@
           </button>
         </div>
         <div class="col-4">
-          <h7>
+          <h5>
             Total Duration of sections : {{ totalDurationOfSections }} mins
-          </h7>
+          </h5>
         </div>
         <div class="col-3">
-          <h7>Total Test Duration : {{ totalTestDuration }} mins</h7>
+          <h5>Total Test Duration : {{ totalTestDuration }} mins</h5>
         </div>
       </div>
     </div>
     <mat-accordion *ngIf="modelsections?.length > 0">
-      <mat-expansion-panel
-        *ngFor="let section of modelsections"
-        expanded="false"
-        (click)="getSectionId(section)"
+      <div
+        class="row"
+        *ngFor="let section of modelsections; let i = index"
+        style="margin-bottom: 20px"
       >
-        <mat-expansion-panel-header class="d-flex justify-content-between">
-          <mat-panel-title class="position-relative">
-            <span class=""><strong>{{ section.name }}</strong> </span>
-          </mat-panel-title>
-          <!-- <mat-panel-description
+        <div class="col-lg-11">
+          <mat-expansion-panel [expanded]="expandedStateArray[i]">
+            <mat-expansion-panel-header (click)="getSectionId(section, i)">
+              <mat-panel-title class="position-relative">
+                <span class=""
+                  ><strong>{{ section.name }}</strong>
+                </span>
+              </mat-panel-title>
+              <!-- <mat-panel-description
             ><p>{{ section.durationInMinutes }} mins</p></mat-panel-description
           > -->
-          <p class="sectionDuration__p">Section Duration : {{ section.durationInMinutes }} mins</p>
+              <p class="sectionDuration__p">
+                Section Duration : {{ section.durationInMinutes }} mins
+              </p>
+              <!-- <button
+            class="edit__btn"
+            mat-mini-fab
+            color=""
+            (click)="editSection(section)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            class="remove__btn"
+            mat-mini-fab
+            color=""
+            (click)="removeSection(section)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button> -->
+            </mat-expansion-panel-header>
+            <h2 class="text-center">Question List</h2>
+
+            <div class="row py-5">
+              <div class="col-lg-6">
+                <form action="" class="search__box">
+                  <div class="input-group">
+                    <div class="input-group-prepend border-0">
+                      <span class="input-group-text border-0" id="search"
+                        ><i class="fa fa-search"></i
+                      ></span>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control border-0"
+                      placeholder="Search anything ..."
+                      [(ngModel)]="searchText"
+                      [ngModelOptions]="{ standalone: true }"
+                      (keyup)="applyFilter()"
+                      aria-label="search"
+                      aria-describedby="search"
+                    />
+                  </div>
+                </form>
+              </div>
+              <div class="col-lg-6">
+                <div class="btn__group">
+                  <button
+                    mat-raised-button
+                    class="add-btn mx-2"
+                    (click)="openQuestionList()"
+                  >
+                    <mat-icon>add_circle</mat-icon><span class="ml-2">Add</span>
+                  </button>
+                  <button
+                    mat-raised-button
+                    class="add-btn mx-2"
+                    (click)="deleteQuestionFromSection()"
+                  >
+                    <mat-icon>delete</mat-icon><span class="ml-2">Delete</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="question-list-grid">
+              <div class="example-container mat-elevation-z8">
+                <div class="example-table-container">
+                  <table
+                    mat-table
+                    [dataSource]="dataSource"
+                    matSort
+                    class="mat-elevation-z8 border custom_table border-right"
+                  >
+                    <ng-container matColumnDef="select">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox
+                          (change)="$event ? masterToggle() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="
+                            selection.hasValue() && !isAllSelected()
+                          "
+                        >
+                        </mat-checkbox>
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        <mat-checkbox
+                          (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)"
+                        >
+                        </mat-checkbox>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Name
+                      </th>
+                      <td
+                        mat-cell
+                        *matCellDef="let element"
+                        [innerHTML]="element.name"
+                      ></td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="negative">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Negative Mark
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.negativeMark }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="positive">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Positive Mark
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.positiveMark }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="skip">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Skip Mark
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element.skipMark }}
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr
+                      mat-row
+                      *matRowDef="let row; columns: displayedColumns"
+                      (click)="selection.toggle(row)"
+                    ></tr>
+                  </table>
+                </div>
+
+                <mat-paginator
+                  [length]="totalNumberOfRecords"
+                  [pageSizeOptions]="pageOptions"
+                ></mat-paginator>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </div>
+        <div
+          class="col-lg-1"
+          style="margin-top: 10px"
+          *ngIf="status !== 'PUBLISHED'"
+        >
           <button
             class="edit__btn"
             mat-mini-fab
@@ -95,129 +286,8 @@
           >
             <mat-icon>delete</mat-icon>
           </button>
-        </mat-expansion-panel-header>
-        <div class="row py-5">
-          <div class="col-lg-6">
-            <form action="" class="search__box">
-              <div class="input-group">
-                <div class="input-group-prepend border-0">
-                  <span class="input-group-text border-0" id="search"
-                    ><i class="fa fa-search"></i
-                  ></span>
-                </div>
-                <input
-                  type="text"
-                  class="form-control border-0"
-                  placeholder="Search anything ..."
-                  [(ngModel)]="searchText"
-                  [ngModelOptions]="{ standalone: true }"
-                  (keyup)="applyFilter()"
-                  aria-label="search"
-                  aria-describedby="search"
-                />
-              </div>
-            </form>
-          </div>
-          <div class="col-lg-6">
-            <div class="btn__group">
-              <button
-                mat-raised-button
-                class="add-btn mx-2"
-                (click)="openQuestionList()"
-              >
-                <mat-icon>add_circle</mat-icon><span class="ml-2">Add</span>
-              </button>
-              <button
-                mat-raised-button
-                class="add-btn mx-2"
-                (click)="deleteQuestionFromSection()"
-              >
-                <mat-icon>delete</mat-icon><span class="ml-2">Delete</span>
-              </button>
-            </div>
-          </div>
         </div>
-        <div class="question-list-grid">
-          <div class="example-container mat-elevation-z8">
-            <div class="example-table-container">
-              <table
-                mat-table
-                [dataSource]="dataSource"
-                matSort
-                class="mat-elevation-z8 border custom_table border-right"
-              >
-                <ng-container matColumnDef="select">
-                  <th mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox
-                      (change)="$event ? masterToggle() : null"
-                      [checked]="selection.hasValue() && isAllSelected()"
-                      [indeterminate]="selection.hasValue() && !isAllSelected()"
-                    >
-                    </mat-checkbox>
-                  </th>
-                  <td mat-cell *matCellDef="let row">
-                    <mat-checkbox
-                      (click)="$event.stopPropagation()"
-                      (change)="$event ? selection.toggle(row) : null"
-                      [checked]="selection.isSelected(row)"
-                    >
-                    </mat-checkbox>
-                  </td>
-                </ng-container>
-                <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Name
-                  </th>
-                  <td
-                    mat-cell
-                    *matCellDef="let element"
-                    [innerHTML]="element.name"
-                  ></td>
-                </ng-container>
-
-                <ng-container matColumnDef="negative">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Negative Mark
-                  </th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.negativeMark }}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="positive">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Positive Mark
-                  </th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.positiveMark }}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="skip">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Skip Mark
-                  </th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.skipMark }}
-                  </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr
-                  mat-row
-                  *matRowDef="let row; columns: displayedColumns"
-                  (click)="selection.toggle(row)"
-                ></tr>
-              </table>
-            </div>
-
-            <mat-paginator
-              [length]="totalNumberOfRecords"
-              [pageSizeOptions]="pageOptions"
-            ></mat-paginator>
-          </div>
-        </div>
-      </mat-expansion-panel>
+      </div>
     </mat-accordion>
   </div>
 </section>

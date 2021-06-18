@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TestVM } from '../models/postTestVM';
 import { Observable } from 'rxjs';
-import { SearchQuestionPaperVM } from '../models/searchQuestionVM';
+import { SearchQuestionPaperVM } from '../models/searchQuestionPaperVM';
 import { BaseService } from 'src/app/services/base.service';
 import { TestConfigurationVM } from '../models/test-configuration';
 import { Section } from '../models/sections';
 import { QuestionsViewModel } from '../models/questionsVM';
 import { QuestionMarkedForReviewModel } from '../models/questionMarkedForReview';
+import { EditTestMetaData } from '../models/editTestMetaData';
+import { SearchQuestion } from 'src/app/models/questions/search-question-model';
 
 @Injectable({
   providedIn: 'root',
@@ -44,7 +46,7 @@ export class TestConfigService extends BaseService {
     return this.http.post<any>(Url, model, this.headers);
   }
 
-  getQuestionList(model: SearchQuestionPaperVM): Observable<any> {
+  getQuestionList(model: SearchQuestion): Observable<any> {
     const url = `${this.BASE_SERVICE_URL}/api/v1/question/search`;
     return this.http.post<any>(url, model, this.headers);
   }
@@ -65,6 +67,14 @@ export class TestConfigService extends BaseService {
     model: Section
   ): Observable<any> {
     const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${test_id}/section/${section_id}/update-metadata`;
+    return this.http.post<any>(Url, model, this.headers);
+  }
+
+  updateTestMetaData(
+    test_id: string,
+    model: EditTestMetaData
+  ): Observable<any> {
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${test_id}/update-metadata`;
     return this.http.post<any>(Url, model, this.headers);
   }
 

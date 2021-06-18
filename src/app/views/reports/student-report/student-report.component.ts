@@ -18,7 +18,6 @@ import { StudentReportModel } from '../Models/studentReportModel';
 export class StudentReportComponent implements OnInit {
   filterList = [
     'Section Level',
-    'Area Level',
     'Topic Level',
     'Difficulty Level',
     'Solution',
@@ -46,6 +45,8 @@ export class StudentReportComponent implements OnInit {
   accuracyPercentage: string = '0';
 
   fetchedWholeAssignmentResult;
+
+  metrics;
 
   public pageOptions = PAGE_OPTIONS;
 
@@ -90,7 +91,7 @@ export class StudentReportComponent implements OnInit {
               res.summary.difficulty[0].metric
             );
             this.isLoading = false;
-            var metrics = res.summary.difficulty[0].metric;
+            this.metrics = res.summary.difficulty[0].metric;
             // this.studentScore = metrics.marksReceived;
             // this.negativeMarking = metrics.negativeMarks;
             // this.accuracyPercentage =
