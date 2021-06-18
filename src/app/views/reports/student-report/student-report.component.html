@@ -1,4 +1,4 @@
-<div class="testName">Test Name: <strong>{{fetchedWholeAssignmentResult.testName}}</strong> </div>
+<div class="testName">Test Name: <strong>{{fetchedWholeAssignmentResult?.testName}}</strong> </div>
 <div class="card-stats-container">
   <div class="card-stats">
     <div class="card-stats-body">
@@ -130,16 +130,15 @@
 </div>
 
 <div style="margin: 0px 20px">
-  <mat-chip-list aria-label="Fish selection">
-    <mat-chip
-      *ngFor="let filterItem of filterList"
-      (click)="showFilteredData(filterItem)"
-      >{{ filterItem }}</mat-chip
-    >
-  </mat-chip-list>
+  <mat-button-toggle-group #filterToggle="matButtonToggleGroup"
+  (change)="showFilteredData($event.value)"  [value]="currentSelection"
+                           aria-label="Change Filter">
+    <mat-button-toggle  *ngFor="let filterItem of filterList" [value]="filterItem" > {{ filterItem }} </mat-button-toggle>
+  </mat-button-toggle-group>
 </div>
 
-<div class="student-report-list-grid">
+
+<div *ngIf="currentSelection != 'Solution'" class="student-report-list-grid">
   <div class="mat-elevation-z8">
     <div class="loading-container" *ngIf="isLoading">
       <mat-spinner *ngIf="isLoading"></mat-spinner>
@@ -208,3 +207,40 @@
     </div>
   </div>
 </div>
+
+<div  *ngIf="currentSelection == 'Solution'"  class="student-report-list-grid">
+  <mat-tab-group [color]="'primary'" [backgroundColor]="'primary'">
+    <mat-tab *ngFor="let section of fetchedWholeAssignmentResult.sections" [label]="section.sectionName">
+      <div *ngFor="let answer of section.answers; let i = index;" style="margin-bottom: 20px;">
+        <div style="display: flex; margin-bottom: 10px;">
+          <div class="numberCircle">{{i + 1}}</div>
+          <div class="questionName" [innerHtml]="transform(answer.name)"></div>
+        </div>
+
+        <div style="margin-left: 30px;">
+            <div class="option"[ngClass]="{'correct': answer.correctOptions?.includes(option.key),
+             'selected' : answer.selectedOptions?.includes(option.key),  'wrong' : !answer.correctOptions?.includes(option.key) }"
+            *ngFor="let option of answer.inputOptions" >
+              <div class="markcontainer">
+                <i *ngIf="answer.answerStatus == 'CORRECT' && answer.correctOptions.includes(option.key)"  style="color: green" class="fas fa-check-circle"></i>
+                <i *ngIf="answer.answerStatus == 'INCORRECT' && answer.selectedOptions.includes(option.key) " style="color: red"  class="fas fa-times-circle"></i>
+              </div>
+              <div [innerHtml]="transform(option.value)"></div>
+            </div>
+        </div>
+
+        <div *ngIf="answer.type == 'TITA'" style="margin-left: 30px;">
+            <div class="option correct">
+              <div [innerHtml]="transform(answer.correctAnswerText)"></div>
+            </div>
+            <div class="option" [ngClass]="{'correct': answer.answerStatus  == 'CORRECT' ,  'wrong' : answer.answerStatus  == 'INCORRECT' }">
+              <div [innerHtml]="transform(answer.answerText)"></div>
+            </div>
+        </div>
+      </div>
+
+    </mat-tab>
+
+  </mat-tab-group>
+</div>
+
