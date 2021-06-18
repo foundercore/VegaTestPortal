@@ -21,6 +21,9 @@ import { TestVM } from '../models/postTestVM';
 import { Status } from '../models/statusEnum';
 import { EditTestComponent } from '../popups/edit-test/edit-test.component';
 import { EditTestMetaData } from '../models/editTestMetaData';
+import { forkJoin, merge, Observable, of as observableOf, Subject } from 'rxjs';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { SearchQuestionPaperVM } from '../models/searchQuestionPaperVM';
 
 @Component({
   selector: 'app-update-test-content',
@@ -32,7 +35,7 @@ export class UpdateTestContentComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   totalNumberOfRecords = 0;
   public pageOptions = PAGE_OPTIONS;
-  currentOpenedSection;
+  currentOpenedSection = new Section();
   panelOpenState: boolean = false;
   modelsections: any = ([] = []);
   section = new Section();
@@ -57,6 +60,9 @@ export class UpdateTestContentComponent implements OnInit {
   quest: any;
   status: string;
   expandedStateArray = [];
+  isLoadingResults: boolean;
+  isRateLimitReached: boolean;
+  actualTotalNumberOfRecords: any;
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
@@ -66,8 +72,45 @@ export class UpdateTestContentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // // this.testId = this.route.snapshot.paramMap.get('id');
+    // // this.getQuestionPaperbyId();
+  }
+
+  ngAfterViewInit(): void {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
     this.testId = this.route.snapshot.paramMap.get('id');
     this.getQuestionPaperbyId();
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap((res) => {
+          console.log('Res from switch map=>', res);
+          this.isLoadingResults = true;
+          const searchQuestion = this.createSearchObject();
+          return this.testConfigService.getAllQuestionPaper(searchQuestion);
+        }),
+        map((data) => {
+          console.log('data in map=>', data);
+          this.isLoadingResults = false;
+          this.isRateLimitReached = false;
+          this.actualTotalNumberOfRecords = data.totalRecords;
+          return data.tests.map((x) => {
+            x.explanation_added =
+              x.explanation && x.explanation.length ? 'Yes' : 'No';
+            return x;
+          });
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          this.isRateLimitReached = true;
+          return observableOf([]);
+        })
+      )
+      .subscribe((data) => {
+        this.dataSource.data = data;
+        console.log('This.datasource=', this.dataSource);
+      });
   }
 
   addSection() {
@@ -372,19 +415,67 @@ export class UpdateTestContentComponent implements OnInit {
 
   setDataSourceOfPaginator(sections) {
     sections.map((sec) => {
-      if (sec.id === this.currentOpenedSection.id) {
-        this.currentOpenedSection = sec;
-      }
+      if (sec && this.currentOpenedSection)
+        if (sec.id === this.currentOpenedSection.id) {
+          this.currentOpenedSection = sec;
+        }
     });
     console.log(
       'Setting paginator datasource with section=>',
       this.currentOpenedSection
     );
-    this.ques = this.currentOpenedSection?.questions;
-    this.ques2 = this.currentOpenedSection?.questions;
-    this.dataSource = new MatTableDataSource(this.ques);
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    if (this.currentOpenedSection) {
+      this.ques = this.currentOpenedSection?.questions;
+      //this.ques2 = this.currentOpenedSection?.questions;
+      this.dataSource = new MatTableDataSource(this.ques);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.totalNumberOfRecords = this.currentOpenedSection?.questions
+        ? this.currentOpenedSection?.questions.length
+        : 0;
+      //this.sort.sortChange
+
+      // merge(this.sort.sortChange, this.paginator.page)
+      //   .pipe(
+      //     startWith({}),
+      //     switchMap(() => {
+      //       this.isLoadingResults = true;
+      //       const searchQuestion = this.createSearchObject();
+      //       return this.testConfigService.getAllQuestionPaper(searchQuestion);
+      //     }),
+      //     map((data) => {
+      //       console.log('data in map=>', data);
+      //       this.isLoadingResults = false;
+      //       this.isRateLimitReached = false;
+      //       this.actualTotalNumberOfRecords = data.totalRecords;
+      //       return data.tests.map((x) => {
+      //         x.explanation_added =
+      //           x.explanation && x.explanation.length ? 'Yes' : 'No';
+      //         return x;
+      //       });
+      //     }),
+      //     catchError(() => {
+      //       this.isLoadingResults = false;
+      //       this.isRateLimitReached = true;
+      //       return observableOf([]);
+      //     })
+      //   )
+      //   .subscribe((data) => {
+      //     this.dataSource.data = data;
+      //     console.log('This.datasource=', this.dataSource);
+      //   });
+    }
+  }
+
+  createSearchObject() {
+    const searchQuestionPaper = new SearchQuestionPaperVM(
+      String(this.paginator.pageIndex + 1),
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction
+    );
+    this.totalNumberOfRecords = this.paginator.pageSize;
+    return searchQuestionPaper;
   }
 
   prepareExpandedStateArray(state, length?, index?) {

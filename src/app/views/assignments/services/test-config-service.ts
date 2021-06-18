@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TestVM } from '../models/postTestVM';
 import { Observable } from 'rxjs';
-import { SearchQuestionPaperVM } from '../models/searchQuestionVM';
+import { SearchQuestionPaperVM } from '../models/searchQuestionPaperVM';
 import { BaseService } from 'src/app/services/base.service';
 import { TestConfigurationVM } from '../models/test-configuration';
 import { Section } from '../models/sections';

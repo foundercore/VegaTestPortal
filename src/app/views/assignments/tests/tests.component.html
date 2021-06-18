@@ -51,12 +51,18 @@
         <table
           mat-table
           [dataSource]="dataSource"
-          class="mat__data__table mb-0"
+          class="
+            mat__data__table
+            mb-0
+            mat-elevation-z8
+            border
+            custom_table
+            border-right
+          "
           matSort
           matSortDisableClear
           matSortDirection="desc"
           (matSortChange)="resetPaging()"
-          class="mat-elevation-z8 border custom_table border-right"
         >
           <ng-container matColumnDef="select">
             <th mat-header-cell *matHeaderCellDef>
@@ -79,7 +85,11 @@
 
           <ng-container matColumnDef="testName">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Test Name</th>
-            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [innerHtml]="element.name"
+            ></td>
           </ng-container>
 
           <ng-container matColumnDef="status">
@@ -106,7 +116,7 @@
           </ng-container>
 
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td class="actions_container" mat-cell *matCellDef="let element">
               <span
                 class="action-btn"
@@ -149,12 +159,17 @@
           ></tr>
         </table>
       </div>
-      <mat-paginator
+      <!-- <mat-paginator
         class="pagination__box"
         [length]="totalNumberOfRecords"
         [pageSizeOptions]="pageOptions"
         (page)="getPaginatorData($event)"
         showFirstLastButtons="true"
+      ></mat-paginator> -->
+      <mat-paginator
+        class="pagination__box"
+        [length]="actualTotalNumberOfRecords"
+        [pageSizeOptions]="pageOptions"
       ></mat-paginator>
     </div>
   </div>

@@ -22,7 +22,7 @@ import { TestConfigService } from '../../services/test-config-service';
 import { CalculatorComponent } from '../calculator/calculator.component';
 import { TestLiveComponent } from '../test-live/test-live.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SearchQuestionPaperVM } from '../../models/searchQuestionVM';
+import { SearchQuestionPaperVM } from '../../models/searchQuestionPaperVM';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
@@ -57,14 +57,14 @@ export class EditSectionComponent implements OnInit {
       },
       {
         name: 'redText',
-        class: 'redText'
+        class: 'redText',
       },
       {
         name: 'titleText',
         class: 'titleText',
         tag: 'h1',
       },
-    ]
+    ],
   };
   constructor(
     @Inject(MAT_DIALOG_DATA) public editSection_data: any,
@@ -106,69 +106,100 @@ export class EditSectionComponent implements OnInit {
     //this.sectionForm.getRawValue().duration
     this.Update_SectionWithDurationCheck();
   }
-
   Update_SectionWithDurationCheck() {
-    let model = new SearchQuestionPaperVM();
-    this.showSpinner = true;
+    //let model = new SearchQuestionPaperVM();
     this.testConfigService
-      .getAllQuestionPaper(model)
-      .pipe(finalize(() => {}))
-      .subscribe(
-        (res: any) => {
-          //if (res.isSuccess) {
-          this.showSpinner = false;
-          console.log('this.listtest ==', res);
-          if (res.tests !== null) {
-            res.tests?.map((test) => {
-              //check for currentt section in all tests data with current test
-              if (test.questionPaperId === this.editSection_data.testId) {
-                console.log(' test=>', test);
-                var maxDuration = test.totalDurationInMinutes;
-                var totDuration = 0;
-                console.log('MaxDuration for this test=>', maxDuration);
-                if (test.sections !== null) {
-                  test.sections.map((section) => {
-                    if (section.id !== this.editSection_data.section.id)
-                      totDuration += section.durationInMinutes;
-                  });
-                }
-                totDuration += Number(this.sectionForm.getRawValue().duration);
-                console.log(
-                  'totDuration of all sections duration',
-                  totDuration
-                );
-
-                if (totDuration <= maxDuration) {
-                  console.log(
-                    'totDuration of section < MaxDuration for current test'
-                  );
-                  this.UpdateSection();
-                } else {
-                  this.toastrService.error(
-                    'You exceeded the maximum duration limit by ' +
-                      (totDuration - maxDuration) +
-                      ' mins.'
-                  );
-                }
-              }
-            });
-          }
-        },
-        (error) => {
-          this.toastrService.error(
-            error?.error?.message ? error?.error?.message : error?.message,
-            'Error'
-          );
-          this.showSpinner = false;
+      .getQuestionPaper(this.editSection_data.testId)
+      .subscribe((res: any) => {
+        var test = res;
+        var maxDuration = test.totalDurationInMinutes;
+        var totDuration = 0;
+        console.log('MaxDuration for this test=>', maxDuration);
+        if (test.sections !== null) {
+          test.sections.map((section) => {
+            if (section.id !== this.editSection_data.section.id)
+              totDuration += section.durationInMinutes;
+          });
         }
-      );
-    // this.getQuestionPaperbyId();
-    // if (this.sectionForm.invalid) {
-    //   return;
-    // } else {
-    //   this.dialogRef.close(this.sectionForm.value);
-    // }
+        totDuration += Number(this.sectionForm.getRawValue().duration);
+        console.log('totDuration of all sections duration', totDuration);
+
+        if (totDuration <= maxDuration) {
+          console.log('totDuration of section < MaxDuration for current test');
+          this.UpdateSection();
+        } else {
+          this.toastrService.error(
+            'You exceeded the maximum duration limit by ' +
+              (totDuration - maxDuration) +
+              ' mins.'
+          );
+        }
+        console.log('this.gettest==', test);
+      });
   }
+
+  // Update_SectionWithDurationCheck() {
+  //   let model = new SearchQuestionPaperVM();
+  //   this.showSpinner = true;
+  //   this.testConfigService
+  //     .getAllQuestionPaper(model)
+  //     .pipe(finalize(() => {}))
+  //     .subscribe(
+  //       (res: any) => {
+  //         //if (res.isSuccess) {
+  //         this.showSpinner = false;
+  //         console.log('this.listtest ==', res);
+  //         if (res.tests !== null) {
+  //           res.tests?.map((test) => {
+  //             //check for currentt section in all tests data with current test
+  //             if (test.questionPaperId === this.editSection_data.testId) {
+  //               console.log(' test=>', test);
+  //               var maxDuration = test.totalDurationInMinutes;
+  //               var totDuration = 0;
+  //               console.log('MaxDuration for this test=>', maxDuration);
+  //               if (test.sections !== null) {
+  //                 test.sections.map((section) => {
+  //                   if (section.id !== this.editSection_data.section.id)
+  //                     totDuration += section.durationInMinutes;
+  //                 });
+  //               }
+  //               totDuration += Number(this.sectionForm.getRawValue().duration);
+  //               console.log(
+  //                 'totDuration of all sections duration',
+  //                 totDuration
+  //               );
+
+  //               if (totDuration <= maxDuration) {
+  //                 console.log(
+  //                   'totDuration of section < MaxDuration for current test'
+  //                 );
+  //                 this.UpdateSection();
+  //               } else {
+  //                 this.toastrService.error(
+  //                   'You exceeded the maximum duration limit by ' +
+  //                     (totDuration - maxDuration) +
+  //                     ' mins.'
+  //                 );
+  //               }
+  //             }
+  //           });
+  //         }
+  //       },
+  //       (error) => {
+  //         this.toastrService.error(
+  //           error?.error?.message ? error?.error?.message : error?.message,
+  //           'Error'
+  //         );
+  //         this.showSpinner = false;
+  //       }
+  //     );
+  //   // this.getQuestionPaperbyId();
+  //   // if (this.sectionForm.invalid) {
+  //   //   return;
+  //   // } else {
+  //   //   this.dialogRef.close(this.sectionForm.value);
+  //   // }
+  // }
 
   UpdateSection() {
     if (this.sectionForm.invalid) {

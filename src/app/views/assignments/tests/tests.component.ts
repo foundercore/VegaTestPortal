@@ -13,13 +13,16 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin, merge, Observable, of as observableOf, Subject } from 'rxjs';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+
 import { finalize } from 'rxjs/operators';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import Swal from 'sweetalert2';
 import { CloneAssignmentComponent } from '../clone-assignment/clone-assignment.component';
 import { TestVM } from '../models/postTestVM';
-import { SearchQuestionPaperVM } from '../models/searchQuestionVM';
+import { SearchQuestionPaperVM } from '../models/searchQuestionPaperVM';
 import { Status } from '../models/statusEnum';
 import { AssessmentEditorComponent } from '../popups/assessment-editor/assessment-editor.component';
 import { TestLiveComponent } from '../popups/test-live/test-live.component';
@@ -53,8 +56,11 @@ export class TestsComponent implements OnInit, AfterViewInit {
   studentName: string = '';
   userType: string = '';
   buttontext: string = '';
-  createdId : string = "";
+  createdId: string = '';
   searchQuestionPaperModel = new SearchQuestionPaperVM();
+  isLoadingResults: boolean;
+  isRateLimitReached: boolean;
+  actualTotalNumberOfRecords: 0;
   constructor(
     private testConfigService: TestConfigService,
     public dialog: MatDialog,
@@ -63,20 +69,61 @@ export class TestsComponent implements OnInit, AfterViewInit {
     private store: Store<AppState>
   ) {}
   ngAfterViewInit(): void {
-    this.dataSource = new MatTableDataSource(this.alltest);
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.GetAllquestionPapers();
-  }
-
-  ngOnInit(): void {
     this.store.select('appState').subscribe((data) => {
       this.userName = data.user.userName;
       this.studentName = data.user.firstName + ' ' + data.user.lastName;
       this.userType = data?.user?.authorities[0]?.authority;
       console.log('data', data);
     });
+
+    // this.dataSource = new MatTableDataSource(this.alltest);
+    // this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
+    // this.GetAllquestionPapers();
+
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoadingResults = true;
+          const searchQuestion = this.createSearchObject();
+          return this.testConfigService.getAllQuestionPaper(searchQuestion);
+        }),
+        map((data) => {
+          console.log('data in map=>', data);
+          this.isLoadingResults = false;
+          this.isRateLimitReached = false;
+          this.actualTotalNumberOfRecords = data.totalRecords;
+          return data.tests.map((x) => {
+            x.explanation_added =
+              x.explanation && x.explanation.length ? 'Yes' : 'No';
+            return x;
+          });
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          this.isRateLimitReached = true;
+          return observableOf([]);
+        })
+      )
+      .subscribe((data) => {
+        this.dataSource.data = data;
+        console.log('This.datasource=', this.dataSource);
+      });
+  }
+
+  ngOnInit(): void {
     // this.alltest.push({"testId" : "fc94065f-b544-4fa0-adfa-dd159da4fd87","testName" : "hello Test","minimumDurationInMinutes" : 45, "totalDurationInMinutes": 50});
+  }
+  createSearchObject() {
+    const searchQuestionPaper = new SearchQuestionPaperVM(
+      String(this.paginator.pageIndex + 1),
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction
+    );
+    this.totalNumberOfRecords = this.paginator.pageSize;
+    return searchQuestionPaper;
   }
 
   isAllSelected() {
@@ -121,7 +168,9 @@ export class TestsComponent implements OnInit, AfterViewInit {
           (error) => {
             if (error.status == 200) {
               this.createdId = error.error.text;
-              this.router.navigate(['/home/tests/update-test/' + this.createdId]);
+              this.router.navigate([
+                '/home/tests/update-test/' + this.createdId,
+              ]);
               this.toastrService.success('Test created successfully');
               this.GetAllquestionPapers();
             } else {
@@ -266,15 +315,20 @@ export class TestsComponent implements OnInit, AfterViewInit {
   private getSearchTestModel() {
     this.searchQuestionPaperModel.pageNumber = this.paginator.pageIndex + 1;
     this.searchQuestionPaperModel.pageSize = this.paginator.pageSize;
-    this.searchQuestionPaperModel.sortColumn = this.sort.active ? this.sort.active : 'lastUpdatedOn';
-    this.searchQuestionPaperModel.sortOrder = this.sort.direction ? this.sort.direction : 'desc';
+    this.searchQuestionPaperModel.sortColumn = this.sort.active
+      ? this.sort.active
+      : 'lastUpdatedOn';
+    this.searchQuestionPaperModel.sortOrder = this.sort.direction
+      ? this.sort.direction
+      : 'desc';
+    this.totalNumberOfRecords = this.paginator.pageSize;
   }
 
   resetPaging(): void {
     this.paginator.pageIndex = 0;
   }
 
-  getPaginatorData(event: PageEvent) : PageEvent{
+  getPaginatorData(event: PageEvent): PageEvent {
     this.GetAllquestionPapers();
     return event;
   }
@@ -319,44 +373,51 @@ export class TestsComponent implements OnInit, AfterViewInit {
   }
 
   applyFilter() {
-    this.searchQuestionPaperModel.nameRegexPattern = this.searchText.trim().toLowerCase();
+    this.searchQuestionPaperModel.nameRegexPattern = this.searchText
+      .trim()
+      .toLowerCase();
     this.GetAllquestionPapers();
   }
 
   cloneTest(assignment: any) {
-    const dialogRef = this.dialog.open(CloneAssignmentComponent, { disableClose: true });
+    const dialogRef = this.dialog.open(CloneAssignmentComponent, {
+      disableClose: true,
+    });
     dialogRef.afterClosed().subscribe((result) => {
       debugger;
       if (result != null && result?.testName && result?.testName !== '') {
         this.testConfigService
           .getQuestionPaper(assignment?.questionPaperId)
-          .pipe(finalize(() => { }))
+          .pipe(finalize(() => {}))
           .subscribe(
             (res: any) => {
-               if (res) {
-                 res.name = result?.testName;
-                 this.testConfigService.createQuestionPaper(res).subscribe(
-                   (res: any) => {
-                     //if (res.isSuccess) {
-                     this.toastrService.success('Test cloned successfully');
-                     this.GetAllquestionPapers();
-                     // }
-                   },
-                   (error) => {
-                     if (error.status == 200) {
-                       this.createdId = error.error.text;
-                       this.router.navigate(['/home/tests/update-test/' + this.createdId]);
-                       this.toastrService.success('Test cloned successfully ');
-                       this.GetAllquestionPapers();
-                     } else {
-                       this.toastrService.error(
-                         error?.error?.message ? error?.error?.message : error?.message,
-                         'Error'
-                       );
-                     }
-                   }
-                 );
-
+              if (res) {
+                res.name = result?.testName;
+                this.testConfigService.createQuestionPaper(res).subscribe(
+                  (res: any) => {
+                    //if (res.isSuccess) {
+                    this.toastrService.success('Test cloned successfully');
+                    this.GetAllquestionPapers();
+                    // }
+                  },
+                  (error) => {
+                    if (error.status == 200) {
+                      this.createdId = error.error.text;
+                      this.router.navigate([
+                        '/home/tests/update-test/' + this.createdId,
+                      ]);
+                      this.toastrService.success('Test cloned successfully ');
+                      this.GetAllquestionPapers();
+                    } else {
+                      this.toastrService.error(
+                        error?.error?.message
+                          ? error?.error?.message
+                          : error?.message,
+                        'Error'
+                      );
+                    }
+                  }
+                );
               }
             },
             (error) => {
@@ -369,5 +430,4 @@ export class TestsComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
 }
