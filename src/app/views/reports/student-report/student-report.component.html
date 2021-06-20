@@ -220,7 +220,7 @@
 </div>
 
 <div  *ngIf="currentSelection == 'Solution'"  class="student-report-list-grid">
-  <mat-tab-group [color]="'primary'" [backgroundColor]="'primary'">
+  <mat-tab-group >
     <mat-tab *ngFor="let section of fetchedWholeAssignmentResult.sections" [label]="section.sectionName">
       <div *ngFor="let answer of section.answers; let i = index;"  class="question-card">
         <div style="display: flex; margin-bottom: 20px;">

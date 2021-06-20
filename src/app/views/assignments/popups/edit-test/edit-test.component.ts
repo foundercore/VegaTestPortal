@@ -93,9 +93,7 @@ export class EditTestComponent implements OnInit {
         this.editTest_data.questionPaper.totalDurationInMinutes,
         [Validators.required]
       ),
-      totalMarks: new FormControl(this.editTest_data.questionPaper.totalMarks, [
-        Validators.required,
-      ]),
+      totalMarks: new FormControl(this.editTest_data.questionPaper.totalMarks, []),
       instructions: new FormControl(
         this.editTest_data.questionPaper.instructions
       ),
@@ -186,7 +184,8 @@ export class EditTestComponent implements OnInit {
     model.name = this.testForm.value.testName;
     model.instructions = this.testForm.value.instructions;
     model.totalDurationInMinutes = this.testForm.value.duration;
-    model.totalMarks = this.testForm.value.totalMarks;
+    // TODO - make it summation of all the positive marks of teh section questions
+    model.totalMarks = 5;
     this.testConfigService
       .updateTestMetaData(this.testForm.value.testId, model)
       .subscribe(
