@@ -63,6 +63,7 @@ import { AssignmentFormComponent } from './views/assignments/assignment-form/ass
 import { ViewAssignmentComponent } from './views/assignments/view-assignment/view-assignment.component';
 import { CountdownModule } from 'ngx-countdown';
 import { AddStudentsComponent } from './views/assignments/add-students/add-students.component';
+import { CustomDialogConfirmationComponent } from './shared/components/custom-dialog-confirmation/custom-dialog-confirmation.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -104,7 +105,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     DialogConformationComponent,
     ViewAssignmentComponent,
     AssignmentFormComponent,
-    AddStudentsComponent
+    AddStudentsComponent,
+    CustomDialogConfirmationComponent
   ],
 
   imports: [

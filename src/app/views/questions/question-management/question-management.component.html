@@ -1,7 +1,7 @@
 <div class="question-grid-action">
-  <button mat-raised-button (click)="performGridAction('bulk_delete')">
+  <!-- <button mat-raised-button (click)="performGridAction('bulk_delete')">
     <mat-icon>delete_forever</mat-icon> {{ "COMMON_TAG.DELETE" | translate }}
-  </button>
+  </button> -->
   <button mat-raised-button (click)="performGridAction('add')">
     <mat-icon>add_circle</mat-icon> {{ "COMMON_TAG.ADD" | translate }}
   </button>
@@ -218,13 +218,13 @@
             >
               <mat-icon>edit</mat-icon>
             </span>
-            <span
+            <!-- <span
               class="action-btn"
               matTooltip="Delete Question"
               (click)="performGridAction('delete', row)"
             >
               <mat-icon>delete_forever</mat-icon>
-            </span>
+            </span> -->
           </td>
         </ng-container>
 
