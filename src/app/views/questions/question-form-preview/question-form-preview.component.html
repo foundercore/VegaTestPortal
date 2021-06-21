@@ -148,13 +148,13 @@
     <div>
       <h5>Answer Configuration</h5>
       <div class="w-100-div flex-container">
-        <mat-form-field
-          appearance="outline"
-          class="w-25-field form-field-padding"
-        >
-          <mat-label>Answer Text</mat-label>
-          <input matInput formControlName="answerText" />
-        </mat-form-field>
+        <div class="w-100-div" style="margin-bottom: 20px">
+          <mat-label style="color: rgba(0, 0, 0, 0.38)">Answer Text</mat-label>
+          <div
+            class="text-area-div disabled"
+            [innerHtml]="questionPreviewGroup.controls['answerText']?.value"
+          ></div>
+        </div>
 
         <div class="w-100-div" style="margin-bottom: 20px">
           <mat-label style="color: rgba(0, 0, 0, 0.38)">Options</mat-label>
