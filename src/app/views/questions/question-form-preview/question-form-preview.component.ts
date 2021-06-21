@@ -75,7 +75,7 @@ export class QuestionFormPreviewComponent implements OnInit {
             this.questionPreviewGroup.get('type')?.setValue(resp.type);
             this.questionPreviewGroup
               .get('answerText')
-              ?.setValue(resp.answer.answerText?.replace(/(<([^>]+)>)/gi, ''));
+              ?.setValue(resp.answer.answerText);
             this.options = resp.options;
             this.options.forEach((x) => {
               const newCntrl = new FormControl();

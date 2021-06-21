@@ -132,6 +132,7 @@ export class QuestionFormComponent implements OnInit {
           this.questionSecondFormGrp.get('skipMark')?.setValue(resp.skipMark);
           this.questionFirstFormGrp.get('subject')?.setValue(resp.subject);
           this.questionFirstFormGrp.get('subTopic')?.setValue(resp.subTopic);
+          this.questionForthFormGrp.get('answerText')?.setValue(resp.answer.answerText);
           if(resp.tags){
             this.tags = resp.tags;
           }

@@ -84,6 +84,7 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     private toastrService: ToastrService,
     private questionService: QuestionManagementService
   ) {
+    console.log(this._data)
     forkJoin([
       this.questionService.getQuestionType(),
       this.questionService.getQuestionTags(),
@@ -215,7 +216,8 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((data) => {
-        this.dataSource.data = data;
+        console.log(data)
+        this.dataSource.data = data?.filter(q=> !this._data?.selectedques?.some(ques=> ques.id == q.id.questionId));
         console.log('This.datasource=', this.dataSource);
       });
   }
