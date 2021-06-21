@@ -24,6 +24,7 @@ import { EditTestMetaData } from '../models/editTestMetaData';
 import { forkJoin, merge, Observable, of as observableOf, Subject } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { SearchQuestionPaperVM } from '../models/searchQuestionPaperVM';
+import { error } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-update-test-content',
@@ -572,7 +573,10 @@ export class UpdateTestContentComponent implements OnInit {
                 this.getQuestionPaperbyId();
               },
               (err) => {
-                this.toastrService.success('Status updation failed');
+                console.log(err.error.apierror);
+                this.toastrService.error(
+                  err.error.apierror.message.split('.')[0]
+                );
                 this.getQuestionPaperbyId();
               }
             );
