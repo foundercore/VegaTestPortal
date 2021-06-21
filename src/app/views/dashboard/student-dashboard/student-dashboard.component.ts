@@ -104,6 +104,18 @@ export class StudentDashboardComponent implements OnInit {
     if (this.userType === 'ROLE_USER_ADMIN') {
       this.buttontext = 'Preview Test';
     } else {
+      console.log(element)
+      let timeNow = new Date()
+      let testValidFrom = new Date(element.validFrom)
+      let testvalidTo = new Date(element.validTo)
+      if (timeNow < testValidFrom) {
+        this.toastrService.error('Test is yet to start')
+        return
+      }
+      if (timeNow > testvalidTo) {
+        this.toastrService.error('Test has ended already')
+        return
+      }
       this.buttontext = 'Start Test';
     }
     Swal.fire({
@@ -121,6 +133,15 @@ export class StudentDashboardComponent implements OnInit {
         else this.openTestPopup(element);
       }
     });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   openTestPopup(element) {

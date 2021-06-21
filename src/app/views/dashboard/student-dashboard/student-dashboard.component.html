@@ -11,6 +11,18 @@
     </mat-card-content>
   </mat-card> -->
 
+  <div class="assignment-search-bar">
+    <mat-form-field style="width: 600px" appearance="outline">
+      <mat-label> {{ "COMMON_TAG.FILTER" | translate }}</mat-label>
+      <input
+        matInput
+        placeholder="Search Tests"
+        #input
+        (keyup)="applyFilter($event)"
+      />
+    </mat-form-field>
+  </div>
+
   <div class="student-dash-list-grid">
     <div class="student-result-container mat-elevation-z8">
       <!-- <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
