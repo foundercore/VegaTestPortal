@@ -17,6 +17,8 @@ import Swal from 'sweetalert2';
 import { TestLiveComponent } from '../../assignments/popups/test-live/test-live.component';
 import { TestConfigService } from '../../assignments/services/test-config-service';
 import { ToastrService } from 'ngx-toastr';
+import { CustomDialogConfirmationModel } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation-model';
+import { CustomDialogConfirmationComponent } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation.component';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -106,17 +108,16 @@ export class StudentDashboardComponent implements OnInit {
     } else {
       this.buttontext = 'Start Test';
     }
-    Swal.fire({
-      title: 'Want to start test?',
-      text: this.extractContent(element.testName),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#277da1',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Close',
-      confirmButtonText: this.buttontext,
-    }).then((result) => {
-      if (result.isConfirmed) {
+
+    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.testName);
+
+    const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
+      width: "600px",
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if(dialogResult){
         if (element.passcode !== null) this.verifyPasscode(element);
         else this.openTestPopup(element);
       }
