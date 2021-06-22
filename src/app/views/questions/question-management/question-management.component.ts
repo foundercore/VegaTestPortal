@@ -24,6 +24,7 @@ import { SearchQuestion } from 'src/app/models/questions/search-question-model';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { TranslateService } from '@ngx-translate/core';
 import { DialogConformationComponent } from 'src/app/shared/components/dialog-conformation/dialog-conformation.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-question-management',
@@ -84,7 +85,9 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog,
     private router: Router,
     public translate: TranslateService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private location: Location,
+    private route: ActivatedRoute
   ) {
     forkJoin([
       this.questionService.getQuestionType(),
@@ -104,6 +107,16 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit() {
+    let hasFilters = false;
+    this.route.queryParams.subscribe((params) => {
+      for (let key in params) {
+        if (params[key]) {
+          hasFilters = true;
+          this.filterGroup.controls[key].setValue(params[key]);
+        }
+      }
+    });
+    if (hasFilters) this.applyFilter();
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
@@ -161,6 +174,13 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   }
 
   applyFilter() {
+    let queryParams = '';
+    for (let key in this.filterGroup.controls) {
+      if (this.filterGroup.controls[key].value)
+        queryParams += `${key}=${this.filterGroup.controls[key].value}&`;
+    }
+    queryParams = queryParams.slice(0, -1);
+    this.location.replaceState('/home/questionmanagement', queryParams);
     this.isFilterApply = true;
     this.isLoadingResults = true;
     this.resetPaging();
@@ -179,6 +199,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     this.filterGroup.controls['substopicCntrl'].reset();
     this.filterGroup.controls['fileNameCntrl'].reset();
     this.isFilterApply = false;
+    this.location.replaceState('/home/questionmanagement');
     this.resetPaging();
     const searchQuestion = this.createSearchObject();
     this.refreshQuestionData(searchQuestion);
