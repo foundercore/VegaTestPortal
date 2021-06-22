@@ -14,6 +14,7 @@ export class SearchQuestion {
   topic: string | undefined;
   updateEndTime: string | undefined;
   updateStartTime: string | undefined;
+  migrationSectionName: string | undefined;
 
 
   constructor(pageNumber:string,pageSizeValue:number,sortColumn?:string,sortOrder?:string,) {

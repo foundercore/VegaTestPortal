@@ -61,6 +61,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     topicCntrl: new FormControl(),
     substopicCntrl: new FormControl(),
     fileNameCntrl: new FormControl(),
+    migrationSectionNameCntrl: new FormControl(),
   });
 
   isFilterApply = false;
@@ -198,6 +199,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     this.filterGroup.controls['topicCntrl'].reset();
     this.filterGroup.controls['substopicCntrl'].reset();
     this.filterGroup.controls['fileNameCntrl'].reset();
+    this.filterGroup.controls['migrationSectionNameCntrl'].reset();
     this.isFilterApply = false;
     this.location.replaceState('/home/questionmanagement');
     this.resetPaging();
@@ -275,8 +277,15 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
       )
         searchQuestion.filename =
           this.filterGroup.controls['fileNameCntrl'].value;
+      else if (
+        this.filterGroup.controls['migrationSectionNameCntrl'].value !== null &&
+        this.filterGroup.controls['migrationSectionNameCntrl'].value.length !== 0
+      )
+        searchQuestion.migrationSectionName =
+          this.filterGroup.controls['migrationSectionNameCntrl'].value;
+      
     }
-
+    
     return searchQuestion;
   }
 
