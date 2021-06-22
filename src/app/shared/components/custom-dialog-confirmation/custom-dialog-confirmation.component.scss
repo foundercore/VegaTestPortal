@@ -11,9 +11,9 @@
   position: relative;
   box-sizing: content-box;
   justify-content: center;
-  width: 5em;
-  height: 5em;
-  margin: 2.5em auto .6em;
+  width: 2.5em;
+  height: 2.5em;
+  margin: 0.5em auto .6em;
   border: .25em solid transparent;
   border-radius: 50%;
   border-color: #000;
@@ -71,4 +71,10 @@
   background-color: #6e7d88;
   color: #fff;
   font-size: 1em;
+}
+
+.swal2-icon .swal2-icon-content {
+  display: flex;
+  align-items: center;
+  font-size: 2em;
 }
