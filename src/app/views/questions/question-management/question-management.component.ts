@@ -105,7 +105,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngAfterViewInit() {
     let hasFilters = false;
@@ -117,7 +117,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
         }
       }
     });
-    if (hasFilters) this.applyFilter();
+    if (hasFilters) { this.applyFilter(); }
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
@@ -177,8 +177,9 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   applyFilter() {
     let queryParams = '';
     for (let key in this.filterGroup.controls) {
-      if (this.filterGroup.controls[key].value)
+      if (this.filterGroup.controls[key].value) {
         queryParams += `${key}=${this.filterGroup.controls[key].value}&`;
+      }
     }
     queryParams = queryParams.slice(0, -1);
     this.location.replaceState('/home/questionmanagement', queryParams);
@@ -192,14 +193,14 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   }
 
   resetFilter() {
-    this.filterGroup.controls['filterNameValue'].reset();
-    this.filterGroup.controls['questionTypeCntrl'].reset();
-    this.filterGroup.controls['subjectCntrl'].reset();
-    this.filterGroup.controls['tagCntrl'].reset();
-    this.filterGroup.controls['topicCntrl'].reset();
-    this.filterGroup.controls['substopicCntrl'].reset();
-    this.filterGroup.controls['fileNameCntrl'].reset();
-    this.filterGroup.controls['migrationSectionNameCntrl'].reset();
+    this.filterGroup.controls.filterNameValue.reset();
+    this.filterGroup.controls.questionTypeCntrl.reset();
+    this.filterGroup.controls.subjectCntrl.reset();
+    this.filterGroup.controls.tagCntrl.reset();
+    this.filterGroup.controls.topicCntrl.reset();
+    this.filterGroup.controls.substopicCntrl.reset();
+    this.filterGroup.controls.fileNameCntrl.reset();
+    this.filterGroup.controls.migrationSectionNameCntrl.reset();
     this.isFilterApply = false;
     this.location.replaceState('/home/questionmanagement');
     this.resetPaging();
@@ -238,54 +239,56 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
 
     if (this.isFilterApply) {
       if (
-        this.filterGroup.controls['filterNameValue'].value !== null &&
-        this.filterGroup.controls['filterNameValue'].value.length !== 0
-      )
+        this.filterGroup.controls.filterNameValue.value !== null &&
+        this.filterGroup.controls.filterNameValue.value.length !== 0
+      ) {
         searchQuestion.nameRegexPattern =
-          this.filterGroup.controls['filterNameValue'].value;
-      else if (
-        this.filterGroup.controls['questionTypeCntrl'].value !== null &&
-        this.filterGroup.controls['questionTypeCntrl'].value.length !== 0
-      )
+          this.filterGroup.controls.filterNameValue.value;
+      }
+      if (
+        this.filterGroup.controls.questionTypeCntrl.value !== null &&
+        this.filterGroup.controls.questionTypeCntrl.value.length !== 0
+      ) {
         searchQuestion.type =
-          this.filterGroup.controls['questionTypeCntrl'].value;
-      else if (
-        this.filterGroup.controls['subjectCntrl'].value !== null &&
-        this.filterGroup.controls['subjectCntrl'].value.length !== 0
-      )
+          this.filterGroup.controls.questionTypeCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.subjectCntrl.value !== null &&
+        this.filterGroup.controls.subjectCntrl.value.length !== 0
+      ) {
         searchQuestion.subject =
-          this.filterGroup.controls['subjectCntrl'].value;
-      else if (
-        this.filterGroup.controls['tagCntrl'].value !== null &&
-        this.filterGroup.controls['tagCntrl'].value.length !== 0
-      )
-        searchQuestion.tags = this.filterGroup.controls['tagCntrl'].value;
-      else if (
-        this.filterGroup.controls['topicCntrl'].value !== null &&
-        this.filterGroup.controls['topicCntrl'].value.length !== 0
-      )
-        searchQuestion.topic = this.filterGroup.controls['topicCntrl'].value;
-      else if (
-        this.filterGroup.controls['substopicCntrl'].value !== null &&
-        this.filterGroup.controls['substopicCntrl'].value.length !== 0
-      )
-        searchQuestion.subTopic =
-          this.filterGroup.controls['substopicCntrl'].value;
-      else if (
-        this.filterGroup.controls['fileNameCntrl'].value !== null &&
-        this.filterGroup.controls['fileNameCntrl'].value.length !== 0
-      )
+          this.filterGroup.controls.subjectCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.tagCntrl.value !== null &&
+        this.filterGroup.controls.tagCntrl.value.length !== 0
+      ) {
+        searchQuestion.tags = this.filterGroup.controls.tagCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.topicCntrl.value !== null &&
+        this.filterGroup.controls.topicCntrl.value.length !== 0
+      ) {
+        searchQuestion.topic = this.filterGroup.controls.topicCntrl.value;
+      }
+
+      if (
+        this.filterGroup.controls.fileNameCntrl.value !== null &&
+        this.filterGroup.controls.fileNameCntrl.value.length !== 0
+      ) {
         searchQuestion.filename =
-          this.filterGroup.controls['fileNameCntrl'].value;
-      else if (
-        this.filterGroup.controls['migrationSectionNameCntrl'].value !== null &&
-        this.filterGroup.controls['migrationSectionNameCntrl'].value.length !== 0
-      )
+          this.filterGroup.controls.fileNameCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.migrationSectionNameCntrl.value !== null &&
+        this.filterGroup.controls.migrationSectionNameCntrl.value.length !== 0
+      ) {
         searchQuestion.migrationSectionName =
-          this.filterGroup.controls['migrationSectionNameCntrl'].value;
-      
+          this.filterGroup.controls.migrationSectionNameCntrl.value;
+      }
+
     }
-    
+
     return searchQuestion;
   }
 
@@ -308,9 +311,8 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
-      row.id
-    }`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id
+      }`;
   }
 
   openBulkUploadDialog() {
@@ -322,7 +324,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
 
   openMigrateUploadDialog() {
     const dialogRef = this.dialog.open(QuestionMigrateUploadDialogComponent);
-    dialogRef.afterClosed().subscribe((result) => {});
+    dialogRef.afterClosed().subscribe((result) => { });
   }
 
   deleteQuestion(row: QuestionModel) {
