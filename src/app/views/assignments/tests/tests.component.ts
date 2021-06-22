@@ -18,6 +18,8 @@ import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 
 import { finalize } from 'rxjs/operators';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
+import { CustomDialogConfirmationModel } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation-model';
+import { CustomDialogConfirmationComponent } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation.component';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import Swal from 'sweetalert2';
 import { CloneAssignmentComponent } from '../clone-assignment/clone-assignment.component';
@@ -345,29 +347,28 @@ export class TestsComponent implements OnInit, AfterViewInit {
     } else {
       this.buttontext = 'Start Test';
     }
-    Swal.fire({
-      title: 'Want to start test?',
-      text: this.extractContent(element.instructions),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#277da1',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Close',
-      confirmButtonText: this.buttontext,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const dialogRef = this.dialog.open(TestLiveComponent, {
-          maxWidth: '1700px',
-          width: '100%',
-          minHeight: '100vh',
-          height: 'auto',
-          hasBackdrop: false,
-          backdropClass: 'dialog-backdrop',
-          data: { testData: element, userType: this.userType },
-        });
-        dialogRef.afterClosed().subscribe((result) => {
-          this.GetAllquestionPapers();
-        });
+
+    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.instructions);
+
+    const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
+      width: "600px",
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if(dialogResult){
+          const dialogRef = this.dialog.open(TestLiveComponent, {
+            maxWidth: '1700px',
+            width: '100%',
+            minHeight: '100vh',
+            height: 'auto',
+            hasBackdrop: false,
+            backdropClass: 'dialog-backdrop',
+            data: { testData: element, userType: this.userType },
+          });
+          dialogRef.afterClosed().subscribe((result) => {
+            this.GetAllquestionPapers();
+          });
       }
     });
   }

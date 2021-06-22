@@ -24,7 +24,7 @@ export class EditTestMetaData {
   status: string;
   subject: string;
   tags: [string];
-  totalDurationInMinutes: 0;
-  totalMarks: 0;
+  totalDurationInMinutes = 0;
+  totalMarks = 0;
   type: string;
 }

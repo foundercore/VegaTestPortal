@@ -17,6 +17,8 @@ import Swal from 'sweetalert2';
 import { TestLiveComponent } from '../../assignments/popups/test-live/test-live.component';
 import { TestConfigService } from '../../assignments/services/test-config-service';
 import { ToastrService } from 'ngx-toastr';
+import { CustomDialogConfirmationModel } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation-model';
+import { CustomDialogConfirmationComponent } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation.component';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -104,23 +106,43 @@ export class StudentDashboardComponent implements OnInit {
     if (this.userType === 'ROLE_USER_ADMIN') {
       this.buttontext = 'Preview Test';
     } else {
+      console.log(element)
+      let timeNow = new Date()
+      let testValidFrom = new Date(element.validFrom)
+      let testvalidTo = new Date(element.validTo)
+      if (timeNow < testValidFrom) {
+        this.toastrService.error('Test is yet to start')
+        return
+      }
+      if (timeNow > testvalidTo) {
+        this.toastrService.error('Test has ended already')
+        return
+      }
       this.buttontext = 'Start Test';
     }
-    Swal.fire({
-      title: 'Want to start test?',
-      text: this.extractContent(element.testName),
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#277da1',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Close',
-      confirmButtonText: this.buttontext,
-    }).then((result) => {
-      if (result.isConfirmed) {
+
+    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.testName);
+
+    const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
+      width: "600px",
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if(dialogResult){
         if (element.passcode !== null) this.verifyPasscode(element);
         else this.openTestPopup(element);
       }
     });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   openTestPopup(element) {

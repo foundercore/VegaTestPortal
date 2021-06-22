@@ -242,16 +242,20 @@
     <mat-step>
       <ng-template matStepLabel>Answer Configuration</ng-template>
       <form [formGroup]="questionForthFormGrp">
-        <mat-form-field
-          appearance="outline"
-          class="w-100-field form-field-padding"
-        >
+        <div class="w-100-div" style="margin-bottom: 30px">
           <mat-label>Answer Text</mat-label>
-          <input matInput type="text" formControlName="answerText" />
-        </mat-form-field>
+          <angular-editor
+            id="answer_editor"
+            formControlName="answerText"
+            [config]="descriptionEditorconfig"
+          >
+          </angular-editor>
+        </div>
       </form>
 
-      <label id="example-radio-group-label">Mark Correct Answer Option</label>
+      <label id="example-radio-group-label" style="margin-bottom: 10px"
+        >Mark Correct Answer Option</label
+      >
       <div class="w-100-div flex-container">
         <div
           [formGroup]="answerOptionFormGrp"

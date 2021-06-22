@@ -1,0 +1,80 @@
+.swal2-icon.swal2-warning {
+  border-color: #facea8;
+  color: #f8bb86;
+}
+
+[class^=swal2] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.swal2-icon {
+  position: relative;
+  box-sizing: content-box;
+  justify-content: center;
+  width: 2.5em;
+  height: 2.5em;
+  margin: 0.5em auto .6em;
+  border: .25em solid transparent;
+  border-radius: 50%;
+  border-color: #000;
+  font-family: inherit;
+  line-height: 5em;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+[class^=swal2] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.swal2-title {
+  position: relative;
+  max-width: 100%;
+  margin: 0;
+  padding: .8em 1em 0;
+  color: #595959;
+  font-size: 1.875em;
+  font-weight: 600;
+  text-align: center;
+  text-transform: none;
+  word-wrap: break-word;
+}
+
+.swal2-actions {
+  display: flex;
+  z-index: 1;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 1.25em auto 0;
+  padding: 0;
+}
+
+.swal2-styled.swal2-confirm {
+  border: 0;
+  border-radius: .25em;
+  background: initial;
+  background-color: #7367f0;
+  color: #fff;
+  font-size: 1em;
+}
+
+.swal2-styled.swal2-cancel {
+  border: 0;
+  border-radius: .25em;
+  background: initial;
+  background-color: #6e7d88;
+  color: #fff;
+  font-size: 1em;
+}
+
+.swal2-icon .swal2-icon-content {
+  display: flex;
+  align-items: center;
+  font-size: 2em;
+}

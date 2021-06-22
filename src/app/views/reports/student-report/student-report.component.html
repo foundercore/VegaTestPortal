@@ -1,4 +1,4 @@
-<div class="testName">Test Name: <strong>{{fetchedWholeAssignmentResult.testName}}</strong> </div>
+<div class="testName">Test Name: <strong>{{fetchedWholeAssignmentResult?.testName}}</strong> </div>
 <div class="card-stats-container">
   <div class="card-stats">
     <div class="card-stats-body">
@@ -9,38 +9,42 @@
         Questions Statistics
       </div>
       <div class="card-body">
-        <div class="stats">
-          <div class="card-subtitle">
-            <span> {{metrics?.totalQuestions}} </span><br>
-            <span><i class="fas fa-align-justify"  style="color: blue;margin-right: 5px;" ></i>Total Questions</span>
+        <div class="sub-stats">
+          <div class="stats">
+            <div class="card-subtitle">
+              <span> {{metrics?.totalQuestions}} </span><br>
+              <span><i class="fas fa-align-justify icon-space primary" ></i>Total Questions</span>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div class="card-subtitle">
+              <span> {{metrics?.attempted}} </span><br>
+              <span><i class="fas fa-pen icon-space info" ></i>Attempted Questions</span>
+            </div>
           </div>
         </div>
 
-        <div class="stats">
-          <div class="card-subtitle">
-            <span> {{metrics?.attempted}} </span><br>
-            <span><i class="fas fa-pen" style="color: #9e9e9e;margin-right: 5px;" ></i>Attempted Questions</span>
+        <div class="sub-stats">
+          <div class="stats">
+            <div class="card-subtitle">
+              <span> {{metrics?.skipped}} </span><br>
+              <span><i class="fas fa-forward icon-space warning" ></i>Skipped Questions</span>
+            </div>
           </div>
-        </div>
 
-        <div class="stats">
-          <div class="card-subtitle">
-            <span> {{metrics?.skipped}} </span><br>
-            <span><i class="fas fa-forward"  style="color: orangered;margin-right: 5px;" ></i>Skipped Questions</span>
+          <div class="stats">
+            <div class="card-subtitle">
+              <span> {{metrics?.correct}} </span><br>
+              <span><i class="fas fa-check-circle success icon-space"></i> Correct Questions</span>
+            </div>
           </div>
-        </div>
 
-        <div class="stats">
-          <div class="card-subtitle">
-            <span> {{metrics?.correct}} </span><br>
-            <span><i class="fas fa-check-circle" style="color: green;margin-right: 5px;"></i> Correct Questions</span>
-          </div>
-        </div>
-
-        <div class="stats">
-          <div class="card-subtitle">
-            <span> {{metrics?.incorrect}} </span><br>
-            <span><i class="fas fa-times-circle" style="color: red;margin-right: 5px;"></i>Incorrect Questions</span>
+          <div class="stats">
+            <div class="card-subtitle">
+              <span> {{metrics?.incorrect}} </span><br>
+              <span><i class="fas fa-times-circle icon-space failure" ></i>Incorrect Questions</span>
+            </div>
           </div>
         </div>
       </div>
@@ -56,38 +60,42 @@
         Marks Statistics
       </div>
       <div class="card-body">
-        <div class="stats">
-          <div class="card-subtitle">
-            <span> {{metrics?.totalMarks}} </span><br>
-            <span><i class="fas fa-align-justify"  style="color: blue;margin-right: 5px;" ></i>Total Marks</span>
+        <div class="sub-stats">
+          <div class="stats">
+            <div class="card-subtitle">
+              <span> {{metrics?.totalMarks}} </span><br>
+              <span><i class="fas fa-align-justify icon-space primary" ></i>Total Marks</span>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div class="card-subtitle">
+              <span> {{metrics?.marksReceived}} </span><br>
+              <span><i class="fas fa-poll  icon-space info" ></i>Marks Recieved</span>
+            </div>
           </div>
         </div>
 
-        <div class="stats">
-          <div class="card-subtitle">
-            <span> {{metrics?.marksReceived}} </span><br>
-            <span><i class="fas fa-poll" style="color: #9e9e9e;margin-right: 5px;" ></i>Marks Recieved</span>
+        <div class="sub-stats">
+          <div class="stats">
+            <div class="card-subtitle">
+              <span> {{metrics?.skippedMarks}} </span><br>
+              <span><i class="fas fa-forward icon-space warning"  ></i>Skipped Marks</span>
+            </div>
           </div>
-        </div>
 
-        <div class="stats">
-          <div class="card-subtitle">
-            <span> {{metrics?.skippedMarks}} </span><br>
-            <span><i class="fas fa-forward"  style="color: orangered;margin-right: 5px;" ></i>Skipped Marks</span>
+          <div class="stats">
+            <div class="card-subtitle">
+              <span> {{metrics?.positiveMarks}} </span><br>
+              <span><i class="fas fa-plus-circle success icon-space"></i>Positive Marks</span>
+            </div>
           </div>
-        </div>
 
-        <div class="stats">
-          <div class="card-subtitle">
-            <span> {{metrics?.positiveMarks}} </span><br>
-            <span><i class="fas fa-plus-circle" style="color: green;margin-right: 5px;"></i>Positive Marks</span>
-          </div>
-        </div>
-
-        <div class="stats">
-          <div class="card-subtitle">
-            <span> {{metrics?.negativeMarks}} </span><br>
-            <span><i class="fas fa-minus-circle" style="color: red;margin-right: 5px;"></i>Negative Marks</span>
+          <div class="stats">
+            <div class="card-subtitle">
+              <span> {{metrics?.negativeMarks}} </span><br>
+              <span><i class="fas fa-minus-circle icon-space failure"  ></i>Negative Marks</span>
+            </div>
           </div>
         </div>
       </div>
@@ -106,21 +114,21 @@
         <div class="stats">
           <div class="card-subtitle">
             <span> {{(metrics?.totalTimeInSec / 60)  | number  }} min</span><br>
-            <span><i class="fas fa-hourglass-half"  style="color: blue;margin-right: 5px;" ></i>Total Time</span>
+            <span><i class="fas fa-hourglass-half icon-space primary"></i>Total Time</span>
           </div>
         </div>
 
         <div class="stats">
           <div class="card-subtitle">
             <span> {{metrics?.correctTimeInSec  / 60 | number}} min</span><br>
-            <span><i class="fas fa-hourglass-start" style="color: green;margin-right: 5px;" ></i>Correct Time</span>
+            <span><i class="fas fa-hourglass-start  success icon-space"></i>Correct Time</span>
           </div>
         </div>
 
         <div class="stats">
           <div class="card-subtitle">
             <span> {{metrics?.incorrectTimeInSec  / 60 | number}} min</span><br>
-            <span><i class="fas fa-hourglass-end"  style="color: red;margin-right: 5px;" ></i>Incorrect Time</span>
+            <span><i class="fas fa-hourglass-end icon-space failure"></i>Incorrect Time</span>
           </div>
         </div>
 
@@ -130,16 +138,15 @@
 </div>
 
 <div style="margin: 0px 20px">
-  <mat-chip-list aria-label="Fish selection">
-    <mat-chip
-      *ngFor="let filterItem of filterList"
-      (click)="showFilteredData(filterItem)"
-      >{{ filterItem }}</mat-chip
-    >
-  </mat-chip-list>
+  <mat-button-toggle-group #filterToggle="matButtonToggleGroup"
+  (change)="showFilteredData($event.value)"  [value]="currentSelection"
+                           aria-label="Change Filter">
+    <mat-button-toggle  *ngFor="let filterItem of filterList" [value]="filterItem" > {{ filterItem }} </mat-button-toggle>
+  </mat-button-toggle-group>
 </div>
 
-<div class="student-report-list-grid">
+
+<div *ngIf="currentSelection != 'Solution'" class="student-report-list-grid">
   <div class="mat-elevation-z8">
     <div class="loading-container" *ngIf="isLoading">
       <mat-spinner *ngIf="isLoading"></mat-spinner>
@@ -154,7 +161,10 @@
           matSortDisableClear
         >
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <div>Name</div>
+
+            </th>
             <td mat-cell *matCellDef="let row">{{ row.name }}</td>
           </ng-container>
 
@@ -208,3 +218,58 @@
     </div>
   </div>
 </div>
+
+<div  *ngIf="currentSelection == 'Solution'"  class="student-report-list-grid">
+  <mat-tab-group >
+    <mat-tab *ngFor="let section of fetchedWholeAssignmentResult.sections" [label]="section.sectionName">
+      <div *ngFor="let answer of section.answers; let i = index;"  class="question-card">
+        <div style="display: flex; margin-bottom: 20px;">
+          <div class="numberCircle">{{i + 1}}</div>
+          <div class="questionName" [innerHtml]="transform(answer.name)"></div>
+          <div style="    position: absolute; right: 30px;border-radius: 20px;box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);">
+            <mat-chip-list aria-label="Fish selection">
+              <mat-chip [ngClass]="{'success-bg': answer.answerStatus == 'CORRECT', 'failure-bg' :answer.answerStatus == 'INCORRECT',  'warning-bg' : answer.answerStatus == 'SKIPPED' }" selected>
+                <i class="fas fa-hourglass-half"  style="margin-right: 5px;" ></i> {{answer.timeElapsedInSec}} sec</mat-chip>
+            </mat-chip-list>
+          </div>
+        </div>
+
+        <div style="margin-left: 30px;">
+            <div class="option"[ngClass]="{'correct': answer.correctOptions?.includes(option.key),
+             'selected' : answer.selectedOptions?.includes(option.key),  'wrong' : !answer.correctOptions?.includes(option.key) }"
+            *ngFor="let option of answer.inputOptions" >
+              <div class="markcontainer">
+                <i *ngIf="answer.answerStatus == 'CORRECT' && answer.correctOptions.includes(option.key)"   class="fas fa-check-circle success"></i>
+                <i *ngIf="answer.answerStatus == 'INCORRECT' && answer.selectedOptions.includes(option.key) "  class="fas fa-times-circle failure"></i>
+              </div>
+              <div class="answer-list" [innerHtml]="transform(option.value)"></div>
+              <!-- <mat-chip-list *ngIf="answer.correctOptions?.includes(option.key)" aria-label="Correct Answer">
+                <mat-chip class="primary-bg" selected>
+                   Correct Answer</mat-chip>
+              </mat-chip-list> -->
+              <span *ngIf="answer.correctOptions?.includes(option.key)" class="badge badge-pill badge-primary ml-2">Correct Answer</span>
+            </div>
+        </div>
+
+        <div *ngIf="answer.type == 'TITA'" style="margin-left: 30px;">
+            <div class="option correct">
+              <div [innerHtml]="transform(answer.correctAnswerText)"></div>
+            </div>
+            <div class="option" [ngClass]="{'correct': answer.answerStatus  == 'CORRECT' ,  'wrong' : answer.answerStatus  == 'INCORRECT' }">
+              <div [innerHtml]="transform(answer.answerText)"></div>
+            </div>
+        </div>
+
+        <div style="margin: 20px 30px;">
+          <div style="margin-bottom: 10px;">Explanation</div>
+          <mat-form-field appearance="fill" style="width: 100%;" >
+            <textarea matInput disabled>Explanation</textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </mat-tab>
+
+  </mat-tab-group>
+</div>
+

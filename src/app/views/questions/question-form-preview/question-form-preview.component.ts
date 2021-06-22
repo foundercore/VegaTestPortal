@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -37,7 +38,8 @@ export class QuestionFormPreviewComponent implements OnInit {
     private router: Router,
     private activateRouter: ActivatedRoute,
     public translate: TranslateService,
-    private questionManagementService: QuestionManagementService
+    private questionManagementService: QuestionManagementService,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -75,7 +77,7 @@ export class QuestionFormPreviewComponent implements OnInit {
             this.questionPreviewGroup.get('type')?.setValue(resp.type);
             this.questionPreviewGroup
               .get('answerText')
-              ?.setValue(resp.answer.answerText?.replace(/(<([^>]+)>)/gi, ''));
+              ?.setValue(resp.answer.answerText);
             this.options = resp.options;
             this.options.forEach((x) => {
               const newCntrl = new FormControl();
@@ -92,6 +94,7 @@ export class QuestionFormPreviewComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(['home/questionmanagement']);
+    this.location.back();
+    // this.router.navigate(['home/questionmanagement']);
   }
 }
