@@ -65,6 +65,7 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     topicCntrl: new FormControl(),
     substopicCntrl: new FormControl(),
     fileNameCntrl: new FormControl(),
+    sectionNameCntrl: new FormControl(),
   });
 
   isFilterApply = false;
@@ -308,13 +309,14 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
   }
 
   resetFilter() {
-    this.filterGroup.controls['filterNameValue'].reset();
-    this.filterGroup.controls['questionTypeCntrl'].reset();
-    this.filterGroup.controls['subjectCntrl'].reset();
-    this.filterGroup.controls['tagCntrl'].reset();
-    this.filterGroup.controls['topicCntrl'].reset();
-    this.filterGroup.controls['substopicCntrl'].reset();
-    this.filterGroup.controls['fileNameCntrl'].reset();
+    this.filterGroup.controls.filterNameValue.reset();
+    this.filterGroup.controls.questionTypeCntrl.reset();
+    this.filterGroup.controls.subjectCntrl.reset();
+    this.filterGroup.controls.tagCntrl.reset();
+    this.filterGroup.controls.topicCntrl.reset();
+    this.filterGroup.controls.substopicCntrl.reset();
+    this.filterGroup.controls.fileNameCntrl.reset();
+    this.filterGroup.controls.sectionNameCntrl.reset();
     this.isFilterApply = false;
     this.resetPaging();
     const searchQuestion = this.createSearchObject();
@@ -355,45 +357,60 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
 
     if (this.isFilterApply) {
       if (
-        this.filterGroup.controls['filterNameValue'].value !== null &&
-        this.filterGroup.controls['filterNameValue'].value.length !== 0
-      )
+        this.filterGroup.controls.filterNameValue.value !== null &&
+        this.filterGroup.controls.filterNameValue.value.length !== 0
+      ) {
         searchQuestion.nameRegexPattern =
-          this.filterGroup.controls['filterNameValue'].value;
-      else if (
-        this.filterGroup.controls['questionTypeCntrl'].value !== null &&
-        this.filterGroup.controls['questionTypeCntrl'].value.length !== 0
-      )
+          this.filterGroup.controls.filterNameValue.value;
+      }
+      if (
+        this.filterGroup.controls.questionTypeCntrl.value !== null &&
+        this.filterGroup.controls.questionTypeCntrl.value.length !== 0
+      ) {
         searchQuestion.type =
-          this.filterGroup.controls['questionTypeCntrl'].value;
-      else if (
-        this.filterGroup.controls['subjectCntrl'].value !== null &&
-        this.filterGroup.controls['subjectCntrl'].value.length !== 0
-      )
+          this.filterGroup.controls.questionTypeCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.subjectCntrl.value !== null &&
+        this.filterGroup.controls.subjectCntrl.value.length !== 0
+      ) {
         searchQuestion.subject =
-          this.filterGroup.controls['subjectCntrl'].value;
-      else if (
-        this.filterGroup.controls['tagCntrl'].value !== null &&
-        this.filterGroup.controls['tagCntrl'].value.length !== 0
-      )
-        searchQuestion.tags = this.filterGroup.controls['tagCntrl'].value;
-      else if (
-        this.filterGroup.controls['topicCntrl'].value !== null &&
-        this.filterGroup.controls['topicCntrl'].value.length !== 0
-      )
-        searchQuestion.topic = this.filterGroup.controls['topicCntrl'].value;
-      else if (
-        this.filterGroup.controls['substopicCntrl'].value !== null &&
-        this.filterGroup.controls['substopicCntrl'].value.length !== 0
-      )
+          this.filterGroup.controls.subjectCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.tagCntrl.value !== null &&
+        this.filterGroup.controls.tagCntrl.value.length !== 0
+      ) {
+        searchQuestion.tags = this.filterGroup.controls.tagCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.topicCntrl.value !== null &&
+        this.filterGroup.controls.topicCntrl.value.length !== 0
+      ) {
+        searchQuestion.topic = this.filterGroup.controls.topicCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.substopicCntrl.value !== null &&
+        this.filterGroup.controls.substopicCntrl.value.length !== 0
+      ) {
         searchQuestion.subTopic =
-          this.filterGroup.controls['substopicCntrl'].value;
-      else if (
-        this.filterGroup.controls['fileNameCntrl'].value !== null &&
-        this.filterGroup.controls['fileNameCntrl'].value.length !== 0
-      )
+          this.filterGroup.controls.substopicCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.fileNameCntrl.value !== null &&
+        this.filterGroup.controls.fileNameCntrl.value.length !== 0
+      ) {
         searchQuestion.filename =
-          this.filterGroup.controls['fileNameCntrl'].value;
+          this.filterGroup.controls.fileNameCntrl.value;
+      }
+
+      if (
+        this.filterGroup.controls.sectionNameCntrl.value !== null &&
+        this.filterGroup.controls.sectionNameCntrl.value.length !== 0
+      ) {
+        searchQuestion.migrationSectionName =
+          this.filterGroup.controls.sectionNameCntrl.value;
+      }
     }
     return searchQuestion;
   }

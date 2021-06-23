@@ -88,18 +88,7 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div class="w-25-field">
-                <mat-form-field appearance="outline" class="form-field-padding">
-                  <mat-label>Sub Topic</mat-label>
-                  <mat-select formControlName="substopicCntrl">
-                    <mat-option
-                      *ngFor="let subtopic of subTopicList"
-                      [value]="subtopic"
-                      >{{ subtopic }}</mat-option
-                    >
-                  </mat-select>
-                </mat-form-field>
-              </div>
+              
               <div class="w-25-field">
                 <mat-form-field appearance="outline" class="form-field-padding">
                   <mat-label>File Name</mat-label>
@@ -107,6 +96,16 @@
                     matInput
                     placeholder="File Name"
                     formControlName="fileNameCntrl"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="w-25-field">
+                <mat-form-field appearance="outline" class="form-field-padding">
+                  <mat-label>Section Name</mat-label>
+                  <input
+                    matInput
+                    placeholder="Section Name"
+                    formControlName="sectionNameCntrl"
                   />
                 </mat-form-field>
               </div>

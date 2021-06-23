@@ -7,7 +7,12 @@
         </h4>
       </div>
       <div class="col-md-6 right__col d-flex">
-        <button class="auto-btn m-1" mat-raised-button (click)="calculate()">
+        <button
+          class="auto-btn p-0 m-1"
+          style="height: fit-content"
+          mat-raised-button
+          (click)="calculate()"
+        >
           <mat-icon>calculate</mat-icon>
         </button>
         <div class="d-flex">
@@ -52,10 +57,14 @@
       </div>
     </div>
     <!-- main body content start here -->
-    <mat-tab-group class="pt-2" (selectedTabChange)="selectSection($event)">
+    <mat-tab-group
+      class="pt-2"
+      (selectedTabChange)="selectSection($event)"
+      #TabGroup
+    >
       <!-- one -->
       <div *ngIf="testdata?.sections">
-        <span *ngFor="let section of testdata?.sections">
+        <span *ngFor="let section of testdata?.sections" class="section_tab">
           <mat-tab label="{{ section?.name }}">
             <div class="row mx-0 scroll__box">
               <div class="col-lg-8 position-relative divider">
@@ -78,18 +87,32 @@
                         style="font-weight: 500"
                         [innerHTML]="question?.name"
                       ></p>
+                      <!-- <p class="lead" style="font-weight: 500">
+                        {{ question?.name }}
+                      </p> -->
                       <!-- <p [innerHTML]="question?.explanation"></p>
                       <p [innerHTML]="question?.description"></p> -->
                       <ul>
                         <li *ngFor="let opt of question?.options">
                           <!-- value="{{ opt?.key }}" -->
                           <!-- [checked]="optionsSelected[opt?.key]" -->
-                          <mat-checkbox
-                            [checked]="optionsSelected[opt?.key - 1]"
-                            (change)="setOptionSelected(opt?.key)"
-                          >
-                            <span [innerHTML]="opt?.value"> </span>
-                          </mat-checkbox>
+                          <div class="row">
+                            <mat-checkbox
+                              [checked]="optionsSelected[opt?.key - 1]"
+                              (change)="setOptionSelected(opt?.key)"
+                              class="col-1"
+                            >
+                            </mat-checkbox>
+                            <span
+                              class="col-10"
+                              style="margin-left: -15px"
+                              [innerHTML]="opt?.value"
+                            >
+                            </span>
+                            <!-- <span class="col-10" style="margin-left: -15px">
+                              {{ opt?.value }}
+                            </span> -->
+                          </div>
                         </li>
                       </ul>
                     </div>
@@ -217,6 +240,7 @@
                         [ngStyle]="{
                           background: questionNavigationButtonColorArray[i]
                         }"
+                        style="min-width: 50px"
                       >
                         {{ i + 1 }}
                       </button>
@@ -258,12 +282,12 @@
                   >
                     Not Attempted.
                   </li>
-                  <li
+                  <!-- <li
                     *ngIf="this.userType === 'ROLE_STUDENT'"
                     class="btn btn_marked_and_ans d-inline-block border-0"
                   >
                     Attempted & marked.
-                  </li>
+                  </li> -->
                 </ul>
                 <div
                   *ngIf="this.userType === 'ROLE_STUDENT'"

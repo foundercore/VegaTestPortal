@@ -1,5 +1,5 @@
 import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SectionComponent } from '../popups/section/section.component';
 import { Section } from '../models/sections';
 import { MatPaginator } from '@angular/material/paginator';
@@ -32,8 +32,16 @@ import { error } from '@angular/compiler/src/util';
   styleUrls: ['./update-test-content.component.css'],
 })
 export class UpdateTestContentComponent implements OnInit {
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  public dataSource = new MatTableDataSource([]);
+  @ViewChild(MatSort, { static: false })
+  set sort(value: MatSort) {
+    if (this.dataSource) this.dataSource.sort = value;
+  }
+  @ViewChild(MatPaginator, { static: false, read: true })
+  set paginator(value: MatPaginator) {
+    this.dataSource.paginator = value;
+  }
+  // @ViewChild(MatPaginator) _paginator: MatPaginator;
   totalNumberOfRecords = 0;
   public pageOptions = PAGE_OPTIONS;
   currentOpenedSection = new Section();
@@ -43,7 +51,7 @@ export class UpdateTestContentComponent implements OnInit {
   ques = [];
   testId: string = '';
   controlparms: TestConfigurationVM;
-  dataSource = new MatTableDataSource<any>();
+  //dataSource = new MatTableDataSource<any>();
   selection = new SelectionModel<QuestionModel>(true, []);
   displayedColumns: string[] = [
     'select',
@@ -75,43 +83,47 @@ export class UpdateTestContentComponent implements OnInit {
   ngOnInit(): void {
     // // this.testId = this.route.snapshot.paramMap.get('id');
     // // this.getQuestionPaperbyId();
+    //this.dataSource.paginator = this.paginator;
   }
 
   ngAfterViewInit(): void {
+    console.log('paginator inside ngAfterViewInit=>', this.paginator);
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
     this.testId = this.route.snapshot.paramMap.get('id');
     this.getQuestionPaperbyId();
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap((res) => {
-          console.log('Res from switch map=>', res);
-          this.isLoadingResults = true;
-          const searchQuestion = this.createSearchObject();
-          return this.testConfigService.getAllQuestionPaper(searchQuestion);
-        }),
-        map((data) => {
-          console.log('data in map=>', data);
-          this.isLoadingResults = false;
-          this.isRateLimitReached = false;
-          this.actualTotalNumberOfRecords = data.totalRecords;
-          return data.tests.map((x) => {
-            x.explanation_added =
-              x.explanation && x.explanation.length ? 'Yes' : 'No';
-            return x;
-          });
-        }),
-        catchError(() => {
-          this.isLoadingResults = false;
-          this.isRateLimitReached = true;
-          return observableOf([]);
-        })
-      )
-      .subscribe((data) => {
-        this.dataSource.data = data;
-        console.log('This.datasource=', this.dataSource);
-      });
+
+    //this.dataSource.paginator = this.paginator;
+    // merge(this.sort.sortChange, this.paginator.page)
+    //   .pipe(
+    //     startWith({}),
+    //     switchMap((res) => {
+    //       console.log('Res from switch map=>', res);
+    //       this.isLoadingResults = true;
+    //       const searchQuestion = this.createSearchObject();
+    //       return this.testConfigService.getAllQuestionPaper(searchQuestion);
+    //     }),
+    //     map((data) => {
+    //       console.log('data in map=>', data);
+    //       this.isLoadingResults = false;
+    //       this.isRateLimitReached = false;
+    //       this.actualTotalNumberOfRecords = data.totalRecords;
+    //       return data.tests.map((x) => {
+    //         x.explanation_added =
+    //           x.explanation && x.explanation.length ? 'Yes' : 'No';
+    //         return x;
+    //       });
+    //     }),
+    //     catchError(() => {
+    //       this.isLoadingResults = false;
+    //       this.isRateLimitReached = true;
+    //       return observableOf([]);
+    //     })
+    //   )
+    //   .subscribe((data) => {
+    //     this.dataSource.data = data;
+    //     console.log('This.datasource=', this.dataSource);
+    //   });
   }
 
   addSection() {
@@ -228,60 +240,6 @@ export class UpdateTestContentComponent implements OnInit {
       console.log('Result accepted from edit-test dialog box =>', result);
       //this.toastrService.success('Test details updated successfully');
       this.getQuestionPaperbyId();
-
-      // var model = this.questionPaper;
-      // model.name = result.testName;
-      // model.instructions = result.instructions;
-      // model.totalDurationInMinutes = result.duration;
-      // model.totalMarks = result.totalMarks;
-      // this.testConfigService.updateTestMetaData(result.testId, model).subscribe(
-      //   (res) => {
-      //     this.toastrService.success('Test details updated successfully');
-      //     this.getQuestionPaperbyId();
-      //   },
-      //   (err) => {
-      //     this.toastrService.error('Error in test details updating');
-      //     this.getQuestionPaperbyId();
-      //     console.log('Error while updating test meta data=>', err);
-      //   }
-      // );
-      // console.log(
-      //   'Details req for edit => this.testId=>',
-      //   this.testId,
-      //   ' this.sectionId=>',
-      //   this.sectionId
-      // );
-      // if (result != null) {
-      //   let model = new Section();
-      //   model.durationInMinutes = +result?.duration;
-      //   model.name = result?.sectionName;
-      //   model.instructions = result?.instructions;
-      //   model.difficultyLevel = result?.difficultyLevel;
-      //   model.testId = this.route.snapshot.paramMap.get('id');
-      //   var sectionId = result?.sectionId;
-      //   //debugger;
-      //   this.testConfigService
-      //     .editSection(model.testId, sectionId, model)
-      //     .subscribe(
-      //       (res: string = '') => {
-      //         this.getQuestionPaperbyId();
-      //         this.toastrService.success('Test updated successfully');
-      //       },
-      //       (error) => {
-      //         if (error.status == 200) {
-      //           this.getQuestionPaperbyId();
-      //           this.toastrService.success('Test updated successfully');
-      //         } else {
-      //           this.toastrService.error(
-      //             error?.error?.message
-      //               ? error?.error?.message
-      //               : error?.message,
-      //             'Error'
-      //           );
-      //         }
-      //       }
-      //     );
-      // }
     });
   }
 
@@ -414,26 +372,29 @@ export class UpdateTestContentComponent implements OnInit {
     }
   }
 
-  setDataSourceOfPaginator(sections) {
+  setDataSourceOfPaginator(sections?) {
     sections.map((sec) => {
       if (sec && this.currentOpenedSection)
         if (sec.id === this.currentOpenedSection.id) {
           this.currentOpenedSection = sec;
         }
     });
-    console.log(
-      'Setting paginator datasource with section=>',
-      this.currentOpenedSection
-    );
+
     if (this.currentOpenedSection) {
       this.ques = this.currentOpenedSection?.questions;
-      //this.ques2 = this.currentOpenedSection?.questions;
+      //this.dataSource = null;
       this.dataSource = new MatTableDataSource(this.ques);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.totalNumberOfRecords = this.currentOpenedSection?.questions
         ? this.currentOpenedSection?.questions.length
         : 0;
+      console.log(
+        'Setting paginator datasource=>',
+        this.dataSource,
+        'with section=>',
+        this.currentOpenedSection
+      );
       //this.sort.sortChange
 
       // merge(this.sort.sortChange, this.paginator.page)
@@ -468,60 +429,56 @@ export class UpdateTestContentComponent implements OnInit {
     }
   }
 
-  createSearchObject() {
-    const searchQuestionPaper = new SearchQuestionPaperVM(
-      String(this.paginator.pageIndex + 1),
-      this.paginator.pageSize,
-      this.sort.active,
-      this.sort.direction
-    );
-    this.totalNumberOfRecords = this.paginator.pageSize;
-    return searchQuestionPaper;
-  }
-
   prepareExpandedStateArray(state, length?, index?) {
-    console.log(
-      'prepareExpandedStateArray => state=>',
-      state,
-      ' length=>',
-      length,
-      ' index=>',
-      index
-    );
-    console.log(
-      'currentOpenedSection=>',
-      this.currentOpenedSection,
-      ' datasource of paginator=>',
-      this.dataSource.data
-    );
+    // console.log(
+    //   'prepareExpandedStateArray => state=>',
+    //   state,
+    //   ' length=>',
+    //   length,
+    //   ' index=>',
+    //   index
+    // );
+    // console.log(
+    //   'currentOpenedSection=>',
+    //   this.currentOpenedSection,
+    //   ' datasource of paginator=>',
+    //   this.dataSource.data
+    // );
     if (index >= 0) {
       for (var i = 0; i < length; i++) {
         if (index == i)
           this.expandedStateArray[i] = !this.expandedStateArray[i];
         else this.expandedStateArray[i] = false;
       }
-      console.log('expandedStateArray first=>', this.expandedStateArray);
+      //console.log('expandedStateArray first=>', this.expandedStateArray);
       return;
     }
     for (var i = 0; i < length; i++) {
       if (!this.expandedStateArray[i]) this.expandedStateArray[i] = state;
     }
-    console.log('expandedStateArray second=>', this.expandedStateArray);
+    // console.log('expandedStateArray second=>', this.expandedStateArray);
   }
 
   getSectionId(section?: Section, index?) {
     this.currentOpenedSection = section;
-
+    //this.prepareExpandedStateArray(false, this.modelsections?.length);
+    this.prepareExpandedStateArray(true, this.modelsections?.length, index);
     this.section = section;
     if (section != null) {
       this.ques = section?.questions;
-      this.ques2 = section?.questions;
+      //this.ques2 = section?.questions;
+      //this.dataSource = null;
       this.dataSource = new MatTableDataSource(this.ques);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }
 
-    this.prepareExpandedStateArray(true, this.modelsections?.length, index);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+
+      console.log('dataSource inside getSectionId=>', this.dataSource);
+      this.totalNumberOfRecords = section?.questions
+        ? section?.questions.length
+        : 0;
+      this.getQuestionPaperbyId();
+    }
   }
 
   removeSection(section: Section) {
