@@ -99,7 +99,14 @@ export class TestLiveComponent implements OnInit {
               .substr(11, 8);
           console.log(
             'this.testdata==',
-            res,
+            this.testdata,
+            ' this.testdata.timeSeconds=',
+            this.timeSeconds
+          );
+          this.testdata = this.randomizeQuestionsOfSections(this.testdata);
+          console.log(
+            'After shuffle this.testdata==',
+            this.testdata,
             ' this.testdata.timeSeconds=',
             this.timeSeconds
           );
@@ -115,6 +122,15 @@ export class TestLiveComponent implements OnInit {
           );
         }
       );
+  }
+
+  randomizeQuestionsOfSections(data) {
+    console.log('Input data to randomize=>', data);
+    data.sections.map((sec) => {
+      sec.questions = this.shuffle(sec.questions);
+    });
+    console.log('Output data to randomize=>', data);
+    return data;
   }
 
   observableTimer() {
@@ -224,7 +240,7 @@ export class TestLiveComponent implements OnInit {
     // debugger;
     var optionsSelectedArray = [];
     for (var i = 0; i < this.optionsSelected.length; i++) {
-      if (this.optionsSelected[i]) optionsSelectedArray.push(String(i+1));
+      if (this.optionsSelected[i]) optionsSelectedArray.push(String(i + 1));
     }
     if (optionsSelectedArray.length > 0) {
       console.log(
@@ -593,13 +609,14 @@ export class TestLiveComponent implements OnInit {
               } else {
                 //current ques is in saved data
                 //check if mark for review is true then orange else if answered then blue else grey
-                if (sub_ans.markForReview && sub_ans.selectedOptions !== null) {
-                  if (!colorAppliedIndexesArray[i]) {
-                    //set color violet
-                    this.setButtonColor(i, 'violet');
-                    colorAppliedIndexesArray[i] = true;
-                  }
-                } else if (sub_ans.markForReview) {
+                // if (sub_ans.markForReview && sub_ans.selectedOptions !== null) {
+                //   if (!colorAppliedIndexesArray[i]) {
+                //     //set color violet
+                //     this.setButtonColor(i, 'violet');
+                //     colorAppliedIndexesArray[i] = true;
+                //   }
+                // } else
+                if (sub_ans.markForReview) {
                   if (!colorAppliedIndexesArray[i]) {
                     //set color orange
                     this.setButtonColor(i, 'orange');
@@ -782,5 +799,51 @@ export class TestLiveComponent implements OnInit {
         this.questionNavigationButtonColorArray[i] = color;
       }
     });
+  }
+
+  // shuffle(array) {
+  //   console.log('Shuffle func inp=>', array);
+  //   var currentIndex = array.length,
+  //     randomIndex;
+
+  //   // While there remain elements to shuffle...
+  //   while (0 !== currentIndex) {
+  //     // Pick a remaining element...
+  //     randomIndex = Math.floor(Math.random() * currentIndex);
+  //     currentIndex--;
+
+  //     // And swap it with the current element.
+  //     [array[currentIndex], array[randomIndex]] = [
+  //       array[randomIndex],
+  //       array[currentIndex],
+  //     ];
+  //   }
+  //   console.log('Shuffle func op=>', array);
+  //   return array;
+  // }
+
+  // shuffle(array) {
+  //   console.log('Shuffle func inp=>', array);
+  //   for (var i = array.length - 1; i > 0; i--) {
+  //     var j = Math.floor(Math.random() * (i + 1));
+  //     var temp = array[i];
+  //     array[i] = array[j];
+  //     array[j] = temp;
+  //   }
+  //   console.log('Shuffle func op=>', array);
+  //   return array;
+  // }
+  shuffle(array) {
+    var currentIndex = array.length,
+      temporaryValue,
+      randomIndex;
+    while (0 !== currentIndex) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
   }
 }
