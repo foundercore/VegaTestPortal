@@ -85,7 +85,6 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     private toastrService: ToastrService,
     private questionService: QuestionManagementService
   ) {
-    console.log(this._data)
     forkJoin([
       this.questionService.getQuestionType(),
       this.questionService.getQuestionTags(),
@@ -218,7 +217,7 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
       )
       .subscribe((data) => {
         console.log(data)
-        this.dataSource.data = data?.filter(q=> !this._data?.selectedques?.some(ques=> ques.id == q.id.questionId));
+        this.dataSource.data = data;
         console.log('This.datasource=', this.dataSource);
       });
   }
@@ -277,26 +276,26 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     }
   }
 
-  searchtest() {
-    if (
-      this.searchText != '' &&
-      this.searchText != null &&
-      this.searchText != undefined &&
-      this.searchText.length > 3
-    ) {
-      this.questions = this.questions.filter((x) =>
-        x.name.includes(this.searchText)
-      );
-      this.dataSource = new MatTableDataSource(this.questions);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    } else {
-      this.questions = this.questions2;
-      this.dataSource = new MatTableDataSource(this.questions);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }
-  }
+  // searchtest() {
+  //   if (
+  //     this.searchText != '' &&
+  //     this.searchText != null &&
+  //     this.searchText != undefined &&
+  //     this.searchText.length > 3
+  //   ) {
+  //     this.questions = this.questions.filter((x) =>
+  //       x.name.includes(this.searchText)
+  //     );
+  //     this.dataSource = new MatTableDataSource(this.questions);
+  //     this.dataSource.sort = this.sort;
+  //     this.dataSource.paginator = this.paginator;
+  //   } else {
+  //     this.questions = this.questions2;
+  //     this.dataSource = new MatTableDataSource(this.questions);
+  //     this.dataSource.sort = this.sort;
+  //     this.dataSource.paginator = this.paginator;
+  //   }
+  // }
 
   applyFilter() {
     this.isFilterApply = true;
@@ -329,6 +328,7 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
         this.isLoadingResults = false;
         this.isRateLimitReached = false;
         this.totalNumberOfRecords = data.totalRecords;
+        this.actualTotalNumberOfRecords = data.totalRecords;
         data.questions.map((x) => {
           x.explanation_added = x.explanation?.length != 0 ? 'Yes' : 'No';
           return x;
@@ -355,6 +355,8 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     );
     this.totalNumberOfRecords = this.paginator.pageSize;
 
+    // exlude questions which already exists in the test 
+    searchQuestion.testIdToBeExcluded = this._data.testId;
     if (this.isFilterApply) {
       if (
         this.filterGroup.controls.filterNameValue.value !== null &&

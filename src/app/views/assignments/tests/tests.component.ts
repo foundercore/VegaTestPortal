@@ -47,7 +47,7 @@ export class TestsComponent implements OnInit, AfterViewInit {
     'select',
     'testName',
     'status',
-    'minimumDurationInMinutes',
+    // 'minimumDurationInMinutes',
     'totalDurationInMinutes',
     'actions',
   ];
