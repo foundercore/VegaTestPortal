@@ -11,9 +11,7 @@
   <div class="add-student-batch-content">
     <div class="add-student-batch-content-container">
       <div class="example-container">
-        <span
-          >List of All Student which are NOT in the assignment selected</span
-        >
+        <span>List of All Candidate which are NOT in the assignment selected</span>
         <div style="margin: 10px">
           <mat-checkbox
             (change)="$event ? masterLeftSelectionToggle() : null"
@@ -24,7 +22,7 @@
             [aria-label]="leftCheckboxLabel()"
           >
           </mat-checkbox>
-          Select all Student
+          Select all Candidate
         </div>
         <div
           cdkDropList
@@ -66,7 +64,7 @@
       </div>
 
       <div class="example-container">
-        <span>List of All Student which are in the assignment selected</span>
+        <span>List of All Candidate which are in the assignment selected</span>
         <div style="margin: 10px">
           <mat-checkbox
             (change)="$event ? masterRightSelectionToggle() : null"
@@ -77,7 +75,7 @@
             [aria-label]="rightCheckboxLabel()"
           >
           </mat-checkbox>
-          Select all Student
+          Select all Candidate
         </div>
         <div
           cdkDropList

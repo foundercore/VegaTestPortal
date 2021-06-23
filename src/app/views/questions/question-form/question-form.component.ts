@@ -11,6 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { TranslateService } from '@ngx-translate/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-question-form',
@@ -103,7 +104,8 @@ export class QuestionFormComponent implements OnInit {
     private toastr: ToastrService,
     private activateRouter: ActivatedRoute,
     public translate: TranslateService,
-    private questionManagementService: QuestionManagementService
+    private questionManagementService: QuestionManagementService,
+    private location: Location
     ) {
 
       forkJoin([this.questionManagementService.getQuestionType()
@@ -270,7 +272,8 @@ export class QuestionFormComponent implements OnInit {
         }
   }
 
-  cancel(){
-    this.router.navigate(['home/questionmanagement']);
+  cancel() {
+    this.location.back()
+    // this.router.navigate(['home/questionmanagement']);
   }
 }

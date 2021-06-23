@@ -75,8 +75,19 @@
             </mat-select>
           </mat-form-field>
         </div>
+        
         <div class="w-25-field">
           <mat-form-field appearance="outline" class="form-field-padding">
+            <mat-label>File Name</mat-label>
+            <input
+              matInput
+              placeholder="File Name"
+              formControlName="fileNameCntrl"
+            />
+          </mat-form-field>
+        </div>
+        <div class="w-25-field">
+          <!-- <mat-form-field appearance="outline" class="form-field-padding">
             <mat-label>Sub Topic</mat-label>
             <mat-select formControlName="substopicCntrl">
               <mat-option
@@ -85,15 +96,13 @@
                 >{{ subtopic }}</mat-option
               >
             </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="w-25-field">
+          </mat-form-field> -->
           <mat-form-field appearance="outline" class="form-field-padding">
-            <mat-label>File Name</mat-label>
+            <mat-label>Migration Section</mat-label>
             <input
               matInput
-              placeholder="File Name"
-              formControlName="fileNameCntrl"
+              placeholder="Section"
+              formControlName="migrationSectionNameCntrl"
             />
           </mat-form-field>
         </div>
@@ -228,7 +237,7 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>

@@ -143,3 +143,8 @@ table {
   color: white;
   margin-right: 10px;
 }
+
+th{
+  font-weight: 900;
+  font-size: 13px;
+}
