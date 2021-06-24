@@ -269,6 +269,7 @@ export class TestLiveComponent implements OnInit {
     this.optionsSelected = [];
     if (this.currentQuestionIndex < this.sectionsWithPapers.length - 1) {
       this.currentQuestionIndex = this.currentQuestionIndex + 1;
+      this.questionNumber = this.currentQuestionIndex + 1;
       this.question = this.sectionsWithPapers[this.currentQuestionIndex];
     } else {
       this.goToNextSection();
