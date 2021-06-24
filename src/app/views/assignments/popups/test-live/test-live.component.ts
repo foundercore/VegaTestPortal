@@ -470,6 +470,8 @@ export class TestLiveComponent implements OnInit {
       if (sections != null) {
         sections.forEach((element) => {
           if (element != null && element.questions != null) {
+            // sort question by Passage
+            element.questions.sort((a, b) => (a.passageContent < b.passageContent ? -1 : 1));
             element.questions.forEach((element2) => {
               if (element2 != null) {
                 var checkdata = this.sectionsWithPapers.find(
@@ -542,7 +544,6 @@ export class TestLiveComponent implements OnInit {
     this.setCurrentQuestionSelectedOption();
     this.setColoursForQuestionNavigationButtons();
     this.sectionsWithPapers = this.sections.filter((x) => x.sectionId == id);
-
     if (this.sectionsWithPapers.length > 0) {
       this.sectionsWithPapers.forEach((element) => {
         element.color = 'grey';
