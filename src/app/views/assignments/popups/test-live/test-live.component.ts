@@ -1,5 +1,5 @@
 import { E } from '@angular/cdk/keycodes';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -16,6 +16,7 @@ import { QuestionMarkedForReviewModel } from '../../models/questionMarkedForRevi
 import { TestConfigService } from '../../services/test-config-service';
 import { CalculatorComponent } from '../calculator/calculator.component';
 import { timer } from 'rxjs';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-test-live',
@@ -23,6 +24,7 @@ import { timer } from 'rxjs';
   styleUrls: ['./test-live.component.css'],
 })
 export class TestLiveComponent implements OnInit {
+  @ViewChild('TabGroup', { static: false }) Tab_Group: MatTabGroup;
   timeSeconds: number = 0;
   timeElapsedInSecond: number = 0;
   testid: string = '';
@@ -50,6 +52,8 @@ export class TestLiveComponent implements OnInit {
   timerSource;
   shown: 'native' | 'hover' | 'always' = 'native';
   assignmentId: string = '';
+  Titatext : string = "";
+  questionNumber : number = 1;
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<TestLiveComponent>,
@@ -99,7 +103,14 @@ export class TestLiveComponent implements OnInit {
               .substr(11, 8);
           console.log(
             'this.testdata==',
-            res,
+            this.testdata,
+            ' this.testdata.timeSeconds=',
+            this.timeSeconds
+          );
+          // this.testdata = this.randomizeQuestionsOfSections(this.testdata);
+          console.log(
+            'After shuffle this.testdata==',
+            this.testdata,
             ' this.testdata.timeSeconds=',
             this.timeSeconds
           );
@@ -115,6 +126,15 @@ export class TestLiveComponent implements OnInit {
           );
         }
       );
+  }
+
+  randomizeQuestionsOfSections(data) {
+    console.log('Input data to randomize=>', data);
+    data.sections.map((sec) => {
+      sec.questions = this.shuffle(sec.questions);
+    });
+    console.log('Output data to randomize=>', data);
+    return data;
   }
 
   observableTimer() {
@@ -180,7 +200,7 @@ export class TestLiveComponent implements OnInit {
 
   async SaveandNextAnswers() {
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
-    quesForMarkedAsReview.answerText = null;
+    quesForMarkedAsReview.answerText = this.Titatext;
     quesForMarkedAsReview.markForReview = false;
     quesForMarkedAsReview.assignmentId = this.assignmentId;
     quesForMarkedAsReview.questionId = this.question.id.questionId;
@@ -191,6 +211,10 @@ export class TestLiveComponent implements OnInit {
       'Save and next => questionSaveAndNext object=>',
       quesForMarkedAsReview
     );
+    // if (quesForMarkedAsReview.selectedOptions === null) {
+    //   this.goToNextQuestion();
+    //   return;
+    // }
     await this.testConfigService
       .saveandNextAnswers(
         quesForMarkedAsReview.assignmentId,
@@ -198,7 +222,8 @@ export class TestLiveComponent implements OnInit {
       )
       .subscribe(
         (res) => {
-          this.toastrService.success('Question saved successfully');
+          if (quesForMarkedAsReview.selectedOptions !== null)
+            this.toastrService.success('Question saved successfully');
           this.getUserSubmissionData();
           this.goToNextQuestion();
         },
@@ -224,7 +249,7 @@ export class TestLiveComponent implements OnInit {
     // debugger;
     var optionsSelectedArray = [];
     for (var i = 0; i < this.optionsSelected.length; i++) {
-      if (this.optionsSelected[i]) optionsSelectedArray.push(String(i+1));
+      if (this.optionsSelected[i]) optionsSelectedArray.push(String(i + 1));
     }
     if (optionsSelectedArray.length > 0) {
       console.log(
@@ -244,45 +269,36 @@ export class TestLiveComponent implements OnInit {
     this.optionsSelected = [];
     if (this.currentQuestionIndex < this.sectionsWithPapers.length - 1) {
       this.currentQuestionIndex = this.currentQuestionIndex + 1;
+      this.questionNumber = this.currentQuestionIndex + 1;
       this.question = this.sectionsWithPapers[this.currentQuestionIndex];
     } else {
-      this.toastrService.error(
-        'You are already at last question of this section.'
-      );
+      this.goToNextSection();
+      // this.toastrService.error(
+      //   'You are already at last question of this section.'
+      // );
     }
   }
 
-  SaveandExit() {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'want to submit test.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#277da1',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Close',
-      confirmButtonText: 'Submit',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.testConfigService.saveandExit(this.assignmentId).subscribe(
-          (res: any) => {
-            this.close();
-            this.router
-              .navigate(['/home/assignment_report/' + this.assignmentId])
-              .then(() => console.log('Navigate to score card'))
-              .catch((err) =>
-                console.log('Error=> Navigate to score card=>', err)
-              );
-            this.toastrService.success('Test submitted successfully');
-          },
-          (err) => console.log('Error while making the question for save', err)
-        );
-      }
-    });
+  goToNextSection() {
+    // console.log(
+    //   'testData.sections=>',
+    //   this.testdata.sections,
+    //   ' current sections=>',
+    //   ele
+    // );
+    const tabGroup = this.Tab_Group;
+    if (!tabGroup || !(tabGroup instanceof MatTabGroup)) return;
+
+    const tabCount = tabGroup._tabs.length;
+    if (tabGroup.selectedIndex == tabCount - 1) {
+      this.SaveandExit();
+      return;
+    }
+    tabGroup.selectedIndex = (tabGroup.selectedIndex + 1) % tabCount;
+    console.log('tabGroup=', tabGroup);
   }
 
   async getUserSubmissionData() {
-    //debugger;
     await this.testConfigService
       .getSudentSubmissionState(this.assignmentId, this.userName)
       .subscribe(
@@ -294,6 +310,10 @@ export class TestLiveComponent implements OnInit {
             ' current question=>',
             this.question
           );
+          if(this.question.type == "TITA"){
+            this.Titatext = this.question.answer.answerText;
+          }
+          this.Titatext = this.question.answer.answerText;
           this.optionsSelected = [];
           this.setCurrentQuestionSelectedOption();
           this.setColoursForQuestionNavigationButtons();
@@ -408,7 +428,7 @@ export class TestLiveComponent implements OnInit {
     );
     try {
       selected.map((optIndex) => {
-        this.optionsSelected[Number(optIndex)] = true;
+        this.optionsSelected[Number(optIndex) - 1] = true;
       });
       console.log(
         'After settingt the fetched selectedOptions , this.selectedOptions =>',
@@ -447,6 +467,7 @@ export class TestLiveComponent implements OnInit {
     });
   }
 
+ 
   GetQuestionPapers() {
     if (this.testdata?.sections.length > 0) {
       var sections = this.testdata?.sections;
@@ -454,6 +475,8 @@ export class TestLiveComponent implements OnInit {
       if (sections != null) {
         sections.forEach((element) => {
           if (element != null && element.questions != null) {
+            // sort question by Passage
+            element.questions.sort((a, b) => (a.passageContent < b.passageContent ? -1 : 1));
             element.questions.forEach((element2) => {
               if (element2 != null) {
                 var checkdata = this.sectionsWithPapers.find(
@@ -494,10 +517,12 @@ export class TestLiveComponent implements OnInit {
     }
   }
 
+
   //function called by question number buttons
   getQuestion(ques: any, currentQuestionIndex: number) {
     //debugger;
     this.currentQuestionIndex = currentQuestionIndex;
+    this.questionNumber = this.currentQuestionIndex + 1; 
     this.optionsSelected = [];
     // this.setCurrentQuestionNumberButtonColor(currentQuestionIndex);
     this.question = this.sectionsWithPapers.find(
@@ -526,7 +551,6 @@ export class TestLiveComponent implements OnInit {
     this.setCurrentQuestionSelectedOption();
     this.setColoursForQuestionNavigationButtons();
     this.sectionsWithPapers = this.sections.filter((x) => x.sectionId == id);
-
     if (this.sectionsWithPapers.length > 0) {
       this.sectionsWithPapers.forEach((element) => {
         element.color = 'grey';
@@ -593,13 +617,14 @@ export class TestLiveComponent implements OnInit {
               } else {
                 //current ques is in saved data
                 //check if mark for review is true then orange else if answered then blue else grey
-                if (sub_ans.markForReview && sub_ans.selectedOptions !== null) {
-                  if (!colorAppliedIndexesArray[i]) {
-                    //set color violet
-                    this.setButtonColor(i, 'violet');
-                    colorAppliedIndexesArray[i] = true;
-                  }
-                } else if (sub_ans.markForReview) {
+                // if (sub_ans.markForReview && sub_ans.selectedOptions !== null) {
+                //   if (!colorAppliedIndexesArray[i]) {
+                //     //set color violet
+                //     this.setButtonColor(i, 'violet');
+                //     colorAppliedIndexesArray[i] = true;
+                //   }
+                // } else
+                if (sub_ans.markForReview) {
                   if (!colorAppliedIndexesArray[i]) {
                     //set color orange
                     this.setButtonColor(i, 'orange');
@@ -752,6 +777,34 @@ export class TestLiveComponent implements OnInit {
       }
     }
   }
+  SaveandExit() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'want to submit test.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#277da1',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Close',
+      confirmButtonText: 'Submit',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.testConfigService.saveandExit(this.assignmentId).subscribe(
+          (res: any) => {
+            this.close();
+            this.router
+              .navigate(['/home/assignment_report/' + this.assignmentId])
+              .then(() => console.log('Navigate to score card'))
+              .catch((err) =>
+                console.log('Error=> Navigate to score card=>', err)
+              );
+            this.toastrService.success('Test submitted successfully');
+          },
+          (err) => console.log('Error while making the question for save', err)
+        );
+      }
+    });
+  }
 
   convertminutestoseconds(value) {
     return Math.floor(value * 60);
@@ -782,5 +835,19 @@ export class TestLiveComponent implements OnInit {
         this.questionNavigationButtonColorArray[i] = color;
       }
     });
+  }
+
+  shuffle(array) {
+    var currentIndex = array.length,
+      temporaryValue,
+      randomIndex;
+    while (0 !== currentIndex) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
   }
 }

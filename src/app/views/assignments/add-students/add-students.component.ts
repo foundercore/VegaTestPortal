@@ -48,13 +48,9 @@ export class AddStudentsComponent implements OnInit {
     let assignedStudent= this.data.data.assignedToStudent == null? []:  this.data.data.assignedToStudent;
 
     this.userService.getUserList().subscribe((resp) => {
-      this.availableStudentList = resp
-        .filter((x) => x.roles.includes('ROLE_STUDENT'))
-        .filter((x) => !assignedStudent.includes(x.userName));
+      this.availableStudentList = resp.filter((x) => !assignedStudent.includes(x.userName));
 
-      this.taggedStudentList = resp
-        .filter((x) => x.roles.includes('ROLE_STUDENT'))
-        .filter((x) => assignedStudent.includes(x.userName));
+      this.taggedStudentList = resp.filter((x) => assignedStudent.includes(x.userName));
 
     });
 

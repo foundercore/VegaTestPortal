@@ -11,10 +11,10 @@
   <div class="add-student-batch-content">
     <div class="add-student-batch-content-container">
       <div class="example-container">
-        <span>List of All Student which are NOT in the assignment selected</span>
+        <span>List of All Candidate which are NOT in the assignment selected</span>
         <div style="margin: 10px">
           <mat-checkbox
-             (change)="$event ? masterLeftSelectionToggle() : null"
+            (change)="$event ? masterLeftSelectionToggle() : null"
             [checked]="leftSideSelection.hasValue() && isAllLeftSelected()"
             [indeterminate]="
               leftSideSelection.hasValue() && !isAllLeftSelected()
@@ -22,7 +22,7 @@
             [aria-label]="leftCheckboxLabel()"
           >
           </mat-checkbox>
-          Select all Student
+          Select all Candidate
         </div>
         <div
           cdkDropList
@@ -36,9 +36,9 @@
             class="example-box"
             *ngFor="let item of availableStudentList"
             cdkDrag
-           >
+          >
             <mat-checkbox
-               (change)="$event ? leftSideSelection.toggle(item) : null"
+              (change)="$event ? leftSideSelection.toggle(item) : null"
               [checked]="leftSideSelection.isSelected(item)"
               >{{ item.displayName }}</mat-checkbox
             >
@@ -64,7 +64,7 @@
       </div>
 
       <div class="example-container">
-        <span>List of All Student which are in the assignment selected</span>
+        <span>List of All Candidate which are in the assignment selected</span>
         <div style="margin: 10px">
           <mat-checkbox
             (change)="$event ? masterRightSelectionToggle() : null"
@@ -75,7 +75,7 @@
             [aria-label]="rightCheckboxLabel()"
           >
           </mat-checkbox>
-          Select all Student
+          Select all Candidate
         </div>
         <div
           cdkDropList
@@ -89,9 +89,9 @@
             class="example-box"
             *ngFor="let student of taggedStudentList"
             cdkDrag
-           >
+          >
             <mat-checkbox
-               (change)="$event ? rightSideSelection.toggle(student) : null"
+              (change)="$event ? rightSideSelection.toggle(student) : null"
               [checked]="rightSideSelection.isSelected(student)"
               >{{ student.displayName }}</mat-checkbox
             >
@@ -100,7 +100,12 @@
       </div>
     </div>
     <div class="btn-grp-cls">
-      <button mat-raised-button class="save-btn-cls" (click)="addStudent()">
+      <button
+        mat-raised-button
+        class="save-btn-cls"
+        (click)="addStudent()"
+        style="position: fixed; margin-top: -60px"
+      >
         {{ "COMMON_TAG.SAVE" | translate }}
       </button>
     </div>

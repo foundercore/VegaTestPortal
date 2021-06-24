@@ -106,31 +106,35 @@ export class StudentDashboardComponent implements OnInit {
     if (this.userType === 'ROLE_USER_ADMIN') {
       this.buttontext = 'Preview Test';
     } else {
-      console.log(element)
-      let timeNow = new Date()
-      let testValidFrom = new Date(element.validFrom)
-      let testvalidTo = new Date(element.validTo)
+      console.log(element);
+      let timeNow = new Date();
+      let testValidFrom = new Date(element.validFrom);
+      let testvalidTo = new Date(element.validTo);
       if (timeNow < testValidFrom) {
-        this.toastrService.error('Test is yet to start')
-        return
+        this.toastrService.error('Test is yet to start');
+        return;
       }
       if (timeNow > testvalidTo) {
-        this.toastrService.error('Test has ended already')
-        return
+        this.toastrService.error('Test has ended already');
+        return;
       }
       this.buttontext = 'Start Test';
     }
 
-    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.testName);
+    const dialogData = new CustomDialogConfirmationModel(
+      'Want to start test?',
+      element.testName
+    );
 
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
-      width: "600px",
-      data: dialogData
+      width: '600px',
+      data: dialogData,
     });
 
-    dialogRef.afterClosed().subscribe(dialogResult => {
-      if(dialogResult){
-        if (element.passcode !== null) this.verifyPasscode(element);
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult) {
+        if (element.passcode !== null && String(element.passcode).length > 1)
+          this.verifyPasscode(element);
         else this.openTestPopup(element);
       }
     });

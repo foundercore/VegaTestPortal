@@ -65,6 +65,7 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     topicCntrl: new FormControl(),
     substopicCntrl: new FormControl(),
     fileNameCntrl: new FormControl(),
+    sectionNameCntrl: new FormControl(),
   });
 
   isFilterApply = false;
@@ -84,7 +85,6 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     private toastrService: ToastrService,
     private questionService: QuestionManagementService
   ) {
-    console.log(this._data)
     forkJoin([
       this.questionService.getQuestionType(),
       this.questionService.getQuestionTags(),
@@ -141,54 +141,16 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getQuestions() {
+  getQuestions(pageno?) {
     this.questions = [];
     let model = new SearchQuestion(
-      String(this.paginator.pageIndex + 1),
+      pageno
+        ? String(this.paginator.pageIndex + pageno + 1)
+        : String(this.paginator.pageIndex + 1),
       this.paginator.pageSize,
       this.sort.active,
       this.sort.direction
     );
-    // this.testConfigService
-    //   .getQuestionList(model)
-    //   .pipe(finalize(() => {}))
-    //   .subscribe(
-    //     (res: any) => {
-    //       console.log('this.queslist==', res);
-    //       this.totalNumberOfRecords = res.totalRecords;
-
-    //       if (res?.questions.length > 0) {
-    //         if (
-    //           this._data.selectedques != null &&
-    //           this._data.selectedques.length > 0
-    //         ) {
-    //           //  res?.questions.forEach(element => {
-    //           this._data?.selectedques.forEach((element2) => {
-    //             // if(element.id == element2.id){
-    //             let index = res.questions.findIndex(
-    //               (x) => x.id.questionId == element2.id
-    //             );
-    //             if (index != -1) {
-    //               res?.questions.splice(index, 1);
-    //             }
-    //             //}
-    //           });
-    //           // });
-    //         }
-    //         this.questions = res?.questions;
-    //         //this.questions2 = res?.questions;
-    //         this.dataSource = new MatTableDataSource(this.questions);
-    //         this.dataSource.sort = this.sort;
-    //         this.dataSource.paginator = this.paginator;
-    //       }
-    //     },
-    //     (error) => {
-    //       this.toastrService.error(
-    //         error?.error?.message ? error?.error?.message : error?.message,
-    //         'Error'
-    //       );
-    //     }
-    //   );
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -216,9 +178,30 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((data) => {
-        console.log(data)
-        this.dataSource.data = data?.filter(q=> !this._data?.selectedques?.some(ques=> ques.id == q.id.questionId));
-        console.log('This.datasource=', this.dataSource);
+        console.log(data);
+        data = data?.filter(
+          (q) =>
+            !this._data?.selectedques?.some(
+              (ques) => ques.id == q.id.questionId
+            )
+        );
+        this.actualTotalNumberOfRecords -= this._data.selectedques.length;
+        console.log('this.paginator=>', this.paginator);
+        if (data.length == 0) {
+          //this.dataSource.paginator = this.paginator;
+          // this.paginator.nextPage();
+          this.toastrService.warning(
+            'All questions of this page are already added. Please switch pages.'
+          );
+          //return;
+        }
+        this.dataSource = new MatTableDataSource(data);
+        console.log(
+          'This.datasource=',
+          this.dataSource,
+          ' data saved in it=>',
+          data
+        );
       });
   }
 
@@ -276,26 +259,26 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     }
   }
 
-  searchtest() {
-    if (
-      this.searchText != '' &&
-      this.searchText != null &&
-      this.searchText != undefined &&
-      this.searchText.length > 3
-    ) {
-      this.questions = this.questions.filter((x) =>
-        x.name.includes(this.searchText)
-      );
-      this.dataSource = new MatTableDataSource(this.questions);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    } else {
-      this.questions = this.questions2;
-      this.dataSource = new MatTableDataSource(this.questions);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }
-  }
+  // searchtest() {
+  //   if (
+  //     this.searchText != '' &&
+  //     this.searchText != null &&
+  //     this.searchText != undefined &&
+  //     this.searchText.length > 3
+  //   ) {
+  //     this.questions = this.questions.filter((x) =>
+  //       x.name.includes(this.searchText)
+  //     );
+  //     this.dataSource = new MatTableDataSource(this.questions);
+  //     this.dataSource.sort = this.sort;
+  //     this.dataSource.paginator = this.paginator;
+  //   } else {
+  //     this.questions = this.questions2;
+  //     this.dataSource = new MatTableDataSource(this.questions);
+  //     this.dataSource.sort = this.sort;
+  //     this.dataSource.paginator = this.paginator;
+  //   }
+  // }
 
   applyFilter() {
     this.isFilterApply = true;
@@ -308,13 +291,14 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
   }
 
   resetFilter() {
-    this.filterGroup.controls['filterNameValue'].reset();
-    this.filterGroup.controls['questionTypeCntrl'].reset();
-    this.filterGroup.controls['subjectCntrl'].reset();
-    this.filterGroup.controls['tagCntrl'].reset();
-    this.filterGroup.controls['topicCntrl'].reset();
-    this.filterGroup.controls['substopicCntrl'].reset();
-    this.filterGroup.controls['fileNameCntrl'].reset();
+    this.filterGroup.controls.filterNameValue.reset();
+    this.filterGroup.controls.questionTypeCntrl.reset();
+    this.filterGroup.controls.subjectCntrl.reset();
+    this.filterGroup.controls.tagCntrl.reset();
+    this.filterGroup.controls.topicCntrl.reset();
+    this.filterGroup.controls.substopicCntrl.reset();
+    this.filterGroup.controls.fileNameCntrl.reset();
+    this.filterGroup.controls.sectionNameCntrl.reset();
     this.isFilterApply = false;
     this.resetPaging();
     const searchQuestion = this.createSearchObject();
@@ -327,6 +311,7 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
         this.isLoadingResults = false;
         this.isRateLimitReached = false;
         this.totalNumberOfRecords = data.totalRecords;
+        this.actualTotalNumberOfRecords = data.totalRecords;
         data.questions.map((x) => {
           x.explanation_added = x.explanation?.length != 0 ? 'Yes' : 'No';
           return x;
@@ -353,47 +338,64 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     );
     this.totalNumberOfRecords = this.paginator.pageSize;
 
+    // exlude questions which already exists in the test 
+    searchQuestion.testIdToBeExcluded = this._data.testId;
     if (this.isFilterApply) {
       if (
-        this.filterGroup.controls['filterNameValue'].value !== null &&
-        this.filterGroup.controls['filterNameValue'].value.length !== 0
-      )
+        this.filterGroup.controls.filterNameValue.value !== null &&
+        this.filterGroup.controls.filterNameValue.value.length !== 0
+      ) {
         searchQuestion.nameRegexPattern =
-          this.filterGroup.controls['filterNameValue'].value;
-      else if (
-        this.filterGroup.controls['questionTypeCntrl'].value !== null &&
-        this.filterGroup.controls['questionTypeCntrl'].value.length !== 0
-      )
+          this.filterGroup.controls.filterNameValue.value;
+      }
+      if (
+        this.filterGroup.controls.questionTypeCntrl.value !== null &&
+        this.filterGroup.controls.questionTypeCntrl.value.length !== 0
+      ) {
         searchQuestion.type =
-          this.filterGroup.controls['questionTypeCntrl'].value;
-      else if (
-        this.filterGroup.controls['subjectCntrl'].value !== null &&
-        this.filterGroup.controls['subjectCntrl'].value.length !== 0
-      )
+          this.filterGroup.controls.questionTypeCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.subjectCntrl.value !== null &&
+        this.filterGroup.controls.subjectCntrl.value.length !== 0
+      ) {
         searchQuestion.subject =
-          this.filterGroup.controls['subjectCntrl'].value;
-      else if (
-        this.filterGroup.controls['tagCntrl'].value !== null &&
-        this.filterGroup.controls['tagCntrl'].value.length !== 0
-      )
-        searchQuestion.tags = this.filterGroup.controls['tagCntrl'].value;
-      else if (
-        this.filterGroup.controls['topicCntrl'].value !== null &&
-        this.filterGroup.controls['topicCntrl'].value.length !== 0
-      )
-        searchQuestion.topic = this.filterGroup.controls['topicCntrl'].value;
-      else if (
-        this.filterGroup.controls['substopicCntrl'].value !== null &&
-        this.filterGroup.controls['substopicCntrl'].value.length !== 0
-      )
+          this.filterGroup.controls.subjectCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.tagCntrl.value !== null &&
+        this.filterGroup.controls.tagCntrl.value.length !== 0
+      ) {
+        searchQuestion.tags = this.filterGroup.controls.tagCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.topicCntrl.value !== null &&
+        this.filterGroup.controls.topicCntrl.value.length !== 0
+      ) {
+        searchQuestion.topic = this.filterGroup.controls.topicCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.substopicCntrl.value !== null &&
+        this.filterGroup.controls.substopicCntrl.value.length !== 0
+      ) {
         searchQuestion.subTopic =
-          this.filterGroup.controls['substopicCntrl'].value;
-      else if (
-        this.filterGroup.controls['fileNameCntrl'].value !== null &&
-        this.filterGroup.controls['fileNameCntrl'].value.length !== 0
-      )
+          this.filterGroup.controls.substopicCntrl.value;
+      }
+      if (
+        this.filterGroup.controls.fileNameCntrl.value !== null &&
+        this.filterGroup.controls.fileNameCntrl.value.length !== 0
+      ) {
         searchQuestion.filename =
-          this.filterGroup.controls['fileNameCntrl'].value;
+          this.filterGroup.controls.fileNameCntrl.value;
+      }
+
+      if (
+        this.filterGroup.controls.sectionNameCntrl.value !== null &&
+        this.filterGroup.controls.sectionNameCntrl.value.length !== 0
+      ) {
+        searchQuestion.migrationSectionName =
+          this.filterGroup.controls.sectionNameCntrl.value;
+      }
     }
     return searchQuestion;
   }
