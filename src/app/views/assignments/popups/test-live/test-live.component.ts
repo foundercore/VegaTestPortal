@@ -52,6 +52,8 @@ export class TestLiveComponent implements OnInit {
   timerSource;
   shown: 'native' | 'hover' | 'always' = 'native';
   assignmentId: string = '';
+  Titatext : string = "";
+  questionNumber : number = 1;
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<TestLiveComponent>,
@@ -198,7 +200,7 @@ export class TestLiveComponent implements OnInit {
 
   async SaveandNextAnswers() {
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
-    quesForMarkedAsReview.answerText = null;
+    quesForMarkedAsReview.answerText = this.Titatext;
     quesForMarkedAsReview.markForReview = false;
     quesForMarkedAsReview.assignmentId = this.assignmentId;
     quesForMarkedAsReview.questionId = this.question.id.questionId;
@@ -296,7 +298,6 @@ export class TestLiveComponent implements OnInit {
   }
 
   async getUserSubmissionData() {
-    //debugger;
     await this.testConfigService
       .getSudentSubmissionState(this.assignmentId, this.userName)
       .subscribe(
@@ -308,6 +309,10 @@ export class TestLiveComponent implements OnInit {
             ' current question=>',
             this.question
           );
+          if(this.question.type == "TITA"){
+            this.Titatext = this.question.answer.answerText;
+          }
+          this.Titatext = this.question.answer.answerText;
           this.optionsSelected = [];
           this.setCurrentQuestionSelectedOption();
           this.setColoursForQuestionNavigationButtons();
@@ -461,6 +466,7 @@ export class TestLiveComponent implements OnInit {
     });
   }
 
+ 
   GetQuestionPapers() {
     if (this.testdata?.sections.length > 0) {
       var sections = this.testdata?.sections;
@@ -510,10 +516,12 @@ export class TestLiveComponent implements OnInit {
     }
   }
 
+
   //function called by question number buttons
   getQuestion(ques: any, currentQuestionIndex: number) {
     //debugger;
     this.currentQuestionIndex = currentQuestionIndex;
+    this.questionNumber = this.currentQuestionIndex + 1; 
     this.optionsSelected = [];
     // this.setCurrentQuestionNumberButtonColor(currentQuestionIndex);
     this.question = this.sectionsWithPapers.find(
