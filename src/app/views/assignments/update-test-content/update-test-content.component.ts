@@ -60,6 +60,7 @@ export class UpdateTestContentComponent implements OnInit {
     'positive',
     'skip',
   ];
+  ListOfQuestions_Added_In_All_Sections = [];
   totalTestDuration: number = 0;
   totalDurationOfSections: number = 0;
   sectionId: string = '';
@@ -340,7 +341,7 @@ export class UpdateTestContentComponent implements OnInit {
       data: {
         testId: this.route.snapshot.paramMap.get('id'),
         section: this.section,
-        selectedques: this.ques,
+        selectedques: this.ListOfQuestions_Added_In_All_Sections,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -361,11 +362,19 @@ export class UpdateTestContentComponent implements OnInit {
           this.totalTestDuration = res?.totalDurationInMinutes;
           this.status = res?.status;
           var dur = 0;
+          this.ListOfQuestions_Added_In_All_Sections = [];
           res.sections.map((sec) => {
             dur += sec.durationInMinutes;
+            sec.questions.map((que) => {
+              this.ListOfQuestions_Added_In_All_Sections.push(que);
+            });
           });
           this.totalDurationOfSections = dur;
           console.log('this.gettest==', res);
+          console.log(
+            'this.ListOfQuestions_Added_In_All_Sections',
+            this.ListOfQuestions_Added_In_All_Sections
+          );
           this.setDataSourceOfPaginator(res?.sections);
           this.prepareExpandedStateArray(false, res?.sections.length);
         });
