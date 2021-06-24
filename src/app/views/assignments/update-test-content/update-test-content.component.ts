@@ -349,6 +349,7 @@ export class UpdateTestContentComponent implements OnInit {
     });
   }
 
+  remarks: string = "";
   getQuestionPaperbyId() {
     if (this.route.snapshot.paramMap.get('id') != null) {
       this.testConfigService
@@ -370,6 +371,17 @@ export class UpdateTestContentComponent implements OnInit {
             });
           });
           this.totalDurationOfSections = dur;
+          debugger;
+          if(res?.migration.length > 0){
+            var filteredrecords = res.migration.filter(x=> x.status == res.status);
+            var remarks = filteredrecords[filteredrecords.length - 1];
+            var data = JSON.parse(remarks.remarks);
+            this.remarks = data.rejectionReason;
+          }
+
+
+
+
           console.log('this.gettest==', res);
           console.log(
             'this.ListOfQuestions_Added_In_All_Sections',

@@ -92,7 +92,7 @@
             *ngIf="quest != null"
           >
             {{ quest?.status }}
-          </button>
+          </button><i *ngIf="remarks != '' && remarks != null" matTooltip="{{remarks}}" class="fas fa-info-circle fa-1x"></i>
         </div>
         <div class="col-4">
           <h5>
