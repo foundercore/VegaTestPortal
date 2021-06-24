@@ -57,10 +57,14 @@
       </div>
     </div>
     <!-- main body content start here -->
-    <mat-tab-group class="pt-2" (selectedTabChange)="selectSection($event)">
+    <mat-tab-group
+      class="pt-2"
+      (selectedTabChange)="selectSection($event)"
+      #TabGroup
+    >
       <!-- one -->
       <div *ngIf="testdata?.sections">
-        <span *ngFor="let section of testdata?.sections">
+        <span *ngFor="let section of testdata?.sections" class="section_tab">
           <mat-tab label="{{ section?.name }}">
             <div class="row mx-0 scroll__box">
               <div class="col-lg-8 position-relative divider">

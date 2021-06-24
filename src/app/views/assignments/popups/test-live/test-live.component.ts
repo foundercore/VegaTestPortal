@@ -1,5 +1,5 @@
 import { E } from '@angular/cdk/keycodes';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -16,6 +16,7 @@ import { QuestionMarkedForReviewModel } from '../../models/questionMarkedForRevi
 import { TestConfigService } from '../../services/test-config-service';
 import { CalculatorComponent } from '../calculator/calculator.component';
 import { timer } from 'rxjs';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-test-live',
@@ -23,6 +24,7 @@ import { timer } from 'rxjs';
   styleUrls: ['./test-live.component.css'],
 })
 export class TestLiveComponent implements OnInit {
+  @ViewChild('TabGroup', { static: false }) Tab_Group: MatTabGroup;
   timeSeconds: number = 0;
   timeElapsedInSecond: number = 0;
   testid: string = '';
@@ -103,7 +105,7 @@ export class TestLiveComponent implements OnInit {
             ' this.testdata.timeSeconds=',
             this.timeSeconds
           );
-          this.testdata = this.randomizeQuestionsOfSections(this.testdata);
+          // this.testdata = this.randomizeQuestionsOfSections(this.testdata);
           console.log(
             'After shuffle this.testdata==',
             this.testdata,
@@ -207,6 +209,10 @@ export class TestLiveComponent implements OnInit {
       'Save and next => questionSaveAndNext object=>',
       quesForMarkedAsReview
     );
+    // if (quesForMarkedAsReview.selectedOptions === null) {
+    //   this.goToNextQuestion();
+    //   return;
+    // }
     await this.testConfigService
       .saveandNextAnswers(
         quesForMarkedAsReview.assignmentId,
@@ -214,7 +220,8 @@ export class TestLiveComponent implements OnInit {
       )
       .subscribe(
         (res) => {
-          this.toastrService.success('Question saved successfully');
+          if (quesForMarkedAsReview.selectedOptions !== null)
+            this.toastrService.success('Question saved successfully');
           this.getUserSubmissionData();
           this.goToNextQuestion();
         },
@@ -262,39 +269,25 @@ export class TestLiveComponent implements OnInit {
       this.currentQuestionIndex = this.currentQuestionIndex + 1;
       this.question = this.sectionsWithPapers[this.currentQuestionIndex];
     } else {
-      this.toastrService.error(
-        'You are already at last question of this section.'
-      );
+      this.goToNextSection();
+      // this.toastrService.error(
+      //   'You are already at last question of this section.'
+      // );
     }
   }
 
-  SaveandExit() {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'want to submit test.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#277da1',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Close',
-      confirmButtonText: 'Submit',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.testConfigService.saveandExit(this.assignmentId).subscribe(
-          (res: any) => {
-            this.close();
-            this.router
-              .navigate(['/home/assignment_report/' + this.assignmentId])
-              .then(() => console.log('Navigate to score card'))
-              .catch((err) =>
-                console.log('Error=> Navigate to score card=>', err)
-              );
-            this.toastrService.success('Test submitted successfully');
-          },
-          (err) => console.log('Error while making the question for save', err)
-        );
-      }
-    });
+  goToNextSection() {
+    // console.log(
+    //   'testData.sections=>',
+    //   this.testdata.sections,
+    //   ' current sections=>',
+    //   ele
+    // );
+    const tabGroup = this.Tab_Group;
+    if (!tabGroup || !(tabGroup instanceof MatTabGroup)) return;
+
+    const tabCount = tabGroup._tabs.length;
+    tabGroup.selectedIndex = (tabGroup.selectedIndex + 1) % tabCount;
   }
 
   async getUserSubmissionData() {
@@ -424,7 +417,7 @@ export class TestLiveComponent implements OnInit {
     );
     try {
       selected.map((optIndex) => {
-        this.optionsSelected[Number(optIndex)] = true;
+        this.optionsSelected[Number(optIndex) - 1] = true;
       });
       console.log(
         'After settingt the fetched selectedOptions , this.selectedOptions =>',
@@ -770,6 +763,34 @@ export class TestLiveComponent implements OnInit {
       }
     }
   }
+  SaveandExit() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'want to submit test.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#277da1',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Close',
+      confirmButtonText: 'Submit',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.testConfigService.saveandExit(this.assignmentId).subscribe(
+          (res: any) => {
+            this.close();
+            this.router
+              .navigate(['/home/assignment_report/' + this.assignmentId])
+              .then(() => console.log('Navigate to score card'))
+              .catch((err) =>
+                console.log('Error=> Navigate to score card=>', err)
+              );
+            this.toastrService.success('Test submitted successfully');
+          },
+          (err) => console.log('Error while making the question for save', err)
+        );
+      }
+    });
+  }
 
   convertminutestoseconds(value) {
     return Math.floor(value * 60);
@@ -802,38 +823,6 @@ export class TestLiveComponent implements OnInit {
     });
   }
 
-  // shuffle(array) {
-  //   console.log('Shuffle func inp=>', array);
-  //   var currentIndex = array.length,
-  //     randomIndex;
-
-  //   // While there remain elements to shuffle...
-  //   while (0 !== currentIndex) {
-  //     // Pick a remaining element...
-  //     randomIndex = Math.floor(Math.random() * currentIndex);
-  //     currentIndex--;
-
-  //     // And swap it with the current element.
-  //     [array[currentIndex], array[randomIndex]] = [
-  //       array[randomIndex],
-  //       array[currentIndex],
-  //     ];
-  //   }
-  //   console.log('Shuffle func op=>', array);
-  //   return array;
-  // }
-
-  // shuffle(array) {
-  //   console.log('Shuffle func inp=>', array);
-  //   for (var i = array.length - 1; i > 0; i--) {
-  //     var j = Math.floor(Math.random() * (i + 1));
-  //     var temp = array[i];
-  //     array[i] = array[j];
-  //     array[j] = temp;
-  //   }
-  //   console.log('Shuffle func op=>', array);
-  //   return array;
-  // }
   shuffle(array) {
     var currentIndex = array.length,
       temporaryValue,
