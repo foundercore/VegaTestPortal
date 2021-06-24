@@ -373,8 +373,9 @@ export class TestsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  applyFilter() {
-    this.searchQuestionPaperModel.nameRegexPattern = this.searchText
+  applyFilter(e: Event) {
+    this.searchQuestionPaperModel.nameRegexPattern = (e.target as HTMLInputElement)
+      .value
       .trim()
       .toLowerCase();
     this.GetAllquestionPapers();

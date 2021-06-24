@@ -104,3 +104,8 @@ table {
 .pagination__box {
   position: relative;
 }
+
+th{
+  font-weight: 900;
+  font-size: 13px;
+}
