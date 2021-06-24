@@ -287,7 +287,12 @@ export class TestLiveComponent implements OnInit {
     if (!tabGroup || !(tabGroup instanceof MatTabGroup)) return;
 
     const tabCount = tabGroup._tabs.length;
+    if (tabGroup.selectedIndex == tabCount - 1) {
+      this.SaveandExit();
+      return;
+    }
     tabGroup.selectedIndex = (tabGroup.selectedIndex + 1) % tabCount;
+    console.log('tabGroup=', tabGroup);
   }
 
   async getUserSubmissionData() {

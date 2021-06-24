@@ -141,54 +141,16 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getQuestions() {
+  getQuestions(pageno?) {
     this.questions = [];
     let model = new SearchQuestion(
-      String(this.paginator.pageIndex + 1),
+      pageno
+        ? String(this.paginator.pageIndex + pageno + 1)
+        : String(this.paginator.pageIndex + 1),
       this.paginator.pageSize,
       this.sort.active,
       this.sort.direction
     );
-    // this.testConfigService
-    //   .getQuestionList(model)
-    //   .pipe(finalize(() => {}))
-    //   .subscribe(
-    //     (res: any) => {
-    //       console.log('this.queslist==', res);
-    //       this.totalNumberOfRecords = res.totalRecords;
-
-    //       if (res?.questions.length > 0) {
-    //         if (
-    //           this._data.selectedques != null &&
-    //           this._data.selectedques.length > 0
-    //         ) {
-    //           //  res?.questions.forEach(element => {
-    //           this._data?.selectedques.forEach((element2) => {
-    //             // if(element.id == element2.id){
-    //             let index = res.questions.findIndex(
-    //               (x) => x.id.questionId == element2.id
-    //             );
-    //             if (index != -1) {
-    //               res?.questions.splice(index, 1);
-    //             }
-    //             //}
-    //           });
-    //           // });
-    //         }
-    //         this.questions = res?.questions;
-    //         //this.questions2 = res?.questions;
-    //         this.dataSource = new MatTableDataSource(this.questions);
-    //         this.dataSource.sort = this.sort;
-    //         this.dataSource.paginator = this.paginator;
-    //       }
-    //     },
-    //     (error) => {
-    //       this.toastrService.error(
-    //         error?.error?.message ? error?.error?.message : error?.message,
-    //         'Error'
-    //       );
-    //     }
-    //   );
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -216,9 +178,30 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe((data) => {
-        console.log(data)
-        this.dataSource.data = data;
-        console.log('This.datasource=', this.dataSource);
+        console.log(data);
+        data = data?.filter(
+          (q) =>
+            !this._data?.selectedques?.some(
+              (ques) => ques.id == q.id.questionId
+            )
+        );
+        this.actualTotalNumberOfRecords -= this._data.selectedques.length;
+        console.log('this.paginator=>', this.paginator);
+        if (data.length == 0) {
+          //this.dataSource.paginator = this.paginator;
+          // this.paginator.nextPage();
+          this.toastrService.warning(
+            'All questions of this page are already added. Please switch pages.'
+          );
+          //return;
+        }
+        this.dataSource = new MatTableDataSource(data);
+        console.log(
+          'This.datasource=',
+          this.dataSource,
+          ' data saved in it=>',
+          data
+        );
       });
   }
 
