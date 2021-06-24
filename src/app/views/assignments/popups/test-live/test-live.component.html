@@ -81,7 +81,8 @@
                     <!-- <h3
                   [innerHTML]="currentQuestionIndex + 1 + question?.name"
                 ></h3> -->
-                {{questionNumber}} )<div *ngIf="question?.name">
+                <strong>Question : {{questionNumber}}</strong> 
+                <div *ngIf="question?.name">
                       <p 
                         class="lead"
                         [innerHTML]="question?.passageContent">
