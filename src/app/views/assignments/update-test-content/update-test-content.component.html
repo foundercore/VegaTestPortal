@@ -62,7 +62,7 @@
           <mat-icon>add_circle</mat-icon
           ><span class="ml-2">View Assignment</span>
         </button>
-        <button
+        <!-- <button
           mat-raised-button
           class="add-btn mx-2"
           (click)="TestConfig()"
@@ -70,7 +70,7 @@
         >
           <mat-icon>add_circle</mat-icon
           ><span class="ml-2">Configure Test</span>
-        </button>
+        </button> -->
         <button
           mat-raised-button
           class="add-btn mx-2"
@@ -92,7 +92,8 @@
             *ngIf="quest != null"
           >
             {{ quest?.status }}
-          </button><i *ngIf="remarks != '' && remarks != null" matTooltip="{{remarks}}" class="fas fa-info-circle fa-1x"></i>
+          </button><i *ngIf="remarks != '' && remarks != null && status == 'DRAFT'" 
+                  matTooltip="{{remarks}}" class="fas fa-info-circle fa-1x"></i>
         </div>
         <div class="col-4">
           <h5>
