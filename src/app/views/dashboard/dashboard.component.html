@@ -1,5 +1,5 @@
-<!-- <app-admin-dashboard *ngIf="!authorizationService.isStudent"></app-admin-dashboard>
- -->
+<app-admin-dashboard *ngIf="!authorizationService.isStudent"></app-admin-dashboard>
+
  <app-student-dashboard *ngIf="authorizationService.isStudent"></app-student-dashboard>
 <div *ngIf="!authorizationService.isStudent" style="    height: 800px;
 line-height: 800px;
