@@ -146,7 +146,10 @@
 </div>
 
 
-<div *ngIf="currentSelection != 'Solution'" class="student-report-list-grid">
+<container-element [ngSwitch]="currentSelection">
+
+
+<div *ngSwitchDefault   class="student-report-list-grid">
   <div class="mat-elevation-z8">
     <div class="loading-container" *ngIf="isLoading">
       <mat-spinner *ngIf="isLoading"></mat-spinner>
@@ -160,47 +163,59 @@
           matSortActive="name"
           matSortDisableClear
         >
+
+
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
               <div>Name</div>
-
             </th>
             <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+            <td mat-footer-cell *matFooterCellDef  class="footer-stye"> Total </td>
           </ng-container>
 
           <ng-container matColumnDef="questions">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Questions</th>
             <td mat-cell *matCellDef="let row">{{ row.questions }}</td>
+            <td mat-footer-cell *matFooterCellDef  class="footer-stye"> {{ getTotal('questions') }} </td>
+
           </ng-container>
 
           <ng-container matColumnDef="timeTaken">
-            <th mat-header-cell *matHeaderCellDef>Time Taken (in sec)</th>
+            <th mat-header-cell *matHeaderCellDef>Time Taken (in min)</th>
             <td mat-cell *matCellDef="let row">
-              {{ row.timeTaken }}
+              {{ row.timeTaken / 60  | number }}
             </td>
+            <td mat-footer-cell *matFooterCellDef class="footer-stye"> {{ getTotal('timeTaken') / 60   | number}} </td>
           </ng-container>
 
           <ng-container matColumnDef="attempt">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Attempt</th>
             <td mat-cell *matCellDef="let row">{{ row.attempt }}</td>
+            <td mat-footer-cell *matFooterCellDef  class="footer-stye"> {{ getTotal('attempt') }} </td>
           </ng-container>
 
           <ng-container matColumnDef="incorrect">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Incorrect</th>
             <td mat-cell *matCellDef="let row">{{ row.incorrect }}</td>
+            <td mat-footer-cell *matFooterCellDef  class="footer-stye"> {{ getTotal('incorrect') }} </td>
           </ng-container>
+
           <ng-container matColumnDef="skipped">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Skipped</th>
             <td mat-cell *matCellDef="let row">{{ row.skipped }}</td>
+            <td mat-footer-cell *matFooterCellDef  class="footer-stye"> {{ getTotal('skipped') }} </td>
           </ng-container>
 
           <ng-container matColumnDef="score">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Score</th>
             <td mat-cell *matCellDef="let row">{{ row.score }}</td>
+            <td mat-footer-cell *matFooterCellDef  class="footer-stye">{{ getTotal('score')}} </td>
           </ng-container>
+
           <ng-container matColumnDef="correct">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Correct</th>
             <td mat-cell *matCellDef="let row">{{ row.correct }}</td>
+            <td mat-footer-cell *matFooterCellDef  class="footer-stye"> {{ getTotal('correct') }}  </td>
           </ng-container>
 
           <ng-container matColumnDef="accuracy">
@@ -208,10 +223,13 @@
               Accuracy %
             </th>
             <td mat-cell *matCellDef="let row">{{ row.accuracy }}</td>
+            <td mat-footer-cell *matFooterCellDef  class="footer-stye"> {{ getTotal('accuracy') }} </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+
         </table>
       </div>
 
@@ -219,7 +237,7 @@
   </div>
 </div>
 
-<div  *ngIf="currentSelection == 'Solution'"  class="student-report-list-grid">
+<div  *ngSwitchCase="'Solution'"  class="student-report-list-grid">
   <mat-tab-group >
     <mat-tab *ngFor="let section of fetchedWholeAssignmentResult.sections" [label]="section.sectionName">
       <div *ngFor="let answer of section.answers; let i = index;"  class="question-card">
@@ -273,3 +291,48 @@
   </mat-tab-group>
 </div>
 
+<div *ngSwitchCase="'Ranking'"    class="student-report-list-grid">
+  <div class="mat-elevation-z8">
+    <div class="loading-container" *ngIf="isLoading">
+      <mat-spinner *ngIf="isLoading"></mat-spinner>
+    </div>
+    <div class="mat-elevation-z8">
+      <div>
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          matSort
+          matSortActive="name"
+          matSortDisableClear
+        >
+
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <div>Name</div>
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+           </ng-container>
+
+          <ng-container matColumnDef="totalMarks">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Mark</th>
+            <td mat-cell *matCellDef="let row">{{ row.totalMarks }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="marksReceived">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Mark Recieved</th>
+            <td mat-cell *matCellDef="let row">{{ row.marksReceived }}</td>
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="rankingDisplayedColumn"></tr>
+          <tr mat-row *matRowDef="let row; columns: rankingDisplayedColumn"></tr>
+
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</container-element>
