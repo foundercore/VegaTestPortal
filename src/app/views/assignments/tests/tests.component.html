@@ -2,23 +2,17 @@
   <div class="container-fluid">
     <div class="row py-5">
       <div class="col-lg-6">
-        <form action="" class="search__box">
-          <div class="input-group">
-            <div class="input-group-prepend border-0">
-              <span class="input-group-text border-0" id="search"
-                ><i class="fa fa-search"></i
-              ></span>
-            </div>
+        <div class="search-bar">
+          <mat-form-field style="width: 600px" appearance="outline">
+            <mat-label> {{ "COMMON_TAG.FILTER" | translate }}</mat-label>
             <input
-              type="text"
-              [(ngModel)]="searchText"
-              (keyup)="applyFilter()"
-              [ngModelOptions]="{ standalone: true }"
-              class="form-control border-0"
-              placeholder="Search anything ..."
+              matInput
+              placeholder="Search Tests"
+              #input
+              (keyup)="applyFilter($event)"
             />
-          </div>
-        </form>
+          </mat-form-field>
+        </div>
       </div>
       <div class="col-lg-6">
         <div class="btn__group text-right">

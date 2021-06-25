@@ -117,7 +117,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
         }
       }
     });
-    if (hasFilters) { this.applyFilter(); }
+    if (hasFilters) this.isFilterApply = true;
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),

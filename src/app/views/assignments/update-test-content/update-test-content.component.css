@@ -176,3 +176,7 @@ tr.mat-row td > p {
 li {
   cursor: auto;
 }
+th{
+  font-weight: 900;
+  font-size: 13px;
+}

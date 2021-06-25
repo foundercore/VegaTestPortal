@@ -702,8 +702,8 @@ export class UpdateTestContentComponent implements OnInit {
     }
   }
 
-  applyFilter() {
-    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  applyFilter(e) {
+    this.dataSource.filter = (e.target as HTMLInputElement).value.trim().toLowerCase();
   }
 
   goBack(){
