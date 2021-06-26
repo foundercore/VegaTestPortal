@@ -166,10 +166,9 @@ ul > li {
   padding: 0.5rem;
 }
 
-.index__box .btn-secondary {
-  background-color: lightblue;
-  padding: 0.5rem;
-  color: black;
+.btn-secondary {
+  background-color: #2596be;
+  color: white;
 }
 
 .index__box .btn-warning {

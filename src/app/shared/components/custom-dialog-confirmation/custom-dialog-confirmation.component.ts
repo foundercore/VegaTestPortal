@@ -12,13 +12,17 @@ export class CustomDialogConfirmationComponent implements OnInit {
 
   title: string;
   message: string;
+  confirmText: string;
+  cancelText: string;
 
   constructor(
     public dialogRef: MatDialogRef<CustomDialogConfirmationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: CustomDialogConfirmationModel
     ) {
      this.title = data.title;
-     this.message = data.message;
+    this.message = data.message;
+    this.confirmText = data.confirmText;
+    this.cancelText = data.cancelText
   }
 
   ngOnInit() {

@@ -1,8 +1,8 @@
 <div class="card border-0">
   <div class="card-header d-flex bg-transparent p-0 border-0">
-    <div class="row w-100 mx-0 align-items-center border-bottom">
+    <div class="row w-100 mx-0 align-items-center">
       <div class="col-md-6 left__col p-0 d-flex align-items-center">
-        <h4 class="ml-5">
+        <h4 class="ml-5" style="width: 100%;text-align: center; font-weight: 700;">
           {{ testdata?.name }}
         </h4>
       </div>
@@ -17,15 +17,8 @@
         </button>
         <div class="d-flex">
           <div class="student__box d-flex align-items-center">
-            <h5>Total Time</h5>
           </div>
-          <div class="time d-flex p-2 align-items-center">
-            <img
-              src="assets/images/clock.png"
-              width="auto"
-              height="30"
-              alt=""
-            />
+          <div class="time d-flex align-items-center" style="display: flex; justify-content: center;">
             <h4 class="mb-0 ml-5">
               <!-- <countdown [config]="{ leftTime: timeSeconds }"></countdown> -->
               {{ CountDownTimerValue }}
@@ -67,7 +60,7 @@
         <span *ngFor="let section of testdata?.sections" class="section_tab">
           <mat-tab label="{{ section?.name }}">
             <div class="row mx-0 scroll__box">
-              <div class="col-lg-8 position-relative divider">
+              <div class="col-lg-9 position-relative">
                 <div class="left__content inner__scroll">
                   <ng-scrollbar
                     #scrollable
@@ -81,7 +74,9 @@
                     <!-- <h3
                   [innerHTML]="currentQuestionIndex + 1 + question?.name"
                 ></h3> -->
+              <p style="font-size: 24px;">
                 <strong>Question : {{questionNumber + 1}}</strong> 
+              </p>
                 <div *ngIf="question?.name">
                       <p 
                         class="lead"
@@ -168,21 +163,21 @@
                   *ngIf="this.userType === 'ROLE_STUDENT'"
                 >
                   <button
-                    class="btn-primary"
+                    class="btn btn-secondary"
                     mat-raised-button
                     (click)="setQuestionAsMarkerdForReview()"
                   >
                     Mark For Review
                   </button>
                   <button
-                    class="btn-danger"
+                    class="btn btn-secondary"
                     mat-raised-button
                     (click)="clearResponse()"
                   >
                     Clear Response
                   </button>
                   <button
-                    class="btn-primary"
+                    class="btn btn-secondary"
                     mat-raised-button
                     (click)="SaveandNextAnswers()"
                   >
@@ -207,7 +202,7 @@
               </div> -->
               </div>
 
-              <div class="col-lg-4 mh">
+              <div class="col-lg-3 mh position-relative">
                 <div class="scoll_height">
                   <ng-scrollbar
                     #scrollable
@@ -277,7 +272,7 @@
                   </ng-scrollbar>
                 </div>
                 <ul class="border index__box list-unstyled mb-2">
-                  <li class="p-b2 text-center lead">Question Color Index</li>
+                  <li class="p-b2 text-center lead" style="font-weight: 700; font-size: 20;">Legends</li>
                   <li class="btn btn-primary d-inline-block border-0">
                     Current Question
                   </li>
@@ -308,11 +303,13 @@
                 </ul>
                 <div
                   *ngIf="this.userType === 'ROLE_STUDENT'"
-                  class="text-center save__btn- pt-1"
+                  class="text-center save__btn- pt-1 position-absolute"
+                  style="bottom: 17px; width: 93%;"
                 >
                   <!-- <div class="text-center save__btn- pt-1"> -->
                   <button
-                    class="btn-primary save__btn- w-50 mx-auto bg-danger"
+                    class="btn-primary save__btn w-100 mx-auto bg-danger"
+                    style="color: white;"
                     mat-raised-button
                     (click)="SaveandExit()"
                   >

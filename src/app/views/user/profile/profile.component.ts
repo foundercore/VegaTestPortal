@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { IUserUpdateRequestModel } from 'src/app/models/user/user-model';
+import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
 import { UserService } from 'src/app/services/users/users.service';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
@@ -18,6 +19,7 @@ import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.compo
 export class ProfileComponent implements OnInit {
 
   profileObj;
+  updateProfileScopes;
 
   userFormGroup = new FormGroup({
     firstname: new FormControl('',[Validators.required]),
@@ -36,12 +38,21 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private tosterService: ToastrService,
     public translate: TranslateService,
-    public dialogRef: MatDialogRef<AddUserDialogComponent>
+    public dialogRef: MatDialogRef<AddUserDialogComponent>,
+    private authService: AuthorizationService
     ) {
 
      }
 
-    ngOnInit(): void {
+  ngOnInit(): void {
+    this.updateProfileScopes = {
+      ROLE_STUDENT: ['firstname', 'displayName', 'address', 'gender', 'lastname', 'state', 'email'],
+      ROLE_ADMIN: [],
+      ROLE_STAFF: [],
+    } // fetch update scopes
+    this.updateProfileScopes[this.authService.getAllRoleTag()[0]].forEach(scope => {
+      this.userFormGroup.controls[scope].disable();
+    });
       this.userService.getProfile().subscribe(resp => {
         this.userFormGroup.controls.firstname.setValue(resp.firstName);
         this.userFormGroup.controls.displayName.setValue(resp.displayName);
@@ -53,7 +64,6 @@ export class ProfileComponent implements OnInit {
         this.userFormGroup.controls.enabled.setValue(resp.enabled);
         this.userFormGroup.controls.roles.setValue(resp.roles);
         this.userFormGroup.controls.userName.setValue(resp.userName);
-        this.userFormGroup.controls.email.disable();
       })
   }
 

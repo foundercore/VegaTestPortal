@@ -97,7 +97,7 @@ export class AssignmentTestComponent implements OnInit {
       this.buttontext = 'Start Test';
     }
 
-    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.testName);
+    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.testName, this.buttontext, 'Cancel');
 
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
       width: "600px",
