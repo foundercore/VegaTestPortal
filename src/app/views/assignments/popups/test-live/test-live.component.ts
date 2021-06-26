@@ -31,7 +31,7 @@ export class TestLiveComponent implements OnInit {
   testid: string = '';
   testdata: any;
 
-  currentQuestionIndex: number = 0;
+  questionNumber: number = 0;
   buttonStyle: ButtonStyleAttributesModel[] = [];
 
   questionNavigationButtonColorArray = [];
@@ -56,7 +56,6 @@ export class TestLiveComponent implements OnInit {
   shown: 'native' | 'hover' | 'always' = 'native';
   assignmentId: string = '';
   Titatext: string = '';
-  questionNumber: number = 1;
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<TestLiveComponent>,
@@ -295,10 +294,9 @@ export class TestLiveComponent implements OnInit {
 
   goToNextQuestion() {
     this.optionsSelected = [];
-    if (this.currentQuestionIndex < this.sectionsWithPapers.length - 1) {
-      this.currentQuestionIndex = this.currentQuestionIndex + 1;
-      this.questionNumber = this.currentQuestionIndex + 1;
-      this.question = this.sectionsWithPapers[this.currentQuestionIndex];
+    if (this.questionNumber < this.sectionsWithPapers.length - 1) {
+      this.questionNumber = this.questionNumber + 1;
+      this.question = this.sectionsWithPapers[this.questionNumber];
     } else {
       this.goToNextSection();
       // this.toastrService.error(
@@ -563,9 +561,7 @@ export class TestLiveComponent implements OnInit {
 
   //function called by question number buttons
   getQuestion(ques: any, currentQuestionIndex: number) {
-    //debugger;
-    this.currentQuestionIndex = currentQuestionIndex;
-    this.questionNumber = this.currentQuestionIndex + 1;
+    this.questionNumber = currentQuestionIndex;
     this.optionsSelected = [];
     // this.setCurrentQuestionNumberButtonColor(currentQuestionIndex);
     this.question = this.sectionsWithPapers.find(
@@ -957,7 +953,7 @@ export class TestLiveComponent implements OnInit {
 
   selectSection(event) {
     //debugger;
-    this.currentQuestionIndex = 0;
+    this.questionNumber = 0;
     var section = this.testdata?.sections.find(
       (x) => x.name == event.tab.textLabel
     );
