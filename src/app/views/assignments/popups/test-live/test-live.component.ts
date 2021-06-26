@@ -45,7 +45,7 @@ export class TestLiveComponent implements OnInit {
   submissionData: any;
   currentSectionSubmittedData: any;
   studentName: string = '';
-  userType: string = '';
+  testType: string = 'preview';
   // scrollbar
   disabled = false;
   compact = false;
@@ -64,16 +64,17 @@ export class TestLiveComponent implements OnInit {
     private toastrService: ToastrService,
     private store: Store<AppState>,
     private router: Router
-  ) {}
+  ) {
+
+  }
 
   ngOnInit(): void {
-    // //debugger;
+
+    this.testType =  this._data.testType;
     this.store.select('appState').subscribe((data) => {
       this.userName = data.user.userName;
       this.studentName = data.user.firstName + ' ' + data.user.lastName;
-      this.userType = data?.user?.authorities[0]?.authority;
-      console.log('data', data, ' userType=>', this.userType);
-    });
+     });
     if (
       this._data.testData.questionPaperId != null &&
       this._data.testData.questionPaperId != undefined
@@ -98,11 +99,13 @@ export class TestLiveComponent implements OnInit {
           this.timeSeconds = this.convertminutestoseconds(
             this.testdata.totalDurationInMinutes
           );
-          if (this.userType === 'ROLE_STUDENT') this.observableTimer();
+
+          if (this.testType === 'live') this.observableTimer();
           else
             this.CountDownTimerValue = new Date(this.timeSeconds * 1000)
               .toISOString()
               .substr(11, 8);
+
           console.log(
             'this.testdata==',
             this.testdata,

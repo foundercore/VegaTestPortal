@@ -81,9 +81,9 @@
                     <!-- <h3
                   [innerHTML]="currentQuestionIndex + 1 + question?.name"
                 ></h3> -->
-                <strong>Question : {{questionNumber + 1}}</strong> 
+                <strong>Question : {{questionNumber + 1}}</strong>
                 <div *ngIf="question?.name">
-                      <p 
+                      <p
                         class="lead"
                         [innerHTML]="question?.passageContent">
                       </p>
@@ -92,7 +92,7 @@
                         class="lead"
                         [innerHTML]="question?.name"
                       ></p>
-                     
+
                         <mat-form-field appearance="outline" *ngIf="question.type == 'TITA'" style="width: 100%;">
                           <mat-label>Answer here...</mat-label>
                           <input matInput placeholder="Answer here..." [(ngModel)]="Titatext">
@@ -100,7 +100,7 @@
                       <!-- <p class="lead" style="font-weight: 500">
                         {{ question?.name }}
                       </p> -->
-                    
+
                       <!-- <p [innerHTML]="question?.explanation"></p>
                       <p [innerHTML]="question?.description"></p> -->
                       <ul>
@@ -113,7 +113,7 @@
                               (change)="setOptionSelected(opt?.key)"
                               class="col-1"
                             >
-                            
+
                             </mat-checkbox>
                             <span
                               class="col-10"
@@ -124,17 +124,17 @@
                           </div>
                         </li>
                       </ul>
-                     
-                      <div  *ngIf="this.userType != 'ROLE_STUDENT'">
-                      Explanation: 
-                      <p [innerHTML]="question?.explanation">
-                      </p>
-                      Option: 
-                      <p [innerHTML]="question?.answer?.options">
-                      </p>
+
+                      <div  *ngIf="this.testType == 'preview'">
+                      Correct Option:
+                      <div class="correct-option-div"  [innerHTML]="question?.answer?.options">
+                      </div>
+                      Explanation:
+                      <div class="explanation-div" [innerHTML]="question?.explanation">
+                      </div>
                     </div>
                     </div>
-                   
+
                     <div class="testLive__NoQuestion" *ngIf="!question?.name">
                       <div class="testLive__NoQuestion_text">
                         No question added !!!
@@ -165,7 +165,7 @@
                     pb-3
                     pt-3
                   "
-                  *ngIf="this.userType === 'ROLE_STUDENT'"
+                  *ngIf="this.testType == 'live'"
                 >
                   <button
                     class="btn-primary"
@@ -282,19 +282,19 @@
                     Current Question
                   </li>
                   <li
-                    *ngIf="this.userType === 'ROLE_STUDENT'"
+                    *ngIf="this.testType == 'live'"
                     class="btn btn-warning d-inline-block border-0"
                   >
                     Marked Question.
                   </li>
                   <li
-                    *ngIf="this.userType === 'ROLE_STUDENT'"
+                    *ngIf="this.testType == 'live'"
                     class="btn btn-secondary d-inline-block border-0"
                   >
                     Saved Question.
                   </li>
                   <li
-                    *ngIf="this.userType === 'ROLE_STUDENT'"
+                    *ngIf="this.testType == 'live'"
                     class="btn btn-success d-inline-block border-0"
                   >
                     Not Attempted.
@@ -307,7 +307,7 @@
                   </li> -->
                 </ul>
                 <div
-                  *ngIf="this.userType === 'ROLE_STUDENT'"
+                  *ngIf="this.testType == 'live'"
                   class="text-center save__btn- pt-1"
                 >
                   <!-- <div class="text-center save__btn- pt-1"> -->
