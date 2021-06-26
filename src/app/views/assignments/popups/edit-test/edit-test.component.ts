@@ -25,6 +25,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 // import { SearchQuestionPaperVM } from '../../models/searchQuestionPaperVM';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { EditTestMetaData } from '../../models/editTestMetaData';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-edit-test',
@@ -68,6 +70,9 @@ export class EditTestComponent implements OnInit {
     ],
   };
   questionPaper = new EditTestMetaData();
+
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  tags: string[] | undefined = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) public editTest_data: any,
     public dialogRef: MatDialogRef<EditTestComponent>,
@@ -85,6 +90,7 @@ export class EditTestComponent implements OnInit {
   ngOnInit(): void {
     console.log('editTest_data =>', this.editTest_data);
     this.questionPaper = this.editTest_data.questionPaper;
+    this.tags = this.editTest_data?.questionPaper?.tags;
     this.testForm = new FormGroup({
       testName: new FormControl(this.editTest_data.questionPaper.name, [
         Validators.required,
@@ -94,6 +100,7 @@ export class EditTestComponent implements OnInit {
         [Validators.required]
       ),
       totalMarks: new FormControl(this.editTest_data.questionPaper.totalMarks, []),
+      tags: new FormControl(this.editTest_data.questionPaper.tags, []),
       instructions: new FormControl(
         this.editTest_data.questionPaper.instructions
       ),
@@ -169,7 +176,27 @@ export class EditTestComponent implements OnInit {
   //   //   this.dialogRef.close(this.testForm.value);
   //   // }
   // }
+  addTag(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
 
+    if ((value || '').trim()) {
+      this.tags?.push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  removeTag(tag: string): void {
+    const index = this.tags?.indexOf(tag);
+
+    if (index != undefined && index >= 0) {
+      this.tags?.splice(index, 1);
+    }
+  }
   Updatetest() {
     if (this.testForm.invalid) {
       return;
@@ -184,6 +211,7 @@ export class EditTestComponent implements OnInit {
     model.name = this.testForm.value.testName;
     model.instructions = this.testForm.value.instructions;
     model.totalDurationInMinutes = this.testForm.value.duration;
+    model.tags = this.tags;
     // TODO - make it summation of all the positive marks of teh section questions
     model.totalMarks = 5;
     this.testConfigService
@@ -204,6 +232,7 @@ export class EditTestComponent implements OnInit {
   }
 
   Reset() {
+    this.tags = [];
     this.testForm.reset();
   }
 

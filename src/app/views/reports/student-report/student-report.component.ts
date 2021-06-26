@@ -22,6 +22,13 @@ export class StudentReportComponent implements OnInit {
     'Topic Level',
     'Difficulty Level',
     'Solution',
+    'Ranking'
+  ];
+
+  rankingDisplayedColumn: string[] = [
+    'name',
+    'totalMarks',
+    'marksReceived'
   ];
 
   displayedColumns: string[] = [
@@ -41,6 +48,8 @@ export class StudentReportComponent implements OnInit {
   assignmentId: string = '';
 
   fetchedWholeAssignmentResult;
+
+  rankingDetailsResult;
 
   metrics;
 
@@ -73,6 +82,7 @@ export class StudentReportComponent implements OnInit {
     });
     this.isLoading = true;
     this.getAssignmentResults();
+    this.getRankingDetails();
   }
 
   getAssignmentResults() {
@@ -99,6 +109,15 @@ export class StudentReportComponent implements OnInit {
           }
         );
     });
+  }
+
+
+  getRankingDetails(){
+    this.activatedRoute.params.subscribe((params) => {
+      this.testConfigService.getRankingDetails(params.id).subscribe(resp=>{
+          this.rankingDetailsResult = resp;
+      })
+    })
   }
 
   showFilteredData(filterMode?) {
@@ -198,11 +217,18 @@ export class StudentReportComponent implements OnInit {
         datas.push(studentReportModel);
       });
       this.dataSource.data = datas;
+    } else if (filterMode === 'Ranking') {
+      this.dataSource.data = this.rankingDetailsResult;
     }
   }
 
   public transform(value: string): SafeHtml {
     return this._sanitizer.bypassSecurityTrustHtml(value);
   }
+
+  getTotal(property: string) {
+    return this.dataSource.data.map(t => t[property]).reduce((acc, value) => acc + value, 0);
+  }
+
 
 }

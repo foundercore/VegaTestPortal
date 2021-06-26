@@ -1,3 +1,4 @@
+
 .btn__group {
   text-align: right;
 }
@@ -13,45 +14,6 @@
   text-align: right;
 }
 
-/* table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  thead{
-    background: #fff !important;
-  }
-  tr.mat-header-row {
-    height: 45px;
-  }
-  .data__table th {
-    background-color: #fff;
-  }
-
-  .data__table th:nth-child(1),
-  .data__table td:nth-child(1) {
-    width: 10%;
-    text-align: center;
-  }
-  .data__table th:nth-child(2),
-  .data__table td:nth-child(2) {
-    width: 40%;
-    text-align: left;
-  }
-  .data__table th:nth-child(3),
-  .data__table td:nth-child(3) {
-    width: 15%;
-    text-align: left;
-  }
-  .data__table th:nth-child(4),
-  .data__table td:nth-child(4) {
-    width: 15%;
-    text-align: left;
-  }
-  .data__table th:nth-child(5),
-  .data__table td:nth-child(5) {
-    width: 20%;
-    text-align: left;
-  } */
 
 .action-btn {
   cursor: pointer;
@@ -75,11 +37,7 @@
     0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%);
 }
 
-.actions_container {
-  min-width: 200px;
 
-  align-items: flex-start;
-}
 
 .scroll__box {
   max-height: 500px;
@@ -105,7 +63,18 @@ table {
   position: relative;
 }
 
-th{
-  font-weight: 900;
-  font-size: 13px;
+.mat-column-name{
+
 }
+
+.mat-column-status{
+  width: 200px;
+}
+
+.mat-column-actions{
+width: 150px;
+}
+.table-title-header-row {
+  border-bottom: 1px solid;
+}
+

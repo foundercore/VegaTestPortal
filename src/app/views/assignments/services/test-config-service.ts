@@ -46,6 +46,17 @@ export class TestConfigService extends BaseService {
     return this.http.post<any>(Url, model, this.headers);
   }
 
+
+  getPendingVerficationTest(): Observable<any>{
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/pending-verification`;
+    return this.http.get<any>(Url);
+  }
+
+  getRankingDetails(assignmentid: string){
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/report/submission/${assignmentid}/students-overall-ranking`;
+    return this.http.get<any>(Url);
+  }
+
   getQuestionList(model: SearchQuestion): Observable<any> {
     const url = `${this.BASE_SERVICE_URL}/api/v1/question/search`;
     return this.http.post<any>(url, model, this.headers);

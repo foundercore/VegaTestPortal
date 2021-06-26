@@ -40,6 +40,37 @@
           >Total Marks is required</mat-error
         >
       </mat-form-field> -->
+      <!-- <label for="name" class="label">Tags</label> -->
+      <!-- <mat-form-field appearance="outline" style="width: 100%">
+        <input
+          matInput
+          placeholder="Tags"
+          formControlName="tags"
+        />
+      </mat-form-field> -->
+       <mat-form-field
+             appearance="outline" style="width: 100%"
+          >
+            <mat-label>Tags</mat-label>
+            <mat-chip-list #chipList aria-label="Tag selection">
+              <mat-chip
+                *ngFor="let tag of tags"
+                [selectable]="true"
+                [removable]="true"
+                (removed)="removeTag(tag)"
+              >
+                {{ tag }}
+                <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+              </mat-chip>
+              <input
+                placeholder="New tag..."
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="true"
+                (matChipInputTokenEnd)="addTag($event)"
+              />
+            </mat-chip-list>
+          </mat-form-field>
 
       <label for="name" class="label">Instructions</label>
       <angular-editor

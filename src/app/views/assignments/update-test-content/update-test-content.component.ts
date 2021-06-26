@@ -6,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { TestconfigComponent } from '../popups/test-config/test-config.component';
 import { QuestionslistComponent } from '../popups/questions-list/questions-list.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { TestConfigService } from '../services/test-config-service';
 import { ToastrService } from 'ngx-toastr';
 import { TestConfigurationVM } from '../models/test-configuration';
@@ -22,9 +22,10 @@ import { Status } from '../models/statusEnum';
 import { EditTestComponent } from '../popups/edit-test/edit-test.component';
 import { EditTestMetaData } from '../models/editTestMetaData';
 import { forkJoin, merge, Observable, of as observableOf, Subject } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { catchError, filter, map, startWith, switchMap } from 'rxjs/operators';
 import { SearchQuestionPaperVM } from '../models/searchQuestionPaperVM';
 import { error } from '@angular/compiler/src/util';
+import { Location } from '@angular/common'
 
 @Component({
   selector: 'app-update-test-content',
@@ -73,18 +74,19 @@ export class UpdateTestContentComponent implements OnInit {
   isLoadingResults: boolean;
   isRateLimitReached: boolean;
   actualTotalNumberOfRecords: any;
+
+
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private testConfigService: TestConfigService,
     private toastrService: ToastrService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
-    // // this.testId = this.route.snapshot.paramMap.get('id');
-    // // this.getQuestionPaperbyId();
-    //this.dataSource.paginator = this.paginator;
+
   }
 
   ngAfterViewInit(): void {
@@ -700,7 +702,11 @@ export class UpdateTestContentComponent implements OnInit {
     }
   }
 
-  applyFilter() {
-    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  applyFilter(e) {
+    this.dataSource.filter = (e.target as HTMLInputElement).value.trim().toLowerCase();
+  }
+
+  goBack(){
+     this.location.back();
   }
 }
