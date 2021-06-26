@@ -8,10 +8,22 @@
   <div style="text-align: center; margin-bottom: 10px; color: red">
     Drag and Drop between list
   </div>
+  <div class="btn-grp-cls">
+    <button
+      mat-raised-button
+      class="save-btn-cls"
+      (click)="addStudent()"
+      style="position: fixed; margin-top: -40px"
+    >
+      {{ "COMMON_TAG.SAVE" | translate }}
+    </button>
+  </div>
   <div class="add-student-batch-content">
     <div class="add-student-batch-content-container">
       <div class="example-container">
-        <span>List of All Candidate which are NOT in the assignment selected</span>
+        <span
+          >List of All Candidate which are NOT in the assignment selected</span
+        >
         <div style="margin: 10px">
           <mat-checkbox
             (change)="$event ? masterLeftSelectionToggle() : null"
@@ -98,16 +110,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="btn-grp-cls">
-      <button
-        mat-raised-button
-        class="save-btn-cls"
-        (click)="addStudent()"
-        style="position: fixed; margin-top: -60px"
-      >
-        {{ "COMMON_TAG.SAVE" | translate }}
-      </button>
     </div>
   </div>
 </div>

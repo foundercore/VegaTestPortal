@@ -81,25 +81,31 @@
                     <!-- <h3
                   [innerHTML]="currentQuestionIndex + 1 + question?.name"
                 ></h3> -->
-                {{questionNumber}} )<div *ngIf="question?.name">
-                      <p 
-                        class="lead"
-                        [innerHTML]="question?.passageContent">
-                      </p>
-
+                    {{ currentQuestionIndex + 1 }} )
+                    <div *ngIf="question?.name">
                       <p
                         class="lead"
-                        [innerHTML]="question?.name"
+                        [innerHTML]="question?.passageContent"
                       ></p>
-                     
-                        <mat-form-field appearance="outline" *ngIf="question.type == 'TITA'" style="width: 100%;">
-                          <mat-label>Put your answer</mat-label>
-                          <input matInput placeholder="Answer here.." [(ngModel)]="Titatext">
-                        </mat-form-field>
+
+                      <p class="lead" [innerHTML]="question?.name"></p>
+
+                      <mat-form-field
+                        appearance="outline"
+                        *ngIf="question.type == 'TITA'"
+                        style="width: 100%"
+                      >
+                        <mat-label>Put your answer</mat-label>
+                        <input
+                          matInput
+                          placeholder="Answer here.."
+                          [(ngModel)]="Titatext"
+                        />
+                      </mat-form-field>
                       <!-- <p class="lead" style="font-weight: 500">
                         {{ question?.name }}
                       </p> -->
-                    
+
                       <!-- <p [innerHTML]="question?.explanation"></p>
                       <p [innerHTML]="question?.description"></p> -->
                       <ul>
@@ -112,7 +118,6 @@
                               (change)="setOptionSelected(opt?.key)"
                               class="col-1"
                             >
-                            
                             </mat-checkbox>
                             <span
                               class="col-10"
@@ -123,17 +128,15 @@
                           </div>
                         </li>
                       </ul>
-                     
-                       <div  *ngIf="this.userType != 'ROLE_STUDENT'">
-                      Explanation: 
-                      <p [innerHTML]="question?.explanation">
-                      </p>
-                      Option: 
-                      <p [innerHTML]="question?.answer?.options">
-                      </p>
+
+                      <div *ngIf="this.userType != 'ROLE_STUDENT'">
+                        Explanation:
+                        <p [innerHTML]="question?.explanation"></p>
+                        Option:
+                        <p [innerHTML]="question?.answer?.options"></p>
+                      </div>
                     </div>
-                    </div>
-                   
+
                     <div class="testLive__NoQuestion" *ngIf="!question?.name">
                       <div class="testLive__NoQuestion_text">
                         No question added !!!
@@ -255,9 +258,7 @@
                         mat-raised-button
                         *ngFor="let ques of sectionsWithPapers; let i = index"
                         (click)="getQuestion(ques, i)"
-                        [ngStyle]="{
-                          background: questionNavigationButtonColorArray[i]
-                        }"
+                        [ngStyle]="buttonStyle[i]"
                         style="min-width: 50px"
                       >
                         {{ i + 1 }}

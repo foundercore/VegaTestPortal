@@ -349,7 +349,7 @@ export class UpdateTestContentComponent implements OnInit {
     });
   }
 
-  remarks: string = "";
+  remarks: string = '';
   getQuestionPaperbyId() {
     if (this.route.snapshot.paramMap.get('id') != null) {
       this.testConfigService
@@ -366,21 +366,21 @@ export class UpdateTestContentComponent implements OnInit {
           this.ListOfQuestions_Added_In_All_Sections = [];
           res.sections.map((sec) => {
             dur += sec.durationInMinutes;
-            sec.questions.map((que) => {
-              this.ListOfQuestions_Added_In_All_Sections.push(que);
-            });
+            if (sec.questions)
+              sec.questions.map((que) => {
+                this.ListOfQuestions_Added_In_All_Sections.push(que);
+              });
           });
           this.totalDurationOfSections = dur;
           debugger;
-          if(res?.migration.length > 0){
-            var filteredrecords = res.migration.filter(x=> x.status == res.status);
+          if (res?.migration && res?.migration.length > 0) {
+            var filteredrecords = res.migration.filter(
+              (x) => x.status == res.status
+            );
             var remarks = filteredrecords[filteredrecords.length - 1];
             var data = JSON.parse(remarks.remarks);
             this.remarks = data.rejectionReason;
           }
-
-
-
 
           console.log('this.gettest==', res);
           console.log(
