@@ -17,6 +17,7 @@ import { TestConfigService } from '../../services/test-config-service';
 import { CalculatorComponent } from '../calculator/calculator.component';
 import { timer } from 'rxjs';
 import { MatTabGroup } from '@angular/material/tabs';
+import { ButtonStyleAttributesModel } from '../../models/buttonStyleAttributesModel';
 
 @Component({
   selector: 'app-test-live',
@@ -30,7 +31,9 @@ export class TestLiveComponent implements OnInit {
   testid: string = '';
   testdata: any;
 
-  currentQuestionIndex: number = 0;
+  questionNumber: number = 0;
+  buttonStyle: ButtonStyleAttributesModel[] = [];
+
   questionNavigationButtonColorArray = [];
   sectionsWithPapers = [];
   question: any;
@@ -52,8 +55,7 @@ export class TestLiveComponent implements OnInit {
   timerSource;
   shown: 'native' | 'hover' | 'always' = 'native';
   assignmentId: string = '';
-  Titatext : string = "";
-  questionNumber : number = 1;
+  Titatext: string = '';
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<TestLiveComponent>,
@@ -116,7 +118,7 @@ export class TestLiveComponent implements OnInit {
           );
           if (res.sections !== null) this.GetQuestionPapers();
           //  if (res.isSuccess) {
-
+          this.getUserSubmissionData();
           // }
         },
         (error) => {
@@ -169,7 +171,7 @@ export class TestLiveComponent implements OnInit {
 
   async setQuestionAsMarkerdForReview() {
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
-    quesForMarkedAsReview.answerText = null;
+    quesForMarkedAsReview.answerText = this.question.name;
     quesForMarkedAsReview.markForReview = true;
     quesForMarkedAsReview.assignmentId = this.assignmentId;
     quesForMarkedAsReview.questionId = this.question.id.questionId;
@@ -198,10 +200,34 @@ export class TestLiveComponent implements OnInit {
       );
   }
 
+  isCurrentQuestionMarkedForReview() {
+    console.log(
+      'buttonStyle array=>',
+      this.buttonStyle,
+      ' this.sectionsWithPapers=>',
+      this.sectionsWithPapers,
+      ' current Question=>',
+      this.question
+    );
+    var marked = false;
+    this.sectionsWithPapers.map((sec, i) => {
+      if (sec.id.questionId === this.question.id.questionId) {
+        if (this.buttonStyle[i].background === 'orange') {
+          marked = true;
+        }
+      }
+    });
+    console.log('The prev question was marked?=>', marked);
+    return marked;
+  }
+
   async SaveandNextAnswers() {
+    console.log('this.question=>', this.question);
+    this.isCurrentQuestionMarkedForReview();
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
     quesForMarkedAsReview.answerText = this.Titatext;
-    quesForMarkedAsReview.markForReview = false;
+    quesForMarkedAsReview.markForReview =
+      this.isCurrentQuestionMarkedForReview();
     quesForMarkedAsReview.assignmentId = this.assignmentId;
     quesForMarkedAsReview.questionId = this.question.id.questionId;
     quesForMarkedAsReview.sectionId = this.question.sectionId;
@@ -244,6 +270,7 @@ export class TestLiveComponent implements OnInit {
         }
       );
   }
+
   getSelectedOption() {
     // console.log('optionsSelected=>', this.optionsSelected);
     // debugger;
@@ -258,7 +285,7 @@ export class TestLiveComponent implements OnInit {
       );
       return optionsSelectedArray;
     } else {
-      console.log('No option selected in getSelectedOption function');
+      // console.log('No option selected in getSelectedOption function');
       return null;
     }
     // return null;
@@ -267,10 +294,9 @@ export class TestLiveComponent implements OnInit {
 
   goToNextQuestion() {
     this.optionsSelected = [];
-    if (this.currentQuestionIndex < this.sectionsWithPapers.length - 1) {
-      this.currentQuestionIndex = this.currentQuestionIndex + 1;
-      this.questionNumber = this.currentQuestionIndex + 1;
-      this.question = this.sectionsWithPapers[this.currentQuestionIndex];
+    if (this.questionNumber < this.sectionsWithPapers.length - 1) {
+      this.questionNumber = this.questionNumber + 1;
+      this.question = this.sectionsWithPapers[this.questionNumber];
     } else {
       this.goToNextSection();
       // this.toastrService.error(
@@ -310,11 +336,12 @@ export class TestLiveComponent implements OnInit {
             ' current question=>',
             this.question
           );
-          if(this.question.type == "TITA"){
-            this.Titatext = this.question.answer.answerText;
-          }
-          this.Titatext = this.question.answer.answerText;
+          // if(this.question.type == "TITA"){
+          //   this.Titatext = this.question.answer.answerText;
+          // }
+          // this.Titatext = this.question.answer.answerText;
           this.optionsSelected = [];
+          this.setTITAQuestionFetchedAns(this.submissionData);
           this.setCurrentQuestionSelectedOption();
           this.setColoursForQuestionNavigationButtons();
           // this.setColoursForQuestionNavigationButtons();
@@ -372,16 +399,30 @@ export class TestLiveComponent implements OnInit {
       );
   }
 
-  // setCurrentQuestionNumberButtonColor(questionNumberIndex: number) {
-  //   this.sectionsWithPapers.map((sec, i) => {
-  //     if (i == questionNumberIndex) this.sectionsWithPapers[i].color = 'green';
-  //   });
-  //   this.changeColorIn_sectionWithPapers_Array(questionNumberIndex);
-  // }
-
-  // isColorAppliedToThisIndex(index) {
-  //   if(this.colorAppliedIndexesArray[index])
-  // }
+  setTITAQuestionFetchedAns(submittedFetchedData) {
+    this.Titatext = '';
+    console.log(
+      'setTITAInputTExt=>  sumitted data fecthed=>',
+      submittedFetchedData,
+      ' current section=>',
+      this.currentSectionId,
+      ' this.question=>',
+      this.question
+    );
+    if (submittedFetchedData.sections) {
+      submittedFetchedData.sections.map((sec) => {
+        if (sec.sectionId === this.currentSectionId) {
+          sec.answers.map((ans) => {
+            if (ans.questionId === this.question.id.questionId) {
+              this.Titatext = ans.answerText;
+            }
+          });
+        }
+      });
+    } else {
+      this.Titatext = '';
+    }
+  }
 
   setCurrentQuestionSelectedOption() {
     const fetchedSubmissionState = this.submissionData;
@@ -422,18 +463,18 @@ export class TestLiveComponent implements OnInit {
   }
 
   setOptionSelectedAfterFetchingData(selected) {
-    console.log(
-      'Fethched selectedOptions for the current question passed to function =>',
-      selected
-    );
+    // console.log(
+    //   'Fethched selectedOptions for the current question passed to function =>',
+    //   selected
+    // );
     try {
       selected.map((optIndex) => {
         this.optionsSelected[Number(optIndex) - 1] = true;
       });
-      console.log(
-        'After settingt the fetched selectedOptions , this.selectedOptions =>',
-        this.optionsSelected
-      );
+      // console.log(
+      //   'After settingt the fetched selectedOptions , this.selectedOptions =>',
+      //   this.optionsSelected
+      // );
     } catch (exception) {
       console.log(
         'Error while setting the fetched selected options for current question =>',
@@ -467,7 +508,6 @@ export class TestLiveComponent implements OnInit {
     });
   }
 
- 
   GetQuestionPapers() {
     if (this.testdata?.sections.length > 0) {
       var sections = this.testdata?.sections;
@@ -476,7 +516,9 @@ export class TestLiveComponent implements OnInit {
         sections.forEach((element) => {
           if (element != null && element.questions != null) {
             // sort question by Passage
-            element.questions.sort((a, b) => (a.passageContent < b.passageContent ? -1 : 1));
+            element.questions.sort((a, b) =>
+              a.passageContent < b.passageContent ? -1 : 1
+            );
             element.questions.forEach((element2) => {
               if (element2 != null) {
                 var checkdata = this.sectionsWithPapers.find(
@@ -517,12 +559,9 @@ export class TestLiveComponent implements OnInit {
     }
   }
 
-
   //function called by question number buttons
   getQuestion(ques: any, currentQuestionIndex: number) {
-    //debugger;
-    this.currentQuestionIndex = currentQuestionIndex;
-    this.questionNumber = this.currentQuestionIndex + 1; 
+    this.questionNumber = currentQuestionIndex;
     this.optionsSelected = [];
     // this.setCurrentQuestionNumberButtonColor(currentQuestionIndex);
     this.question = this.sectionsWithPapers.find(
@@ -544,7 +583,7 @@ export class TestLiveComponent implements OnInit {
   }
 
   selectSection1(id: string = '') {
-    console.log('Current section id =>', id);
+    //console.log('Current section id =>', id);
     this.currentSectionId = id;
     // this.currentQuestionIndex = 0;
     this.optionsSelected = [];
@@ -567,6 +606,165 @@ export class TestLiveComponent implements OnInit {
     this.setColoursForQuestionNavigationButtons();
   }
 
+  // setColoursForQuestionNavigationButtons() {
+  //   // console.log(' setColoursForQuestionNavigationButtons called');
+  //   // console.log(
+  //   //   ' this.sectionsWithPapers =>',
+  //   //   this.sectionsWithPapers,
+  //   //   'this.currentSectionSubmittedData =>',
+  //   //   this.currentSectionSubmittedData,
+  //   //   ' submissionData=>',
+  //   //   this.submissionData,
+  //   //   ' currentSectionId=>',
+  //   //   this.currentSectionId
+  //   // );
+  //   var colorAppliedIndexesArray = [];
+  //   //prepare color array with all false
+  //   this.sectionsWithPapers.map((sec, i) => {
+  //     colorAppliedIndexesArray[i] = false;
+  //     this.questionNavigationButtonColorArray[i] = 'grey';
+  //   });
+  //   //debugger;
+  //   this.submissionData?.sections.map((section) => {
+  //     if (section.sectionId === this.currentSectionId) {
+  //       this.currentSectionSubmittedData = section.answers;
+  //     }
+  //   });
+
+  //   if (this.sectionsWithPapers?.length > 0) {
+  //     this.sectionsWithPapers.map((ques, i) => {
+  //       //this.currentSectionSubmittedData will always be a array of length 1 0r 0
+  //       if (this.currentSectionSubmittedData)
+  //         this.currentSectionSubmittedData.map((sub_ans) => {
+  //           //console.log('524 line sub_data=>', sub_ans);
+
+  //           // All comparisions will be done between ques and sub_ans
+  //           if (ques.id.questionId == sub_ans.questionId) {
+  //             //if current ques status /data is submitted then apply colors
+  //             //if its current question then green else
+  //             if (ques.id.questionId === this.question?.id.questionId) {
+  //               //the ques is current question
+  //               // console.log(
+  //               //   'current green color question is =>',
+  //               //   this.question?.name
+  //               // );
+  //               if (!colorAppliedIndexesArray[i]) {
+  //                 //set color green
+  //                 this.setButtonColor(i, 'green');
+  //                 colorAppliedIndexesArray[i] = true;
+  //               }
+  //             } else {
+  //               //current ques is in saved data
+  //               //check if mark for review is true then orange else if answered then blue else grey
+  //               // if (sub_ans.markForReview && sub_ans.selectedOptions !== null) {
+  //               //   if (!colorAppliedIndexesArray[i]) {
+  //               //     //set color violet
+  //               //     this.setButtonColor(i, 'violet');
+  //               //     colorAppliedIndexesArray[i] = true;
+  //               //   }
+  //               // } else
+  //               if (sub_ans.markForReview) {
+  //                 if (!colorAppliedIndexesArray[i]) {
+  //                   //set color orange
+  //                   this.setButtonColor(i, 'orange');
+  //                   colorAppliedIndexesArray[i] = true;
+  //                 }
+  //               } else if (sub_ans.selectedOptions !== null) {
+  //                 if (!colorAppliedIndexesArray[i]) {
+  //                   //set color grey
+  //                   this.setButtonColor(i, 'lightblue');
+  //                   colorAppliedIndexesArray[i] = true;
+  //                 }
+  //               } else {
+  //                 //the ques is in sub_data but not marked for review and
+  //                 //not current question too so set grey
+  //                 if (!colorAppliedIndexesArray[i]) {
+  //                   //set color grey
+  //                   this.setButtonColor(i, 'grey');
+  //                   colorAppliedIndexesArray[i] = true;
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         });
+  //     });
+
+  //     this.sectionsWithPapers.map((ques, i) => {
+  //       //this.currentSectionSubmittedData will always be a array of length 1 0r 0
+  //       if (this.currentSectionSubmittedData)
+  //         this.currentSectionSubmittedData.map((sub_ans) => {
+  //           // console.log('524 line sub_data=>', sub_ans);
+
+  //           //current ques is not in saved data so apply button color
+  //           //green if its current ques
+  //           //grey if not current ques
+  //           if (ques.id.questionId === this.question?.id.questionId) {
+  //             //the ques is current question
+  //             // console.log(
+  //             //   'current green color question is =>',
+  //             //   this.question?.name
+  //             // );
+  //             if (!colorAppliedIndexesArray[i]) {
+  //               //set color green
+  //               this.setButtonColor(i, 'green');
+  //               colorAppliedIndexesArray[i] = true;
+  //             }
+  //           } else {
+  //             //current ques is in saved data
+  //             //check if mark for review is true then orange else grey
+
+  //             //the ques is in sub_data but not marked for review and
+  //             //not current question too so set grey
+  //             if (!colorAppliedIndexesArray[i]) {
+  //               //set color grey
+  //               this.setButtonColor(i, 'grey');
+  //               colorAppliedIndexesArray[i] = true;
+  //             }
+  //           }
+  //         });
+  //     });
+
+  //     this.sectionsWithPapers.map((ques, i) => {
+  //       //this.currentSectionSubmittedData will always be a array of length 1 0r 0
+
+  //       // console.log('524 line sub_data=>', sub_ans);
+
+  //       //current ques is not in saved data so apply button color
+  //       //green if its current ques
+  //       //grey if not current ques
+  //       if (ques.id.questionId === this.question?.id.questionId) {
+  //         //the ques is current question
+  //         // console.log(
+  //         //   'current green color question is =>',
+  //         //   this.question?.name
+  //         // );
+  //         if (!colorAppliedIndexesArray[i]) {
+  //           //set color green
+  //           this.setButtonColor(i, 'green');
+  //           colorAppliedIndexesArray[i] = true;
+  //         }
+  //       } else {
+  //         //current ques is in saved data
+  //         //check if mark for review is true then orange else grey
+
+  //         //the ques is in sub_data but not marked for review and
+  //         //not current question too so set grey
+  //         if (!colorAppliedIndexesArray[i]) {
+  //           //set color grey
+  //           this.setButtonColor(i, 'grey');
+  //           colorAppliedIndexesArray[i] = true;
+  //         }
+  //       }
+  //     });
+  //   }
+
+  //   this.sectionsWithPapers.map((sec, i) => {
+  //     colorAppliedIndexesArray[i] = false;
+  //   });
+  // }
+
+  //on click of switch sections tab buttons
+
   setColoursForQuestionNavigationButtons() {
     // console.log(' setColoursForQuestionNavigationButtons called');
     // console.log(
@@ -582,8 +780,12 @@ export class TestLiveComponent implements OnInit {
     var colorAppliedIndexesArray = [];
     //prepare color array with all false
     this.sectionsWithPapers.map((sec, i) => {
-      colorAppliedIndexesArray[i] = false;
-      this.questionNavigationButtonColorArray[i] = 'grey';
+      // colorAppliedIndexesArray[i] = false;
+      // this.questionNavigationButtonColorArray[i] = 'grey';
+      // if (ques.id.questionId === this.question?.id.questionId)
+      //   this.setButtonColor(i, 'grey', 'green');
+      // else
+      this.setButtonColor(i, 'grey', 'none');
     });
     //debugger;
     this.submissionData?.sections.map((section) => {
@@ -603,49 +805,60 @@ export class TestLiveComponent implements OnInit {
             if (ques.id.questionId == sub_ans.questionId) {
               //if current ques status /data is submitted then apply colors
               //if its current question then green else
-              if (ques.id.questionId === this.question?.id.questionId) {
-                //the ques is current question
-                // console.log(
-                //   'current green color question is =>',
-                //   this.question?.name
-                // );
+              //if (ques.id.questionId === this.question?.id.questionId) {
+              //the ques is current question
+              // console.log(
+              //   'current green color question is =>',
+              //   this.question?.name
+              // );
+              //   if (!colorAppliedIndexesArray[i]) {
+              //     //set color green
+              //     this.setButtonColor(i, 'green');
+              //     colorAppliedIndexesArray[i] = true;
+              //   }
+              // } else {
+              //current ques is in saved data
+              //check if mark for review is true then orange else if answered then blue else grey
+              // if (sub_ans.markForReview && sub_ans.selectedOptions !== null) {
+              //   if (!colorAppliedIndexesArray[i]) {
+              //     //set color violet
+              //     this.setButtonColor(i, 'violet');
+              //     colorAppliedIndexesArray[i] = true;
+              //   }
+              // } else
+              if (sub_ans.markForReview) {
                 if (!colorAppliedIndexesArray[i]) {
-                  //set color green
-                  this.setButtonColor(i, 'green');
+                  //set color orange
+                  if (ques.id.questionId === this.question?.id.questionId)
+                    this.setButtonColor(i, 'orange', 'green');
+                  else this.setButtonColor(i, 'orange', 'none');
+                  colorAppliedIndexesArray[i] = true;
+                }
+              } else if (
+                sub_ans.selectedOptions !== null ||
+                (sub_ans.answerText !== null && sub_ans.answerText !== '')
+              ) {
+                if (!colorAppliedIndexesArray[i]) {
+                  //set color grey
+                  //this.setButtonColor(i, 'lightblue');
+                  if (ques.id.questionId === this.question?.id.questionId)
+                    this.setButtonColor(i, 'lightblue', 'green');
+                  else this.setButtonColor(i, 'lightblue', 'none');
                   colorAppliedIndexesArray[i] = true;
                 }
               } else {
-                //current ques is in saved data
-                //check if mark for review is true then orange else if answered then blue else grey
-                // if (sub_ans.markForReview && sub_ans.selectedOptions !== null) {
-                //   if (!colorAppliedIndexesArray[i]) {
-                //     //set color violet
-                //     this.setButtonColor(i, 'violet');
-                //     colorAppliedIndexesArray[i] = true;
-                //   }
-                // } else
-                if (sub_ans.markForReview) {
-                  if (!colorAppliedIndexesArray[i]) {
-                    //set color orange
-                    this.setButtonColor(i, 'orange');
-                    colorAppliedIndexesArray[i] = true;
-                  }
-                } else if (sub_ans.selectedOptions !== null) {
-                  if (!colorAppliedIndexesArray[i]) {
-                    //set color grey
-                    this.setButtonColor(i, 'lightblue');
-                    colorAppliedIndexesArray[i] = true;
-                  }
-                } else {
-                  //the ques is in sub_data but not marked for review and
-                  //not current question too so set grey
-                  if (!colorAppliedIndexesArray[i]) {
-                    //set color grey
-                    this.setButtonColor(i, 'grey');
-                    colorAppliedIndexesArray[i] = true;
-                  }
+                //the ques is in sub_data but not marked for review and
+                //not current question too so set grey
+                if (!colorAppliedIndexesArray[i]) {
+                  //set color grey
+                  //this.setButtonColor(i, 'grey');
+                  if (ques.id.questionId === this.question?.id.questionId)
+                    this.setButtonColor(i, 'grey', 'green');
+                  else this.setButtonColor(i, 'grey', 'none');
+                  colorAppliedIndexesArray[i] = true;
                 }
               }
+              // }
             }
           });
       });
@@ -659,75 +872,88 @@ export class TestLiveComponent implements OnInit {
             //current ques is not in saved data so apply button color
             //green if its current ques
             //grey if not current ques
-            if (ques.id.questionId === this.question?.id.questionId) {
-              //the ques is current question
-              // console.log(
-              //   'current green color question is =>',
-              //   this.question?.name
-              // );
-              if (!colorAppliedIndexesArray[i]) {
-                //set color green
-                this.setButtonColor(i, 'green');
-                colorAppliedIndexesArray[i] = true;
-              }
-            } else {
-              //current ques is in saved data
-              //check if mark for review is true then orange else grey
-
-              //the ques is in sub_data but not marked for review and
-              //not current question too so set grey
-              if (!colorAppliedIndexesArray[i]) {
-                //set color grey
-                this.setButtonColor(i, 'grey');
-                colorAppliedIndexesArray[i] = true;
-              }
+            // if (ques.id.questionId === this.question?.id.questionId) {
+            //the ques is current question
+            // console.log(
+            //   'current green color question is =>',
+            //   this.question?.name
+            // );
+            if (!colorAppliedIndexesArray[i]) {
+              //set color green
+              //this.setButtonColor(i, 'green');
+              if (ques.id.questionId === this.question?.id.questionId)
+                this.setButtonColor(i, 'grey', 'green');
+              else this.setButtonColor(i, 'grey', 'none');
+              colorAppliedIndexesArray[i] = true;
             }
+            //  } else {
+            //current ques is in saved data
+            //check if mark for review is true then orange else grey
+
+            //the ques is in sub_data but not marked for review and
+            //not current question too so set grey
+            // if (!colorAppliedIndexesArray[i]) {
+            //   //set color grey
+            //   this.setButtonColor(i, 'grey');
+            //   colorAppliedIndexesArray[i] = true;
+            // }
+            // }
           });
       });
 
-      this.sectionsWithPapers.map((ques, i) => {
-        //this.currentSectionSubmittedData will always be a array of length 1 0r 0
-
-        // console.log('524 line sub_data=>', sub_ans);
-
-        //current ques is not in saved data so apply button color
-        //green if its current ques
-        //grey if not current ques
-        if (ques.id.questionId === this.question?.id.questionId) {
-          //the ques is current question
-          // console.log(
-          //   'current green color question is =>',
-          //   this.question?.name
-          // );
-          if (!colorAppliedIndexesArray[i]) {
-            //set color green
-            this.setButtonColor(i, 'green');
-            colorAppliedIndexesArray[i] = true;
-          }
-        } else {
-          //current ques is in saved data
-          //check if mark for review is true then orange else grey
-
-          //the ques is in sub_data but not marked for review and
-          //not current question too so set grey
-          if (!colorAppliedIndexesArray[i]) {
-            //set color grey
-            this.setButtonColor(i, 'grey');
-            colorAppliedIndexesArray[i] = true;
-          }
-        }
-      });
+      //
     }
+
+    this.sectionsWithPapers.map((ques, i) => {
+      //this.currentSectionSubmittedData will always be a array of length 1 0r 0
+
+      // console.log('524 line sub_data=>', sub_ans);
+
+      //current ques is not in saved data so apply button color
+      //green if its current ques
+      // //grey if not current ques
+      // if (ques.id.questionId === this.question?.id.questionId) {
+      //   //the ques is current question
+      //   // console.log(
+      //   //   'current green color question is =>',
+      //   //   this.question?.name
+      //   // );
+      //   if (!colorAppliedIndexesArray[i]) {
+      //     //set color green
+      //     this.setButtonColor(i, 'green');
+      //     colorAppliedIndexesArray[i] = true;
+      //   }
+      // } else {
+      //   //current ques is in saved data
+      //   //check if mark for review is true then orange else grey
+
+      //   //the ques is in sub_data but not marked for review and
+      //   //not current question too so set grey
+      //   if (!colorAppliedIndexesArray[i]) {
+      //     //set color grey
+      //     this.setButtonColor(i, 'grey');
+      //     colorAppliedIndexesArray[i] = true;
+      //   }
+      // }
+
+      if (!colorAppliedIndexesArray[i]) {
+        //set color grey
+        //this.setButtonColor(i, 'grey');
+        if (ques.id.questionId === this.question?.id.questionId)
+          this.setButtonColor(i, 'grey', 'green');
+        else this.setButtonColor(i, 'grey', 'none');
+        colorAppliedIndexesArray[i] = true;
+      }
+    });
 
     this.sectionsWithPapers.map((sec, i) => {
       colorAppliedIndexesArray[i] = false;
     });
   }
 
-  //on click of switch sections tab buttons
   selectSection(event) {
     //debugger;
-    this.currentQuestionIndex = 0;
+    this.questionNumber = 0;
     var section = this.testdata?.sections.find(
       (x) => x.name == event.tab.textLabel
     );
@@ -819,7 +1045,7 @@ export class TestLiveComponent implements OnInit {
     this.timerSource.unsubscribe();
   }
 
-  setButtonColor(buttonNumber?, color?) {
+  setButtonColor(buttonNumber, color, border) {
     // console.log(
     //   'SetButton color is called with  sectionsWithPapers=>',
     //   this.sectionsWithPapers,
@@ -833,6 +1059,9 @@ export class TestLiveComponent implements OnInit {
       if (i === buttonNumber) {
         this.sectionsWithPapers[i].color = color;
         this.questionNavigationButtonColorArray[i] = color;
+        //if(color === 'green') this.buttonStyle[i]= new ButtonStyleAttributesModel(this.buttonStyle[i].background,"green")
+        //else
+        this.buttonStyle[i] = new ButtonStyleAttributesModel(color, border);
       }
     });
   }

@@ -81,7 +81,7 @@
                     <!-- <h3
                   [innerHTML]="currentQuestionIndex + 1 + question?.name"
                 ></h3> -->
-                <strong>Question : {{questionNumber}}</strong> 
+                <strong>Question : {{questionNumber + 1}}</strong> 
                 <div *ngIf="question?.name">
                       <p 
                         class="lead"
@@ -256,9 +256,7 @@
                         mat-raised-button
                         *ngFor="let ques of sectionsWithPapers; let i = index"
                         (click)="getQuestion(ques, i)"
-                        [ngStyle]="{
-                          background: questionNavigationButtonColorArray[i]
-                        }"
+                        [ngStyle]="buttonStyle[i]"
                         style="min-width: 50px"
                       >
                         {{ i + 1 }}
