@@ -3,7 +3,7 @@
     <div class="row w-100 mx-0 align-items-center">
       <div class="col-md-6 left__col p-0 d-flex align-items-center">
         <h4 class="ml-5" style="width: 100%;text-align: center; font-weight: 700;">
-          {{ testdata?.name }}
+          {{ testData?.name }}
         </h4>
       </div>
       <div class="col-md-6 right__col d-flex">
@@ -56,8 +56,8 @@
       #TabGroup
     >
       <!-- one -->
-      <div *ngIf="testdata?.sections">
-        <span *ngFor="let section of testdata?.sections" class="section_tab">
+      <div *ngIf="testData?.sections">
+        <span *ngFor="let section of testData?.sections" class="section_tab">
           <mat-tab label="{{ section?.name }}">
             <div class="row mx-0 scroll__box">
               <div class="col-lg-9 position-relative">
@@ -90,7 +90,7 @@
 
                         <mat-form-field appearance="outline" *ngIf="question.type == 'TITA'" style="width: 100%;">
                           <mat-label>Answer here...</mat-label>
-                          <input matInput placeholder="Answer here..." [(ngModel)]="Titatext">
+                          <input matInput placeholder="Answer here..." [(ngModel)]="titaText">
                         </mat-form-field>
                       <!-- <p class="lead" style="font-weight: 500">
                         {{ question?.name }}
@@ -179,7 +179,7 @@
                   <button
                     class="btn btn-secondary"
                     mat-raised-button
-                    (click)="SaveandNextAnswers()"
+                    (click)="saveAndNextAnswers()"
                   >
                     Save And Next
                   </button>
@@ -322,7 +322,7 @@
         </span>
       </div>
     </mat-tab-group>
-    <div class="testLive__NoSections" *ngIf="testdata?.sections === null">
+    <div class="testLive__NoSections" *ngIf="testData?.sections === null">
       No Sections added !!!
     </div>
   </div>

@@ -373,7 +373,6 @@ export class UpdateTestContentComponent implements OnInit {
               });
           });
           this.totalDurationOfSections = dur;
-          debugger;
           if (res?.migration && res?.migration.length > 0) {
             var filteredrecords = res.migration.filter(
               (x) => x.status == res.status
