@@ -156,7 +156,8 @@ export class TestLiveComponent implements OnInit {
         this.timerSource.unsubscribe();
         Swal.fire({
           icon: 'success',
-          title: 'Test Duration Completed',
+          title: 'Test Over!!',
+          confirmButtonText: 'Go to Dashboard',
         }).finally(() => {
           this.testConfigService.saveandExit(this.testid).subscribe(
             (res: any) => {
@@ -845,8 +846,8 @@ export class TestLiveComponent implements OnInit {
                   //set color grey
                   //this.setButtonColor(i, 'lightblue');
                   if (ques.id.questionId === this.question?.id.questionId)
-                    this.setButtonColor(i, 'lightblue', 'green');
-                  else this.setButtonColor(i, 'lightblue', 'none');
+                    this.setButtonColor(i, '#2596be', 'green');
+                  else this.setButtonColor(i, '#2596be', 'none');
                   colorAppliedIndexesArray[i] = true;
                 }
               } else {

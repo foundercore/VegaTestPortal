@@ -61,7 +61,7 @@ export class StudentDashboardComponent implements OnInit {
 
   public pageOptions = PAGE_OPTIONS;
 
-  displayedColumns: string[] = ['testName', 'attempted', 'actions'];
+  displayedColumns: string[] = ['testName', 'attempted', 'actions', 'marksObtained'];
 
   dataSource = new MatTableDataSource<any>();
 
@@ -122,12 +122,13 @@ export class StudentDashboardComponent implements OnInit {
     }
 
     const dialogData = new CustomDialogConfirmationModel(
-      'Want to start test?',
-      element.testName
+      'Please read the instructions carefully before starting the test',
+      element.testName,
+      this.buttontext
     );
 
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
-      width: '600px',
+      width: '700px',
       data: dialogData,
     });
 
@@ -173,15 +174,17 @@ export class StudentDashboardComponent implements OnInit {
         element.passcode
       );
       Swal.fire({
-        title: 'Verify Passcode',
+        title: 'Verify Yourself',
         text: 'Enter Passcode:',
         input: 'text',
+        confirmButtonText: 'Verify',
         showCancelButton: true,
       }).then((result) => {
         if (result.value && result.value == element.passcode) {
           this.openTestPopup(element,'live');
           this.toastrService.success('Passcode Verified successfully');
-        } else this.toastrService.error('Invalid Passcode');
+        } else if (result.value && result.value != element.passcode)
+          this.toastrService.error('Invalid Passcode');
       });
     }
   }

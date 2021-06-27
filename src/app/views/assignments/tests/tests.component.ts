@@ -348,7 +348,7 @@ export class TestsComponent implements OnInit, AfterViewInit {
       this.buttontext = 'Start Test';
     }
 
-    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.instructions);
+    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.instructions, this.buttontext);
 
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
       width: "600px",

@@ -13,7 +13,7 @@
 
   <div class="assignment-search-bar">
     <mat-form-field style="width: 600px" appearance="outline">
-      <mat-label> {{ "COMMON_TAG.FILTER" | translate }}</mat-label>
+      <mat-label>Search tests</mat-label>
       <input
         matInput
         placeholder="Search Tests"
@@ -31,14 +31,14 @@
         <table mat-table [dataSource]="dataSource" class="example-table">
           <ng-container matColumnDef="testName">
             <th mat-header-cell *matHeaderCellDef>Test Name</th>
-            <td mat-cell *matCellDef="let row">{{ row.testName }}</td>
+            <td mat-cell style="font-weight: 600;" *matCellDef="let row">{{ row.testName }}</td>
           </ng-container>
 
           <ng-container matColumnDef="attempted">
-            <th mat-header-cell *matHeaderCellDef>Attempted</th>
+            <th mat-header-cell *matHeaderCellDef>Test Status</th>
             <td mat-cell *matCellDef="let row">
-              <p *ngIf="row.attempted">Yes</p>
-              <p *ngIf="!row.attempted">No</p>
+              <p *ngIf="row.attempted" style="color: green;">Attempted</p>
+              <p *ngIf="!row.attempted" style="color: blue;">Not Attempted</p>
             </td>
           </ng-container>
 
@@ -49,21 +49,25 @@
               <span
                 *ngIf="row.attempted"
                 class="action-btn"
-                matTooltip="View Result"
+                style="display: flex; align-items: center;"
                 (click)="viewResult(row)"
-                ><mat-icon>assignment</mat-icon></span
+                ><mat-icon>assignment</mat-icon>&nbsp;&nbsp;View Result</span
               >
               <span
                 *ngIf="!row.attempted"
                 class="action-btn"
-                matTooltip="Take Test"
+                style="display: flex; align-items: center;"
                 (click)="startTest(row)"
-                ><mat-icon>play_circle_filled</mat-icon></span
+                ><mat-icon>play_circle_filled</mat-icon>&nbsp;&nbsp;Take Test</span
               >
             </td>
           </ng-container>
+          <ng-container matColumnDef="marksObtained">
+            <th mat-header-cell *matHeaderCellDef>Marks Obtained</th>
+            <td mat-cell *matCellDef="let row">{{ row.attempted ? row.marksReceived : '-' }}</td>
+          </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
       </div>

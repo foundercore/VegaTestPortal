@@ -98,7 +98,7 @@ export class TestPendingVerificationComponent implements OnInit, AfterViewInit {
   startTest(element) {
 
 
-    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.instructions);
+    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.instructions, this.buttontext);
 
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
       width: "600px",

@@ -52,3 +52,7 @@ table {
   display: flex;
   justify-content: flex-start;
 }
+th{
+  font-weight: 900;
+  font-size: 13px;
+}
