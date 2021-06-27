@@ -13,6 +13,7 @@ import { AppState } from 'src/app/state_management/_states/auth.state';
  import { SearchQuestionPaperVM } from '../../assignments/models/searchQuestionPaperVM';
  import { TestLiveComponent } from '../../assignments/popups/test-live/test-live.component';
 import { TestConfigService } from '../../assignments/services/test-config-service';
+import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
 
 @Component({
   selector: 'app-test-pending-verification',
@@ -26,7 +27,6 @@ export class TestPendingVerificationComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   totalNumberOfRecords = 0;
 
@@ -57,7 +57,9 @@ export class TestPendingVerificationComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog,
     public toastrService: ToastrService,
     private router: Router,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    public authorizationService: AuthorizationService
+
   ) {
 
   }
@@ -85,7 +87,7 @@ export class TestPendingVerificationComponent implements OnInit, AfterViewInit {
       this.isLoadingResults = false;
       this.isRateLimitReached = false;
       this.dataSource.data = resp;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     },error => {
       this.isLoadingResults = false;
       this.isRateLimitReached = true;
@@ -94,13 +96,9 @@ export class TestPendingVerificationComponent implements OnInit, AfterViewInit {
 
 
   startTest(element) {
-    if (this.userType === 'ROLE_USER_ADMIN') {
-      this.buttontext = 'Preview Test';
-    } else {
-      this.buttontext = 'Start Test';
-    }
 
-    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.instructions, this.buttontext, 'Cancel');
+
+    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.instructions, this.buttontext);
 
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
       width: "600px",
@@ -116,7 +114,7 @@ export class TestPendingVerificationComponent implements OnInit, AfterViewInit {
             height: 'auto',
             hasBackdrop: false,
             backdropClass: 'dialog-backdrop',
-            data: { testData: element, userType: this.userType },
+            data: { testData: element, testType: 'preview' },
           });
           dialogRef.afterClosed().subscribe((result) => {
             this.getAllPendingTest();
@@ -125,11 +123,9 @@ export class TestPendingVerificationComponent implements OnInit, AfterViewInit {
     });
   }
 
-  applyFilter() {
-    this.searchQuestionPaperModel.nameRegexPattern = this.searchText
-      .trim()
-      .toLowerCase();
-    this.getAllPendingTest();
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
 }

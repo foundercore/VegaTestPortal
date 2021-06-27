@@ -123,7 +123,8 @@ export class StudentDashboardComponent implements OnInit {
 
     const dialogData = new CustomDialogConfirmationModel(
       'Please read the instructions carefully before starting the test',
-      element.testName, this.buttontext, 'Cancel'
+      element.testName,
+      this.buttontext
     );
 
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
@@ -135,7 +136,7 @@ export class StudentDashboardComponent implements OnInit {
       if (dialogResult) {
         if (element.passcode !== null && String(element.passcode).length > 1)
           this.verifyPasscode(element);
-        else this.openTestPopup(element);
+        else this.openTestPopup(element,'live');
       }
     });
   }
@@ -149,7 +150,7 @@ export class StudentDashboardComponent implements OnInit {
     }
   }
 
-  openTestPopup(element) {
+  openTestPopup(element,testType) {
     const dialogRef = this.dialog.open(TestLiveComponent, {
       maxWidth: '1700px',
       width: '100%',
@@ -157,7 +158,7 @@ export class StudentDashboardComponent implements OnInit {
       height: 'auto',
       hasBackdrop: false,
       backdropClass: 'dialog-backdrop',
-      data: { testData: element, userType: this.userType },
+      data: { testData: element, testType: testType },
     });
     dialogRef.afterClosed().subscribe((result) => {
       this.getMyAssignments();
@@ -180,7 +181,7 @@ export class StudentDashboardComponent implements OnInit {
         showCancelButton: true,
       }).then((result) => {
         if (result.value && result.value == element.passcode) {
-          this.openTestPopup(element);
+          this.openTestPopup(element,'live');
           this.toastrService.success('Passcode Verified successfully');
         } else if (result.value && result.value != element.passcode)
           this.toastrService.error('Invalid Passcode');

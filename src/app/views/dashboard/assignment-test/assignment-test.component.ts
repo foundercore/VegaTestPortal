@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -32,7 +33,6 @@ export class AssignmentTestComponent implements OnInit {
   currentSectionSubmittedData: any;
   studentName: string = '';
   userType: string = '';
-  buttontext: string = '';
   createdId: string = '';
 
   public pageOptions = PAGE_OPTIONS;
@@ -41,7 +41,10 @@ export class AssignmentTestComponent implements OnInit {
 
   dataSource = new MatTableDataSource<any>();
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  isLoadingResults = false;
+  isRateLimitReached = false;
+
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     public translate: TranslateService,
@@ -67,8 +70,13 @@ export class AssignmentTestComponent implements OnInit {
     this.testAssignmentService.getMyAssignment().subscribe((resp) => {
       this.resultData = resp;
       console.log('this.resultData==', this.resultData);
-      this.dataSource = new MatTableDataSource<any>(this.resultData);
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.data = resp;
+      this.dataSource.sort = this.sort;
+      this.isLoadingResults = false;
+      this.isRateLimitReached = false;
+    }, (error) => {
+      this.isLoadingResults = false;
+      this.isRateLimitReached = true;
     });
   }
 
@@ -79,26 +87,20 @@ export class AssignmentTestComponent implements OnInit {
   }
 
   startTest(element) {
-    if (this.userType === 'ROLE_USER_ADMIN') {
-      this.buttontext = 'Preview Test';
-    } else {
-      console.log(element)
+
       let timeNow = new Date()
       let testValidFrom = new Date(element.validFrom)
       let testvalidTo = new Date(element.validTo)
       if (timeNow < testValidFrom) {
         this.toastrService.error('Test is yet to start')
-        return
+        return;
       }
       if (timeNow > testvalidTo) {
         this.toastrService.error('Test has ended already')
-        return
+        return;
       }
-      this.buttontext = 'Start Test';
-    }
 
-    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.testName, this.buttontext, 'Cancel');
-
+    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.testName, "Start Test");
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
       width: "600px",
       data: dialogData
@@ -107,7 +109,7 @@ export class AssignmentTestComponent implements OnInit {
     dialogRef.afterClosed().subscribe(dialogResult => {
       if(dialogResult){
         if (element.passcode !== null) this.verifyPasscode(element);
-        else this.openTestPopup(element);
+        else this.openTestPopup(element,'live');
       }
     });
   }
@@ -115,13 +117,10 @@ export class AssignmentTestComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
-  openTestPopup(element) {
+
+  openTestPopup(element,testType) {
     const dialogRef = this.dialog.open(TestLiveComponent, {
       maxWidth: '1700px',
       width: '100%',
@@ -129,7 +128,7 @@ export class AssignmentTestComponent implements OnInit {
       height: 'auto',
       hasBackdrop: false,
       backdropClass: 'dialog-backdrop',
-      data: { testData: element, userType: this.userType },
+      data: { testData: element, testType: testType },
     });
     dialogRef.afterClosed().subscribe((result) => {
       this.getMyAssignments();
@@ -151,7 +150,7 @@ export class AssignmentTestComponent implements OnInit {
         showCancelButton: true,
       }).then((result) => {
         if (result.value && result.value == element.passcode) {
-          this.openTestPopup(element);
+          this.openTestPopup(element,'live');
           this.toastrService.success('Passcode Verified successfully');
         } else this.toastrService.error('Invalid Passcode');
       });

@@ -277,12 +277,10 @@
               <div [innerHtml]="transform(answer.answerText)"></div>
             </div>
         </div>
-
+        <mat-divider></mat-divider>
         <div style="margin: 20px 30px;">
           <div style="margin-bottom: 10px;">Explanation</div>
-          <mat-form-field appearance="fill" style="width: 100%;" >
-            <textarea matInput disabled>Explanation</textarea>
-          </mat-form-field>
+            <div [innerHtml]="transform(answer.explanation)" disabled>Explanation</div>
         </div>
       </div>
 
