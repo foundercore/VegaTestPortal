@@ -350,7 +350,7 @@ export class UpdateTestContentComponent implements OnInit {
     });
   }
 
- 
+
   getQuestionPaperbyId() {
     if (this.route.snapshot.paramMap.get('id') != null) {
       this.testConfigService

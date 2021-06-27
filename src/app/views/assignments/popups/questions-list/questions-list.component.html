@@ -88,7 +88,7 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              
+
               <div class="w-25-field">
                 <mat-form-field appearance="outline" class="form-field-padding">
                   <mat-label>File Name</mat-label>
@@ -132,6 +132,12 @@
 
       <div class="question-list-grid shadow__box">
         <div class="example-table-container">
+
+          <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached" >
+            <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+            <div class="example-rate-limit-reached" *ngIf="isRateLimitReached"> Something is wrong with server. </div>
+          </div>
+
           <table
             mat-table
             [dataSource]="dataSource"

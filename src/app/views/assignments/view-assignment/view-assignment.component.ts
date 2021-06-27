@@ -70,13 +70,13 @@ export class ViewAssignmentComponent implements OnInit {
   }
 
   refreshAssignmentList(){
+    this.isLoading = true;
     this.testAssignmentService.getAssignmentListByTestId(this.testId).subscribe(
       (data) => {
-        this.isLoading = false;
         this.dataSource = new MatTableDataSource<any>(data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-
+        this.isLoading = false;
       },
       (err) => {
         this.isLoading = false;
