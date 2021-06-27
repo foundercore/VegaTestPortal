@@ -7,16 +7,18 @@
   </div>
   <div class="card-body">
     <form [formGroup]="testForm" autocomplete="off">
-      <label for="name" class="label">Test Name</label>
+      <div class="contentBody">
       <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Name</mat-label>
         <input matInput placeholder="Test Name" formControlName="testName" />
         <mat-error *ngIf="hasError('testName', 'required')"
           >Test Name is required</mat-error
         >
       </mat-form-field>
 
-      <label for="name" class="label">Duration (Mins)</label>
       <mat-form-field appearance="outline" style="width: 100%">
+        
+        <mat-label>Duration (Mins)</mat-label>
         <input
           type="number"
           matInput
@@ -27,6 +29,9 @@
           >Duration is required</mat-error
         >
       </mat-form-field>
+      
+      <mat-checkbox formControlName="calculatorRequired" style="padding-bottom: 15px;"> Calculator Required?  </mat-checkbox>
+
 
       <!-- <label for="name" class="label">Total Marks</label>
       <mat-form-field appearance="outline" style="width: 100%">
@@ -84,6 +89,7 @@
       <mat-error *ngIf="hasError('instructions', 'required')"
         >Instruction is required</mat-error
       >
+      </div>
       <!-- <mat-form-field appearance="outline" style="width: 100%">
           <input
             type="text"
