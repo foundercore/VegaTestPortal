@@ -1,9 +1,9 @@
 <div class="card border-0">
   <div class="card-header d-flex bg-transparent p-0 border-0">
-    <div class="row w-100 mx-0 align-items-center justify-content-space-between" style="background: #2596be; padding: 0.77rem;">
+    <div class="row w-100 mx-0 align-items-center justify-content-space-between" style="background: #2596be; padding: 1rem;">
       <div class="col-md-6 left__col p-0 d-flex align-items-center">
         <h4 class="ml-5" style="width: 100%;text-align: center; font-weight: 700; color: white;">
-          {{ testdata?.name }}
+          {{ testData?.name }}
         </h4>
       </div>
       <div class="col-md-6 right__col d-flex justify-content-end">
@@ -19,12 +19,10 @@
         <div class="d-flex ">
           <div class="student__box d-flex align-items-center">
           </div>
-          <div class="time d-flex align-items-center" style="display: flex; justify-content: center;">
-            <h4 class="mb-0 ml-5">
+            <h4 class="mb-0 ml-5" style="color: white;font-weight: 600;">
               <!-- <countdown [config]="{ leftTime: timeSeconds }"></countdown> -->
               {{ CountDownTimerValue }}
             </h4>
-          </div>
         </div>
         <!-- <div class="student__box d-flex align-items-center">
           <h5>{{ studentName }}</h5>

@@ -261,3 +261,8 @@ ul > li {
   padding-right: 0;
   position: relative;
 }
+
+.btn {
+  color: white;
+  font-weight: 600;
+}
