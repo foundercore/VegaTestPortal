@@ -79,7 +79,7 @@
                 <div *ngIf="question?.name">
                  
                   <div class="row">
-                    <div class="col col-xs-6 " style=" border-right: 4px solid #333;" *ngIf="question?.passageContent != ''">
+                    <div class="col col-xs-6 " style=" border-right: 4px solid #333;" *ngIf=" question?.passageContent && question?.passageContent != ''">
                       <p [innerHTML]="question?.passageContent"> </p>
                     </div>
                     <div class="col col-xs-6">
