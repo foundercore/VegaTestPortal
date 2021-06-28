@@ -1,13 +1,17 @@
 import { Action } from '@ngrx/store';
 
 
+
+
 export enum AuthActionTypes {
   LOGIN = '[Auth] Login',
   LOGIN_SUCCESS = '[Auth] Login Success',
   LOGIN_FAILURE = '[Auth] Login Failure',
   LOGOUT = '[Auth] Logout',
   CHANGE_AUTH_INFO = '[Auth] Change AUTH INFO',
-  RETRIVE_STATE = '[Auth] Retrive State'
+  RETRIVE_STATE = '[Auth] Retrive State',
+  UPDATE_TERM_CONDITION = '[Auth] Update Term Condition',
+  UpdateTermConditionState = "UpdateTermConditionState"
 }
 
 export class LogIn implements Action {
@@ -38,10 +42,16 @@ export class RetriveState implements Action {
   readonly type = AuthActionTypes.RETRIVE_STATE;
 }
 
+export class UpdateTermConditionState implements Action {
+  readonly type = AuthActionTypes.UPDATE_TERM_CONDITION;
+  constructor(public payload: any) {}
+}
+
 export type All =
   | LogIn
   | LogInSuccess
   | LogInFailure
   | LogOut
   | ChangeAuthInfo
-  | RetriveState ;
+  | RetriveState
+  | UpdateTermConditionState;
