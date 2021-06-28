@@ -128,8 +128,10 @@ ul > li {
 }
 
 .close__btn {
-  margin-top: -56px;
-  margin-right: -10px;
+  position: absolute;
+  left: 20px;
+  top: 52px;
+  color: white
 }
 
 @media (max-width: 991.99px) {
@@ -246,4 +248,21 @@ ul > li {
     border-radius: 10px;
     padding: 10px;
     margin: 10px 0px;
+}
+
+.mat-tab-label.mat-tab-label-active {
+  background: #2596be;
+  color: white;
+  border-radius: 5px;
+}
+.mat-dialog-container{
+  padding-top: 0;
+  padding-left: 0;
+  padding-right: 0;
+  position: relative;
+}
+
+.btn {
+  color: white;
+  font-weight: 600;
 }
