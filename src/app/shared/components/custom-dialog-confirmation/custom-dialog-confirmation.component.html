@@ -1,5 +1,6 @@
 <div class="swal2-icon swal2-warning swal2-icon-show" style="display: flex;">
-  <div class="swal2-icon-content">!</div>
+  <!-- <div class="swal2-icon-content">!</div> -->
+  <img src="assets/images/instructions.png" />
 </div>
 
 
@@ -8,14 +9,16 @@
 
 
 <div mat-dialog-content>
-  <div style="overflow: auto;max-height: 250px;margin-top:10px;border: 1px solid;
+  <div style="overflow: auto;max-height: 50vh;margin-top:10px;border: 1px solid;
   border-radius: 5px;
+  overflow-y: auto;
+  height: 50vh;
   padding: 5px;" [innerHTML]="message"></div>
 </div>
 
 
 
-<div class="swal2-actions">
+<div class="swal2-actions" >
   <button type="button" class="swal2-confirm swal2-styled swal2-default-outline"
   aria-label="" style="display: inline-block; background-color: rgb(39, 125, 161);" (click)="onConfirm()" >{{primarybtnText}}</button>
   <button type="button" class="swal2-cancel swal2-styled swal2-default-outline" aria-label=""

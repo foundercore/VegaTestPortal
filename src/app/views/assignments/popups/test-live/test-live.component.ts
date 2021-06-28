@@ -1,5 +1,5 @@
 import { E } from '@angular/cdk/keycodes';
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -23,6 +23,7 @@ import { ButtonStyleAttributesModel } from '../../models/buttonStyleAttributesMo
   selector: 'app-test-live',
   templateUrl: './test-live.component.html',
   styleUrls: ['./test-live.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class TestLiveComponent implements OnInit {
   @ViewChild('TabGroup', { static: false }) Tab_Group: MatTabGroup;

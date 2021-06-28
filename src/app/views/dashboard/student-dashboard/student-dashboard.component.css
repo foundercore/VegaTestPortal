@@ -54,5 +54,7 @@ table {
 }
 th{
   font-weight: 900;
-  font-size: 13px;
+  font-size: 15px;
+  color: black;
+  text-transform: uppercase;
 }
