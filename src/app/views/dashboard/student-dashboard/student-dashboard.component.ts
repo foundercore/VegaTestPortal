@@ -128,7 +128,8 @@ export class StudentDashboardComponent implements OnInit {
     );
 
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
-      width: '700px',
+      width: '80vw',
+      height: '80vh',
       data: dialogData,
     });
 
@@ -179,6 +180,8 @@ export class StudentDashboardComponent implements OnInit {
         input: 'text',
         confirmButtonText: 'Verify',
         showCancelButton: true,
+        confirmButtonColor: 'rgb(39, 125, 161)',
+        cancelButtonColor:'rgb(221, 51, 51)'
       }).then((result) => {
         if (result.value && result.value == element.passcode) {
           this.openTestPopup(element,'live');
