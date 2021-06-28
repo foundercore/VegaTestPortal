@@ -43,6 +43,7 @@ export class TestLiveComponent implements OnInit {
   optionsSelected = [];
   appState: any;
   userName: string = '';
+  isUserAdmin: boolean = false;
   submissionData: any;
   currentSectionSubmittedData: any;
   studentName: string = '';
@@ -75,6 +76,7 @@ export class TestLiveComponent implements OnInit {
     this.store.select('appState').subscribe((data) => {
       this.userName = data.user.userName;
       this.studentName = data.user.firstName + ' ' + data.user.lastName;
+      this.isUserAdmin = data.user.authorities.indexOf('ROLE_USER_ADMIN') >= 0;
      });
     if (
       this._data.testData.questionPaperId != null &&
@@ -148,7 +150,6 @@ export class TestLiveComponent implements OnInit {
   observableTimer() {
     const source = timer(1000, 1000);
     this.timerSource = source.subscribe((val) => {
-      
       this.timeElapsedInSecond++;
       var leftSecs = this.timeSeconds - val;
       if (leftSecs > 0) {
@@ -184,7 +185,7 @@ export class TestLiveComponent implements OnInit {
       ' current question => ',
       this.question
     );
-    await this.testConfigService
+    this.testConfigService
       .setQuestionAsMarkedForReview(
         quesForMarkedAsReview.assignmentId,
         quesForMarkedAsReview
@@ -202,14 +203,7 @@ export class TestLiveComponent implements OnInit {
   }
 
   isCurrentQuestionMarkedForReview() {
-    // console.log(
-    //   'buttonStyle array=>',
-    //   this.buttonStyle,
-    //   ' this.sectionsWithPapers=>',
-    //   this.sectionsWithPapers,
-    //   ' current Question=>',
-    //   this.question
-    // );
+    
     var marked = false;
     this.sectionsWithPapers.map((sec, i) => {
       if (sec.id.questionId === this.question.id.questionId) {
@@ -227,8 +221,8 @@ export class TestLiveComponent implements OnInit {
     this.isCurrentQuestionMarkedForReview();
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
     quesForMarkedAsReview.answerText = this.titaText;
-    quesForMarkedAsReview.markForReview =
-      this.isCurrentQuestionMarkedForReview();
+    quesForMarkedAsReview.markForReview = this.getSelectedOption() != null
+                                    || this.titaText != null ?  false : true;
     quesForMarkedAsReview.assignmentId = this.assignmentId;
     quesForMarkedAsReview.questionId = this.question.id.questionId;
     quesForMarkedAsReview.sectionId = this.question.sectionId;
@@ -250,17 +244,15 @@ export class TestLiveComponent implements OnInit {
             this.toastrService.success('Question saved successfully');
           }
           this.getUserSubmissionData();
-          if (moveToNext){
+          if (moveToNext) {
             this.goToNextQuestion();
           }
-          
+
         },
         (err) => {
-          if (
-            String(err.error.apierror.message).includes(
-              'already submitted by student'
-            )
-          ) {
+          if (String(err.error.apierror.message).includes(
+            'already submitted by student'
+          )) {
             Swal.fire({
               icon: 'error',
               title: 'Error while saving question !!!',
@@ -330,7 +322,7 @@ export class TestLiveComponent implements OnInit {
   }
 
   async getUserSubmissionData() {
-    await this.testConfigService
+    this.testConfigService
       .getSudentSubmissionState(this.assignmentId, this.userName)
       .subscribe(
         (res: any) => {
@@ -341,37 +333,19 @@ export class TestLiveComponent implements OnInit {
             ' current question=>',
             this.question
           );
-          // if(this.question.type == "TITA"){
-          //   this.Titatext = this.question.answer.answerText;
-          // }
-          // this.Titatext = this.question.answer.answerText;
           this.optionsSelected = [];
           this.setTITAQuestionFetchedAns(this.submissionData);
           this.setCurrentQuestionSelectedOption();
           this.setColoursForQuestionNavigationButtons();
-          // this.setColoursForQuestionNavigationButtons();
         },
         (error) => {
-          // this.toastrService.error(
-          //   error?.error?.message ? error?.error?.message : error?.message,
-          //   'Error while fetching user submitted data : '
-          // );
           console.error(
-            "Error in fetching user submitted data => Reasons can be: 1)This user doesn't has any submitted data 2). Internet connectivity issue"
+            'Error in fetching user submitted data => Reasons can be: 1)This user doesn\'t has any submitted data 2). Internet connectivity issue'
           );
           this.setColoursForQuestionNavigationButtons();
         }
       );
-    // this.testConfigService
-    //   .getSudentSubmissionState(
-    //     this._data.testData.questionPaperId,
-    //     this.userName
-    //   )
-    //   .subscribe(
-    //     (res) => this.submissionData = res,
-    //     (err) => console.log('Error while making the question for review', err)
-    //   );
-    //   console.log("this.submissionData==",this.submissionData);
+
   }
 
   async clearResponse() {
@@ -389,7 +363,7 @@ export class TestLiveComponent implements OnInit {
     questionForClearResponse.selectedOptions = (this.getSelectedOption() as any);
     questionForClearResponse.timeElapsedInSec = this.timeElapsedInSecond;
     console.log('questionForClearResponse object=>', questionForClearResponse);
-    await this.testConfigService
+    this.testConfigService
       .clearQuestionResponse(this.testId, questionForClearResponse)
       .subscribe(
         (res) => {
@@ -432,26 +406,10 @@ export class TestLiveComponent implements OnInit {
 
   setCurrentQuestionSelectedOption() {
     const fetchedSubmissionState = this.submissionData;
-    //console.log('Inside the setting current selected option function');
-    //console.log('we are in the section id =>', this.currentSectionId);
     fetchedSubmissionState?.sections.map((section) => {
-      //console.log('Section inside fetched state =>', section.sectionId);
-      //section match
       if (section.sectionId === this.currentSectionId) {
         section.answers.map((ans) => {
-          //console.log('answers in the section=>', ans);
-          //console.log('ans.questionId in the section=>', ans.questionId);
-          //console.log('current question=>', this.question?.id.questionId);
-          //current question match
           if (ans?.questionId === this.question?.id.questionId) {
-            // try {
-            //   if (ans?.options[0] !== null)
-            //     this.setOptionSelectedAfterFetchingData(Number(ans.options[0]));
-            //   else this.setOptionSelectedAfterFetchingData(0);
-            // } catch {
-            //   console.log('No option selected');
-            //   this.setOptionSelectedAfterFetchingData(0);
-            // }
             var selectedOptions = ans.selectedOptions;
             // console.log(
             //   'Fethched selectedOptions for the current question =>',
@@ -469,18 +427,12 @@ export class TestLiveComponent implements OnInit {
   }
 
   setOptionSelectedAfterFetchingData(selected) {
-    // console.log(
-    //   'Fethched selectedOptions for the current question passed to function =>',
-    //   selected
-    // );
+
     try {
       selected.map((optIndex) => {
         this.optionsSelected[Number(optIndex) - 1] = true;
       });
-      // console.log(
-      //   'After settingt the fetched selectedOptions , this.selectedOptions =>',
-      //   this.optionsSelected
-      // );
+
     } catch (exception) {
       console.log(
         'Error while setting the fetched selected options for current question =>',
@@ -566,9 +518,10 @@ export class TestLiveComponent implements OnInit {
   }
 
   //function called by question number buttons
-  getQuestion(ques: any, currentQuestionIndex: number) {
+  async getQuestion(ques: any, currentQuestionIndex: number) {
     // first save the response on previous question
-    this.saveAndNextAnswers(false);
+    await this.saveAndNextAnswers(false);
+    this.timeElapsedInSecond = 0;
     // move to the next question
     {
     this.questionNumber = currentQuestionIndex;

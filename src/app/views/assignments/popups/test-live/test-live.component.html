@@ -30,7 +30,7 @@
         </div> -->
       </div>
     </div>
-    <button class="btn close__btn" (click)="close()">
+    <button *ngIf='isUserAdmin' class="btn close__btn" (click)="close()">
       <span class="position-center">&times;</span>
     </button>
   </div>
@@ -79,7 +79,7 @@
                 <div *ngIf="question?.name">
                  
                   <div class="row">
-                    <div class="col col-xs-6 " style=" border-right: 4px solid #333;" *ngIf="question?.passageContent != ''">
+                    <div class="col col-xs-6 " style=" border-right: 4px solid #333;" *ngIf="question?.passageContent">
                       <p [innerHTML]="question?.passageContent"> </p>
                     </div>
                     <div class="col col-xs-6">
@@ -127,20 +127,7 @@
                         No question added !!!
                       </div>
                     </div>
-                    <!-- <mat-radio-group
-                  aria-label="Select an option"
-                  class="radio__button"
-                >
-                  <mat-radio-button
-                    value="{{ opt?.key }}"
-                    *ngFor="let opt of question?.options"
-                    [checked]="optionsSelected[opt?.key]"
-                    (change)="setOptionSelected(opt?.key)"
-                  >
-                    <span [innerHTML]="opt?.value"> </span>
-                  </mat-radio-button>
-                  <br />
-                </mat-radio-group> -->
+                   
                   </ng-scrollbar>
                 </div>
                 <!-- footer button box -->
@@ -177,21 +164,6 @@
                   </button>
                 </div>
 
-                <!-- admin disabled buttons -->
-                <!-- <div
-                class="btn__box d-flex justify-content-space-between pb-3 pt-3"
-                *ngIf="userType === 'ROLE_USER_ADMIN'"
-              >
-                <button class="btn-primary" mat-raised-button disabled>
-                  Mark For Review
-                </button>
-                <button class="btn-danger" mat-raised-button disabled>
-                  Clear Response
-                </button>
-                <button class="btn-primary" mat-raised-button disabled>
-                  Save And Next
-                </button>
-              </div> -->
               </div>
 
               <div class="col-lg-3 mh position-relative">
@@ -206,19 +178,7 @@
                     [disabled]="disabled"
                   >
                     <ul class="list-unstyled">
-                      <!-- <li *ngFor="let ques of sectionsWithPapers; let i=index">
-                                  <button class=""  mat-mini-fab (click)="getQuestion(ques)" [ngStyle]="{
-                                      background: getactiveRandomColorStatus(
-                                          ques?.iscolorActive
-                                      )
-                                    }">{{i + 1}}</button>
-
-                              </li> -->
-                      <!-- <span
-                        [innerHTML]="question?.name"
-                        style="padding-left: 5px"
-                        *ngIf="question?.name"
-                      ></span> -->
+                     
                       <div
                         class="testLive__NoQuestion1"
                         *ngIf="!question?.name"
@@ -230,14 +190,7 @@
                     </ul>
 
                     <div class="num__box">
-                      <!-- <button class="auto-btn" mat-raised-button *ngFor="let ques of sectionsWithPapers; let i=index"
-                              [ngStyle]="{
-                                  color : 'white',
-                                  background: getmarkedRandomColorStatus(
-                                      ques?.ismarked
-                                  )
-                                }"
-                              >{{i + 1}}</button> -->
+                     
                       <button
                         class="auto-btn"
                         mat-raised-button
@@ -248,18 +201,7 @@
                       >
                         {{ i + 1 }}
                       </button>
-                      <!-- <div
-                    class="text-center py-3"
-                    *ngIf="userType === 'ROLE_USER_ADMIN'"
-                  >
-                    <button
-                      class="btn-primary save__btn w-50 mx-auto"
-                      mat-raised-button
-                      disabled
-                    >
-                      Save And Exit
-                    </button>
-                  </div> -->
+                  
                     </div>
                   </ng-scrollbar>
                 </div>
