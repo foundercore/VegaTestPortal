@@ -88,28 +88,30 @@ export class AssignmentTestComponent implements OnInit {
 
   startTest(element) {
 
-      let timeNow = new Date()
-      let testValidFrom = new Date(element.validFrom)
-      let testvalidTo = new Date(element.validTo)
-      if (timeNow < testValidFrom) {
+    const timeNow = new Date().setHours(0, 0, 0, 0);
+    const testValidFrom = new Date(element.validFrom).setHours(0, 0, 0, 0);
+    const testvalidTo = new Date(element.validTo).setHours(0, 0, 0, 0);
+    if (timeNow < testValidFrom) {
         this.toastrService.error('Test is yet to start')
         return;
       }
-      if (timeNow > testvalidTo) {
+    if (timeNow > testvalidTo) {
         this.toastrService.error('Test has ended already')
         return;
       }
 
-    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.testName, "Start Test");
+    const dialogData = new CustomDialogConfirmationModel('Want to start test?', element.testName, 'Start Test');
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
-      width: "600px",
+      width: '600px',
       data: dialogData
     });
 
     dialogRef.afterClosed().subscribe(dialogResult => {
       if(dialogResult){
-        if (element.passcode !== null) this.verifyPasscode(element);
-        else this.openTestPopup(element,'live');
+        if (element.passcode !== null && String(element.passcode.trim()).length > 1) {
+          this.verifyPasscode(element);
+        }
+        else { this.openTestPopup(element,'live'); }
       }
     });
   }
