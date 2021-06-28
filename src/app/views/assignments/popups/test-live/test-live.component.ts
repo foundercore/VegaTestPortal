@@ -1,4 +1,4 @@
-import { E } from '@angular/cdk/keycodes';
+import { E, X } from '@angular/cdk/keycodes';
 import { Component, OnInit, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import {
   MatDialog,
@@ -76,7 +76,7 @@ export class TestLiveComponent implements OnInit {
     this.store.select('appState').subscribe((data) => {
       this.userName = data.user.userName;
       this.studentName = data.user.firstName + ' ' + data.user.lastName;
-      this.isUserAdmin = data.user.authorities.indexOf('ROLE_USER_ADMIN') >= 0;
+      this.isUserAdmin = data.user.authorities.some(x => x.authority == 'ROLE_USER_ADMIN');
      });
     if (
       this._data.testData.questionPaperId != null &&
@@ -203,7 +203,7 @@ export class TestLiveComponent implements OnInit {
   }
 
   isCurrentQuestionMarkedForReview() {
-    
+
     var marked = false;
     this.sectionsWithPapers.map((sec, i) => {
       if (sec.id.questionId === this.question.id.questionId) {
