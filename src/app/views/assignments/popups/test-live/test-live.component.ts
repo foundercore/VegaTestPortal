@@ -29,8 +29,8 @@ export class TestLiveComponent implements OnInit {
   @ViewChild('TabGroup', { static: false }) Tab_Group: MatTabGroup;
   timeSeconds: number = 0;
   timeElapsedInSecond: number = 0;
-  testid: string = '';
-  testdata: any;
+  testId: string = '';
+  testData: any;
 
   questionNumber: number = 0;
   buttonStyle: ButtonStyleAttributesModel[] = [];
@@ -56,7 +56,7 @@ export class TestLiveComponent implements OnInit {
   timerSource;
   shown: 'native' | 'hover' | 'always' = 'native';
   assignmentId: string = '';
-  Titatext: string = '';
+  titaText: string = '';
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<TestLiveComponent>,
@@ -80,9 +80,9 @@ export class TestLiveComponent implements OnInit {
       this._data.testData.questionPaperId != null &&
       this._data.testData.questionPaperId != undefined
     ) {
-      this.testid = this._data.testData.questionPaperId;
+      this.testId = this._data.testData.questionPaperId;
     } else {
-      this.testid = this._data.testData.testId;
+      this.testId = this._data.testData.testId;
       this.assignmentId = this._data.testData.assignmentId;
     }
     this.getQuestionPaperbyId();
@@ -92,31 +92,33 @@ export class TestLiveComponent implements OnInit {
   getQuestionPaperbyId() {
     //debugger;
     this.testConfigService
-      .getQuestionPaper(this.testid)
+      .getQuestionPaper(this.testId)
       .pipe(finalize(() => {}))
       .subscribe(
         (res: any) => {
-          this.testdata = res;
+          this.testData = res;
           this.timeSeconds = this.convertminutestoseconds(
-            this.testdata.totalDurationInMinutes
+            this.testData.totalDurationInMinutes
           );
 
-          if (this.testType === 'live') this.observableTimer();
-          else
+          if (this.testType === 'live') {
+            this.observableTimer();
+          } else {
             this.CountDownTimerValue = new Date(this.timeSeconds * 1000)
               .toISOString()
               .substr(11, 8);
+          }
 
           console.log(
             'this.testdata==',
-            this.testdata,
+            this.testData,
             ' this.testdata.timeSeconds=',
             this.timeSeconds
           );
           // this.testdata = this.randomizeQuestionsOfSections(this.testdata);
           console.log(
             'After shuffle this.testdata==',
-            this.testdata,
+            this.testData,
             ' this.testdata.timeSeconds=',
             this.timeSeconds
           );
@@ -146,29 +148,22 @@ export class TestLiveComponent implements OnInit {
   observableTimer() {
     const source = timer(1000, 1000);
     this.timerSource = source.subscribe((val) => {
-      //console.log(val, '-');
+      
       this.timeElapsedInSecond++;
       var leftSecs = this.timeSeconds - val;
-      if (leftSecs > 0)
+      if (leftSecs > 0) {
         this.CountDownTimerValue = new Date(leftSecs * 1000)
           .toISOString()
           .substr(11, 8);
+      }
       else if (leftSecs == 0) {
         this.timerSource.unsubscribe();
         Swal.fire({
           icon: 'success',
           title: 'Test Over!!',
-          confirmButtonText: 'Go to Dashboard',
+          confirmButtonText: 'Ok',
         }).finally(() => {
-          this.testConfigService.saveandExit(this.testid).subscribe(
-            (res: any) => {
-              this.toastrService.success('Test submitted successfully');
-              this.close();
-              this.router.navigate(['/home/tests/show-result/' + this.testid]);
-            },
-            (err) =>
-              console.log('Error while making the question for save', err)
-          );
+          this.submitAssessment();
         });
       }
     });
@@ -181,8 +176,8 @@ export class TestLiveComponent implements OnInit {
     quesForMarkedAsReview.assignmentId = this.assignmentId;
     quesForMarkedAsReview.questionId = this.question.id.questionId;
     quesForMarkedAsReview.sectionId = this.question.sectionId;
-    quesForMarkedAsReview.selectedOptions = <any>this.getSelectedOption();
-    quesForMarkedAsReview.timeElapsedInSec = this.timeSeconds;
+    quesForMarkedAsReview.selectedOptions = (this.getSelectedOption() as any);
+    quesForMarkedAsReview.timeElapsedInSec = this.timeElapsedInSecond;
     console.log(
       'questionMarkedForReview object=>',
       quesForMarkedAsReview,
@@ -200,20 +195,21 @@ export class TestLiveComponent implements OnInit {
             'Question is successfully marked for review'
           );
           this.getUserSubmissionData();
+          this.goToNextQuestion();
         },
         (err) => console.log('Error while making the question for review', err)
       );
   }
 
   isCurrentQuestionMarkedForReview() {
-    console.log(
-      'buttonStyle array=>',
-      this.buttonStyle,
-      ' this.sectionsWithPapers=>',
-      this.sectionsWithPapers,
-      ' current Question=>',
-      this.question
-    );
+    // console.log(
+    //   'buttonStyle array=>',
+    //   this.buttonStyle,
+    //   ' this.sectionsWithPapers=>',
+    //   this.sectionsWithPapers,
+    //   ' current Question=>',
+    //   this.question
+    // );
     var marked = false;
     this.sectionsWithPapers.map((sec, i) => {
       if (sec.id.questionId === this.question.id.questionId) {
@@ -226,26 +222,23 @@ export class TestLiveComponent implements OnInit {
     return marked;
   }
 
-  async SaveandNextAnswers() {
+  async saveAndNextAnswers(moveToNext = true) {
     console.log('this.question=>', this.question);
     this.isCurrentQuestionMarkedForReview();
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
-    quesForMarkedAsReview.answerText = this.Titatext;
+    quesForMarkedAsReview.answerText = this.titaText;
     quesForMarkedAsReview.markForReview =
       this.isCurrentQuestionMarkedForReview();
     quesForMarkedAsReview.assignmentId = this.assignmentId;
     quesForMarkedAsReview.questionId = this.question.id.questionId;
     quesForMarkedAsReview.sectionId = this.question.sectionId;
-    quesForMarkedAsReview.selectedOptions = <any>this.getSelectedOption();
+    quesForMarkedAsReview.selectedOptions = (this.getSelectedOption() as any);
     quesForMarkedAsReview.timeElapsedInSec = this.timeElapsedInSecond;
     console.log(
       'Save and next => questionSaveAndNext object=>',
       quesForMarkedAsReview
     );
-    // if (quesForMarkedAsReview.selectedOptions === null) {
-    //   this.goToNextQuestion();
-    //   return;
-    // }
+
     await this.testConfigService
       .saveandNextAnswers(
         quesForMarkedAsReview.assignmentId,
@@ -253,24 +246,30 @@ export class TestLiveComponent implements OnInit {
       )
       .subscribe(
         (res) => {
-          if (quesForMarkedAsReview.selectedOptions !== null)
+          if (quesForMarkedAsReview.selectedOptions !== null) {
             this.toastrService.success('Question saved successfully');
+          }
           this.getUserSubmissionData();
-          this.goToNextQuestion();
+          if (moveToNext){
+            this.goToNextQuestion();
+          }
+          
         },
         (err) => {
           if (
             String(err.error.apierror.message).includes(
               'already submitted by student'
             )
-          )
+          ) {
             Swal.fire({
               icon: 'error',
               title: 'Error while saving question !!!',
               text: 'This test is already submitted. You cant save the question after submitting test',
             });
-          else
+          }
+          else {
             this.toastrService.error('Error - ' + err.error.apierror.message);
+          }
           console.log('Error while making the question for save', err);
         }
       );
@@ -279,9 +278,9 @@ export class TestLiveComponent implements OnInit {
   getSelectedOption() {
     // console.log('optionsSelected=>', this.optionsSelected);
     // debugger;
-    var optionsSelectedArray = [];
-    for (var i = 0; i < this.optionsSelected.length; i++) {
-      if (this.optionsSelected[i]) optionsSelectedArray.push(String(i + 1));
+    const optionsSelectedArray = [];
+    for (let i = 0; i < this.optionsSelected.length; i++) {
+      if (this.optionsSelected[i]) { optionsSelectedArray.push(String(i + 1)); }
     }
     if (optionsSelectedArray.length > 0) {
       console.log(
@@ -299,6 +298,7 @@ export class TestLiveComponent implements OnInit {
 
   goToNextQuestion() {
     this.optionsSelected = [];
+    this.timeElapsedInSecond = 0;
     if (this.questionNumber < this.sectionsWithPapers.length - 1) {
       this.questionNumber = this.questionNumber + 1;
       this.question = this.sectionsWithPapers[this.questionNumber];
@@ -386,16 +386,17 @@ export class TestLiveComponent implements OnInit {
     questionForClearResponse.markForReview = false;
     questionForClearResponse.questionId = this.question.id.questionId;
     questionForClearResponse.sectionId = this.question.sectionId;
-    questionForClearResponse.selectedOptions = <any>this.getSelectedOption();
-    questionForClearResponse.timeElapsedInSec = this.timeSeconds;
+    questionForClearResponse.selectedOptions = (this.getSelectedOption() as any);
+    questionForClearResponse.timeElapsedInSec = this.timeElapsedInSecond;
     console.log('questionForClearResponse object=>', questionForClearResponse);
     await this.testConfigService
-      .clearQuestionResponse(this.testid, questionForClearResponse)
+      .clearQuestionResponse(this.testId, questionForClearResponse)
       .subscribe(
         (res) => {
           console.log('Responses cleared for this question', res);
-          this.toastrService.success('Response cleared successfully'),
-            this.getUserSubmissionData();
+          this.toastrService.success('Response cleared successfully');
+          this.timeElapsedInSecond = 0;
+          this.getUserSubmissionData();
           this.setColoursForQuestionNavigationButtons();
         },
         (err) => {
@@ -405,7 +406,7 @@ export class TestLiveComponent implements OnInit {
   }
 
   setTITAQuestionFetchedAns(submittedFetchedData) {
-    this.Titatext = '';
+    this.titaText = '';
     console.log(
       'setTITAInputTExt=>  sumitted data fecthed=>',
       submittedFetchedData,
@@ -419,13 +420,13 @@ export class TestLiveComponent implements OnInit {
         if (sec.sectionId === this.currentSectionId) {
           sec.answers.map((ans) => {
             if (ans.questionId === this.question.id.questionId) {
-              this.Titatext = ans.answerText;
+              this.titaText = ans.answerText;
             }
           });
         }
       });
     } else {
-      this.Titatext = '';
+      this.titaText = '';
     }
   }
 
@@ -514,8 +515,8 @@ export class TestLiveComponent implements OnInit {
   }
 
   GetQuestionPapers() {
-    if (this.testdata?.sections.length > 0) {
-      var sections = this.testdata?.sections;
+    if (this.testData?.sections.length > 0) {
+      var sections = this.testData?.sections;
       console.log('Current Sections => ', sections);
       if (sections != null) {
         sections.forEach((element) => {
@@ -566,6 +567,10 @@ export class TestLiveComponent implements OnInit {
 
   //function called by question number buttons
   getQuestion(ques: any, currentQuestionIndex: number) {
+    // first save the response on previous question
+    this.saveAndNextAnswers(false);
+    // move to the next question
+    {
     this.questionNumber = currentQuestionIndex;
     this.optionsSelected = [];
     // this.setCurrentQuestionNumberButtonColor(currentQuestionIndex);
@@ -583,8 +588,7 @@ export class TestLiveComponent implements OnInit {
 
     this.getUserSubmissionData();
     this.setColoursForQuestionNavigationButtons();
-
-    console.log('question =>', this.question);
+  }
   }
 
   selectSection1(id: string = '') {
@@ -959,7 +963,7 @@ export class TestLiveComponent implements OnInit {
   selectSection(event) {
     //debugger;
     this.questionNumber = 0;
-    var section = this.testdata?.sections.find(
+    var section = this.testData?.sections.find(
       (x) => x.name == event.tab.textLabel
     );
     console.log('Currect section object =>', section);
@@ -1020,21 +1024,32 @@ export class TestLiveComponent implements OnInit {
       confirmButtonText: 'Submit',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.testConfigService.saveandExit(this.assignmentId).subscribe(
-          (res: any) => {
-            this.close();
-            this.router
-              .navigate(['/home/assignment_report/' + this.assignmentId])
-              .then(() => console.log('Navigate to score card'))
-              .catch((err) =>
-                console.log('Error=> Navigate to score card=>', err)
-              );
-            this.toastrService.success('Test submitted successfully');
-          },
-          (err) => console.log('Error while making the question for save', err)
-        );
+       this.submitAssessment();
       }
     });
+  }
+
+  submitAssessment(){
+    this.testConfigService.saveandExit(this.assignmentId).subscribe(
+      (res: any) => {
+        this.close();
+        this.router
+          .navigate(['/home/assignment_report/' + this.assignmentId])
+          .then(() => console.log('Navigate to score card'))
+          .catch((err) =>
+            console.log('Error=> Navigate to score card=>', err)
+          );
+        this.toastrService.success('Test submitted successfully');
+      },
+      (err) => {
+        this.toastrService.error('Test submitted failed. Please try again.');
+        console.log('Error while making the question for save', err);
+        if(err.status === 400 &&
+          err.error.apierror.message === 'Student submission details not found.'){
+          this.toastrService.error('No response submitted by you.');
+        }
+      }
+    );
   }
 
   convertminutestoseconds(value) {

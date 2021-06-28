@@ -12,15 +12,9 @@ import {
 } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { id } from '@swimlane/ngx-charts';
 import { ToastrService } from 'ngx-toastr';
-import { finalize, max } from 'rxjs/operators';
 import { AppState } from 'src/app/state_management/_states/auth.state';
-import Swal from 'sweetalert2';
-import { QuestionMarkedForReviewModel } from '../../models/questionMarkedForReview';
 import { TestConfigService } from '../../services/test-config-service';
-import { CalculatorComponent } from '../calculator/calculator.component';
-import { TestLiveComponent } from '../test-live/test-live.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 // import { SearchQuestionPaperVM } from '../../models/searchQuestionPaperVM';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
@@ -44,8 +38,8 @@ export class EditTestComponent implements OnInit {
   descriptionEditorconfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
-    minHeight: '5rem',
-    maxHeight: '5rem',
+    minHeight: '10rem',
+    maxHeight: '20rem',
     placeholder: 'Enter Instruction here...',
     translate: 'no',
     sanitize: false,
@@ -81,7 +75,7 @@ export class EditTestComponent implements OnInit {
     private toastrService: ToastrService,
     private store: Store<AppState>,
     private router: Router
-  ) {}
+  ) { }
 
   hasError = (controlName: string, errorName: string) => {
     return this.testForm.controls[controlName].hasError(errorName);
@@ -101,6 +95,7 @@ export class EditTestComponent implements OnInit {
       ),
       totalMarks: new FormControl(this.editTest_data.questionPaper.totalMarks, []),
       tags: new FormControl(this.editTest_data.questionPaper.tags, []),
+      calculatorRequired: new FormControl(this.editTest_data.questionPaper.calculatorRequired, []),
       instructions: new FormControl(
         this.editTest_data.questionPaper.instructions
       ),
@@ -212,6 +207,7 @@ export class EditTestComponent implements OnInit {
     model.instructions = this.testForm.value.instructions;
     model.totalDurationInMinutes = this.testForm.value.duration;
     model.tags = this.tags;
+    model.calculatorRequired = this.testForm.value.calculatorRequired;
     // TODO - make it summation of all the positive marks of teh section questions
     model.totalMarks = 5;
     this.testConfigService

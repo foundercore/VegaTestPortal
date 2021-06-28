@@ -11,7 +11,8 @@
           class="auto-btn p-0 m-1"
           style="height: fit-content"
           mat-raised-button
-          (click)="calculate()"
+          (click)="calculate()" 
+          *ngIf="testData?.calculatorRequired"
         >
           <mat-icon>calculate</mat-icon>
         </button>
@@ -56,8 +57,8 @@
       #TabGroup
     >
       <!-- one -->
-      <div *ngIf="testdata?.sections">
-        <span *ngFor="let section of testdata?.sections" class="section_tab">
+      <div *ngIf="testData?.sections">
+        <span *ngFor="let section of testData?.sections" class="section_tab">
           <mat-tab label="{{ section?.name }}">
             <div class="row mx-0 scroll__box">
               <div class="col-lg-9 position-relative">
@@ -78,30 +79,20 @@
                 <strong>Question : {{questionNumber + 1}}</strong> 
               </p>
                 <div *ngIf="question?.name">
-                      <p
-                        class="lead"
-                        [innerHTML]="question?.passageContent">
-                      </p>
-
-                      <p
-                        class="lead"
-                        [innerHTML]="question?.name"
-                      ></p>
-
+                 
+                  <div class="row">
+                    <div class="col col-xs-6 " style=" border-right: 4px solid #333;" *ngIf="question?.passageContent != ''">
+                      <p [innerHTML]="question?.passageContent"> </p>
+                    </div>
+                    <div class="col col-xs-6">
+                      <p [innerHTML]="question?.name"></p>
                         <mat-form-field appearance="outline" *ngIf="question.type == 'TITA'" style="width: 100%;">
                           <mat-label>Answer here...</mat-label>
-                          <input matInput placeholder="Answer here..." [(ngModel)]="Titatext">
+                          <input matInput placeholder="Answer here..." [(ngModel)]="titaText">
                         </mat-form-field>
-                      <!-- <p class="lead" style="font-weight: 500">
-                        {{ question?.name }}
-                      </p> -->
 
-                      <!-- <p [innerHTML]="question?.explanation"></p>
-                      <p [innerHTML]="question?.description"></p> -->
                       <ul>
                         <li *ngFor="let opt of question?.options">
-                          <!-- value="{{ opt?.key }}" -->
-                          <!-- [checked]="optionsSelected[opt?.key]" -->
                           <div class="row">
                             <mat-checkbox
                               [checked]="optionsSelected[opt?.key - 1]"
@@ -119,6 +110,9 @@
                           </div>
                         </li>
                       </ul>
+                    </div>
+                  </div>
+                      
 
                       <div  *ngIf="this.testType == 'preview'">
                       Correct Option:
@@ -179,7 +173,7 @@
                   <button
                     class="btn btn-secondary"
                     mat-raised-button
-                    (click)="SaveandNextAnswers()"
+                    (click)="saveAndNextAnswers()"
                   >
                     Save And Next
                   </button>
@@ -321,7 +315,7 @@
         </span>
       </div>
     </mat-tab-group>
-    <div class="testLive__NoSections" *ngIf="testdata?.sections === null">
+    <div class="testLive__NoSections" *ngIf="testData?.sections === null">
       No Sections added !!!
     </div>
   </div>

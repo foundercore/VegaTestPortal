@@ -27,4 +27,5 @@ export class EditTestMetaData {
   totalDurationInMinutes = 0;
   totalMarks = 0;
   type: string;
+  calculatorRequired: boolean;
 }
