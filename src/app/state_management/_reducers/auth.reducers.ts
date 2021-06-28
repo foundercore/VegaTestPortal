@@ -25,6 +25,13 @@ export function ChangeAuthInfoState(user: any,password: string){
   return  new UserModel(user, btoa(user.email+':'+ password),user.authorities);
 }
 
+export function UpdateTermConditionState(user: any,acceptedTermsOn: string){
+    let updateUser = {...user};
+    updateUser.acceptedTermsOn = acceptedTermsOn;
+    updateUser.acceptedTerms = true;
+    return updateUser;
+}
+
 export function retriceState(state){
   if(sessionStorage.getItem('state')){
     var oldState = JSON.parse(sessionStorage.getItem('state'))
@@ -65,6 +72,12 @@ export function AppReducer(state = initialState, action: All): State  {
     }
     case AuthActionTypes.RETRIVE_STATE: {
       return retriceState(state);
+    }
+    case AuthActionTypes.UPDATE_TERM_CONDITION: {
+      return {
+        ...state,
+        user: UpdateTermConditionState(state.user,action.payload.acceptedTermsOn),
+      };
     }
     case AuthActionTypes.LOGOUT: {
       return {

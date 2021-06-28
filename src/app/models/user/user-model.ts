@@ -18,6 +18,8 @@ export interface IUserModel {
   phone?: number;
   batch?: number;
   authInfo?:string;
+  acceptedTerms?:boolean;
+  acceptedTermsOn?:Date;
 }
 
 export class UserModel implements IUserModel {
@@ -38,6 +40,9 @@ export class UserModel implements IUserModel {
   lastUpdatedOn?: Date | undefined;
   lastUpdatedBy?: string | undefined;
   authInfo: string;
+  acceptedTerms?:boolean;
+  acceptedTermsOn?:Date;
+
 
   constructor(userObj: any, authInfo: string,authorities: string[]) {
     this.address = userObj?.address;
@@ -56,7 +61,10 @@ export class UserModel implements IUserModel {
     this.credentialsNonExpired = userObj?.credentialsNonExpired;
     this.lastUpdatedOn = userObj?.lastUpdatedOn;
     this.lastUpdatedBy = userObj?.lastUpdatedBy;
+    this.acceptedTerms = userObj?.acceptedTerms;
+    this.acceptedTermsOn = userObj?.acceptedTermsOn;
     this.authInfo = authInfo;
+
   }
 
 
@@ -71,10 +79,12 @@ export interface IUserCommonModel {
   firstName?: string;
   gender?: string;
   lastName?: string;
-  roles: string[];
+  roles?: string[];
   state?: string;
   userName?: string;
   email?: string;
+  acceptedTerms?: boolean,
+  acceptedTermsOn?: any
 }
 
 export interface IUserCreateRequestModel extends IUserCommonModel {
@@ -86,8 +96,10 @@ export interface IUserResponseModel extends IUserCommonModel{
   lastUpdatedBy: Date;
   lastUpdatedOn: Date;
   userName: string;
+  acceptedTerms: boolean,
+  acceptedTermsOn: any
 }
 
 export interface IUserUpdateRequestModel extends IUserCommonModel{
-  enabled: boolean;
+  enabled?: boolean;
 }
