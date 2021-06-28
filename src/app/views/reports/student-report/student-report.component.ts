@@ -100,7 +100,7 @@ export class StudentReportComponent implements OnInit {
               res.summary.difficulty[0].metric
             );
             this.isLoading = false;
-            this.metrics = res.summary.difficulty[0].metric;
+            this.metrics = res.summary.metric;
             this.showFilteredData(this.currentSelection);
           },
           (err) => {

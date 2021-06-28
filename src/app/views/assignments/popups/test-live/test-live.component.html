@@ -11,7 +11,7 @@
           class="auto-btn p-0 m-1"
           style="height: fit-content"
           mat-raised-button
-          (click)="calculate()" 
+          (click)="calculate()"
           *ngIf="testData?.calculatorRequired"
         >
           <mat-icon>calculate</mat-icon>
@@ -74,10 +74,10 @@
                   [innerHTML]="currentQuestionIndex + 1 + question?.name"
                 ></h3> -->
               <p style="font-size: 24px;">
-                <strong>Question : {{questionNumber + 1}}</strong> 
+                <strong>Question : {{questionNumber + 1}}</strong>
               </p>
                 <div *ngIf="question?.name">
-                 
+
                   <div class="row">
                     <div class="col col-xs-6 " style=" border-right: 4px solid #333;" *ngIf="question?.passageContent">
                       <p [innerHTML]="question?.passageContent"> </p>
@@ -110,7 +110,7 @@
                       </ul>
                     </div>
                   </div>
-                      
+
 
                       <div  *ngIf="this.testType == 'preview'">
                       Correct Option:
@@ -127,7 +127,7 @@
                         No question added !!!
                       </div>
                     </div>
-                   
+
                   </ng-scrollbar>
                 </div>
                 <!-- footer button box -->
@@ -143,13 +143,13 @@
                 >
                   <button
                     class="btn btn-secondary"
-                    mat-raised-button
+                    mat-raised-button style="background-color:orange"
                     (click)="setQuestionAsMarkerdForReview()"
                   >
                     Mark For Review
                   </button>
                   <button
-                    class="btn btn-secondary"
+                    class="btn btn-secondary" style="background-color:#ff3547"
                     mat-raised-button
                     (click)="clearResponse()"
                   >
@@ -178,7 +178,7 @@
                     [disabled]="disabled"
                   >
                     <ul class="list-unstyled">
-                     
+
                       <div
                         class="testLive__NoQuestion1"
                         *ngIf="!question?.name"
@@ -190,23 +190,23 @@
                     </ul>
 
                     <div class="num__box">
-                     
+
                       <button
                         class="auto-btn"
                         mat-raised-button
                         *ngFor="let ques of sectionsWithPapers; let i = index"
                         (click)="getQuestion(ques, i)"
                         [ngStyle]="buttonStyle[i]"
-                        style="min-width: 50px"
+                        style="min-width: 50px;color: white;font-weight: bold;"
                       >
                         {{ i + 1 }}
                       </button>
-                  
+
                     </div>
                   </ng-scrollbar>
                 </div>
                 <ul class="border index__box list-unstyled mb-2 px-2" style="border-width: 3px !important; text-align: center;">
-                  <li class="p-b2 text-center lead" style="font-weight: 700; font-size: 20;">Legends</li>
+                  <li class="p-b2 text-center lead" style="font-weight: 700; font-size: 20;">Legend</li>
                   <li class="btn btn-primary d-inline-block border-0">
                     Current Question
                   </li>
@@ -242,7 +242,7 @@
                   <!-- <div class="text-center save__btn- pt-1"> -->
                   <button
                     class="btn-primary save__btn w-100 mx-auto bg-danger"
-                    style="color: white;"
+                    style="color: white;font-size:17px;font-weight:bold"
                     mat-raised-button
                     (click)="SaveandExit()"
                   >

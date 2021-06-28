@@ -61,7 +61,7 @@ export class StudentDashboardComponent implements OnInit {
 
   public pageOptions = PAGE_OPTIONS;
 
-  displayedColumns: string[] = ['testName', 'attempted', 'actions', 'marksObtained'];
+  displayedColumns: string[] = ['testName', 'attempted', 'marksObtained','actions'];
 
   dataSource = new MatTableDataSource<any>();
 
@@ -124,7 +124,8 @@ export class StudentDashboardComponent implements OnInit {
     const dialogData = new CustomDialogConfirmationModel(
       'Please read the instructions carefully before starting the test',
       element.testName,
-      this.buttontext
+      this.buttontext,
+      'Not Now'
     );
 
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {

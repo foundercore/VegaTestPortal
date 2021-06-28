@@ -1,37 +1,42 @@
 <div class="parentContainer">
    <div class="loginContainer">
       <div class="box">
-         <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
-         <div class="title">{{pageTitle}}</div>
-         <mat-form-field appearance="fill"  class="full-width">
-            <mat-label>Username</mat-label>
-            <input matInput
-               placeholder="{{userNamePlaceHolder}}"
-               name="username"
-               ngModel
-               required/>
-         </mat-form-field>
-         <mat-form-field appearance="fill"  class="full-width">
-            <mat-label>Password</mat-label>
-            <input matInput
-               placeholder="Password"
-               name="password"
-               ngModel
-               [type]="maskPassword ? 'password' : 'text'" required/>
-            <mat-icon matSuffix (click)="maskPassword = !maskPassword">
-               {{maskPassword ? 'visibility_off' : 'visibility'}}
-            </mat-icon>
-         </mat-form-field>
-         <div class="iconButton loginButton">
-            <button mat-raised-button
-               color="primary"
-               [disabled]="!loginForm.form.valid"
-               type="submit">
-            <i class="loginIcon material-icons mdc-button__icon" aria-hidden="true">login</i>
-            <span>Login</span>
-            </button>
-         </div>
-         </form>
+        <img style="height: 90px" src="../../../../assets/images/app-logo.jpg" />
+        <!-- <div class="login-logo-title"> </div> -->
+        <div class="login-body">
+          <form class="login-form" (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
+
+            <mat-form-field appearance="outline"  class="full-width">
+               <mat-label>Username</mat-label>
+               <input matInput
+                  placeholder="{{userNamePlaceHolder}}"
+                  name="username"
+                  ngModel
+                  required/>
+            </mat-form-field>
+            <mat-form-field appearance="outline"  class="full-width">
+               <mat-label>Password</mat-label>
+               <input matInput
+                  placeholder="Password"
+                  name="password"
+                  ngModel
+                  [type]="maskPassword ? 'password' : 'text'" required/>
+               <mat-icon matSuffix (click)="maskPassword = !maskPassword">
+                  {{maskPassword ? 'visibility_off' : 'visibility'}}
+               </mat-icon>
+            </mat-form-field>
+            <div class="iconButton loginButton">
+               <button mat-raised-button
+                  color="primary"
+                  [disabled]="!loginForm.form.valid"
+                  type="submit">
+               <i class="loginIcon material-icons mdc-button__icon" aria-hidden="true">login</i>
+               <span>Login</span>
+               </button>
+            </div>
+            </form>
+        </div>
+
          <!-- <mat-divider></mat-divider>
          <div class="iconButton loginMicrosoftButton">
             <button mat-raised-button
@@ -40,6 +45,10 @@
             <span>Create a new account</span> <i class="fa fa-check"></i>
             </button>
          </div> -->
+         <div style="font-size: 12px;    padding-top: 10px;
+         color: var(--bs-secondary);">
+              Powered By <strong>FounderCore</strong>
+         </div>
       </div>
    </div>
 </div>

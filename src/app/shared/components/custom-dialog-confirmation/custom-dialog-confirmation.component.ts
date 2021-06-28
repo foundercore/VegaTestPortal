@@ -13,6 +13,7 @@ export class CustomDialogConfirmationComponent implements OnInit {
   title: string;
   message: string;
   primarybtnText = "Preview Test";
+  secondarybtnText = "Close";
 
   constructor(
     public dialogRef: MatDialogRef<CustomDialogConfirmationComponent>,
@@ -22,6 +23,9 @@ export class CustomDialogConfirmationComponent implements OnInit {
      this.message = data.message;
      if(data.primarybtnText){
       this.primarybtnText = data.primarybtnText;
+     }
+     if(data.secondarybtnText){
+      this.secondarybtnText = data.secondarybtnText;
      }
   }
 
