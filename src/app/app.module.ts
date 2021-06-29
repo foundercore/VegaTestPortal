@@ -67,6 +67,7 @@ import { CustomDialogConfirmationComponent } from './shared/components/custom-di
 import { TestPendingVerificationComponent } from './views/dashboard/test-pending-verification/test-pending-verification.component';
 import { AssignmentTestComponent } from './views/dashboard/assignment-test/assignment-test.component';
 import { TermConditionPageComponent } from './views/dashboard/term-condition-page/term-condition-page.component';
+import { MinuteSecondsPipe } from './shared/pipe/MinuteSecondsPipe';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -112,7 +113,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     CustomDialogConfirmationComponent,
     TestPendingVerificationComponent,
     AssignmentTestComponent,
-    TermConditionPageComponent
+    TermConditionPageComponent,
+    MinuteSecondsPipe
   ],
 
   imports: [
