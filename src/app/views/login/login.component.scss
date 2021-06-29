@@ -108,6 +108,7 @@
 }
 .loginButton {
   margin: 5px;
+  color: white;
 }
 .loginButton button {
   width: 200px;
@@ -117,7 +118,7 @@
   font-weight: bold;
   text-align: center;
    cursor: pointer;
-  font-size: 18px;
+  font-size: 18px; 
 }
 
 .loginButton button:disabled,

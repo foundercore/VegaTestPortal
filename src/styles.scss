@@ -25,27 +25,14 @@ body {
   // overflow: hidden;
   font-family: 'Montserrat', sans-serif !important;
 }
-
-// body::-webkit-scrollbar {
-//   width: 1em;
-// }
-
-// body::-webkit-scrollbar-track {
-//   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-//   margin-top: 75px;
-//   margin-left: 210px;
-// }
-
-// body::-webkit-scrollbar-thumb {
-//   background-color: darkgrey;
-//   outline: 1px solid slategrey;
-// }
-
-
-// .iconButton *.icon {
-//   margin-right: 5px;
-// }
-
+/* Autofill color to be white */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active
+{
+ -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
 
 .text-right {
   text-align: right;
