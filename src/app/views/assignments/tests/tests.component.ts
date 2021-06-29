@@ -374,10 +374,12 @@ export class TestsComponent implements OnInit, AfterViewInit {
   }
 
   applyFilter(e: Event) {
-    this.searchQuestionPaperModel.nameRegexPattern = (e.target as HTMLInputElement)
+    // debugger;
+    let namePattern = (e.target as HTMLInputElement)
       .value
       .trim()
       .toLowerCase();
+    this.searchQuestionPaperModel.nameRegexPattern = namePattern.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
     this.GetAllquestionPapers();
   }
 
