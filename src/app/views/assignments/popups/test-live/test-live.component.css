@@ -127,7 +127,7 @@ ul > li {
   display: block !important;
 }
 
-.close__btn {
+.close_btn_test {
   position: absolute;
   left: 20px;
   top: 52px;

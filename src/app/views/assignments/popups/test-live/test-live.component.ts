@@ -416,7 +416,7 @@ export class TestLiveComponent implements OnInit {
 
   calculate() {
     const dialogRef = this.dialog.open(CalculatorComponent, {
-      maxWidth: '500px',
+      maxWidth: '450px',
       width: '100%',
       height: 'auto',
     });
@@ -678,7 +678,8 @@ export class TestLiveComponent implements OnInit {
       }
     }
   }
-  SaveandExit() {
+  async SaveandExit() {
+    await this.saveAndNextAnswers(false);
     Swal.fire({
       title: 'Are you sure?',
       text: 'want to submit test.',
