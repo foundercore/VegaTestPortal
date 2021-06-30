@@ -31,12 +31,12 @@
       overflow: auto;">
         <table mat-table [dataSource]="dataSource" class="example-table">
           <ng-container matColumnDef="testName">
-            <th mat-header-cell *matHeaderCellDef>TEST NAME</th>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>TEST NAME</th>
             <td mat-cell *matCellDef="let row">{{ row.testName }}</td>
           </ng-container>
 
           <ng-container matColumnDef="attempted">
-            <th mat-header-cell *matHeaderCellDef>Test Status</th>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>Test Status</th>
             <td mat-cell *matCellDef="let row">
               <span *ngIf="row.attempted" style="color: green;font-weight: bold;">Attempted</span>
               <span *ngIf="!row.attempted" style="color: #ffc107;font-weight: bold;">Not Attempted</span>
@@ -45,7 +45,7 @@
 
 
           <ng-container matColumnDef="marksObtained">
-            <th   mat-header-cell *matHeaderCellDef>Marks Obtained</th>
+            <th class="custom-mat-header-th"  mat-header-cell *matHeaderCellDef>Marks Obtained</th>
             <td  mat-cell *matCellDef="let row">
               <span *ngIf="row.attempted">
                 <span style="font-weight: 600; font-size: 16px;">{{ row.marksReceived }}</span>  out of  <span style="font-weight: 600;font-size: 16px;"> {{row.totalMarks}} </span>
@@ -58,7 +58,7 @@
 
            <!-- actions Column -->
            <ng-container matColumnDef="actions">
-            <th mat-header-cell   *matHeaderCellDef>Actions</th>
+            <th class="custom-mat-header-th" mat-header-cell   *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let row">
               <span
                 *ngIf="row.attempted"

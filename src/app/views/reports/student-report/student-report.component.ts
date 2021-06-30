@@ -19,8 +19,8 @@ import { StudentReportModel } from '../Models/studentReportModel';
 export class StudentReportComponent implements OnInit {
   filterList = [
     'Section Level',
-    'Topic Level',
-    'Difficulty Level',
+    // 'Topic Level',
+    // 'Difficulty Level',
     'Solution',
     'Ranking'
   ];
@@ -31,6 +31,11 @@ export class StudentReportComponent implements OnInit {
     'marksReceived'
   ];
 
+  solutionFilter = [
+    'Correct',
+    'Incorrect',
+    'Skipped'
+  ]
   displayedColumns: string[] = [
     'name',
     'questions',
@@ -55,6 +60,8 @@ export class StudentReportComponent implements OnInit {
 
   currentSelection = 'Section Level';
 
+  currentSolutionSelection = '';
+
   public pageOptions = PAGE_OPTIONS;
 
   isLoading: boolean = true;
@@ -75,8 +82,8 @@ export class StudentReportComponent implements OnInit {
 
   ngOnInit() {
     this.store.select('appState').subscribe((data) => {
-      this.userName = data.user.userName;
-      this.studentName = data.user.firstName + ' ' + data.user.lastName;
+      this.userName = data?.user?.userName;
+      this.studentName = data?.user?.firstName + ' ' + data?.user?.lastName;
       this.userType = data?.user?.authorities[0]?.authority;
       console.log('data', data);
     });
@@ -118,6 +125,14 @@ export class StudentReportComponent implements OnInit {
           this.rankingDetailsResult = resp;
       })
     })
+  }
+
+  changeSolutionFilter(filterMode?) {
+    if(this.currentSolutionSelection === filterMode){
+      this.currentSolutionSelection = '';
+    } else {
+      this.currentSolutionSelection = filterMode;
+    }
   }
 
   showFilteredData(filterMode?) {

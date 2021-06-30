@@ -137,13 +137,32 @@
   </div>
 </div>
 
-<div style="margin: 0px 20px">
-  <mat-button-toggle-group #filterToggle="matButtonToggleGroup"
-  (change)="showFilteredData($event.value)"  [value]="currentSelection"
-                           aria-label="Change Filter">
-    <mat-button-toggle  *ngFor="let filterItem of filterList" [value]="filterItem" > {{ filterItem }} </mat-button-toggle>
-  </mat-button-toggle-group>
+
+<div style="position: relative;
+height: 50px;">
+
+  <div style="margin: 0px 20px;display: inline-block;">
+    <mat-button-toggle-group #filterToggle="matButtonToggleGroup"
+    (change)="showFilteredData($event.value)"  [value]="currentSelection"
+                             aria-label="Change Filter">
+      <mat-button-toggle  *ngFor="let filterItem of filterList" [value]="filterItem" > {{ filterItem }} </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <div *ngIf="currentSelection == 'Solution'" style="    margin: 0px 20px;
+
+  position: absolute;
+  display: inline-block;
+  right: 0;">
+    <mat-button-toggle-group #solutionfilterToggle="matButtonToggleGroup"
+     [value]="currentSolutionSelection"
+                             aria-label="Change Filter">
+      <mat-button-toggle (click)="changeSolutionFilter(filter)"  *ngFor="let filter of solutionFilter" [value]="filter" > {{ filter }} </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
 </div>
+
 
 
 <container-element [ngSwitch]="currentSelection">
@@ -166,7 +185,7 @@
 
 
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>
               <div>Name</div>
             </th>
             <td mat-cell *matCellDef="let row">{{ row.name }}</td>
@@ -174,14 +193,14 @@
           </ng-container>
 
           <ng-container matColumnDef="questions">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Questions</th>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>Questions</th>
             <td mat-cell *matCellDef="let row">{{ row.questions }}</td>
             <td mat-footer-cell *matFooterCellDef  class="footer-stye"> {{ getTotal('questions') }} </td>
 
           </ng-container>
 
           <ng-container matColumnDef="timeTaken">
-            <th mat-header-cell *matHeaderCellDef>Time Taken (in min)</th>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>Time Taken (in min)</th>
             <td mat-cell *matCellDef="let row">
               {{ row.timeTaken | minuteSeconds }}
             </td>
@@ -189,37 +208,37 @@
           </ng-container>
 
           <ng-container matColumnDef="attempt">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Attempt</th>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>Attempt</th>
             <td mat-cell *matCellDef="let row">{{ row.attempt }}</td>
             <td mat-footer-cell *matFooterCellDef  class="footer-stye"> {{ getTotal('attempt') }} </td>
           </ng-container>
 
           <ng-container matColumnDef="incorrect">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Incorrect</th>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>Incorrect</th>
             <td mat-cell *matCellDef="let row">{{ row.incorrect }}</td>
             <td mat-footer-cell *matFooterCellDef  class="footer-stye"> {{ getTotal('incorrect') }} </td>
           </ng-container>
 
           <ng-container matColumnDef="skipped">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Skipped</th>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>Skipped</th>
             <td mat-cell *matCellDef="let row">{{ row.skipped }}</td>
             <td mat-footer-cell *matFooterCellDef  class="footer-stye"> {{ getTotal('skipped') }} </td>
           </ng-container>
 
           <ng-container matColumnDef="score">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Score</th>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>Score</th>
             <td mat-cell *matCellDef="let row">{{ row.score }}</td>
             <td mat-footer-cell *matFooterCellDef  class="footer-stye">{{ getTotal('score')}} </td>
           </ng-container>
 
           <ng-container matColumnDef="correct">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Correct</th>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>Correct</th>
             <td mat-cell *matCellDef="let row">{{ row.correct }}</td>
             <td mat-footer-cell *matFooterCellDef  class="footer-stye"> {{ getTotal('correct') }}  </td>
           </ng-container>
 
           <ng-container matColumnDef="accuracy">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>
               Accuracy %
             </th>
             <td mat-cell *matCellDef="let row">{{ row.accuracy }}</td>
@@ -240,7 +259,7 @@
 <div  *ngSwitchCase="'Solution'"  class="student-report-list-grid">
   <mat-tab-group >
     <mat-tab *ngFor="let section of fetchedWholeAssignmentResult.sections" [label]="section.sectionName">
-      <div *ngFor="let answer of section.answers; let i = index;"  class="question-card">
+      <div *ngFor="let answer of section.answers | filterPipe:currentSolutionSelection; let i = index;"  class="question-card">
         <div style="display: flex; margin-bottom: 20px;">
           <div class="numberCircle">{{i + 1}}</div>
           <div class="questionName" [innerHtml]="transform(answer.name)"></div>
@@ -306,19 +325,19 @@
 
 
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>
               <div>Name</div>
             </th>
             <td mat-cell *matCellDef="let row">{{ row.name }}</td>
            </ng-container>
 
           <ng-container matColumnDef="totalMarks">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Mark</th>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>Total Mark</th>
             <td mat-cell *matCellDef="let row">{{ row.totalMarks }}</td>
           </ng-container>
 
           <ng-container matColumnDef="marksReceived">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Mark Recieved</th>
+            <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>Mark Recieved</th>
             <td mat-cell *matCellDef="let row">{{ row.marksReceived }}</td>
           </ng-container>
 
