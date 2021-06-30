@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.store.select('appState').subscribe((data: any) => {
       console.log(data);
-      this.nameOfUser = data.user.firstName + ' ' + data.user.lastName;
+      this.nameOfUser = data?.user?.firstName + ' ' + data?.user?.lastName;
     });
   }
 

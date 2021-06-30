@@ -58,8 +58,8 @@ export class AssignmentTestComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.select('appState').subscribe((data) => {
-      this.userName = data.user.userName;
-      this.studentName = data.user.firstName + ' ' + data.user.lastName;
+      this.userName = data?.user?.userName;
+      this.studentName = data?.user?.firstName + ' ' + data?.user?.lastName;
       this.userType = data?.user?.authorities[0]?.authority;
       console.log('data', data);
     });

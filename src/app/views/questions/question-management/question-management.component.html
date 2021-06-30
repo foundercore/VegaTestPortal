@@ -75,7 +75,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-        
+
         <div class="w-25-field">
           <mat-form-field appearance="outline" class="form-field-padding">
             <mat-label>File Name</mat-label>
@@ -173,7 +173,7 @@
 
         <!-- Name Column -->
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Question</th>
+          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>Question</th>
           <td mat-cell *matCellDef="let row" [innerHtml]="row.name"></td>
         </ng-container>
 
@@ -191,13 +191,13 @@
 
         <!-- FileName Column -->
         <ng-container matColumnDef="fileName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>File Name</th>
+          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>File Name</th>
           <td mat-cell *matCellDef="let row">{{ row.fileName }}</td>
         </ng-container>
 
         <!-- Explanation Column -->
         <ng-container matColumnDef="explanation_added">
-          <th mat-header-cell *matHeaderCellDef>Explanation Added?</th>
+          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>Explanation Added?</th>
           <td mat-cell *matCellDef="let row">
             {{ row.explanation_added }}
           </td>
@@ -205,13 +205,13 @@
 
         <!-- Tag Column -->
         <ng-container matColumnDef="tags">
-          <th mat-header-cell *matHeaderCellDef>Tag</th>
+          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>Tag</th>
           <td mat-cell *matCellDef="let row">{{ row.tags }}</td>
         </ng-container>
 
         <!-- actions Column -->
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let row">
             <span
               class="action-btn"

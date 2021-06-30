@@ -39,21 +39,21 @@
 
 
              <ng-container matColumnDef="description">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>
                 Description
               </th>
               <td mat-cell *matCellDef="let row">{{ row.description }}</td>
             </ng-container>
 
              <ng-container matColumnDef="releaseDate">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>
                 Release Date
               </th>
               <td mat-cell *matCellDef="let row">{{ row.releaseDate | date : 'mediumDate'}}</td>
             </ng-container>
 
              <ng-container matColumnDef="passcode">
-              <th mat-header-cell *matHeaderCellDef>
+              <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
                 Passcode
               </th>
               <td mat-cell *matCellDef="let row">
@@ -62,14 +62,14 @@
             </ng-container>
 
              <ng-container matColumnDef="validFrom">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>
                 Valid From
               </th>
               <td mat-cell *matCellDef="let row">{{ row.validFrom | date : 'mediumDate'}}</td>
             </ng-container>
 
               <ng-container matColumnDef="validTo">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>
                 Valid To
               </th>
               <td mat-cell *matCellDef="let row">{{ row.validTo | date : 'mediumDate' }}</td>
@@ -78,7 +78,7 @@
 
             <!-- actions Column -->
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef>
+              <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
                 {{ "COMMON_TAG.ACTIONS" | translate }}
               </th>
               <td mat-cell *matCellDef="let row">
@@ -96,7 +96,7 @@
                   *ngIf="
                     !(
                       this.authorizationService.isStaffRole() &&
-                      row.roles.includes('ROLE_USER_ADMIN')
+                      row.roles?.includes('ROLE_USER_ADMIN')
                     )
                   "
                 >

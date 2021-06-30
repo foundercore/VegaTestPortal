@@ -77,9 +77,9 @@ export class TestLiveComponent implements OnInit {
 
     this.testType = this._data.testType;
     this.store.select('appState').subscribe((data) => {
-      this.userName = data.user.userName;
-      this.studentName = data.user.firstName + ' ' + data.user.lastName;
-      this.isUserAdmin = data.user.authorities.some(x => x.authority == 'ROLE_USER_ADMIN');
+      this.userName = data?.user?.userName;
+      this.studentName = data?.user?.firstName + ' ' + data?.user?.lastName;
+      this.isUserAdmin = data?.user?.authorities.some(x => x.authority == 'ROLE_USER_ADMIN');
     });
     if (
       this._data.testData.questionPaperId != null &&
@@ -107,7 +107,7 @@ export class TestLiveComponent implements OnInit {
             this.testData.totalDurationInMinutes
           );
 
-          
+
           if (res.sections !== null) {
             this.GetQuestionPapers();
           }
@@ -129,7 +129,7 @@ export class TestLiveComponent implements OnInit {
       );
   }
 
- 
+
 
   observableTimer(totalTestTimeTakenInSec = 0) {
     const source = timer(1000, 1000);
@@ -602,7 +602,7 @@ export class TestLiveComponent implements OnInit {
               else { this.setButtonColor(i, 'grey', 'none'); }
               colorAppliedIndexesArray[i] = true;
             }
-          
+
           });
         }
       });
@@ -611,7 +611,7 @@ export class TestLiveComponent implements OnInit {
     }
 
     this.sectionsWithPapers.map((ques, i) => {
-    
+
 
       if (!colorAppliedIndexesArray[i]) {
         // set color grey
@@ -630,6 +630,7 @@ export class TestLiveComponent implements OnInit {
   }
 
   selectSection(event) {
+    this.saveAndNextAnswers(false);
     // debugger;
     this.questionNumber = 0;
     const section = this.testData?.sections.find(
@@ -644,7 +645,7 @@ export class TestLiveComponent implements OnInit {
       this.sectionsWithPapers = this.sections.filter(
         (x) => x.sectionId == section.id
       );
-    
+
       if (this.sectionsWithPapers.length > 0) {
         this.sectionsWithPapers.forEach((element) => {
           element.color = 'grey';
@@ -731,7 +732,7 @@ export class TestLiveComponent implements OnInit {
   }
 
   setButtonColor(buttonNumber, color, border) {
-   
+
     this.sectionsWithPapers.map((sec, i) => {
       if (i === buttonNumber) {
         this.sectionsWithPapers[i].color = color;
