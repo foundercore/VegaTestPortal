@@ -1,12 +1,13 @@
 import { Inject } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
 import { IUserModel, IUserUpdateRequestModel } from 'src/app/models/user/user-model';
 import { UserService } from 'src/app/services/users/users.service';
 import { UpdateTermConditionState } from 'src/app/state_management/_actions/user.action';
-  import { AppState } from 'src/app/state_management/_states/auth.state';
+import { AppState } from 'src/app/state_management/_states/auth.state';
 
 @Component({
   selector: 'app-term-condition-page',
@@ -14,16 +15,19 @@ import { UpdateTermConditionState } from 'src/app/state_management/_actions/user
   styleUrls: ['./term-condition-page.component.scss']
 })
 export class TermConditionPageComponent implements OnInit {
-
+  termAndCondition;
   constructor(
     private userService: UserService,
     private tosterService: ToastrService,
-     public dialogRef: MatDialogRef<TermConditionPageComponent>,
-     @Inject(MAT_DIALOG_DATA) public data: IUserModel,
-     private store: Store<AppState>,
+    public dialogRef: MatDialogRef<TermConditionPageComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: IUserModel,
+    private store: Store<AppState>, private sanitizer: DomSanitizer
     ) { }
 
   ngOnInit() {
+    fetch('/assets/termAndCondition.html').then(res => res.text()).then(data => {
+      this.termAndCondition = this.sanitizer.bypassSecurityTrustHtml(data);
+    })
   }
 
   accept(){
