@@ -61,7 +61,7 @@ export class StudentDashboardComponent implements OnInit {
 
   public pageOptions = PAGE_OPTIONS;
 
-  displayedColumns: string[] = ['testName', 'attempted', 'actions', 'marksObtained'];
+  displayedColumns: string[] = ['testName', 'attempted', 'marksObtained','actions'];
 
   dataSource = new MatTableDataSource<any>();
 
@@ -79,8 +79,8 @@ export class StudentDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.select('appState').subscribe((data) => {
-      this.userName = data.user.userName;
-      this.studentName = data.user.firstName + ' ' + data.user.lastName;
+      this.userName = data?.user?.userName;
+      this.studentName = data?.user?.firstName + ' ' + data?.user?.lastName;
       this.userType = data?.user?.authorities[0]?.authority;
       console.log('data', data);
     });
@@ -107,9 +107,9 @@ export class StudentDashboardComponent implements OnInit {
       this.buttontext = 'Preview Test';
     } else {
       console.log(element);
-      let timeNow = new Date();
-      let testValidFrom = new Date(element.validFrom);
-      let testvalidTo = new Date(element.validTo);
+      const timeNow = new Date().setHours(0, 0, 0, 0);;
+      const testValidFrom = new Date(element.validFrom).setHours(0, 0, 0, 0);;
+      const testvalidTo = new Date(element.validTo).setHours(0, 0, 0, 0);;
       if (timeNow < testValidFrom) {
         this.toastrService.error('Test is yet to start');
         return;
@@ -124,7 +124,8 @@ export class StudentDashboardComponent implements OnInit {
     const dialogData = new CustomDialogConfirmationModel(
       'Please read the instructions carefully before starting the test',
       element.testName,
-      this.buttontext
+      this.buttontext,
+      'Not Now'
     );
 
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
@@ -135,9 +136,10 @@ export class StudentDashboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        if (element.passcode !== null && String(element.passcode).length > 1)
+        if (element.passcode !== null && String(element.passcode.trim()).length > 1) {
           this.verifyPasscode(element);
-        else this.openTestPopup(element,'live');
+        }
+        else { this.openTestPopup(element, 'live'); }
       }
     });
   }
@@ -186,8 +188,9 @@ export class StudentDashboardComponent implements OnInit {
         if (result.value && result.value == element.passcode) {
           this.openTestPopup(element,'live');
           this.toastrService.success('Passcode Verified successfully');
-        } else if (result.value && result.value != element.passcode)
+        } else if (result.value && result.value != element.passcode) {
           this.toastrService.error('Invalid Passcode');
+ }
       });
     }
   }

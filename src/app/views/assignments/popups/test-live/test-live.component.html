@@ -11,7 +11,7 @@
           class="auto-btn p-0 m-1"
           style="height: fit-content"
           mat-raised-button
-          (click)="calculate()" 
+          (click)="calculate()"
           *ngIf="testData?.calculatorRequired"
         >
           <mat-icon>calculate</mat-icon>
@@ -30,7 +30,7 @@
         </div> -->
       </div>
     </div>
-    <button class="btn close__btn" (click)="close()">
+    <button *ngIf='isUserAdmin' class="btn close__btn close_btn_test " (click)="close()">
       <span class="position-center">&times;</span>
     </button>
   </div>
@@ -74,12 +74,12 @@
                   [innerHTML]="currentQuestionIndex + 1 + question?.name"
                 ></h3> -->
               <p style="font-size: 24px;">
-                <strong>Question : {{questionNumber + 1}}</strong> 
+                <strong>Question : {{questionNumber + 1}}</strong>
               </p>
                 <div *ngIf="question?.name">
-                 
+
                   <div class="row">
-                    <div class="col col-xs-6 " style=" border-right: 4px solid #333;" *ngIf=" question?.passageContent && question?.passageContent != ''">
+                    <div class="col col-xs-6 " style=" border-right: 4px solid #333;" *ngIf="question?.passageContent">
                       <p [innerHTML]="question?.passageContent"> </p>
                     </div>
                     <div class="col col-xs-6">
@@ -110,7 +110,7 @@
                       </ul>
                     </div>
                   </div>
-                      
+
 
                       <div  *ngIf="this.testType == 'preview'">
                       Correct Option:
@@ -127,20 +127,7 @@
                         No question added !!!
                       </div>
                     </div>
-                    <!-- <mat-radio-group
-                  aria-label="Select an option"
-                  class="radio__button"
-                >
-                  <mat-radio-button
-                    value="{{ opt?.key }}"
-                    *ngFor="let opt of question?.options"
-                    [checked]="optionsSelected[opt?.key]"
-                    (change)="setOptionSelected(opt?.key)"
-                  >
-                    <span [innerHTML]="opt?.value"> </span>
-                  </mat-radio-button>
-                  <br />
-                </mat-radio-group> -->
+
                   </ng-scrollbar>
                 </div>
                 <!-- footer button box -->
@@ -156,20 +143,20 @@
                 >
                   <button
                     class="btn btn-secondary"
-                    mat-raised-button
+                    mat-raised-button style="background-color:orange"
                     (click)="setQuestionAsMarkerdForReview()"
                   >
                     Mark For Review
                   </button>
                   <button
-                    class="btn btn-secondary"
+                    class="btn btn-secondary" style="background-color:#ff3547"
                     mat-raised-button
                     (click)="clearResponse()"
                   >
                     Clear Response
                   </button>
                   <button
-                    class="btn btn-secondary"
+                    class="btn btn-secondary" style="background-color:#2596be"
                     mat-raised-button
                     (click)="saveAndNextAnswers()"
                   >
@@ -177,21 +164,6 @@
                   </button>
                 </div>
 
-                <!-- admin disabled buttons -->
-                <!-- <div
-                class="btn__box d-flex justify-content-space-between pb-3 pt-3"
-                *ngIf="userType === 'ROLE_USER_ADMIN'"
-              >
-                <button class="btn-primary" mat-raised-button disabled>
-                  Mark For Review
-                </button>
-                <button class="btn-danger" mat-raised-button disabled>
-                  Clear Response
-                </button>
-                <button class="btn-primary" mat-raised-button disabled>
-                  Save And Next
-                </button>
-              </div> -->
               </div>
 
               <div class="col-lg-3 mh position-relative">
@@ -206,19 +178,7 @@
                     [disabled]="disabled"
                   >
                     <ul class="list-unstyled">
-                      <!-- <li *ngFor="let ques of sectionsWithPapers; let i=index">
-                                  <button class=""  mat-mini-fab (click)="getQuestion(ques)" [ngStyle]="{
-                                      background: getactiveRandomColorStatus(
-                                          ques?.iscolorActive
-                                      )
-                                    }">{{i + 1}}</button>
 
-                              </li> -->
-                      <!-- <span
-                        [innerHTML]="question?.name"
-                        style="padding-left: 5px"
-                        *ngIf="question?.name"
-                      ></span> -->
                       <div
                         class="testLive__NoQuestion1"
                         *ngIf="!question?.name"
@@ -230,53 +190,35 @@
                     </ul>
 
                     <div class="num__box">
-                      <!-- <button class="auto-btn" mat-raised-button *ngFor="let ques of sectionsWithPapers; let i=index"
-                              [ngStyle]="{
-                                  color : 'white',
-                                  background: getmarkedRandomColorStatus(
-                                      ques?.ismarked
-                                  )
-                                }"
-                              >{{i + 1}}</button> -->
+
                       <button
                         class="auto-btn"
                         mat-raised-button
                         *ngFor="let ques of sectionsWithPapers; let i = index"
                         (click)="getQuestion(ques, i)"
                         [ngStyle]="buttonStyle[i]"
-                        style="min-width: 50px"
+                        style="min-width: 50px;color: white;font-weight: bold;"
                       >
                         {{ i + 1 }}
                       </button>
-                      <!-- <div
-                    class="text-center py-3"
-                    *ngIf="userType === 'ROLE_USER_ADMIN'"
-                  >
-                    <button
-                      class="btn-primary save__btn w-50 mx-auto"
-                      mat-raised-button
-                      disabled
-                    >
-                      Save And Exit
-                    </button>
-                  </div> -->
+
                     </div>
                   </ng-scrollbar>
                 </div>
                 <ul class="border index__box list-unstyled mb-2 px-2" style="border-width: 3px !important; text-align: center;">
-                  <li class="p-b2 text-center lead" style="font-weight: 700; font-size: 20;">Legends</li>
+                  <li class="p-b2 text-center lead" style="font-weight: 700; font-size: 20;">Legend</li>
                   <li class="btn btn-primary d-inline-block border-0">
                     Current Question
                   </li>
                   <li
                     *ngIf="this.testType == 'live'"
-                    class="btn btn-warning d-inline-block border-0"
+                    class="btn btn-warning d-inline-block border-0" style=" color:#ffffff"
                   >
                     Marked Question.
                   </li>
                   <li
                     *ngIf="this.testType == 'live'"
-                    class="btn btn-secondary d-inline-block border-0"
+                    class="btn btn-secondary d-inline-block border-0" style="background-color:#2596be"
                   >
                     Saved Question.
                   </li>
@@ -300,7 +242,7 @@
                   <!-- <div class="text-center save__btn- pt-1"> -->
                   <button
                     class="btn-primary save__btn w-100 mx-auto bg-danger"
-                    style="color: white;"
+                    style="color: white;font-size:17px;font-weight:bold"
                     mat-raised-button
                     (click)="SaveandExit()"
                   >

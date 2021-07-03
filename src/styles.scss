@@ -25,27 +25,14 @@ body {
   // overflow: hidden;
   font-family: 'Montserrat', sans-serif !important;
 }
-
-// body::-webkit-scrollbar {
-//   width: 1em;
-// }
-
-// body::-webkit-scrollbar-track {
-//   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-//   margin-top: 75px;
-//   margin-left: 210px;
-// }
-
-// body::-webkit-scrollbar-thumb {
-//   background-color: darkgrey;
-//   outline: 1px solid slategrey;
-// }
-
-
-// .iconButton *.icon {
-//   margin-right: 5px;
-// }
-
+/* Autofill color to be white */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active
+{
+ -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
 
 .text-right {
   text-align: right;
@@ -401,7 +388,7 @@ mat-checkbox span { white-space: pre-wrap; }
   color: white;
 }
 
-.ng-scroll-content { 
+.ng-scroll-content {
   padding-right: 15px;
 }
 
@@ -411,4 +398,22 @@ mat-checkbox span { white-space: pre-wrap; }
 
 .mat-checkbox-ripple .mat-ripple-element,.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
   background-color:  #005691 !important;
+}
+
+
+.custom-mat-header-th {
+    font-weight: 700;
+    font-size: 15px;
+    color: black;
+    text-transform: uppercase;
+}
+
+.mat-tab-label{
+  opacity: 1 !important;
+}
+
+.mat-tab-label.mat-tab-label-active {
+  background: #2596be;
+  color: white;
+  border-radius: 5px;
 }

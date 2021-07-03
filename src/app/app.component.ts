@@ -5,6 +5,8 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from './state_management/_states/auth.state';
 import { TranslateService } from '@ngx-translate/core';
+import { MatDialog } from '@angular/material/dialog';
+import { TermConditionPageComponent } from './views/dashboard/term-condition-page/term-condition-page.component';
 
 @Component({
   selector: 'app-root',
@@ -16,11 +18,13 @@ export class AppComponent {
 
   subscription: Subscription;
 
+  dialogRef = null;
 
   constructor(
     private router: Router,
     private store: Store<AppState>,
-    private translate: TranslateService
+    private translate: TranslateService,
+     public dialog: MatDialog
   ) {
     this.subscription = router.events.subscribe((event) => {
         if (event instanceof NavigationStart) {
@@ -30,6 +34,15 @@ export class AppComponent {
         }
     });
     translate.setDefaultLang('en');
+    this.store.select('appState').subscribe(data =>
+      {
+        if(data?.user?.acceptedTerms == false && this.dialogRef == null) {
+          this.dialogRef = this.dialog.open(TermConditionPageComponent, { disableClose: true , data: data?.user});
+          this.dialogRef.afterClosed().subscribe(result => {
+            this.dialogRef = null;
+          });
+        }
+      });
   }
 
   @HostListener('window:beforeunload')

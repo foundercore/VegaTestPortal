@@ -298,12 +298,12 @@ export class TestsComponent implements OnInit, AfterViewInit {
       .pipe(finalize(() => {}))
       .subscribe(
         (res: any) => {
-          if (res?.tests?.length > 0) {
+          // if (res?.tests?.length > 0) {
             this.alltest = res?.tests;
             this.dataSource.data = this.alltest;
             this.totalNumberOfRecords = res?.totalRecords;
             console.log('this.list test ==', res);
-          }
+          // }
         },
         (error) => {
           this.toastrService.error(
@@ -374,10 +374,11 @@ export class TestsComponent implements OnInit, AfterViewInit {
   }
 
   applyFilter(e: Event) {
-    this.searchQuestionPaperModel.nameRegexPattern = (e.target as HTMLInputElement)
+    let namePattern = (e.target as HTMLInputElement)
       .value
       .trim()
       .toLowerCase();
+    this.searchQuestionPaperModel.nameRegexPattern = namePattern.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
     this.GetAllquestionPapers();
   }
 

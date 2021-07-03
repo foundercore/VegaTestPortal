@@ -8,24 +8,35 @@
 .btn.col-sm-6 {
     width: 176px;
 }
- 
 
-.close__btn {
-    width: auto;
-    margin: 0;
+
+.closeIcon {
+ color: red;
+ width: 15px; 
+    border: none;
+    background: transparent;
 }
 
 .result__box {
     min-height: 2.8rem;
     background-color: #f0f0f0;
     align-items: center;
-    display: flex;
     font-weight: 600;
     color: #5d5d5d;
     font-size: 20px;
+    max-width: 85%;
+    border: 2px solid ;
+    padding: 5px;
 }
 
 .clear {
     border: 1px solid #fff;
     padding: 4px;
+}
+
+
+.num {
+  color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
 }

@@ -26,18 +26,18 @@
 
         <!-- Disclaimer column -->
         <ng-container matColumnDef="tabletitle">
-          <td mat-header-cell *matHeaderCellDef colspan="3">
+          <td class="custom-mat-header-th" mat-header-cell *matHeaderCellDef colspan="3">
             My Assigned Test
            </td>
           </ng-container>
 
         <ng-container matColumnDef="testName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Test Name</th>
+          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>Test Name</th>
           <td mat-cell *matCellDef="let row">{{ row.testName }}</td>
         </ng-container>
 
         <ng-container matColumnDef="attempted">
-          <th mat-header-cell *matHeaderCellDef>Attempted</th>
+          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>Attempted</th>
           <td mat-cell *matCellDef="let row">
             <p *ngIf="row.attempted">Yes</p>
             <p *ngIf="!row.attempted">No</p>
@@ -46,7 +46,7 @@
 
         <!-- actions Column -->
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <th class="custom-mat-header-th"  mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let row">
             <span
               *ngIf="row.attempted"

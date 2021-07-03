@@ -52,9 +52,3 @@ table {
   display: flex;
   justify-content: flex-start;
 }
-th{
-  font-weight: 700;
-  font-size: 15px;
-  color: black;
-  text-transform: uppercase;
-}
