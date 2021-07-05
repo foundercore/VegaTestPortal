@@ -20,6 +20,9 @@ import { EditSectionComponent } from './popups/edit-section/edit-section.compone
 import { RejectstatusComponent } from './popups/reject-status/reject-status.component';
 import { CloneAssignmentComponent } from './clone-assignment/clone-assignment.component';
 import { EditTestComponent } from './popups/edit-test/edit-test.component';
+import { AddStudentsComponent } from './add-students/add-students.component';
+import { ViewAssignmentComponent } from './view-assignment/view-assignment.component';
+import { AssignmentFormComponent } from './assignment-form/assignment-form.component';
 
 
 
@@ -37,7 +40,11 @@ import { EditTestComponent } from './popups/edit-test/edit-test.component';
     EditSectionComponent,
     RejectstatusComponent,
     CloneAssignmentComponent,
-    EditTestComponent
+    EditTestComponent,
+    AddStudentsComponent,
+    ViewAssignmentComponent,
+    AssignmentFormComponent,
+
   ],
   imports: [
     CommonModule,

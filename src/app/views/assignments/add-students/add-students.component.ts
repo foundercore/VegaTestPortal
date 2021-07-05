@@ -5,14 +5,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
-import { forkJoin } from 'rxjs';
-import { StudentBatchModel } from 'src/app/models/student-batch/student-batch-model';
 import { AssignmentRequest } from 'src/app/models/test-assignment/test-assignment-request';
 import { TestAssignmentServiceService } from 'src/app/services/assignment/test-assignment-service.service';
 import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
 import { StudentBatchService } from 'src/app/services/student-batch/student-batch.service';
 import { UserService } from 'src/app/services/users/users.service';
-import { AddUserDialogComponent } from '../../user/add-user-dialog/add-user-dialog.component';
 
 @Component({
   selector: 'app-add-students',
@@ -38,7 +35,7 @@ export class AddStudentsComponent implements OnInit {
     private userService: UserService,
     private tosterService: ToastrService,
     public translate: TranslateService,
-    public dialogRef: MatDialogRef<AddUserDialogComponent>,
+    public dialogRef: MatDialogRef<AddStudentsComponent>,
     public authorizationService: AuthorizationService,
     private testAssignmentService: TestAssignmentServiceService,
     @Inject(MAT_DIALOG_DATA) public data: any
