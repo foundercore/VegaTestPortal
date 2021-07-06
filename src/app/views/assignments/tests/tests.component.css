@@ -9,50 +9,6 @@
   margin: 0 3px !important;
 }
 
-.btn__group {
-  text-align: right;
-}
-
-/* table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  thead{
-    background: #fff !important;
-  }
-  tr.mat-header-row {
-    height: 45px;
-  }
-  .data__table th {
-    background-color: #fff;
-  }
-
-  .data__table th:nth-child(1),
-  .data__table td:nth-child(1) {
-    width: 10%;
-    text-align: center;
-  }
-  .data__table th:nth-child(2),
-  .data__table td:nth-child(2) {
-    width: 40%;
-    text-align: left;
-  }
-  .data__table th:nth-child(3),
-  .data__table td:nth-child(3) {
-    width: 15%;
-    text-align: left;
-  }
-  .data__table th:nth-child(4),
-  .data__table td:nth-child(4) {
-    width: 15%;
-    text-align: left;
-  }
-  .data__table th:nth-child(5),
-  .data__table td:nth-child(5) {
-    width: 20%;
-    text-align: left;
-  } */
-
 .action-btn {
   cursor: pointer;
   margin: 0 0.3rem;

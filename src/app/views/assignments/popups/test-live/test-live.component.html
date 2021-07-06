@@ -30,7 +30,7 @@
         </div> -->
       </div>
     </div>
-    <button *ngIf='isUserAdmin' class="btn close__btn" (click)="close()">
+    <button *ngIf='isUserAdmin' class="btn close__btn close_btn_test " (click)="close()">
       <span class="position-center">&times;</span>
     </button>
   </div>
@@ -156,7 +156,7 @@
                     Clear Response
                   </button>
                   <button
-                    class="btn btn-secondary"
+                    class="btn btn-secondary" style="background-color:#2596be"
                     mat-raised-button
                     (click)="saveAndNextAnswers()"
                   >
@@ -212,13 +212,13 @@
                   </li>
                   <li
                     *ngIf="this.testType == 'live'"
-                    class="btn btn-warning d-inline-block border-0"
+                    class="btn btn-warning d-inline-block border-0" style=" color:#ffffff"
                   >
                     Marked Question.
                   </li>
                   <li
                     *ngIf="this.testType == 'live'"
-                    class="btn btn-secondary d-inline-block border-0"
+                    class="btn btn-secondary d-inline-block border-0" style="background-color:#2596be"
                   >
                     Saved Question.
                   </li>

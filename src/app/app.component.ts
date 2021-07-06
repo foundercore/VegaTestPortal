@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { AppState } from './state_management/_states/auth.state';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
-import { TermConditionPageComponent } from './views/dashboard/term-condition-page/term-condition-page.component';
+import { TermConditionPageComponent } from './views/term-condition-page/term-condition-page.component';
 
 @Component({
   selector: 'app-root',

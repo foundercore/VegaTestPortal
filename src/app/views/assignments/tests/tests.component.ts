@@ -63,6 +63,7 @@ export class TestsComponent implements OnInit, AfterViewInit {
   isLoadingResults: boolean;
   isRateLimitReached: boolean;
   actualTotalNumberOfRecords: 0;
+  searchPattern: string = '';
   constructor(
     private testConfigService: TestConfigService,
     public dialog: MatDialog,
@@ -88,8 +89,8 @@ export class TestsComponent implements OnInit, AfterViewInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          const searchQuestion = this.createSearchObject();
-          return this.testConfigService.getAllQuestionPaper(searchQuestion);
+          const searchTests = this.createSearchObject();
+          return this.testConfigService.getAllQuestionPaper(searchTests);
         }),
         map((data) => {
           console.log('data in map=>', data);
@@ -124,6 +125,7 @@ export class TestsComponent implements OnInit, AfterViewInit {
       this.sort.active,
       this.sort.direction
     );
+    searchQuestionPaper.nameRegexPattern = this.searchPattern;
     this.totalNumberOfRecords = this.paginator.pageSize;
     return searchQuestionPaper;
   }
@@ -292,18 +294,18 @@ export class TestsComponent implements OnInit, AfterViewInit {
   }
 
   GetAllquestionPapers() {
-    this.getSearchTestModel();
+    const searchTests = this.createSearchObject();
     this.testConfigService
-      .getAllQuestionPaper(this.searchQuestionPaperModel)
+      .getAllQuestionPaper(searchTests)
       .pipe(finalize(() => {}))
       .subscribe(
         (res: any) => {
-          if (res?.tests?.length > 0) {
+          // if (res?.tests?.length > 0) {
             this.alltest = res?.tests;
             this.dataSource.data = this.alltest;
-            this.totalNumberOfRecords = res?.totalRecords;
+            this.actualTotalNumberOfRecords = res?.totalRecords;
             console.log('this.list test ==', res);
-          }
+          // }
         },
         (error) => {
           this.toastrService.error(
@@ -314,17 +316,17 @@ export class TestsComponent implements OnInit, AfterViewInit {
       );
   }
 
-  private getSearchTestModel() {
-    this.searchQuestionPaperModel.pageNumber = this.paginator.pageIndex + 1;
-    this.searchQuestionPaperModel.pageSize = this.paginator.pageSize;
-    this.searchQuestionPaperModel.sortColumn = this.sort.active
-      ? this.sort.active
-      : 'lastUpdatedOn';
-    this.searchQuestionPaperModel.sortOrder = this.sort.direction
-      ? this.sort.direction
-      : 'desc';
-    this.totalNumberOfRecords = this.paginator.pageSize;
-  }
+  // private getSearchTestModel() {
+  //   this.searchQuestionPaperModel.pageNumber = this.paginator.pageIndex + 1;
+  //   this.searchQuestionPaperModel.pageSize = this.paginator.pageSize;
+  //   this.searchQuestionPaperModel.sortColumn = this.sort.active
+  //     ? this.sort.active
+  //     : 'lastUpdatedOn';
+  //   this.searchQuestionPaperModel.sortOrder = this.sort.direction
+  //     ? this.sort.direction
+  //     : 'desc';
+  //   this.totalNumberOfRecords = this.paginator.pageSize;
+  // }
 
   resetPaging(): void {
     this.paginator.pageIndex = 0;
@@ -374,12 +376,12 @@ export class TestsComponent implements OnInit, AfterViewInit {
   }
 
   applyFilter(e: Event) {
-    // debugger;
     let namePattern = (e.target as HTMLInputElement)
       .value
       .trim()
       .toLowerCase();
-    this.searchQuestionPaperModel.nameRegexPattern = namePattern.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+    this.searchPattern = namePattern.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+    this.resetPaging();
     this.GetAllquestionPapers();
   }
 

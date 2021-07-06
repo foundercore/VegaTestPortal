@@ -1,17 +1,12 @@
-import { StudentBatchManagementComponent } from './../views/student-batch/student-batch-management/student-batch-management.component';
-import { QuestionFormPreviewComponent } from './../views/questions/question-form-preview/question-form-preview.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from '../views/home/home.component';
-import { LoginComponent } from '../views/login/login.component';
+import { HomeComponent } from '../views/layout/home/home.component';
+import { LoginComponent } from '../views/bootstrap/login/login.component';
 import { DashboardComponent } from '../views/dashboard/dashboard.component';
 import { ReportsComponent } from '../views/reports/reports.component';
 import { AuthGuard } from '../guard/auth.guard';
-import { RegisterComponent } from '../views/register/register.component';
+import { RegisterComponent } from '../views/bootstrap/register/register.component';
 import { LoggedInAuthGuard } from '../guard/loggedin.guard';
-import { QuestionManagementComponent } from '../views/questions/question-management/question-management.component';
-import { QuestionFormComponent } from '../views/questions/question-form/question-form.component';
-import { UserManagementComponent } from '../views/user/user-management/user-management.component';
 import { RoleGuard } from '../guard/role.guard';
 import { Role } from './constants';
 import { StudentReportComponent } from '../views/reports/student-report/student-report.component';
@@ -30,39 +25,17 @@ const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full' },
       {
         path: 'dashboard',
-        component: DashboardComponent,
+        loadChildren: () => import('../views/dashboard/dashboard.module').then(  (m) => m.DashboardModule ),
       },
       {
         path: 'questionmanagement',
-        children: [
-          {
-            path: '',
-            component: QuestionManagementComponent,
-            canActivate: [RoleGuard],
-            data: { roles: [Role.ADMIN, Role.STAFF] },
-          },
-          {
-            path: ':id/edit',
-            component: QuestionFormComponent,
-            canActivate: [RoleGuard],
-            data: { roles: [Role.ADMIN, Role.STAFF] },
-          },
-          {
-            path: ':id/view',
-            component: QuestionFormPreviewComponent,
-            canActivate: [RoleGuard],
-            data: { roles: [Role.ADMIN, Role.STAFF] },
-          },
-          {
-            path: 'add',
-            component: QuestionFormComponent,
-            canActivate: [RoleGuard],
-            data: { roles: [Role.ADMIN, Role.STAFF] },
-          },
-        ],
+        loadChildren: () => import('../views/questions/questions.module').then(  (m) => m.QuestionsModule ),
       },
       {
         path: 'reports',
@@ -86,17 +59,18 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'users',
-        component: UserManagementComponent,
-        canActivate: [RoleGuard],
-        data: { roles: [Role.ADMIN, Role.STAFF] },
-      },
-      {
-        path: 'batch',
-        component: StudentBatchManagementComponent,
-        canActivate: [RoleGuard],
-        data: { roles: [Role.ADMIN, Role.STAFF] },
-      },
+        path: 'administrations',
+        children: [
+          {
+            path: 'users',
+            loadChildren: () => import('../views/administration/user/user.module').then(  (m) => m.UserModule ),
+          },
+          {
+            path: 'batch',
+            loadChildren: () => import('../views/administration/student-batch/batch.module').then(  (m) => m.BatchModule ),
+          }
+        ]
+       },
     ],
     canActivate: [AuthGuard],
   },
