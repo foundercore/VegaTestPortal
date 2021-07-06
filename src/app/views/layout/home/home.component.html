@@ -1,0 +1,10 @@
+<app-header></app-header>
+<div class="parentContainer">
+  <div class="appContent">
+    <main [@routeAnimations]="prepareRoute(outlet)">
+      <router-outlet #outlet="outlet"></router-outlet>
+    </main>
+
+  </div>
+
+</div>

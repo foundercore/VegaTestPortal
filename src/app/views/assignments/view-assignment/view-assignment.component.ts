@@ -9,12 +9,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
-import { PAGE_OPTIONS, Role } from 'src/app/core/constants';
+import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
 import { UserService } from 'src/app/services/users/users.service';
 import { DialogConformationComponent } from 'src/app/shared/components/dialog-conformation/dialog-conformation.component';
-import { AddUserDialogComponent } from '../../user/add-user-dialog/add-user-dialog.component';
-import { UserBulkUploadDialogComponent } from '../../user/user-bulk-upload-dialog/user-bulk-upload-dialog.component';
 import { AssignmentFormComponent } from '../assignment-form/assignment-form.component';
 
 @Component({

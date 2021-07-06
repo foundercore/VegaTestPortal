@@ -12,10 +12,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { TestAssignmentServiceService } from 'src/app/services/assignment/test-assignment-service.service';
 import { UserService } from 'src/app/services/users/users.service';
-import { AddUserDialogComponent } from '../../user/add-user-dialog/add-user-dialog.component';
 import { StudentBatchService } from 'src/app/services/student-batch/student-batch.service';
 import { StudentBatchModel } from 'src/app/models/student-batch/student-batch-model';
-import { IUserResponseModel } from 'src/app/models/user/user-model';
 import { formatDate } from '@angular/common';
 
 @Component({
