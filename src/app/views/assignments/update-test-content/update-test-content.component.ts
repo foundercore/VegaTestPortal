@@ -365,7 +365,7 @@ export class UpdateTestContentComponent implements OnInit {
           this.status = res?.status;
           var dur = 0;
           this.ListOfQuestions_Added_In_All_Sections = [];
-          res.sections.map((sec) => {
+          res.sections?.map((sec) => {
             dur += sec.durationInMinutes;
             if (sec.questions)
               sec.questions.map((que) => {
@@ -388,13 +388,13 @@ export class UpdateTestContentComponent implements OnInit {
             this.ListOfQuestions_Added_In_All_Sections
           );
           this.setDataSourceOfPaginator(res?.sections);
-          this.prepareExpandedStateArray(false, res?.sections.length);
+          this.prepareExpandedStateArray(false, res?.sections?.length);
         });
     }
   }
 
   setDataSourceOfPaginator(sections?) {
-    sections.map((sec) => {
+    sections?.map((sec) => {
       if (sec && this.currentOpenedSection)
         if (sec.id === this.currentOpenedSection.id) {
           this.currentOpenedSection = sec;

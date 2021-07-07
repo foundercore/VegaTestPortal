@@ -28,7 +28,8 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'dashboard',
-        pathMatch: 'full' },
+        pathMatch: 'full',
+      },
       {
         path: 'dashboard',
         loadChildren: () => import('../views/dashboard/dashboard.module').then(  (m) => m.DashboardModule ),
@@ -60,6 +61,8 @@ const routes: Routes = [
       },
       {
         path: 'administrations',
+        canActivate: [RoleGuard],
+        data: { roles: [Role.ADMIN] },
         children: [
           {
             path: 'users',

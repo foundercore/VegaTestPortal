@@ -66,7 +66,7 @@ export class EditTestComponent implements OnInit {
   questionPaper = new EditTestMetaData();
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  tags: string[] | undefined = [];
+  tags: string[] = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) public editTest_data: any,
     public dialogRef: MatDialogRef<EditTestComponent>,
@@ -84,7 +84,7 @@ export class EditTestComponent implements OnInit {
   ngOnInit(): void {
     console.log('editTest_data =>', this.editTest_data);
     this.questionPaper = this.editTest_data.questionPaper;
-    this.tags = this.editTest_data?.questionPaper?.tags;
+    this.tags = this.editTest_data?.questionPaper?.tags || [];
     this.testForm = new FormGroup({
       testName: new FormControl(this.editTest_data.questionPaper.name, [
         Validators.required,
@@ -173,15 +173,15 @@ export class EditTestComponent implements OnInit {
   // }
   addTag(event: MatChipInputEvent): void {
     const input = event.input;
-    const value = event.value;
+    const value = event.value.trim();
 
-    if ((value || '').trim()) {
-      this.tags?.push(value.trim());
+    if (value || '') {
+      this.tags.push(value);
     }
 
     // Reset the input value
     if (input) {
-      input.value = '';
+      event.input.value = '';
     }
   }
 
