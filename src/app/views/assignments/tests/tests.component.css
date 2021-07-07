@@ -33,9 +33,7 @@
 
 .actions_container {
   min-width: 200px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  text-align: left;
 }
 
 .scroll__box {
