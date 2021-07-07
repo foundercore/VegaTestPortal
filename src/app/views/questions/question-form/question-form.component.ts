@@ -27,7 +27,7 @@ export class QuestionFormComponent implements OnInit {
 
   tags: string[] | undefined = [];
   isNewForm = true;
-  difficultyLevel : string[] = ['Easy','Medium','Hard'];
+  difficultyLevel : string[] = ['EASY','MEDIUM','HARD'];
   questionTypeList : string[] = [];
 
   options: QuestionOption[] | undefined = [];
