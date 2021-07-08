@@ -60,6 +60,10 @@ export class StudentReportComponent implements OnInit {
 
   currentSelection = 'Section Level';
 
+  solution  = 'Solution';
+
+  quickView = 'Charts';
+
   currentSolutionSelection = '';
 
   public pageOptions = PAGE_OPTIONS;

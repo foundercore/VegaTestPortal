@@ -41,6 +41,7 @@
 .testName {
      margin-top: 20px;
     margin-left: 20px;
+    margin-bottom: 20px;
 }
 
 .card-stats-container{
@@ -280,4 +281,8 @@ tr.mat-footer-row {
 
 .footer-stye{
   color: blue;
+}
+
+.mat-tab-labels {
+  margin-left: 20px !important;
 }
