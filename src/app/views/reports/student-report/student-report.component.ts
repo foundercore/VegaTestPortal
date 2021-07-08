@@ -9,7 +9,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import { TestConfigService } from '../../assignments/services/test-config-service';
-import { StudentReportModel } from '../Models/studentReportModel';
+import { BreadcrumbNavService } from '../../layout/breadcrumb/breadcrumb-nav.service';
+import { Metric, StudentReportModel } from 'src/app/models/reports/student-report-model';
 
 @Component({
   selector: 'app-student-report',
@@ -76,12 +77,15 @@ export class StudentReportComponent implements OnInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
+  assignmentChartData : {type:string,title:string,config?:any,data: {name:string,value?:number,series?:any[]}[]} [] = [];
+
   constructor(
     public translate: TranslateService,
     private store: Store<AppState>,
     private testConfigService: TestConfigService,
     private activatedRoute: ActivatedRoute,
-    public _sanitizer: DomSanitizer
+    public _sanitizer: DomSanitizer,
+    public breadcrumbNavService:BreadcrumbNavService
   ) {}
 
   ngOnInit() {
@@ -104,12 +108,9 @@ export class StudentReportComponent implements OnInit {
         .getStudentAssignmentResult(assignmentId, this.userName)
         .subscribe(
           (res) => {
-            console.log('StudentReport fetched=>', res);
-            this.fetchedWholeAssignmentResult = res;
-            console.log(
-              'StudentReport fetched...=>',
-              res.summary.difficulty[0].metric
-            );
+             this.fetchedWholeAssignmentResult = res;
+            this.breadcrumbNavService.pushOnClickCrumb({label:res.testName})
+            this.createAssignmentChartData(res.summary.metric);
             this.isLoading = false;
             this.metrics = res.summary.metric;
             this.showFilteredData(this.currentSelection);
@@ -249,5 +250,71 @@ export class StudentReportComponent implements OnInit {
     return this.dataSource.data.map(t => t[property]).reduce((acc, value) => acc + value, 0);
   }
 
+  createAssignmentChartData(metrics: Metric){
+     this.assignmentChartData.push({
+      type:'Pie',
+      title:'Questions Statistics',
+      config: {
+        colorScheme : ['#fb3','#00c851','#ff3547'],
+        view: [400,400]
+      },
+      data:[
+        {
+          "name": "Skipped Questions",
+          "value": metrics?.skipped
+
+        },
+        {
+          "name": "Correct Questions",
+          "value": metrics?.correct
+        },
+        {
+          "name": "Incorrect Questions",
+          "value": metrics?.incorrect
+        },
+      ]
+    });
+
+    this.assignmentChartData.push({
+      type:'Stacked Bar Chart',
+      title:'Marks Statistics',
+      config: {
+        colorScheme : ['#fb3','#00c851','#ff3547'],
+        view: [400,400]
+      },
+      data:[
+        {
+          "name": "Skipped Marks",
+          "series": [
+            {
+              "name": "Skipped Marks",
+              "value": metrics?.skippedMarks
+            },
+          ]
+        },
+        {
+          "name": "Positive Marks",
+          "series": [
+            {
+              "name": "Positive Marks",
+              "value": metrics?.positiveMarks
+            },
+          ]
+         },
+        {
+          "name": "Negative Marks",
+          "series": [
+            {
+              "name": "Negative Marks",
+              "value": metrics?.negativeMarks
+            },
+          ]
+         },
+      ]
+    })
+
+
+
+  }
 
 }

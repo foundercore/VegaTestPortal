@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { LegendPosition } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-pie-chart',
@@ -8,39 +9,19 @@ import { Component, Input, OnInit } from '@angular/core';
 export class PieChartComponent implements OnInit {
 
 
-  @Input()
+  @Input() data;
+
   title = "Student count by Grade and Gender";
 
-  single: any[] = [
-    {
-      "name": "Grade 1",
-      "value": 442
-    },
-    {
-      "name": "Grade 2",
-      "value": 357
-    },
-    {
-      "name": "Grade 3",
-      "value": 381
-    },
-      {
-      "name": "Grade 4",
-      "value": 452
-    },
-    {
-    "name": "Grade 5",
-    "value": 100
-  }
-  ];;
-  view: any[] = [700, 400];
+  piedata: any[] = [ ];
 
+  view:[number, number] = [550,500];
   // options
   gradient: boolean = true;
   showLegend: boolean = true;
   showLabels: boolean = true;
   isDoughnut: boolean = true;
-  legendPosition: string = 'below';
+  legendPosition:LegendPosition =  LegendPosition.Below ;
 
   colorScheme = {
     domain: ['#FFE600', '#816AF8', '#2D99FE', '#2CD9C5','#FF6C40']
@@ -50,18 +31,27 @@ export class PieChartComponent implements OnInit {
 
   }
   ngOnInit(): void {
-
+      this.title = this.data.title;
+      this.piedata = this.data.data;
+      if(this.data?.config?.colorScheme){
+          this.colorScheme = {
+            domain : this.data?.config.colorScheme
+          }
+      }
+      if(this.data?.config?.view){
+        this.view = undefined;
+      }
   }
 
   onSelect(data): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
+
   }
 
   onActivate(data): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
+
   }
 
   onDeactivate(data): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+
   }
 }

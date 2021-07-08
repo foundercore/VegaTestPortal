@@ -1,6 +1,4 @@
-<div class="testName">
-  Test Name: <strong>{{ fetchedWholeAssignmentResult?.testName }}</strong>
-</div>
+
 
 <mat-tab-group>
   <mat-tab>
@@ -128,7 +126,9 @@
       <mat-icon class="example-tab-icon">bar_chart</mat-icon>
       Quick View
     </ng-template>
-    <div class="card-stats-container">
+    <app-student-assignment-stats-charts [reportData]="assignmentChartData"></app-student-assignment-stats-charts>
+
+    <!-- <div class="card-stats-container">
       <div class="card-stats">
         <div class="card-stats-body">
           <div class="card-title card-bg-pink">
@@ -306,7 +306,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </mat-tab>
 </mat-tab-group>
 
@@ -513,121 +513,6 @@
     </div>
   </div>
 
-  <div *ngSwitchCase="'Solution'" class="student-report-list-grid">
-    <mat-tab-group>
-      <mat-tab
-        *ngFor="let section of fetchedWholeAssignmentResult.sections"
-        [label]="section.sectionName"
-      >
-        <div
-          *ngFor="
-            let answer of section.answers
-              | filterPipe: currentSolutionSelection;
-            let i = index
-          "
-          class="question-card"
-        >
-          <div style="display: flex; margin-bottom: 20px">
-            <div class="numberCircle">{{ i + 1 }}</div>
-            <div
-              class="questionName"
-              [innerHtml]="transform(answer.name)"
-            ></div>
-            <div
-              style="
-                position: absolute;
-                right: 30px;
-                border-radius: 20px;
-                box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%),
-                  0 2px 10px 0 rgb(0 0 0 / 12%);
-              "
-            >
-              <mat-chip-list aria-label="Fish selection">
-                <mat-chip
-                  [ngClass]="{
-                    'success-bg': answer.answerStatus == 'CORRECT',
-                    'failure-bg': answer.answerStatus == 'INCORRECT',
-                    'warning-bg': answer.answerStatus == 'SKIPPED'
-                  }"
-                  selected
-                >
-                  <i
-                    class="fas fa-hourglass-half"
-                    style="margin-right: 5px"
-                  ></i>
-                  {{ answer.timeElapsedInSec }} sec</mat-chip
-                >
-              </mat-chip-list>
-            </div>
-          </div>
-
-          <div style="margin-left: 30px">
-            <div
-              class="option"
-              [ngClass]="{
-                correct: answer.correctOptions?.includes(option.key),
-                selected: answer.selectedOptions?.includes(option.key),
-                wrong: !answer.correctOptions?.includes(option.key)
-              }"
-              *ngFor="let option of answer.inputOptions"
-            >
-              <div class="markcontainer">
-                <i
-                  *ngIf="
-                    answer.answerStatus == 'CORRECT' &&
-                    answer.correctOptions.includes(option.key)
-                  "
-                  class="fas fa-check-circle success"
-                ></i>
-                <i
-                  *ngIf="
-                    answer.answerStatus == 'INCORRECT' &&
-                    answer.selectedOptions.includes(option.key)
-                  "
-                  class="fas fa-times-circle failure"
-                ></i>
-              </div>
-              <div
-                class="answer-list"
-                [innerHtml]="transform(option.value)"
-              ></div>
-              <!-- <mat-chip-list *ngIf="answer.correctOptions?.includes(option.key)" aria-label="Correct Answer">
-                <mat-chip class="primary-bg" selected>
-                   Correct Answer</mat-chip>
-              </mat-chip-list> -->
-              <span
-                *ngIf="answer.correctOptions?.includes(option.key)"
-                class="badge badge-pill badge-primary ml-2"
-                >Correct Answer</span
-              >
-            </div>
-          </div>
-
-          <div *ngIf="answer.type == 'TITA'" style="margin-left: 30px">
-            <div class="option correct">
-              <div [innerHtml]="transform(answer.correctAnswerText)"></div>
-            </div>
-            <div
-              class="option"
-              [ngClass]="{
-                correct: answer.answerStatus == 'CORRECT',
-                wrong: answer.answerStatus == 'INCORRECT'
-              }"
-            >
-              <div [innerHtml]="transform(answer.answerText)"></div>
-            </div>
-          </div>
-          <mat-divider></mat-divider>
-          <div style="margin: 20px 30px">
-            <div style="margin-bottom: 10px">Explanation</div>
-            <div [innerHtml]="transform(answer.explanation)" disabled>
-              Explanation
-            </div>
-          </div>
-        </div>
-      </mat-tab>
-    </mat-tab-group>
-  </div>
 
   <div *ngSwitchCase="'Ranking'" class="student-report-list-grid">
     <div class="mat-elevation-z8">

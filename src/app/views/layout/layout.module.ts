@@ -7,6 +7,8 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { VegaMaterialModule } from 'src/app/core/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { RouterModule } from '@angular/router';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { BreadcrumbNavService } from './breadcrumb/breadcrumb-nav.service';
 
 
 
@@ -16,7 +18,7 @@ import { RouterModule } from '@angular/router';
     HomeComponent,
     ProfileComponent,
     ChangePasswordComponent,
-
+    BreadcrumbComponent
   ],
   imports: [
     CommonModule,
@@ -26,6 +28,6 @@ import { RouterModule } from '@angular/router';
   ],
   exports : [
 
-  ]
+  ],
 })
 export class LayoutModule { }

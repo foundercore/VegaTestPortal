@@ -1,0 +1,11 @@
+<div class="flex-container">
+  <ng-container *ngFor="let item of reportData">
+
+    <div [ngSwitch]="item.type"  style="width: 50%; ">
+      <app-pie-chart *ngSwitchCase="'Pie'" [data]="item"></app-pie-chart>
+      <app-stacked-vertical-bar-chart *ngSwitchCase="'Stacked Bar Chart'" [data]="item"></app-stacked-vertical-bar-chart>
+    </div>
+
+  </ng-container>
+
+</div>
