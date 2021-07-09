@@ -1,13 +1,15 @@
-<mat-tab-group (selectedTabChange)="onTabChanged($event)">
-  
+<mat-tab-group (selectedTabChange)="onTabChanged($event)" style="padding: 0 20px;">
+
   <mat-tab label="QuickView">
     <ng-template mat-tab-label>
       <mat-icon class="example-tab-icon">bar_chart</mat-icon>
       Quick View
     </ng-template>
-    <app-student-assignment-stats-charts
+    <div class="tab-body">
+      <app-student-assignment-stats-charts
       [reportData]="assignmentChartData"
     ></app-student-assignment-stats-charts>
+    </div>
   </mat-tab>
 
   <mat-tab label="Questions">
@@ -17,7 +19,7 @@
     </ng-template>
     <mat-tab-group>
       <mat-tab
-        *ngFor="let section of fetchedWholeAssignmentResult.sections"
+        *ngFor="let section of fetchedWholeAssignmentResult?.sections"
         [label]="section.sectionName"
       >
         <div

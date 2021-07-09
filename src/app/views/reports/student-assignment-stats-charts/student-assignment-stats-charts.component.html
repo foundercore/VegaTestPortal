@@ -1,11 +1,27 @@
-<div class="flex-container">
+<!-- <div class="flex-container">
   <ng-container *ngFor="let item of reportData">
 
     <div [ngSwitch]="item.type"  style="width: 50%; ">
       <app-pie-chart *ngSwitchCase="'Pie'" [data]="item"></app-pie-chart>
       <app-stacked-vertical-bar-chart *ngSwitchCase="'Stacked Bar Chart'" [data]="item"></app-stacked-vertical-bar-chart>
+      <app-vertical-bar-chart  *ngSwitchCase="'Vertical Bar Chart'"  ></app-vertical-bar-chart>
     </div>
 
   </ng-container>
 
+</div> -->
+
+
+
+<div class="container-fluid">
+  <div class="row">
+    <ng-container *ngFor="let item of reportData" [ngSwitch]="item.type">
+         <div class="col-lg-4">
+          <app-pie-chart *ngSwitchCase="'Pie'" [data]="item"></app-pie-chart>
+          <app-stacked-vertical-bar-chart *ngSwitchCase="'Stacked Bar Chart'" [data]="item"></app-stacked-vertical-bar-chart>
+          <app-vertical-bar-chart  *ngSwitchCase="'Vertical Bar Chart'"  [data]="item" ></app-vertical-bar-chart>
+        </div>
+
+    </ng-container>
+  </div>
 </div>

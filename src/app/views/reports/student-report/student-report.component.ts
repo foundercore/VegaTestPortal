@@ -322,5 +322,33 @@ export class StudentReportComponent implements OnInit {
         },
       ],
     });
+
+    this.assignmentChartData.push({
+      type: 'Vertical Bar Chart',
+      title: 'Time Statistics',
+      config: {
+        colorScheme: ['#fb3', '#00c851', '#ff3547'],
+        yAxisLabel:'Time',
+        xAxisLabel:'',
+        showXAxisLabel:false,
+        showYAxisLabel:true
+      },
+      data: [
+        {
+          name: 'Skipped Time',
+          value: metrics?.skippedTimeInSec,
+        },
+        {
+          name: 'Correct Time',
+          value: metrics?.correctTimeInSec,
+        },
+        {
+          name: 'Incorrect Time',
+          value: metrics?.incorrectTimeInSec,
+        },
+      ],
+    });
+
+
   }
 }
