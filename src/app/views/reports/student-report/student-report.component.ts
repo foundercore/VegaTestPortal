@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -29,6 +29,9 @@ export class StudentReportComponent implements OnInit {
 
   solutionSectionArray = [];
 
+  solutionSectionWiseStats: StudentReportModel[] =  [];
+
+  solutionSectionWiseSelectedStats = new EventEmitter<StudentReportModel>();
 
   rankingDisplayedColumn: string[] = ['name', 'totalMarks', 'marksReceived'];
 
@@ -111,6 +114,8 @@ export class StudentReportComponent implements OnInit {
         .subscribe(
           (res) => {
             this.fetchedWholeAssignmentResult = res;
+            this.getSectionWiseStats(this.fetchedWholeAssignmentResult);
+            this.solutionSectionWiseSelectedStats.emit(this.solutionSectionWiseStats[0]);
             this.fetchedWholeAssignmentResult?.sections.forEach((section,i) => {
               this.solutionSectionArray.push(
                 {index: i,name:section.sectionName})
@@ -149,6 +154,48 @@ export class StudentReportComponent implements OnInit {
       this.currentSolutionSelection = filterMode;
     }
   }
+
+
+  getSectionWiseStats(fetchedWholeAssignmentResult){
+
+    var totScore = 0,
+      negativeMarks = 0,
+      totalTimeInSecs = 0,
+      totalQuestions = 0,
+      totalCorrectQuestions = 0,
+      totalAttemptedQuestions = 0,
+      totalAccuracyPerc = 0,
+      noOfRows = 0;
+
+     fetchedWholeAssignmentResult.summary.sections.map((sec) => {
+      var studentReportModel = new StudentReportModel();
+      studentReportModel.name = sec.sectionName;
+      studentReportModel.questions = sec.metric.totalQuestions;
+      studentReportModel.timeTaken = sec.metric.totalTimeInSec;
+      studentReportModel.attempt = sec.metric.attempted;
+      studentReportModel.incorrect = sec.metric.incorrect;
+      studentReportModel.skipped = sec.metric.skipped;
+      studentReportModel.score = sec.metric.marksReceived;
+
+      totScore += sec.metric.marksReceived;
+      negativeMarks += sec.metric.negativeMarks;
+
+      totalTimeInSecs += sec.metric.marksReceived;
+      totalQuestions += sec.metric.totalQuestions;
+      totalCorrectQuestions += sec.metric.correct;
+      totalAttemptedQuestions += sec.metric.attempted;
+
+      studentReportModel.correct = sec.metric.correct;
+      studentReportModel.accuracy =
+        Math.round(
+          (sec.metric.correct / sec.metric.totalQuestions) * 100 * 100
+        ) / 100;
+      totalAccuracyPerc += studentReportModel.accuracy;
+      if (studentReportModel.accuracy > 0) noOfRows++;
+      this.solutionSectionWiseStats.push(studentReportModel);
+    });
+
+   }
 
   showFilteredData(filterMode?) {
     this.currentSelection = filterMode;
@@ -365,6 +412,7 @@ export class StudentReportComponent implements OnInit {
   toggleSolutionSection(selected){
       this.solutionSectionSelection = selected;
       this.solutionSectionSelectedIndex = selected.index;
+      this.solutionSectionWiseSelectedStats.emit(this.solutionSectionWiseStats[selected.index])
   }
 
 
