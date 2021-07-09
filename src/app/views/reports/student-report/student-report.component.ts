@@ -21,17 +21,19 @@ import {
   styleUrls: ['./student-report.component.scss'],
 })
 export class StudentReportComponent implements OnInit {
-  filterList = [
-    'Section Level',
-    // 'Topic Level',
-    // 'Difficulty Level',
-    'Solution',
-    'Ranking',
-  ];
+
+
+  solutionSectionSelection;
+
+  solutionSectionSelectedIndex = 0;
+
+  solutionSectionArray = [];
+
 
   rankingDisplayedColumn: string[] = ['name', 'totalMarks', 'marksReceived'];
 
   solutionFilter = ['Correct', 'Incorrect', 'Skipped'];
+
   displayedColumns: string[] = [
     'name',
     'questions',
@@ -109,6 +111,15 @@ export class StudentReportComponent implements OnInit {
         .subscribe(
           (res) => {
             this.fetchedWholeAssignmentResult = res;
+            this.fetchedWholeAssignmentResult?.sections.forEach((section,i) => {
+              this.solutionSectionArray.push(
+                {index: i,name:section.sectionName})
+            });
+            if(this.solutionSectionArray.length != 0 ){
+              this.solutionSectionSelection = this.solutionSectionArray[0];
+              this.solutionSectionSelectedIndex = 0;
+            }
+
             this.breadcrumbNavService.pushOnClickCrumb({ label: res.testName });
             this.createAssignmentChartData(res.summary.metric);
             this.isLoading = false;
@@ -242,7 +253,7 @@ export class StudentReportComponent implements OnInit {
   }
 
   onTabChanged($event) {
-    if ($event.tab.textLabel === 'Ranking') {
+     if ($event.tab.textLabel === 'Ranking') {
       this.dataSource.data = this.rankingDetailsResult;
     }
     if ($event.tab.textLabel === 'QuickView') {
@@ -348,7 +359,13 @@ export class StudentReportComponent implements OnInit {
         },
       ],
     });
-
-
   }
+
+
+  toggleSolutionSection(selected){
+      this.solutionSectionSelection = selected;
+      this.solutionSectionSelectedIndex = selected.index;
+  }
+
+
 }

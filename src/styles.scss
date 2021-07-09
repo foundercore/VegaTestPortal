@@ -417,3 +417,9 @@ mat-checkbox span { white-space: pre-wrap; }
   color: white;
   border-radius: 5px;
 }
+
+.invisible-tabs {
+  > .mat-tab-header {
+    display: none;
+  }
+}

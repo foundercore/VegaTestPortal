@@ -7,7 +7,7 @@
     </ng-template>
     <div class="tab-body">
       <app-student-assignment-stats-charts
-      [reportData]="assignmentChartData"
+      [reportData]="assignmentChartData" [metric]="fetchedWholeAssignmentResult?.summary?.metric"
     ></app-student-assignment-stats-charts>
     </div>
   </mat-tab>
@@ -17,14 +17,27 @@
       <mat-icon class="example-tab-icon">question_answer</mat-icon>
       Solution
     </ng-template>
-    <mat-tab-group>
+
+    <div style="position: relative; height: 50px">
+        <div style="margin: 0px 20px; display: inline-block">
+           <mat-button-toggle-group #sectionToggle="matButtonToggleGroup"
+           (change)="toggleSolutionSection($event.value)"
+           [(ngModel)]="solutionSectionSelection"
+           aria-label="Change Filter" >
+           <mat-button-toggle *ngFor="let section of solutionSectionArray;let index = index" [value]="section" >
+                   {{ section?.name }}
+           </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+    </div>
+
+    <mat-tab-group class="invisible-tabs"  [selectedIndex]="solutionSectionSelectedIndex">
       <mat-tab
         *ngFor="let section of fetchedWholeAssignmentResult?.sections"
         [label]="section.sectionName"
       >
         <div
-          *ngFor="
-            let answer of section.answers
+          *ngFor=" let answer of section.answers
               | filterPipe: currentSolutionSelection;
             let i = index
           "
@@ -189,22 +202,7 @@
   </mat-tab>
 </mat-tab-group>
 
-<!-- <div style="position: relative; height: 50px">
-  <div style="margin: 0px 20px; display: inline-block">
-    <mat-button-toggle-group
-      #filterToggle="matButtonToggleGroup"
-      (change)="showFilteredData($event.value)"
-      [value]="currentSelection"
-      aria-label="Change Filter"
-    >
-      <mat-button-toggle
-        *ngFor="let filterItem of filterList"
-        [value]="filterItem"
-      >
-        {{ filterItem }}
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-  </div> -->
+
 
 <!-- <div
     *ngIf="currentSelection == 'Solution'"

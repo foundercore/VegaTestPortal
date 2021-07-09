@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Metric } from 'src/app/models/reports/student-report-model';
 
 @Component({
   selector: 'app-student-assignment-stats-charts',
@@ -8,6 +9,8 @@ import { Component, Input, OnInit } from '@angular/core';
 export class StudentAssignmentStatsChartsComponent implements OnInit {
 
   @Input() reportData;
+
+  @Input() metric : Metric;
 
   constructor() {
     console.log(this.reportData);
