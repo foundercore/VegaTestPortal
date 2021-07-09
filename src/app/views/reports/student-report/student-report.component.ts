@@ -10,7 +10,10 @@ import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import { TestConfigService } from '../../assignments/services/test-config-service';
 import { BreadcrumbNavService } from '../../layout/breadcrumb/breadcrumb-nav.service';
-import { Metric, StudentReportModel } from 'src/app/models/reports/student-report-model';
+import {
+  Metric,
+  StudentReportModel,
+} from 'src/app/models/reports/student-report-model';
 
 @Component({
   selector: 'app-student-report',
@@ -23,20 +26,12 @@ export class StudentReportComponent implements OnInit {
     // 'Topic Level',
     // 'Difficulty Level',
     'Solution',
-    'Ranking'
+    'Ranking',
   ];
 
-  rankingDisplayedColumn: string[] = [
-    'name',
-    'totalMarks',
-    'marksReceived'
-  ];
+  rankingDisplayedColumn: string[] = ['name', 'totalMarks', 'marksReceived'];
 
-  solutionFilter = [
-    'Correct',
-    'Incorrect',
-    'Skipped'
-  ]
+  solutionFilter = ['Correct', 'Incorrect', 'Skipped'];
   displayedColumns: string[] = [
     'name',
     'questions',
@@ -61,7 +56,7 @@ export class StudentReportComponent implements OnInit {
 
   currentSelection = 'Section Level';
 
-  solution  = 'Solution';
+  solution = 'Solution';
 
   quickView = 'Charts';
 
@@ -77,7 +72,12 @@ export class StudentReportComponent implements OnInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  assignmentChartData : {type:string,title:string,config?:any,data: {name:string,value?:number,series?:any[]}[]} [] = [];
+  assignmentChartData: {
+    type: string;
+    title: string;
+    config?: any;
+    data: { name: string; value?: number; series?: any[] }[];
+  }[] = [];
 
   constructor(
     public translate: TranslateService,
@@ -85,7 +85,7 @@ export class StudentReportComponent implements OnInit {
     private testConfigService: TestConfigService,
     private activatedRoute: ActivatedRoute,
     public _sanitizer: DomSanitizer,
-    public breadcrumbNavService:BreadcrumbNavService
+    public breadcrumbNavService: BreadcrumbNavService
   ) {}
 
   ngOnInit() {
@@ -108,8 +108,8 @@ export class StudentReportComponent implements OnInit {
         .getStudentAssignmentResult(assignmentId, this.userName)
         .subscribe(
           (res) => {
-             this.fetchedWholeAssignmentResult = res;
-            this.breadcrumbNavService.pushOnClickCrumb({label:res.testName})
+            this.fetchedWholeAssignmentResult = res;
+            this.breadcrumbNavService.pushOnClickCrumb({ label: res.testName });
             this.createAssignmentChartData(res.summary.metric);
             this.isLoading = false;
             this.metrics = res.summary.metric;
@@ -123,17 +123,16 @@ export class StudentReportComponent implements OnInit {
     });
   }
 
-
-  getRankingDetails(){
+  getRankingDetails() {
     this.activatedRoute.params.subscribe((params) => {
-      this.testConfigService.getRankingDetails(params.id).subscribe(resp=>{
-          this.rankingDetailsResult = resp;
-      })
-    })
+      this.testConfigService.getRankingDetails(params.id).subscribe((resp) => {
+        this.rankingDetailsResult = resp;
+      });
+    });
   }
 
   changeSolutionFilter(filterMode?) {
-    if(this.currentSolutionSelection === filterMode){
+    if (this.currentSolutionSelection === filterMode) {
       this.currentSolutionSelection = '';
     } else {
       this.currentSolutionSelection = filterMode;
@@ -151,6 +150,7 @@ export class StudentReportComponent implements OnInit {
       totalAttemptedQuestions = 0,
       totalAccuracyPerc = 0,
       noOfRows = 0;
+
     if (filterMode === 'Section Level') {
       this.fetchedWholeAssignmentResult.summary.sections.map((sec) => {
         var studentReportModel = new StudentReportModel();
@@ -209,7 +209,6 @@ export class StudentReportComponent implements OnInit {
       });
       this.dataSource.data = datas;
     } else if (filterMode === 'Difficulty Level') {
-
       this.fetchedWholeAssignmentResult.summary.difficulty.map((sec) => {
         var studentReportModel = new StudentReportModel();
         studentReportModel.name = sec.difficultyLevel;
@@ -242,79 +241,86 @@ export class StudentReportComponent implements OnInit {
     }
   }
 
+  onTabChanged($event) {
+    if ($event.tab.textLabel === 'Ranking') {
+      this.dataSource.data = this.rankingDetailsResult;
+    }
+    if ($event.tab.textLabel === 'QuickView') {
+    }
+    if ($event.tab.textLabel === 'Questions') {
+    }
+  }
+
   public transform(value: string): SafeHtml {
     return this._sanitizer.bypassSecurityTrustHtml(value);
   }
 
   getTotal(property: string) {
-    return this.dataSource.data.map(t => t[property]).reduce((acc, value) => acc + value, 0);
+    return this.dataSource.data
+      .map((t) => t[property])
+      .reduce((acc, value) => acc + value, 0);
   }
 
-  createAssignmentChartData(metrics: Metric){
-     this.assignmentChartData.push({
-      type:'Pie',
-      title:'Questions Statistics',
+  createAssignmentChartData(metrics: Metric) {
+    this.assignmentChartData.push({
+      type: 'Pie',
+      title: 'Questions Statistics',
       config: {
-        colorScheme : ['#fb3','#00c851','#ff3547'],
-        view: [400,400]
+        colorScheme: ['#fb3', '#00c851', '#ff3547'],
+        view: [400, 400],
       },
-      data:[
+      data: [
         {
-          "name": "Skipped Questions",
-          "value": metrics?.skipped
-
+          name: 'Skipped Questions',
+          value: metrics?.skipped,
         },
         {
-          "name": "Correct Questions",
-          "value": metrics?.correct
+          name: 'Correct Questions',
+          value: metrics?.correct,
         },
         {
-          "name": "Incorrect Questions",
-          "value": metrics?.incorrect
+          name: 'Incorrect Questions',
+          value: metrics?.incorrect,
         },
-      ]
+      ],
     });
 
     this.assignmentChartData.push({
-      type:'Stacked Bar Chart',
-      title:'Marks Statistics',
+      type: 'Stacked Bar Chart',
+      title: 'Marks Statistics',
       config: {
-        colorScheme : ['#fb3','#00c851','#ff3547'],
-        view: [400,400]
+        colorScheme: ['#fb3', '#00c851', '#ff3547'],
+        view: [400, 400],
       },
-      data:[
+      data: [
         {
-          "name": "Skipped Marks",
-          "series": [
+          name: 'Skipped Marks',
+          series: [
             {
-              "name": "Skipped Marks",
-              "value": metrics?.skippedMarks
+              name: 'Skipped Marks',
+              value: metrics?.skippedMarks,
             },
-          ]
+          ],
         },
         {
-          "name": "Positive Marks",
-          "series": [
+          name: 'Positive Marks',
+          series: [
             {
-              "name": "Positive Marks",
-              "value": metrics?.positiveMarks
+              name: 'Positive Marks',
+              value: metrics?.positiveMarks,
             },
-          ]
-         },
+          ],
+        },
         {
-          "name": "Negative Marks",
-          "series": [
+          name: 'Negative Marks',
+          series: [
             {
-              "name": "Negative Marks",
-              "value": metrics?.negativeMarks
+              name: 'Negative Marks',
+              value: metrics?.negativeMarks,
             },
-          ]
-         },
-      ]
-    })
-
-
-
+          ],
+        },
+      ],
+    });
   }
-
 }
