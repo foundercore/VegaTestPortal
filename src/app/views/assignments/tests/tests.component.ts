@@ -58,7 +58,6 @@ export class TestsComponent implements OnInit, AfterViewInit {
   currentSectionSubmittedData: any;
   studentName: string = '';
   userType: string = '';
-  buttontext: string = '';
   createdId: string = '';
   searchQuestionPaperModel = new SearchQuestionPaperVM();
   isLoadingResults: boolean;
@@ -345,13 +344,15 @@ export class TestsComponent implements OnInit, AfterViewInit {
   }
 
   startTest(element) {
-    if (this.userType === 'ROLE_USER_ADMIN') {
-      this.buttontext = 'Preview Test';
+
+    let buttonText = '';
+    if (this.userType === 'ROLE_USER_ADMIN' || this.userType === 'ROLE_STAFF') {
+      buttonText = 'Preview Test';
     } else {
-      this.buttontext = 'Start Test';
+      buttonText = 'Start Test';
     }
 
-    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.instructions, this.buttontext);
+    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.instructions, buttonText);
 
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
       width: "600px",
