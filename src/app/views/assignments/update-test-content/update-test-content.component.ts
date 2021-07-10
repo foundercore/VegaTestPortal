@@ -25,7 +25,8 @@ import { forkJoin, merge, Observable, of as observableOf, Subject } from 'rxjs';
 import { catchError, filter, map, startWith, switchMap } from 'rxjs/operators';
 import { SearchQuestionPaperVM } from '../models/searchQuestionPaperVM';
 import { error } from '@angular/compiler/src/util';
-import { Location } from '@angular/common'
+import { Location } from '@angular/common';
+import { BreadcrumbNavService } from '../../layout/breadcrumb/breadcrumb-nav.service';
 
 @Component({
   selector: 'app-update-test-content',
@@ -74,19 +75,19 @@ export class UpdateTestContentComponent implements OnInit {
   isLoadingResults: boolean;
   isRateLimitReached: boolean;
   actualTotalNumberOfRecords: any;
-  remarks: string = "";
+  remarks: string = '';
+  breadcrumModified: boolean;
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private testConfigService: TestConfigService,
     private toastrService: ToastrService,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private breadcrumbNavService: BreadcrumbNavService
   ) {}
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     console.log('paginator inside ngAfterViewInit=>', this.paginator);
@@ -350,13 +351,15 @@ export class UpdateTestContentComponent implements OnInit {
     });
   }
 
-
   getQuestionPaperbyId() {
     if (this.route.snapshot.paramMap.get('id') != null) {
       this.testConfigService
         .getQuestionPaper(this.route.snapshot.paramMap.get('id'))
         .subscribe((res: any) => {
           this.questionPaper = res;
+          if (!this.breadcrumModified)
+            this.breadcrumbNavService.pushOnClickCrumb({ label: res.name });
+          this.breadcrumModified = true;
           this.quest = res;
           this.controlparms = res?.controlParam;
           this.modelsections = res?.sections;
@@ -701,10 +704,12 @@ export class UpdateTestContentComponent implements OnInit {
   }
 
   applyFilter(e) {
-    this.dataSource.filter = (e.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = (e.target as HTMLInputElement).value
+      .trim()
+      .toLowerCase();
   }
 
-  goBack(){
-     this.location.back();
+  goBack() {
+    this.location.back();
   }
 }

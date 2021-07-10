@@ -23,19 +23,19 @@ const routes: Routes = [
     path: ':id/edit',
     component: QuestionFormComponent,
     canActivate: [RoleGuard],
-    data: { roles: [Role.ADMIN, Role.STAFF] },
+    data: { roles: [Role.ADMIN, Role.STAFF], breadcrumb: 'Edit Question' },
   },
   {
     path: ':id/view',
     component: QuestionFormPreviewComponent,
     canActivate: [RoleGuard],
-    data: { roles: [Role.ADMIN, Role.STAFF] },
+    data: { roles: [Role.ADMIN, Role.STAFF], breadcrumb: 'View Question' },
   },
   {
     path: 'add',
     component: QuestionFormComponent,
     canActivate: [RoleGuard],
-    data: { roles: [Role.ADMIN, Role.STAFF] },
+    data: { roles: [Role.ADMIN, Role.STAFF], breadcrumb: 'Add Question' },
   },
 ];
 
@@ -47,14 +47,13 @@ const routes: Routes = [
     QuestionManagementComponent,
     QuestionMigrateUploadDialogComponent,
     UploadQuestionsComponent,
-
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     VegaMaterialModule,
-    SharedModule
+    SharedModule,
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class QuestionsModule { }
+export class QuestionsModule {}
