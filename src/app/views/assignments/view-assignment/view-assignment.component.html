@@ -36,24 +36,38 @@
             matSortActive="displayName"
             matSortDisableClear
           >
-
-
-             <ng-container matColumnDef="description">
-              <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>
+            <ng-container matColumnDef="description">
+              <th
+                class="custom-mat-header-th"
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+              >
                 Description
               </th>
               <td mat-cell *matCellDef="let row">{{ row.description }}</td>
             </ng-container>
 
-             <ng-container matColumnDef="releaseDate">
-              <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>
+            <ng-container matColumnDef="releaseDate">
+              <th
+                class="custom-mat-header-th"
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+              >
                 Release Date
               </th>
-              <td mat-cell *matCellDef="let row">{{ row.releaseDate | date : 'mediumDate'}}</td>
+              <td mat-cell *matCellDef="let row">
+                {{ row.releaseDate | date: "mediumDate" }}
+              </td>
             </ng-container>
 
-             <ng-container matColumnDef="passcode">
-              <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
+            <ng-container matColumnDef="passcode">
+              <th
+                class="custom-mat-header-th"
+                mat-header-cell
+                *matHeaderCellDef
+              >
                 Passcode
               </th>
               <td mat-cell *matCellDef="let row">
@@ -61,24 +75,41 @@
               </td>
             </ng-container>
 
-             <ng-container matColumnDef="validFrom">
-              <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>
+            <ng-container matColumnDef="validFrom">
+              <th
+                class="custom-mat-header-th"
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+              >
                 Valid From
               </th>
-              <td mat-cell *matCellDef="let row">{{ row.validFrom | date : 'mediumDate'}}</td>
+              <td mat-cell *matCellDef="let row">
+                {{ row.validFrom | date: "mediumDate" }}
+              </td>
             </ng-container>
 
-              <ng-container matColumnDef="validTo">
-              <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>
+            <ng-container matColumnDef="validTo">
+              <th
+                class="custom-mat-header-th"
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+              >
                 Valid To
               </th>
-              <td mat-cell *matCellDef="let row">{{ row.validTo | date : 'mediumDate' }}</td>
+              <td mat-cell *matCellDef="let row">
+                {{ row.validTo | date: "mediumDate" }}
+              </td>
             </ng-container>
-
 
             <!-- actions Column -->
             <ng-container matColumnDef="actions">
-              <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
+              <th
+                class="custom-mat-header-th"
+                mat-header-cell
+                *matHeaderCellDef
+              >
                 {{ "COMMON_TAG.ACTIONS" | translate }}
               </th>
               <td mat-cell *matCellDef="let row">
@@ -102,8 +133,11 @@
                 >
                   <mat-icon>delete_forever</mat-icon>
                 </span>
-                <span class="action-btn" matTooltip="Add Student"
-                     (click)="performGridAction('add_student',row)">
+                <span
+                  class="action-btn"
+                  matTooltip="Add Student"
+                  (click)="performGridAction('add_student', row)"
+                >
                   <mat-icon>group_add</mat-icon>
                 </span>
               </td>
