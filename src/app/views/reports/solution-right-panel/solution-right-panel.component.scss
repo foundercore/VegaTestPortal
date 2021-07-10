@@ -1,0 +1,38 @@
+
+.card-subtitle{
+  text-align: center;
+  color: black;
+  font-family: math;
+  font-size: 14px;
+  }
+  .primary {
+   color: #4285f4 !important;
+  }
+
+  .icon-space{
+   margin-right: 5px;
+  }
+  .stats{
+   display: flex;
+   align-items: center;
+   height: 60px;
+   }
+  .sub-stats {
+   width: 100%;
+   display: flex;
+   justify-content: space-around;
+  }
+  .info{
+   color: #33b5e5 !important;
+  }
+  .success{
+    color: #00c851 !important;
+  }
+
+  .warning{
+    color: #fb3 !important;
+  }
+
+  .failure{
+    color: #ff3547 !important;
+  }

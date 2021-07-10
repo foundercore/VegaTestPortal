@@ -1,0 +1,64 @@
+<div  [formGroup]="filterGroup">
+  <table>
+    <tr>
+      <div class="w-25-field">
+        <mat-form-field appearance="outline" class="form-field-padding">
+          <mat-label>Subject</mat-label>
+          <mat-select formControlName="questionTypeCntrl">
+            <mat-option
+              *ngFor="let questionType of questionTypeList"
+              [value]="questionType"
+              >{{ questionType }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </tr>
+
+    <tr>
+      <div class="w-25-field">
+        <mat-form-field appearance="outline" class="form-field-padding">
+          <mat-label>Topic</mat-label>
+          <mat-select formControlName="topicCntrl">
+            <mat-option *ngFor="let topicList of topicLists" [value]="topicList"
+              >{{ topicList }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </tr>
+
+    <tr>
+      <div class="w-25-field">
+        <mat-form-field appearance="outline" class="form-field-padding">
+          <mat-label>Subtopic</mat-label>
+          <mat-select formControlName="subjectCntrl">
+            <mat-option
+              *ngFor="let subjectList of subjectLists"
+              [value]="subjectList"
+              >{{ subjectList }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </tr>
+    <tr>
+      <div class="w-25-field">
+        <mat-form-field appearance="outline" class="form-field-padding">
+          <mat-label>Difficulty</mat-label>
+          <mat-select formControlName="difficulty">
+            <mat-option
+              *ngFor="let difficultyLevel of difficultyLevels"
+              [value]="difficultyLevel"
+              >{{ difficultyLevel }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </tr>
+  </table>
+</div>
+
+<div >
+  <button mat-raised-button (click)="applyFilter()">Filter</button>
+</div>

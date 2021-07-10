@@ -196,14 +196,12 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   viewResult(row: any) {
-    console.log('View Result function received parameters=>', row);
-    this.testConfigService
+     this.testConfigService
       .getStudentAssignmentResult(row.assignmentId, this.userName)
       .subscribe(
         (res) => {
-          console.log('Fetched Student assignment result =>', res);
-          this.router
-            .navigate(['/home/assignment_report/' + row.assignmentId])
+           this.router
+            .navigate(['/home/dashboard/assignment_report/' + row.assignmentId])
             .then(() => console.log('Navigate to score card'))
             .catch((err) =>
               console.log('Error=> Navigate to score card=>', err)

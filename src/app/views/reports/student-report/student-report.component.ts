@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,7 +9,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import { TestConfigService } from '../../assignments/services/test-config-service';
-import { StudentReportModel } from '../Models/studentReportModel';
+import { BreadcrumbNavService } from '../../layout/breadcrumb/breadcrumb-nav.service';
+import {
+  Metric,
+  StudentReportModel,
+} from 'src/app/models/reports/student-report-model';
 
 @Component({
   selector: 'app-student-report',
@@ -17,25 +21,22 @@ import { StudentReportModel } from '../Models/studentReportModel';
   styleUrls: ['./student-report.component.scss'],
 })
 export class StudentReportComponent implements OnInit {
-  filterList = [
-    'Section Level',
-    // 'Topic Level',
-    // 'Difficulty Level',
-    'Solution',
-    'Ranking'
-  ];
 
-  rankingDisplayedColumn: string[] = [
-    'name',
-    'totalMarks',
-    'marksReceived'
-  ];
 
-  solutionFilter = [
-    'Correct',
-    'Incorrect',
-    'Skipped'
-  ]
+  solutionSectionSelection;
+
+  solutionSectionSelectedIndex = 0;
+
+  solutionSectionArray = [];
+
+  solutionSectionWiseStats: StudentReportModel[] =  [];
+
+  solutionSectionWiseSelectedStats = new EventEmitter<StudentReportModel>();
+
+  rankingDisplayedColumn: string[] = ['name', 'totalMarks', 'marksReceived'];
+
+  solutionFilter = ['Correct', 'Incorrect', 'Skipped'];
+
   displayedColumns: string[] = [
     'name',
     'questions',
@@ -60,6 +61,10 @@ export class StudentReportComponent implements OnInit {
 
   currentSelection = 'Section Level';
 
+  solution = 'Solution';
+
+  quickView = 'Charts';
+
   currentSolutionSelection = '';
 
   public pageOptions = PAGE_OPTIONS;
@@ -72,12 +77,20 @@ export class StudentReportComponent implements OnInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
+  assignmentChartData: {
+    type: string;
+    title: string;
+    config?: any;
+    data: { name: string; value?: number; series?: any[] }[];
+  }[] = [];
+
   constructor(
     public translate: TranslateService,
     private store: Store<AppState>,
     private testConfigService: TestConfigService,
     private activatedRoute: ActivatedRoute,
-    public _sanitizer: DomSanitizer
+    public _sanitizer: DomSanitizer,
+    public breadcrumbNavService: BreadcrumbNavService
   ) {}
 
   ngOnInit() {
@@ -100,12 +113,20 @@ export class StudentReportComponent implements OnInit {
         .getStudentAssignmentResult(assignmentId, this.userName)
         .subscribe(
           (res) => {
-            console.log('StudentReport fetched=>', res);
             this.fetchedWholeAssignmentResult = res;
-            console.log(
-              'StudentReport fetched...=>',
-              res.summary.difficulty[0].metric
-            );
+            this.getSectionWiseStats(this.fetchedWholeAssignmentResult);
+            this.solutionSectionWiseSelectedStats.emit(this.solutionSectionWiseStats[0]);
+            this.fetchedWholeAssignmentResult?.sections.forEach((section,i) => {
+              this.solutionSectionArray.push(
+                {index: i,name:section.sectionName})
+            });
+            if(this.solutionSectionArray.length != 0 ){
+              this.solutionSectionSelection = this.solutionSectionArray[0];
+              this.solutionSectionSelectedIndex = 0;
+            }
+
+            this.breadcrumbNavService.pushOnClickCrumb({ label: res.testName });
+            this.createAssignmentChartData(res.summary.metric);
             this.isLoading = false;
             this.metrics = res.summary.metric;
             this.showFilteredData(this.currentSelection);
@@ -118,22 +139,63 @@ export class StudentReportComponent implements OnInit {
     });
   }
 
-
-  getRankingDetails(){
+  getRankingDetails() {
     this.activatedRoute.params.subscribe((params) => {
-      this.testConfigService.getRankingDetails(params.id).subscribe(resp=>{
-          this.rankingDetailsResult = resp;
-      })
-    })
+      this.testConfigService.getRankingDetails(params.id).subscribe((resp) => {
+        this.rankingDetailsResult = resp;
+      });
+    });
   }
 
   changeSolutionFilter(filterMode?) {
-    if(this.currentSolutionSelection === filterMode){
+    if (this.currentSolutionSelection === filterMode) {
       this.currentSolutionSelection = '';
     } else {
       this.currentSolutionSelection = filterMode;
     }
   }
+
+
+  getSectionWiseStats(fetchedWholeAssignmentResult){
+
+    var totScore = 0,
+      negativeMarks = 0,
+      totalTimeInSecs = 0,
+      totalQuestions = 0,
+      totalCorrectQuestions = 0,
+      totalAttemptedQuestions = 0,
+      totalAccuracyPerc = 0,
+      noOfRows = 0;
+
+     fetchedWholeAssignmentResult.summary.sections.map((sec) => {
+      var studentReportModel = new StudentReportModel();
+      studentReportModel.name = sec.sectionName;
+      studentReportModel.questions = sec.metric.totalQuestions;
+      studentReportModel.timeTaken = sec.metric.totalTimeInSec;
+      studentReportModel.attempt = sec.metric.attempted;
+      studentReportModel.incorrect = sec.metric.incorrect;
+      studentReportModel.skipped = sec.metric.skipped;
+      studentReportModel.score = sec.metric.marksReceived;
+
+      totScore += sec.metric.marksReceived;
+      negativeMarks += sec.metric.negativeMarks;
+
+      totalTimeInSecs += sec.metric.marksReceived;
+      totalQuestions += sec.metric.totalQuestions;
+      totalCorrectQuestions += sec.metric.correct;
+      totalAttemptedQuestions += sec.metric.attempted;
+
+      studentReportModel.correct = sec.metric.correct;
+      studentReportModel.accuracy =
+        Math.round(
+          (sec.metric.correct / sec.metric.totalQuestions) * 100 * 100
+        ) / 100;
+      totalAccuracyPerc += studentReportModel.accuracy;
+      if (studentReportModel.accuracy > 0) noOfRows++;
+      this.solutionSectionWiseStats.push(studentReportModel);
+    });
+
+   }
 
   showFilteredData(filterMode?) {
     this.currentSelection = filterMode;
@@ -146,6 +208,7 @@ export class StudentReportComponent implements OnInit {
       totalAttemptedQuestions = 0,
       totalAccuracyPerc = 0,
       noOfRows = 0;
+
     if (filterMode === 'Section Level') {
       this.fetchedWholeAssignmentResult.summary.sections.map((sec) => {
         var studentReportModel = new StudentReportModel();
@@ -204,7 +267,6 @@ export class StudentReportComponent implements OnInit {
       });
       this.dataSource.data = datas;
     } else if (filterMode === 'Difficulty Level') {
-
       this.fetchedWholeAssignmentResult.summary.difficulty.map((sec) => {
         var studentReportModel = new StudentReportModel();
         studentReportModel.name = sec.difficultyLevel;
@@ -237,12 +299,120 @@ export class StudentReportComponent implements OnInit {
     }
   }
 
+  onTabChanged($event) {
+     if ($event.tab.textLabel === 'Ranking') {
+      this.dataSource.data = this.rankingDetailsResult;
+    }
+    if ($event.tab.textLabel === 'QuickView') {
+    }
+    if ($event.tab.textLabel === 'Questions') {
+    }
+  }
+
   public transform(value: string): SafeHtml {
     return this._sanitizer.bypassSecurityTrustHtml(value);
   }
 
   getTotal(property: string) {
-    return this.dataSource.data.map(t => t[property]).reduce((acc, value) => acc + value, 0);
+    return this.dataSource.data
+      .map((t) => t[property])
+      .reduce((acc, value) => acc + value, 0);
+  }
+
+  createAssignmentChartData(metrics: Metric) {
+    this.assignmentChartData.push({
+      type: 'Pie',
+      title: 'Questions Statistics',
+      config: {
+        colorScheme: ['#fb3', '#00c851', '#ff3547'],
+        view: [400, 400],
+      },
+      data: [
+        {
+          name: 'Skipped Questions',
+          value: metrics?.skipped,
+        },
+        {
+          name: 'Correct Questions',
+          value: metrics?.correct,
+        },
+        {
+          name: 'Incorrect Questions',
+          value: metrics?.incorrect,
+        },
+      ],
+    });
+
+    this.assignmentChartData.push({
+      type: 'Stacked Bar Chart',
+      title: 'Marks Statistics',
+      config: {
+        colorScheme: ['#fb3', '#00c851', '#ff3547'],
+        view: [400, 400],
+      },
+      data: [
+        {
+          name: 'Skipped Marks',
+          series: [
+            {
+              name: 'Skipped Marks',
+              value: metrics?.skippedMarks,
+            },
+          ],
+        },
+        {
+          name: 'Positive Marks',
+          series: [
+            {
+              name: 'Positive Marks',
+              value: metrics?.positiveMarks,
+            },
+          ],
+        },
+        {
+          name: 'Negative Marks',
+          series: [
+            {
+              name: 'Negative Marks',
+              value: metrics?.negativeMarks,
+            },
+          ],
+        },
+      ],
+    });
+
+    this.assignmentChartData.push({
+      type: 'Vertical Bar Chart',
+      title: 'Time Statistics',
+      config: {
+        colorScheme: ['#fb3', '#00c851', '#ff3547'],
+        yAxisLabel:'Time',
+        xAxisLabel:'',
+        showXAxisLabel:false,
+        showYAxisLabel:true
+      },
+      data: [
+        {
+          name: 'Skipped Time',
+          value: metrics?.skippedTimeInSec,
+        },
+        {
+          name: 'Correct Time',
+          value: metrics?.correctTimeInSec,
+        },
+        {
+          name: 'Incorrect Time',
+          value: metrics?.incorrectTimeInSec,
+        },
+      ],
+    });
+  }
+
+
+  toggleSolutionSection(selected){
+      this.solutionSectionSelection = selected;
+      this.solutionSectionSelectedIndex = selected.index;
+      this.solutionSectionWiseSelectedStats.emit(this.solutionSectionWiseStats[selected.index])
   }
 
 

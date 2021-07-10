@@ -16,10 +16,9 @@ h5 {
 
 .chart-body{
   display: grid;
-// height: 385px;
-   //min-height:326px;
- //max-height: 400px;
-
+  //height: 400px;
+ // min-height: 400px;
+  //max-height: 400px;
 }
 
 .chart-container {
@@ -34,35 +33,36 @@ h5 {
 
 }
 
+
 .chart-stats {
-   background-color: #fff;
- }
+  background-color: #fff;
+}
 
 
 .card-subtitle{
- text-align: center;
- color: black;
- font-family: math;
- font-size: 14px;
+text-align: center;
+color: black;
+font-family: math;
+font-size: 14px;
 }
 .primary {
-  color: #4285f4 !important;
+ color: #4285f4 !important;
 }
 
 .icon-space{
-  margin-right: 5px;
+ margin-right: 5px;
 }
 .stats{
-  display: flex;
-  align-items: center;
-  padding: 10px;
+ display: flex;
+ align-items: center;
+ padding: 10px;
 }
 
 .sub-stats {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
+ width: 100%;
+ display: flex;
+ justify-content: space-around;
 }
 .info{
-  color: #33b5e5 !important;
+ color: #33b5e5 !important;
 }

@@ -7,8 +7,15 @@ import { StudentBatchManagementComponent } from './student-batch-management/stud
 import { RouterModule } from '@angular/router';
 import { VegaMaterialModule } from 'src/app/core/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { Routes } from '@angular/router';
 
+const routes: Routes = [
+  {
+    path: '',
+    component: StudentBatchManagementComponent,
+  },
 
+];
 
 @NgModule({
   declarations: [
@@ -20,7 +27,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [
     CommonModule,
     VegaMaterialModule,
-    SharedModule
+    SharedModule,
+    RouterModule.forChild(routes),
   ],
   exports: [RouterModule]
 })

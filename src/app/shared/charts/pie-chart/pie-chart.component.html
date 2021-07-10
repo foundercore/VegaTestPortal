@@ -1,20 +1,28 @@
 <div class="chart-container">
-  <p class="chart-title">{{title}}</p>
-  <div>
+  <div class="chart-title">
+    <h5>{{title}}</h5>
+  </div>
+  <ng-content></ng-content>
+
+
+
+  <div class="chart-body">
     <ngx-charts-pie-chart
-    [view] = "[550,500]"
+
   [scheme]="colorScheme"
-  [results]="single"
+  [results]="piedata"
   [gradient]="gradient"
   [legend]="showLegend"
   [arcWidth]="0.6"
   [labels]="showLabels"
   [doughnut]="isDoughnut"
+  [legendPosition]="legendPosition"
   (select)="onSelect($event)"
   (activate)="onActivate($event)"
   (deactivate)="onDeactivate($event)"
   >
 </ngx-charts-pie-chart>
-
   </div>
+
 </div>
+
