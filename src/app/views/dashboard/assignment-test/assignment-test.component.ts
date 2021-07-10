@@ -167,7 +167,7 @@ export class AssignmentTestComponent implements OnInit {
         (res) => {
           console.log('Fetched Student assignment result =>', res);
           this.router
-            .navigate(['/home/assignment_report/' + row.assignmentId])
+            .navigate(['/home/dashboard/assignment_report/' + row.assignmentId])
             .then(() => console.log('Navigate to score card'))
             .catch((err) =>
               console.log('Error=> Navigate to score card=>', err)
