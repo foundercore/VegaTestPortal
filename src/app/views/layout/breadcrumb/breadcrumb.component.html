@@ -1,0 +1,25 @@
+
+<nav aria-label="breadcrumb" style="padding: 20px 20px 0px 20px">
+
+  <ol class="breadcrumb">
+    <li>
+      <a routerLink="/">
+        <i class="fas fa-home"></i>
+      </a>
+    </li>
+    <li *ngFor="let crumb of service.crumbs$ | async">
+      <a
+      [routerLink]="crumb.route"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="active">
+        {{ crumb.label || crumb.urlSegment }}
+    </a>
+    </li>
+    <li *ngFor="let crumb of service.nonClickCrumbs">
+      <span>
+        {{ crumb.label }}
+    </span>
+    </li>
+
+  </ol>
+</nav>

@@ -1,15 +1,67 @@
+
+h5 {
+  font-family: Open Sans,sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #32325d;
+  margin-bottom: 0px !important;
+}
+
 .chart-title {
-  font-weight: bold;
-  height: 50px;
-  flex: 100%;
+    padding-bottom: 1.25rem;
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0,0,0,.05);
+}
+
+.chart-body{
+  display: grid;
+ // height: 400px;
+  //min-height: 400px;
+ // max-height: 400px;
 }
 
 .chart-container {
-   height: 100%;
+  padding: 1.25rem 1.5rem;
+  height: 100%;
   width: 100%;
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   border-radius: 4px;
   position: relative;
   overflow: auto;
+
+}
+
+.chart-stats {
+  background-color: #fff;
+}
+
+
+.card-subtitle{
+text-align: center;
+color: black;
+font-family: math;
+font-size: 14px;
+}
+.primary {
+ color: #4285f4 !important;
+}
+
+.icon-space{
+ margin-right: 5px;
+}
+.stats{
+ display: flex;
+ align-items: center;
+ padding: 10px;
+}
+
+.sub-stats {
+ width: 100%;
+ display: flex;
+ justify-content: space-around;
+}
+.info{
+ color: #33b5e5 !important;
 }

@@ -1,0 +1,82 @@
+
+<div class="container-fluid">
+  <div class="row">
+    <ng-container *ngFor="let item of reportData" [ngSwitch]="item.type">
+         <div class="col-lg-4">
+
+          <app-pie-chart *ngSwitchCase="'Pie'" [data]="item">
+            <div class="chart-stats">
+              <div class="sub-stats">
+                <div class="stats">
+                  <div class="card-subtitle">
+                    <span><i class="fas fa-align-justify icon-space primary" ></i>Total Questions : </span><span> {{metric.totalQuestions}} </span>
+                  </div>
+                </div>
+                <div class="stats">
+                  <div class="card-subtitle">
+                    <span><i class="fas fa-pen icon-space info" ></i>Attempted Questions : </span><span>  {{metric.attempted}}  </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </app-pie-chart>
+
+          <app-stacked-vertical-bar-chart *ngSwitchCase="'Stacked Bar Chart'" [data]="item">
+            <div class="chart-stats">
+              <div class="sub-stats">
+                <div class="stats">
+                  <div class="card-subtitle">
+                    <span><i class="fas fa-align-justify icon-space primary" ></i>Total Mark : </span><span> {{metric.totalMarks}} </span>
+                  </div>
+                </div>
+
+                <div class="stats">
+                  <div class="card-subtitle">
+
+                    <span><i class="fas fa-pen icon-space info" ></i>Received Mark : </span><span> {{metric.marksReceived}} </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </app-stacked-vertical-bar-chart>
+
+
+          <app-vertical-bar-chart  *ngSwitchCase="'Vertical Bar Chart'"  [data]="item" >
+            <div class="chart-stats">
+              <div class="sub-stats">
+
+                <div class="stats">
+                  <div class="card-subtitle">
+                    <span><i class="fas fa-hourglass-start  success icon-space" ></i>Avg. Correct Time : </span>
+                    <span *ngIf="metric.correct != 0"> {{metric.correctTimeInSec / metric.correct | number}} (sec) </span>
+                    <span *ngIf="metric.correct == 0"> 0 </span>
+                  </div>
+                </div>
+
+                <div class="stats">
+                  <div class="card-subtitle">
+                    <span><i class="fas fa-hourglass-end icon-space failure" ></i>Avg. Incorrect Time : </span>
+                    <span *ngIf="metric.incorrect != 0"> {{metric.incorrectTimeInSec / metric.incorrect | number}} (sec) </span>
+                    <span *ngIf="metric.incorrect == 0"> 0 </span>
+                  </div>
+                </div>
+
+                <div class="stats">
+                  <div class="card-subtitle">
+                    <span><i class="fas fa-hourglass-half icon-space warning" ></i>Avg. Skipped Time : </span>
+                    <span *ngIf="metric.skipped != 0"> {{metric.skippedTimeInSec/ metric.skipped | number}}  (sec)</span>
+                    <span *ngIf="metric.skipped == 0"> 0 </span>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </app-vertical-bar-chart>
+        </div>
+
+    </ng-container>
+  </div>
+</div>

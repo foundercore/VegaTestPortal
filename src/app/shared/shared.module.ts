@@ -14,6 +14,7 @@ import { HttpLoaderFactory } from '../app.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { StackedVerticalBarChartComponent } from './charts/stacked-vertical-bar-chart/stacked-vertical-bar-chart.component';
 
 
 
@@ -22,6 +23,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     PieChartComponent,
     VerticalBarChartComponent,
     GroupVerticalBarChartComponent,
+    StackedVerticalBarChartComponent,
     SingleLayerGaugeComponent,
     CustomDialogConfirmationComponent,
     DialogConformationComponent,
@@ -41,6 +43,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     PieChartComponent,
     VerticalBarChartComponent,
     GroupVerticalBarChartComponent,
+    StackedVerticalBarChartComponent,
     SingleLayerGaugeComponent,
     CustomDialogConfirmationComponent,
     DialogConformationComponent,

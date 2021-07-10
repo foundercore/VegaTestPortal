@@ -27,6 +27,7 @@ import { HttpClient } from '@angular/common/http';
 import { CountdownModule } from 'ngx-countdown';
 import { TermConditionPageComponent } from './views/term-condition-page/term-condition-page.component';
 import { ReportsModule } from './views/reports/reports.module';
+import { BreadcrumbNavService } from './views/layout/breadcrumb/breadcrumb-nav.service';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -36,6 +37,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   declarations: [
     AppComponent,
     TermConditionPageComponent,
+
   ],
 
   imports: [
@@ -79,7 +81,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
       useClass: TokenInterceptor,
       multi: true,
     },
-    TranslateService
+    TranslateService,
+    BreadcrumbNavService
+
   ],
   exports: [TranslateModule],
   bootstrap: [AppComponent],

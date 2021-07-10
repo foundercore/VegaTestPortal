@@ -17,7 +17,7 @@ export class GroupVerticalBarChartComponent  {
       "series": [
         {
           "name": "Pass",
-          "value": 1200
+          "value": -1200
         },
         {
           "name": "Fail",

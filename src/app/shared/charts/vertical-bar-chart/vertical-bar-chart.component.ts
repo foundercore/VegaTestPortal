@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { LegendPosition } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-vertical-bar-chart',
@@ -7,10 +8,11 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class VerticalBarChartComponent implements OnInit {
 
-  @Input()
+  @Input() data;
+
   title = "Examination Results by Branch";
 
-  single: any[] = [
+  barChartData: any[] = [
     {
       "name": "Germany",
       "value": 8940000
@@ -35,9 +37,10 @@ export class VerticalBarChartComponent implements OnInit {
   gradient = false;
   showLegend = true;
   showXAxisLabel = true;
-  xAxisLabel = 'Country';
+  xAxisLabel = 'X Axis Label';
   showYAxisLabel = true;
-  yAxisLabel = 'Population';
+  yAxisLabel = 'Y Axis Label';
+  legendPosition:LegendPosition =  LegendPosition.Below ;
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
@@ -46,6 +49,20 @@ export class VerticalBarChartComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.title = this.data?.title;
+    this.barChartData = this.data.data;
+    if(this.data?.config?.colorScheme){
+        this.colorScheme = {
+          domain : this.data?.config.colorScheme
+        }
+    }
+    if(this.data?.config){
+      this.yAxisLabel = this.data?.config?.yAxisLabel;
+      this.xAxisLabel = this.data?.config?.xAxisLabel;
+      this.showXAxisLabel = this.data?.config?.showXAxisLabel;
+      this.showYAxisLabel = this.data?.config?.showYAxisLabel;
+
+    }
   }
 
 }

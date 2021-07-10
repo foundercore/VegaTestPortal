@@ -24,19 +24,28 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    runGuardsAndResolvers: 'always',
     children: [
       {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',
+        data: {
+          breadcrumb: 'Dashboard'
+        },
+        runGuardsAndResolvers: 'always',
       },
       {
         path: 'dashboard',
         loadChildren: () => import('../views/dashboard/dashboard.module').then(  (m) => m.DashboardModule ),
+        runGuardsAndResolvers: 'always',
       },
       {
         path: 'questionmanagement',
         loadChildren: () => import('../views/questions/questions.module').then(  (m) => m.QuestionsModule ),
+        data: {
+          breadcrumb: 'Question Management'
+        },
       },
       {
         path: 'reports',
@@ -44,16 +53,14 @@ const routes: Routes = [
         canActivate: [RoleGuard],
         data: { roles: [Role.ADMIN, Role.STAFF] },
       },
-      {
-        path: 'assignment_report/:id',
-        component: StudentReportComponent,
-        canActivate: [RoleGuard],
-        data: { roles: [Role.ADMIN, Role.STAFF, Role.STUDENT] },
-      },
+
       {
         path: 'tests',
         canActivate: [RoleGuard],
-        data: { roles: [Role.ADMIN, Role.STAFF] },
+        data: {
+          roles: [Role.ADMIN, Role.STAFF],
+          breadcrumb: 'Test'
+        },
         loadChildren: () =>
           import('../views/assignments/assignments.module').then(
             (m) => m.AssignmentsModule
@@ -62,15 +69,24 @@ const routes: Routes = [
       {
         path: 'administrations',
         canActivate: [RoleGuard],
-        data: { roles: [Role.ADMIN] },
+        data: {
+          roles: [Role.ADMIN],
+          breadcrumb: 'Administrations'
+        },
         children: [
           {
             path: 'users',
             loadChildren: () => import('../views/administration/user/user.module').then(  (m) => m.UserModule ),
+            data: {
+              breadcrumb: 'Users'
+            }
           },
           {
             path: 'batch',
             loadChildren: () => import('../views/administration/student-batch/batch.module').then(  (m) => m.BatchModule ),
+            data: {
+              breadcrumb: 'Batch'
+            }
           }
         ]
        },
@@ -84,7 +100,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    onSameUrlNavigation: 'reload'
+  })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

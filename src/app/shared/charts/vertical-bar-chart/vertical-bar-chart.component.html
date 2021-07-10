@@ -1,14 +1,18 @@
-<div class="chart-container">
-  <div class="chart-title">{{title}}</div>
-  <div>
+ <div class="chart-container">
+  <div class="chart-title">
+    <h5>{{title}}</h5>
+  </div>
+  <ng-content></ng-content>
+
+  <div class="chart-body">
     <ngx-charts-bar-vertical
-  [view]="[undefined, undefined]"
   [scheme]="colorScheme"
-  [results]="single"
+  [results]="barChartData"
   [gradient]="gradient"
   [xAxis]="showXAxis"
   [yAxis]="showYAxis"
   [legend]="showLegend"
+  [legendPosition]="legendPosition"
   [showXAxisLabel]="showXAxisLabel"
   [showYAxisLabel]="showYAxisLabel"
   [xAxisLabel]="xAxisLabel"
@@ -16,4 +20,5 @@
    >
 </ngx-charts-bar-vertical>
   </div>
+
 </div>

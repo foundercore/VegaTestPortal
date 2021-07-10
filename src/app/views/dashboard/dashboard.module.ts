@@ -9,11 +9,24 @@ import { VegaMaterialModule } from 'src/app/core/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { Routes, RouterModule } from '@angular/router';
 import { LayoutModule } from '../layout/layout.module';
+import { Role } from 'src/app/core/constants';
+import { RoleGuard } from 'src/app/guard/role.guard';
+import { StudentReportComponent } from '../reports/student-report/student-report.component';
 
 const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
+  },
+  {
+    path: 'assignment_report/:id',
+    component: StudentReportComponent,
+    canActivate: [RoleGuard],
+    data: {
+      roles: [Role.ADMIN, Role.STAFF, Role.STUDENT],
+      breadcrumb: 'Assignment Report'
+    },
+    runGuardsAndResolvers: 'always',
   },
 ];
 
