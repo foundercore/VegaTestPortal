@@ -5,7 +5,6 @@ import { TestsComponent } from './tests/tests.component';
 import { UpdateTestContentComponent } from './update-test-content/update-test-content.component';
 import { ViewAssignmentComponent } from './view-assignment/view-assignment.component';
 
-
 const routes: Routes = [
   {
     path: '',
@@ -14,19 +13,26 @@ const routes: Routes = [
   {
     path: 'update-test/:id',
     component: UpdateTestContentComponent,
+    data: {
+      breadcrumb: 'Update Test',
+    },
   },
   {
     path: 'update-test/:id/view-assignment',
     component: ViewAssignmentComponent,
+    data: {
+      breadcrumb: 'View Test',
+    },
   },
   {
     path: 'show-result/:id',
     component: ShowResultComponent,
+    data: { breadcrumb: 'Show Result' },
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AssignmentsRoutingModule { }
+export class AssignmentsRoutingModule {}

@@ -1,4 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild,
+  Input,
+  OnChanges,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -20,12 +27,12 @@ import { TestConfigService } from '../../assignments/services/test-config-servic
   selector: 'app-assignment-test',
   templateUrl: './assignment-test.component.html',
   styleUrls: ['./assignment-test.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AssignmentTestComponent implements OnInit {
+export class AssignmentTestComponent implements OnInit, OnChanges {
+  @Input() data;
 
   resultData: any[] = [];
-
 
   searchText: string = '';
   appState: any;
@@ -48,7 +55,6 @@ export class AssignmentTestComponent implements OnInit {
 
   constructor(
     public translate: TranslateService,
-    private testAssignmentService: TestAssignmentServiceService,
     public dialog: MatDialog,
     private store: Store<AppState>,
     private testConfigService: TestConfigService,
@@ -66,18 +72,13 @@ export class AssignmentTestComponent implements OnInit {
     this.getMyAssignments();
   }
 
+  ngOnChanges() {
+    this.getMyAssignments();
+  }
+
   getMyAssignments() {
-    this.testAssignmentService.getMyAssignment().subscribe((resp) => {
-      this.resultData = resp;
-      console.log('this.resultData==', this.resultData);
-      this.dataSource.data = resp;
-      this.dataSource.sort = this.sort;
-      this.isLoadingResults = false;
-      this.isRateLimitReached = false;
-    }, (error) => {
-      this.isLoadingResults = false;
-      this.isRateLimitReached = true;
-    });
+    this.dataSource.data = this.data;
+    this.dataSource.sort = this.sort;
   }
 
   extractContent(s) {
@@ -87,31 +88,38 @@ export class AssignmentTestComponent implements OnInit {
   }
 
   startTest(element) {
-
     const timeNow = new Date().setHours(0, 0, 0, 0);
     const testValidFrom = new Date(element.validFrom).setHours(0, 0, 0, 0);
     const testvalidTo = new Date(element.validTo).setHours(0, 0, 0, 0);
     if (timeNow < testValidFrom) {
-        this.toastrService.error('Test is yet to start')
-        return;
-      }
+      this.toastrService.error('Test is yet to start');
+      return;
+    }
     if (timeNow > testvalidTo) {
-        this.toastrService.error('Test has ended already')
-        return;
-      }
+      this.toastrService.error('Test has ended already');
+      return;
+    }
 
-    const dialogData = new CustomDialogConfirmationModel('Want to start test?', element.testName, 'Start Test');
+    const dialogData = new CustomDialogConfirmationModel(
+      'Want to start test?',
+      element.testName,
+      'Start Test'
+    );
     const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
       width: '600px',
-      data: dialogData
+      data: dialogData,
     });
 
-    dialogRef.afterClosed().subscribe(dialogResult => {
-      if(dialogResult){
-        if (element.passcode !== null && String(element.passcode.trim()).length > 1) {
+    dialogRef.afterClosed().subscribe((dialogResult) => {
+      if (dialogResult) {
+        if (
+          element.passcode !== null &&
+          String(element.passcode.trim()).length > 1
+        ) {
           this.verifyPasscode(element);
+        } else {
+          this.openTestPopup(element, 'live');
         }
-        else { this.openTestPopup(element,'live'); }
       }
     });
   }
@@ -121,8 +129,7 @@ export class AssignmentTestComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-
-  openTestPopup(element,testType) {
+  openTestPopup(element, testType) {
     const dialogRef = this.dialog.open(TestLiveComponent, {
       maxWidth: '1700px',
       width: '100%',
@@ -152,7 +159,7 @@ export class AssignmentTestComponent implements OnInit {
         showCancelButton: true,
       }).then((result) => {
         if (result.value && result.value == element.passcode) {
-          this.openTestPopup(element,'live');
+          this.openTestPopup(element, 'live');
           this.toastrService.success('Passcode Verified successfully');
         } else this.toastrService.error('Invalid Passcode');
       });
