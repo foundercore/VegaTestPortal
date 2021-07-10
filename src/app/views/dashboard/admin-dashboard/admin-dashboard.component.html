@@ -1,6 +1,87 @@
 <div class="admin-dashboard-container">
-  <app-test-pending-verification style="width: 50%;"></app-test-pending-verification>
-  <app-assignment-test style="width: 50%;"></app-assignment-test>
+  <mat-form-field style="width: 45%" appearance="outline">
+    <mat-label> {{ "COMMON_TAG.FILTER" | translate }}</mat-label>
+    <input
+      matInput
+      placeholder="Search Tests"
+      #input
+      (keyup)="applyFilter($event)"
+    />
+  </mat-form-field>
+  <div class="stats-conatiner">
+    <div class="stats-card">
+      <div class="icon">
+        <mat-icon
+          style="width: 50px; height: 50px; font-size: 48px"
+          aria-hidden="false"
+          aria-label="home icon"
+          >people</mat-icon
+        >
+      </div>
+      <div class="stats">
+        <h4>{{ numberOfUsers || 0 }}</h4>
+        <p>Total Users</p>
+      </div>
+    </div>
+    <div class="stats-card">
+      <div class="icon">
+        <mat-icon
+          style="width: 50px; height: 50px; font-size: 48px"
+          aria-hidden="false"
+          aria-label="home icon"
+          >archive</mat-icon
+        >
+      </div>
+      <div class="stats">
+        <h4>{{ numberOfBatches || 0 }}</h4>
+        <p>Total Batches</p>
+      </div>
+    </div>
+    <div class="stats-card">
+      <div class="icon">
+        <mat-icon
+          style="width: 50px; height: 50px; font-size: 48px"
+          aria-hidden="false"
+          aria-label="home icon"
+          >assignment</mat-icon
+        >
+      </div>
+      <div class="stats">
+        <h4>{{ numberOfTests || 0 }}</h4>
+        <p>Total Tests</p>
+      </div>
+    </div>
+  </div>
+  <mat-tab-group style="width: 100%">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        My Assigned Tests ({{ myTestCount }})
+      </ng-template>
+      <app-assignment-test [data]="testsAssignedToMe"></app-assignment-test>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label> Drafts ({{ draftTestCount }}) </ng-template>
+      <app-test-pending-verification
+        [data]="draftTests"
+      ></app-test-pending-verification>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Pending Verification ({{ pendingVerificationTestCount }})
+      </ng-template>
+      <app-test-pending-verification
+        [data]="pendingVerificationTest"
+      ></app-test-pending-verification>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Verified ({{ verifiedTestCount }})
+      </ng-template>
+      <app-test-pending-verification
+        [data]="verifiedTests"
+      ></app-test-pending-verification>
+    </mat-tab>
+  </mat-tab-group>
 </div>
 
 <!--
