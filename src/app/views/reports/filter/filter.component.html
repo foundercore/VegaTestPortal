@@ -15,7 +15,7 @@
             <div>
               <mat-form-field appearance="outline" class="form-field-padding">
                 <mat-label>Subject</mat-label>
-                <mat-select formControlName="subjectCntrl">
+                <mat-select formControlName="subjectCntrl" multiple>
                   <mat-option
                     *ngFor="let subject of subjectLists"
                     [value]="subject"
@@ -30,7 +30,7 @@
             <div>
               <mat-form-field appearance="outline" class="form-field-padding">
                 <mat-label>Topic</mat-label>
-                <mat-select formControlName="topicCntrl">
+                <mat-select formControlName="topicCntrl" multiple>
                   <mat-option
                     *ngFor="let topicList of topicLists"
                     [value]="topicList"
@@ -45,7 +45,7 @@
             <div>
               <mat-form-field appearance="outline" class="form-field-padding">
                 <mat-label>Subtopic</mat-label>
-                <mat-select formControlName="subTopicCntrl">
+                <mat-select formControlName="subTopicCntrl" multiple>
                   <mat-option
                     *ngFor="let subtopic of subtopicList"
                     [value]="subtopic"
@@ -56,11 +56,41 @@
             </div>
           </tr>
 
+          <tr>
+            <div>
+              <mat-form-field appearance="outline" class="form-field-padding">
+                <mat-label>Subtopic</mat-label>
+                <mat-select formControlName="difficulty" multiple>
+                  <mat-option
+                    *ngFor="let level of difficultyLevels"
+                    [value]="level"
+                    >{{ level }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </tr>
+
+
+          <tr>
+            <div>
+              <mat-form-field appearance="outline" class="form-field-padding">
+                <mat-label>Subtopic</mat-label>
+                <mat-select formControlName="difficulty" multiple>
+                  <mat-option
+                    *ngFor="let state of states"
+                    [value]="state"
+                    >{{ state }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </tr>
+
           <!-- <tr>
             <div style="margin-bottom: 20px">
-              <mat-chip
+              <mat-chip formControlName="difficulty" multiple
                 style="margin-right: 30px"
-                multiple="false;"
                 #c="matChip"
                 *ngFor="let option of difficultyLevels"
                 [value]="option"
@@ -72,7 +102,7 @@
             </div>
           </tr> -->
 
-          <tr>
+          <!-- <tr>
             <div>
              <mat-radio-group formControlName="difficulty">
               <span >
@@ -97,7 +127,7 @@
               </mat-radio-group>
               </span>
             </div>
-          </tr>
+          </tr> -->
         </table>
       </div>
       <div style="text-align: center">

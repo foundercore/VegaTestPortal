@@ -324,9 +324,16 @@ export class StudentReportComponent implements OnInit {
     }
   }
 
+  rankFlag : boolean;
   onTabChanged($event) {
      if ($event.tab.textLabel === 'Ranking') {
-      this.dataSource.data = this.rankingDetailsResult;
+      if(this.dataSource.data){
+        this.dataSource.data = this.rankingDetailsResult;
+        this.rankFlag = true;
+      } 
+      else{
+        this.rankFlag = false;
+      }
     }
     if ($event.tab.textLabel === 'QuickView') {
     }
