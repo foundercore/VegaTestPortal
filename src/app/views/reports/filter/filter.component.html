@@ -59,7 +59,7 @@
           <tr>
             <div>
               <mat-form-field appearance="outline" class="form-field-padding">
-                <mat-label>Subtopic</mat-label>
+                <mat-label>Difficulty</mat-label>
                 <mat-select formControlName="difficulty" multiple>
                   <mat-option
                     *ngFor="let level of difficultyLevels"
@@ -75,8 +75,8 @@
           <tr>
             <div>
               <mat-form-field appearance="outline" class="form-field-padding">
-                <mat-label>Subtopic</mat-label>
-                <mat-select formControlName="difficulty" multiple>
+                <mat-label>State</mat-label>
+                <mat-select formControlName="state" multiple>
                   <mat-option
                     *ngFor="let state of states"
                     [value]="state"
