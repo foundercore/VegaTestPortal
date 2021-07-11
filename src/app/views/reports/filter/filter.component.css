@@ -102,9 +102,7 @@ table {
 
 
 .question-filter-panel{
-  margin-left: 20px;
-  margin-top: 100px;
-  margin-right: 20px;
+  margin-top: 30px;
 }
 
 
@@ -165,6 +163,6 @@ th{
 }
 
 ::ng-deep.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
-	border-color:rgb(13 110 253) 
+	border-color:rgb(13 110 253)
   !important; /*outer ring color change*/
 }

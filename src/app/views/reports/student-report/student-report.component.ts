@@ -33,7 +33,7 @@ export class StudentReportComponent implements OnInit {
 
   solutionSectionWiseSelectedStats = new EventEmitter<StudentReportModel>();
 
-  rankingDisplayedColumn: string[] = ['name', 'totalMarks', 'marksReceived'];
+  rankingDisplayedColumn: string[] = ['rank','name', 'totalMarks', 'marksReceived'];
 
   solutionFilter = ['Correct', 'Incorrect', 'Skipped'];
 
@@ -142,7 +142,29 @@ export class StudentReportComponent implements OnInit {
   getRankingDetails() {
     this.activatedRoute.params.subscribe((params) => {
       this.testConfigService.getRankingDetails(params.id).subscribe((resp) => {
-        this.rankingDetailsResult = resp;
+        let sorted = resp.slice().sort(function(a,b){return b.marksReceived - a.marksReceived})
+        let tempRank = 0;
+        let tempMarkRecived;
+        let loginStudentIndex = -1;
+        let loginStudentUserName = this.userName;
+        let ranks = sorted.map(function(v,index,userName){
+          if(tempMarkRecived == undefined || tempMarkRecived != v.marksReceived){
+            tempRank ++;
+          }
+          if(v.username == loginStudentUserName){
+            loginStudentIndex = index;
+          }
+          tempMarkRecived = v.marksReceived;
+         v.rank = tempRank;
+         return v;
+        });
+
+        if(loginStudentIndex != -1){
+          let delStudnt = ranks.splice(loginStudentIndex, 1);
+          ranks = delStudnt.concat(ranks);
+        }
+
+        this.rankingDetailsResult = ranks;
       });
     });
   }

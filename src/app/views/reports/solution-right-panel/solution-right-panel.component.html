@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid stats-shadow ">
   <div class="row">
 
     <div class="col-lg-6"  >
@@ -40,10 +40,40 @@
     <div class="col-lg-6">
     <div class="stats">
       <div class="card-subtitle">
-        <span> {{actualData?.incorrect}} </span><br>
-        <span><i class="fas fa-times-circle icon-space failure" ></i>Incorrect Questions</span>
+        <span> {{actualData?.timeTaken}} </span><br>
+        <span><i class="fas fa-times-circle icon-space failure" ></i>Time Taken</span>
       </div>
     </div>
   </div>
+
+  <div class="col-lg-6">
+    <div class="stats">
+      <div class="card-subtitle">
+        <span> {{actualData?.score}} </span><br>
+        <span><i class="fas fa-pen icon-space info" ></i>Score</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+
+    <div class="stats">
+      <div class="card-subtitle">
+        <span> {{actualData?.correct}} </span><br>
+        <span><i class="fas fa-pen icon-space info" ></i>Accuracy</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+
+    <div class="stats">
+      <div class="card-subtitle">
+        <span> {{actualData?.attempt}} </span><br>
+        <span><i class="fas fa-pen icon-space info" ></i>Attempted Questions</span>
+      </div>
+    </div>
+  </div>
+
   </div>
 </div>
