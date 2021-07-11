@@ -7,6 +7,7 @@ import { VegaMaterialModule } from 'src/app/core/material.module';
 import { StudentAssignmentStatsChartsComponent } from './student-assignment-stats-charts/student-assignment-stats-charts.component';
 import { SolutionRightPanelComponent } from './solution-right-panel/solution-right-panel.component';
 import { FilterComponent } from './filter/filter.component';
+import { SolutionFilterPipe } from './filter/solution-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { FilterComponent } from './filter/filter.component';
     StudentAssignmentStatsChartsComponent,
     SolutionRightPanelComponent,
     FilterComponent,
+    SolutionFilterPipe
   ],
   imports: [CommonModule, VegaMaterialModule, SharedModule],
 })

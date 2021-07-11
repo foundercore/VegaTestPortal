@@ -45,7 +45,7 @@
 
 
               <div *ngFor=" let answer of section.answers
-                    | filterPipe: currentSolutionSelection; let i = index " class="question-card" >
+                    | solutionFilterPipe: currentSolutionSelection; let i = index " class="question-card" >
                 <div style="display: flex; margin-bottom: 20px">
                   <div class="numberCircle">{{ i + 1 }}</div>
                   <div
@@ -135,7 +135,7 @@
                 </div>
                 <mat-divider></mat-divider>
                 <div style="margin: 20px 30px">
-                  <div style="margin-bottom: 10px">Explanation</div>
+                  <div style="margin-bottom: 10px"><strong>Explanation</strong>  </div>
                   <div [innerHtml]="transform(answer.explanation)" disabled>
                     Explanation
                   </div>
@@ -145,7 +145,7 @@
           </mat-tab-group>
           </div>
           <div class="col-lg-4">
-              <app-filter></app-filter>
+              <app-filter [data]="filterData" (filterParameters)="filterSolutionData($event);"></app-filter>
               <app-solution-right-panel [data]="solutionSectionWiseSelectedStats"></app-solution-right-panel>
           </div>
         </div>

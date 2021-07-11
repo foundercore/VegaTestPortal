@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,6 +14,7 @@ import {
   Metric,
   StudentReportModel,
 } from 'src/app/models/reports/student-report-model';
+import { FilterModel } from '../filter/filter.component';
 
 @Component({
   selector: 'app-student-report',
@@ -35,8 +36,6 @@ export class StudentReportComponent implements OnInit {
 
   rankingDisplayedColumn: string[] = ['rank','name', 'totalMarks', 'marksReceived'];
 
-  solutionFilter = ['Correct', 'Incorrect', 'Skipped'];
-
   displayedColumns: string[] = [
     'name',
     'questions',
@@ -55,6 +54,9 @@ export class StudentReportComponent implements OnInit {
 
   fetchedWholeAssignmentResult;
 
+  filterData = new EventEmitter();
+
+
   rankingDetailsResult;
 
   metrics;
@@ -65,7 +67,7 @@ export class StudentReportComponent implements OnInit {
 
   quickView = 'Charts';
 
-  currentSolutionSelection = '';
+  currentSolutionSelection:{filterData ?:FilterModel} = {};
 
   public pageOptions = PAGE_OPTIONS;
 
@@ -115,6 +117,7 @@ export class StudentReportComponent implements OnInit {
           (res) => {
             this.fetchedWholeAssignmentResult = res;
             this.getSectionWiseStats(this.fetchedWholeAssignmentResult);
+            this.filterData.emit(this.fetchedWholeAssignmentResult.sections);
             this.solutionSectionWiseSelectedStats.emit(this.solutionSectionWiseStats[0]);
             this.fetchedWholeAssignmentResult?.sections.forEach((section,i) => {
               this.solutionSectionArray.push(
@@ -171,7 +174,7 @@ export class StudentReportComponent implements OnInit {
 
   changeSolutionFilter(filterMode?) {
     if (this.currentSolutionSelection === filterMode) {
-      this.currentSolutionSelection = '';
+      this.currentSolutionSelection = {};
     } else {
       this.currentSolutionSelection = filterMode;
     }
@@ -437,5 +440,9 @@ export class StudentReportComponent implements OnInit {
       this.solutionSectionWiseSelectedStats.emit(this.solutionSectionWiseStats[selected.index])
   }
 
+
+  filterSolutionData(event){
+    this.currentSolutionSelection = event;
+  }
 
 }
