@@ -1,64 +1,143 @@
-<div  [formGroup]="filterGroup">
-  <table>
-    <tr>
-      <div class="w-25-field">
-        <mat-form-field appearance="outline" class="form-field-padding">
-          <mat-label>Subject</mat-label>
-          <mat-select formControlName="questionTypeCntrl">
-            <mat-option
-              *ngFor="let questionType of questionTypeList"
-              [value]="questionType"
-              >{{ questionType }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </tr>
+<div class="question-filter-panel">
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <i class="fas fa-filter filter-icon"></i> Filter
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div
+        style="margin-left: 20px; margin-top: 20px"
+        [formGroup]="filterGroup"
+      >
+        <table>
+          <tr>
+            <div>
+              <mat-form-field appearance="outline" class="form-field-padding">
+                <mat-label>Subject</mat-label>
+                <mat-select formControlName="subjectCntrl" multiple>
+                  <mat-option
+                    *ngFor="let subject of subjectLists"
+                    [value]="subject"
+                    >{{ subject }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </tr>
 
-    <tr>
-      <div class="w-25-field">
-        <mat-form-field appearance="outline" class="form-field-padding">
-          <mat-label>Topic</mat-label>
-          <mat-select formControlName="topicCntrl">
-            <mat-option *ngFor="let topicList of topicLists" [value]="topicList"
-              >{{ topicList }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </tr>
+          <tr>
+            <div>
+              <mat-form-field appearance="outline" class="form-field-padding">
+                <mat-label>Topic</mat-label>
+                <mat-select formControlName="topicCntrl" multiple>
+                  <mat-option
+                    *ngFor="let topicList of topicLists"
+                    [value]="topicList"
+                    >{{ topicList }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </tr>
 
-    <tr>
-      <div class="w-25-field">
-        <mat-form-field appearance="outline" class="form-field-padding">
-          <mat-label>Subtopic</mat-label>
-          <mat-select formControlName="subjectCntrl">
-            <mat-option
-              *ngFor="let subjectList of subjectLists"
-              [value]="subjectList"
-              >{{ subjectList }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </tr>
-    <tr>
-      <div class="w-25-field">
-        <mat-form-field appearance="outline" class="form-field-padding">
-          <mat-label>Difficulty</mat-label>
-          <mat-select formControlName="difficulty">
-            <mat-option
-              *ngFor="let difficultyLevel of difficultyLevels"
-              [value]="difficultyLevel"
-              >{{ difficultyLevel }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </tr>
-  </table>
-</div>
+          <tr>
+            <div>
+              <mat-form-field appearance="outline" class="form-field-padding">
+                <mat-label>Subtopic</mat-label>
+                <mat-select formControlName="subTopicCntrl" multiple>
+                  <mat-option
+                    *ngFor="let subtopic of subtopicList"
+                    [value]="subtopic"
+                    >{{ subtopic }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </tr>
 
-<div >
-  <button mat-raised-button (click)="applyFilter()">Filter</button>
+          <tr>
+            <div>
+              <mat-form-field appearance="outline" class="form-field-padding">
+                <mat-label>Difficulty</mat-label>
+                <mat-select formControlName="difficulty" multiple>
+                  <mat-option
+                    *ngFor="let level of difficultyLevels"
+                    [value]="level"
+                    >{{ level }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </tr>
+
+
+          <tr>
+            <div>
+              <mat-form-field appearance="outline" class="form-field-padding">
+                <mat-label>State</mat-label>
+                <mat-select formControlName="state" multiple>
+                  <mat-option
+                    *ngFor="let state of states"
+                    [value]="state"
+                    >{{ state }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </tr>
+
+          <!-- <tr>
+            <div style="margin-bottom: 20px">
+              <mat-chip formControlName="difficulty" multiple
+                style="margin-right: 30px"
+                #c="matChip"
+                *ngFor="let option of difficultyLevels"
+                [value]="option"
+                (click)="toggleSelection(c)"
+              >
+                <mat-icon *ngIf="c.selected">check</mat-icon>
+                {{ option }}
+              </mat-chip>
+            </div>
+          </tr> -->
+
+          <!-- <tr>
+            <div>
+             <mat-radio-group formControlName="difficulty">
+              <span >
+                <mat-radio-button style="margin-right: 20px;"
+                  *ngFor="let level of difficultyLevels"
+                  [value]="level"
+                >
+                  {{ level }}
+                </mat-radio-button>
+              </span>
+              </mat-radio-group>
+            </div>
+          </tr>
+
+          <tr>
+            <div style="margin-top:10px;margin-bottom: 20px;">
+              <span>
+              <mat-radio-group formControlName="state">
+                <mat-radio-button style="margin-right: 20px;" *ngFor="let state of states" [value]="state">
+                  {{ state }}
+                </mat-radio-button>
+              </mat-radio-group>
+              </span>
+            </div>
+          </tr> -->
+        </table>
+      </div>
+      <div style="text-align: center">
+        <button mat-raised-button color="primary" (click)="applyFilter()" style="background: blue;color:white;margin-right: 20px;">
+          Apply
+        </button>
+        <button mat-raised-button color="danger" (click)="resetFilter()" style="background: red;color:white">
+          Reset
+        </button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>
