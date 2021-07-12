@@ -49,7 +49,7 @@
                 <div class="stats">
                   <div class="card-subtitle">
                     <span><i class="fas fa-hourglass-start  success icon-space" ></i>Avg. Correct Time : </span>
-                    <span *ngIf="metric.correct != 0"> {{metric.correctTimeInSec / metric.correct | minuteSeconds}} </span>
+                    <span *ngIf="metric.correct != 0"> {{metric.correctTimeInSec / metric.correct  | minuteSeconds}} </span>
                     <span *ngIf="metric.correct == 0"> 0 </span>
                   </div>
                 </div>
