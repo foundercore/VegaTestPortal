@@ -155,8 +155,8 @@
                   <div [ngClass]="{'limitTextHeight': isReadMore}" [innerHtml]="transform(answer.explanation)" disabled>
                     Explanation
                   </div>
-                  <button mat-button color="primary" (click)="showText()">
-                    {{ isReadMore ? 'Read More': 'Read Less' }}
+                  <button style="font-family: cursive;" mat-button color="primary" (click)="showText()">
+                    {{ isReadMore ? 'read more >>':' << read less' }}
                   </button>
                 </div>
               </div>
@@ -178,10 +178,7 @@
 
   <mat-tab label="Ranking">
     <div *ngIf="!rankFlag">
-      <div class="error-msg"><h1>No Rank Generated Yet.</h1></div>
-
-      <div class="error-img">
-      </div>
+      <div class="error-msg">Rank will be available once more students take the Test.</div>
     </div>
 
     <div *ngIf="rankFlag">

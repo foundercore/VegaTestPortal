@@ -325,6 +325,7 @@ export class StudentReportComponent implements OnInit {
   }
 
   rankFlag : boolean;
+
   onTabChanged($event) {
      if ($event.tab.textLabel === 'Ranking') {
       if(this.dataSource.data){
@@ -334,10 +335,6 @@ export class StudentReportComponent implements OnInit {
       else{
         this.rankFlag = false;
       }
-    }
-    if ($event.tab.textLabel === 'QuickView') {
-    }
-    if ($event.tab.textLabel === 'Questions') {
     }
   }
 
