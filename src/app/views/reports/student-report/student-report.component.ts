@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,6 +14,7 @@ import {
   Metric,
   StudentReportModel,
 } from 'src/app/models/reports/student-report-model';
+import { FilterModel } from '../filter/filter.component';
 
 @Component({
   selector: 'app-student-report',
@@ -33,9 +34,7 @@ export class StudentReportComponent implements OnInit {
 
   solutionSectionWiseSelectedStats = new EventEmitter<StudentReportModel>();
 
-  rankingDisplayedColumn: string[] = ['name', 'totalMarks', 'marksReceived'];
-
-  solutionFilter = ['Correct', 'Incorrect', 'Skipped'];
+  rankingDisplayedColumn: string[] = ['rank','name', 'totalMarks', 'marksReceived'];
 
   displayedColumns: string[] = [
     'name',
@@ -55,6 +54,9 @@ export class StudentReportComponent implements OnInit {
 
   fetchedWholeAssignmentResult;
 
+  filterData = new EventEmitter();
+
+
   rankingDetailsResult;
 
   metrics;
@@ -65,7 +67,7 @@ export class StudentReportComponent implements OnInit {
 
   quickView = 'Charts';
 
-  currentSolutionSelection = '';
+  currentSolutionSelection:{filterData ?:FilterModel} = {};
 
   public pageOptions = PAGE_OPTIONS;
 
@@ -115,6 +117,7 @@ export class StudentReportComponent implements OnInit {
           (res) => {
             this.fetchedWholeAssignmentResult = res;
             this.getSectionWiseStats(this.fetchedWholeAssignmentResult);
+            this.filterData.emit(this.fetchedWholeAssignmentResult.sections);
             this.solutionSectionWiseSelectedStats.emit(this.solutionSectionWiseStats[0]);
             this.fetchedWholeAssignmentResult?.sections.forEach((section,i) => {
               this.solutionSectionArray.push(
@@ -142,14 +145,36 @@ export class StudentReportComponent implements OnInit {
   getRankingDetails() {
     this.activatedRoute.params.subscribe((params) => {
       this.testConfigService.getRankingDetails(params.id).subscribe((resp) => {
-        this.rankingDetailsResult = resp;
+        let sorted = resp.slice().sort(function(a,b){return b.marksReceived - a.marksReceived})
+        let tempRank = 0;
+        let tempMarkRecived;
+        let loginStudentIndex = -1;
+        let loginStudentUserName = this.userName;
+        let ranks = sorted.map(function(v,index,userName){
+          if(tempMarkRecived == undefined || tempMarkRecived != v.marksReceived){
+            tempRank ++;
+          }
+          if(v.username == loginStudentUserName){
+            loginStudentIndex = index;
+          }
+          tempMarkRecived = v.marksReceived;
+         v.rank = tempRank;
+         return v;
+        });
+
+        if(loginStudentIndex != -1){
+          let delStudnt = ranks.splice(loginStudentIndex, 1);
+          ranks = delStudnt.concat(ranks);
+        }
+
+        this.rankingDetailsResult = ranks;
       });
     });
   }
 
   changeSolutionFilter(filterMode?) {
     if (this.currentSolutionSelection === filterMode) {
-      this.currentSolutionSelection = '';
+      this.currentSolutionSelection = {};
     } else {
       this.currentSolutionSelection = filterMode;
     }
@@ -299,9 +324,16 @@ export class StudentReportComponent implements OnInit {
     }
   }
 
+  rankFlag : boolean;
   onTabChanged($event) {
      if ($event.tab.textLabel === 'Ranking') {
-      this.dataSource.data = this.rankingDetailsResult;
+      if(this.dataSource.data){
+        this.dataSource.data = this.rankingDetailsResult;
+        this.rankFlag = true;
+      } 
+      else{
+        this.rankFlag = false;
+      }
     }
     if ($event.tab.textLabel === 'QuickView') {
     }
@@ -415,5 +447,9 @@ export class StudentReportComponent implements OnInit {
       this.solutionSectionWiseSelectedStats.emit(this.solutionSectionWiseStats[selected.index])
   }
 
+
+  filterSolutionData(event){
+    this.currentSolutionSelection = event;
+  }
 
 }
