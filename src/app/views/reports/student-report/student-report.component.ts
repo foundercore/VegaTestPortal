@@ -452,4 +452,10 @@ export class StudentReportComponent implements OnInit {
     this.currentSolutionSelection = event;
   }
 
+  isReadMore = true
+
+  showText() {
+     this.isReadMore = !this.isReadMore
+  }
+
 }

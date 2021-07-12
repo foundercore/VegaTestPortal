@@ -152,9 +152,12 @@
                   <div style="margin-bottom: 10px">
                     <strong>Explanation</strong>
                   </div>
-                  <div [innerHtml]="transform(answer.explanation)" disabled>
+                  <div [ngClass]="{'limitTextHeight': isReadMore}" [innerHtml]="transform(answer.explanation)" disabled>
                     Explanation
                   </div>
+                  <button mat-button color="primary" (click)="showText()">
+                    {{ isReadMore ? 'Read More': 'Read Less' }}
+                  </button>
                 </div>
               </div>
             </mat-tab>
