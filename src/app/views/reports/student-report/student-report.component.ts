@@ -330,7 +330,7 @@ export class StudentReportComponent implements OnInit {
       if(this.dataSource.data){
         this.dataSource.data = this.rankingDetailsResult;
         this.rankFlag = true;
-      } 
+      }
       else{
         this.rankFlag = false;
       }
@@ -425,15 +425,15 @@ export class StudentReportComponent implements OnInit {
       },
       data: [
         {
-          name: 'Skipped Time',
+          name: 'Total Skipped Time',
           value: metrics?.skippedTimeInSec,
         },
         {
-          name: 'Correct Time',
+          name: 'Total Correct Time',
           value: metrics?.correctTimeInSec,
         },
         {
-          name: 'Incorrect Time',
+          name: 'Total Incorrect Time',
           value: metrics?.incorrectTimeInSec,
         },
       ],
