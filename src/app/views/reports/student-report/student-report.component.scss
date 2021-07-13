@@ -292,9 +292,17 @@ tr.mat-footer-row {
   padding-bottom: 20px;
 }
 
-.center{
+
+.error-msg{
+  font-family: Verdana;
+  font-size: 34px;
+  color: #333333;
   text-align: center;
-  margin-top: 15%;
+  margin-top: 13%;
 }
 
 
+.limitTextHeight {
+  height: 20px;
+  overflow: hidden;
+}

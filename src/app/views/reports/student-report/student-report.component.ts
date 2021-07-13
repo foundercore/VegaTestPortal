@@ -325,19 +325,16 @@ export class StudentReportComponent implements OnInit {
   }
 
   rankFlag : boolean;
+
   onTabChanged($event) {
      if ($event.tab.textLabel === 'Ranking') {
       if(this.dataSource.data){
         this.dataSource.data = this.rankingDetailsResult;
         this.rankFlag = true;
-      } 
+      }
       else{
         this.rankFlag = false;
       }
-    }
-    if ($event.tab.textLabel === 'QuickView') {
-    }
-    if ($event.tab.textLabel === 'Questions') {
     }
   }
 
@@ -425,15 +422,15 @@ export class StudentReportComponent implements OnInit {
       },
       data: [
         {
-          name: 'Skipped Time',
+          name: 'Total Skipped Time',
           value: metrics?.skippedTimeInSec,
         },
         {
-          name: 'Correct Time',
+          name: 'Total Correct Time',
           value: metrics?.correctTimeInSec,
         },
         {
-          name: 'Incorrect Time',
+          name: 'Total Incorrect Time',
           value: metrics?.incorrectTimeInSec,
         },
       ],
@@ -450,6 +447,12 @@ export class StudentReportComponent implements OnInit {
 
   filterSolutionData(event){
     this.currentSolutionSelection = event;
+  }
+
+  isReadMore = true
+
+  showText() {
+     this.isReadMore = !this.isReadMore
   }
 
 }
