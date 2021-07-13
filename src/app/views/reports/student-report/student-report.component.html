@@ -147,7 +147,7 @@
                     <div [innerHtml]="transform(answer.answerText)"></div>
                   </div>
                 </div>
-                <mat-divider></mat-divider>
+                <mat-divider style="margin-top: 20px;"></mat-divider>
                 <div style="margin: 20px 30px">
                   <div style="margin-bottom: 10px">
                     <strong>Explanation</strong>
@@ -177,6 +177,12 @@
   </mat-tab>
 
   <mat-tab label="Ranking">
+
+    <ng-template mat-tab-label>
+      <span style="margin-right: 2px;"><i class="fas fa-flag-checkered"></i></span>
+      Ranking
+    </ng-template>
+
     <div *ngIf="!rankFlag">
       <div class="error-msg">Rank will be available once more students take the Test.</div>
     </div>

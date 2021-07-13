@@ -1,131 +1,144 @@
-<div class="question-grid-action">
-  <!-- <button mat-raised-button (click)="performGridAction('bulk_delete')">
-    <mat-icon>delete_forever</mat-icon> {{ "COMMON_TAG.DELETE" | translate }}
-  </button> -->
-  <button mat-raised-button (click)="performGridAction('add')">
-    <mat-icon>add_circle</mat-icon> {{ "COMMON_TAG.ADD" | translate }}
-  </button>
-  <button mat-raised-button (click)="performGridAction('upload')">
-    <mat-icon>cloud_upload</mat-icon> {{ "COMMON_TAG.UPLOAD" | translate }}
-  </button>
-  <button mat-raised-button (click)="performGridAction('migrate')">
-    <i class="fas fa-exchange-alt"></i> {{ "COMMON_TAG.MIGRATE" | translate }}
-  </button>
-</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-8">
 
-<div class="question-filter-panel">
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title> Search </mat-panel-title>
-      </mat-expansion-panel-header>
+      <div class="question-filter-panel">
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header style="height: fit-content;">
+              <mat-panel-title> Search </mat-panel-title>
+            </mat-expansion-panel-header>
 
-      <div class="question-grid-search-bar" [formGroup]="filterGroup">
-        <div class="w-50-field">
-          <mat-form-field appearance="outline" class="form-field-padding">
-            <mat-label>Name & Description</mat-label>
-            <input
-              matInput
-              placeholder="Name & Description"
-              formControlName="filterNameValue"
-            />
-          </mat-form-field>
-        </div>
-        <div class="w-25-field">
-          <mat-form-field appearance="outline" class="form-field-padding">
-            <mat-label>Question Type</mat-label>
-            <mat-select formControlName="questionTypeCntrl">
-              <mat-option
-                *ngFor="let questionType of questionTypeList"
-                [value]="questionType"
-                >{{ questionType }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="w-25-field">
-          <mat-form-field appearance="outline" class="form-field-padding">
-            <mat-label>Subject</mat-label>
-            <mat-select formControlName="subjectCntrl">
-              <mat-option
-                *ngFor="let subject of subjectList"
-                [value]="subject"
-                >{{ subject }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="w-25-field">
-          <mat-form-field appearance="outline" class="form-field-padding">
-            <mat-label>Tags</mat-label>
-            <mat-select multiple formControlName="tagCntrl">
-              <mat-option *ngFor="let tag of tags" [value]="tag">{{
-                tag
-              }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="w-25-field">
-          <mat-form-field appearance="outline" class="form-field-padding">
-            <mat-label>Topic</mat-label>
-            <mat-select formControlName="topicCntrl">
-              <mat-option *ngFor="let topic of topicList" [value]="topic">{{
-                topic
-              }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+            <div class="question-grid-search-bar" [formGroup]="filterGroup">
+              <div class="w-50-field">
+                <mat-form-field appearance="outline" class="form-field-padding">
+                  <mat-label>Name & Description</mat-label>
+                  <input
+                    matInput
+                    placeholder="Name & Description"
+                    formControlName="filterNameValue"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="w-25-field">
+                <mat-form-field appearance="outline" class="form-field-padding">
+                  <mat-label>Question Type</mat-label>
+                  <mat-select formControlName="questionTypeCntrl">
+                    <mat-option
+                      *ngFor="let questionType of questionTypeList"
+                      [value]="questionType"
+                      >{{ questionType }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="w-25-field">
+                <mat-form-field appearance="outline" class="form-field-padding">
+                  <mat-label>Subject</mat-label>
+                  <mat-select formControlName="subjectCntrl">
+                    <mat-option
+                      *ngFor="let subject of subjectList"
+                      [value]="subject"
+                      >{{ subject }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="w-25-field">
+                <mat-form-field appearance="outline" class="form-field-padding">
+                  <mat-label>Tags</mat-label>
+                  <mat-select multiple formControlName="tagCntrl">
+                    <mat-option *ngFor="let tag of tags" [value]="tag">{{
+                      tag
+                    }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="w-25-field">
+                <mat-form-field appearance="outline" class="form-field-padding">
+                  <mat-label>Topic</mat-label>
+                  <mat-select formControlName="topicCntrl">
+                    <mat-option *ngFor="let topic of topicList" [value]="topic">{{
+                      topic
+                    }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
-        <div class="w-25-field">
-          <mat-form-field appearance="outline" class="form-field-padding">
-            <mat-label>File Name</mat-label>
-            <input
-              matInput
-              placeholder="File Name"
-              formControlName="fileNameCntrl"
-            />
-          </mat-form-field>
-        </div>
-        <div class="w-25-field">
-          <!-- <mat-form-field appearance="outline" class="form-field-padding">
-            <mat-label>Sub Topic</mat-label>
-            <mat-select formControlName="substopicCntrl">
-              <mat-option
-                *ngFor="let subtopic of subTopicList"
-                [value]="subtopic"
-                >{{ subtopic }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field> -->
-          <mat-form-field appearance="outline" class="form-field-padding">
-            <mat-label>Section Name</mat-label>
-            <input
-              matInput
-              placeholder="Section"
-              formControlName="migrationSectionNameCntrl"
-            />
-          </mat-form-field>
-        </div>
-        <div class="w-100-field" style="height: 40px">
-          <button
-            mat-raised-button
-            class="filter-btn-cls"
-            (click)="applyFilter()"
-          >
-            {{ "COMMON_TAG.SEARCH" | translate }}
-          </button>
-          <button
-            mat-raised-button
-            class="reset-btn-cls"
-            (click)="resetFilter()"
-          >
-            {{ "COMMON_TAG.RESET" | translate }}
-          </button>
-        </div>
+              <div class="w-25-field">
+                <mat-form-field appearance="outline" class="form-field-padding">
+                  <mat-label>File Name</mat-label>
+                  <input
+                    matInput
+                    placeholder="File Name"
+                    formControlName="fileNameCntrl"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="w-25-field">
+                <!-- <mat-form-field appearance="outline" class="form-field-padding">
+                  <mat-label>Sub Topic</mat-label>
+                  <mat-select formControlName="substopicCntrl">
+                    <mat-option
+                      *ngFor="let subtopic of subTopicList"
+                      [value]="subtopic"
+                      >{{ subtopic }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field> -->
+                <mat-form-field appearance="outline" class="form-field-padding">
+                  <mat-label>Section Name</mat-label>
+                  <input
+                    matInput
+                    placeholder="Section"
+                    formControlName="migrationSectionNameCntrl"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="w-100-field" style="height: 40px">
+                <button
+                  mat-raised-button
+                  class="filter-btn-cls"
+                  (click)="applyFilter()"
+                >
+                  {{ "COMMON_TAG.SEARCH" | translate }}
+                </button>
+                <button
+                  mat-raised-button
+                  class="reset-btn-cls"
+                  (click)="resetFilter()"
+                >
+                  {{ "COMMON_TAG.RESET" | translate }}
+                </button>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
       </div>
-    </mat-expansion-panel>
-  </mat-accordion>
+    </div>
+    <div class="col-lg-4">
+      <div class="question-grid-action">
+        <!-- <button mat-raised-button (click)="performGridAction('bulk_delete')">
+          <mat-icon>delete_forever</mat-icon> {{ "COMMON_TAG.DELETE" | translate }}
+        </button> -->
+        <button mat-raised-button (click)="performGridAction('add')">
+          <mat-icon>add_circle</mat-icon> {{ "COMMON_TAG.ADD" | translate }}
+        </button>
+        <button mat-raised-button (click)="performGridAction('upload')">
+          <mat-icon>cloud_upload</mat-icon> {{ "COMMON_TAG.UPLOAD" | translate }}
+        </button>
+        <button mat-raised-button (click)="performGridAction('migrate')">
+          <i class="fas fa-exchange-alt"></i> {{ "COMMON_TAG.MIGRATE" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+
+
+
 
 <div class="question-list-grid">
   <div class="example-container mat-elevation-z8">
