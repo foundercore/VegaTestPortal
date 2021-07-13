@@ -11,11 +11,11 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatChip } from '@angular/material/chips/chip';
 
 export class FilterModel {
-  subtopic: string;
-  subject: string;
-  topic: string;
-  difficulty: string;
-  state:string;
+  subtopic: string[];
+  subject: string[];
+  topic: string[];
+  difficulty: string[];
+  state: string[];
 }
 
 @Component({

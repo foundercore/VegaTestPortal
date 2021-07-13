@@ -15,6 +15,8 @@ export class PieChartComponent implements OnInit {
 
   piedata: any[] = [ ];
 
+  showCountOnly = true;
+
   view:[number, number] = [550,500];
   // options
   gradient: boolean = true;
@@ -41,6 +43,15 @@ export class PieChartComponent implements OnInit {
       if(this.data?.config?.view){
         this.view = undefined;
       }
+  }
+
+  labelFormatting(name?) {
+    let self: any = this; // this "this" will refer to the chart component (pun intented :))
+
+    let data = self.series.filter(x => x.name == name); // chartData will be present in
+                                                        // series along with the label
+    return `${data[0].value}`;
+
   }
 
   onSelect(data): void {

@@ -7,7 +7,7 @@ export class MinuteSecondsPipe implements PipeTransform {
 
     transform(value: number): string {
         const minutes: number = Math.floor(value / 60);
-        return minutes + ':' + (value - minutes * 60);
+        return minutes + ':' + ((value - minutes * 60)).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
     }
 
 }
