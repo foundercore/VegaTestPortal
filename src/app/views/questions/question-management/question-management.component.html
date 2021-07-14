@@ -34,25 +34,57 @@
         <div class="w-25-field">
           <mat-form-field appearance="outline" class="form-field-padding">
             <mat-label>Question Type</mat-label>
-            <mat-select formControlName="questionTypeCntrl">
+            <!-- <mat-select formControlName="questionTypeCntrl"> -->
+            <input
+              type="text"
+              placeholder="Search Question Types"
+              aria-label="Number"
+              matInput
+              formControlName="questionTypeCntrl"
+              [matAutocomplete]="ques"
+            />
+            <mat-autocomplete autoActiveFirstOption #ques="matAutocomplete">
               <mat-option
+                *ngFor="let option of questionTypeListFilteredOptions | async"
+                [value]="option"
+              >
+                {{ option }}
+              </mat-option>
+            </mat-autocomplete>
+            <!-- <mat-option
                 *ngFor="let questionType of questionTypeList"
                 [value]="questionType"
                 >{{ questionType }}
-              </mat-option>
-            </mat-select>
+              </mat-option> -->
+            <!-- </mat-select> -->
           </mat-form-field>
         </div>
         <div class="w-25-field">
           <mat-form-field appearance="outline" class="form-field-padding">
-            <mat-label>Subject</mat-label>
-            <mat-select formControlName="subjectCntrl">
+            <mat-label>Subject </mat-label>
+            <input
+              type="text"
+              placeholder="Search Subjects"
+              aria-label="Number"
+              matInput
+              formControlName="subjectCntrl"
+              [matAutocomplete]="sub"
+            />
+            <mat-autocomplete autoActiveFirstOption #sub="matAutocomplete">
+              <mat-option
+                *ngFor="let option of subjectFilteredOptions | async"
+                [value]="option"
+              >
+                {{ option }}
+              </mat-option>
+            </mat-autocomplete>
+            <!-- <mat-select >
               <mat-option
                 *ngFor="let subject of subjectList"
                 [value]="subject"
                 >{{ subject }}</mat-option
               >
-            </mat-select>
+            </mat-select> -->
           </mat-form-field>
         </div>
         <div class="w-25-field">
@@ -68,11 +100,27 @@
         <div class="w-25-field">
           <mat-form-field appearance="outline" class="form-field-padding">
             <mat-label>Topic</mat-label>
-            <mat-select formControlName="topicCntrl">
+            <input
+              type="text"
+              placeholder="Topic Subjects"
+              aria-label="Number"
+              matInput
+              formControlName="topicCntrl"
+              [matAutocomplete]="topic"
+            />
+            <mat-autocomplete autoActiveFirstOption #topic="matAutocomplete">
+              <mat-option
+                *ngFor="let option of topicListFilteredOptions | async"
+                [value]="option"
+              >
+                {{ option }}
+              </mat-option>
+            </mat-autocomplete>
+            <!-- <mat-select formControlName="topicCntrl">
               <mat-option *ngFor="let topic of topicList" [value]="topic">{{
                 topic
               }}</mat-option>
-            </mat-select>
+            </mat-select> -->
           </mat-form-field>
         </div>
 
@@ -173,7 +221,14 @@
 
         <!-- Name Column -->
         <ng-container matColumnDef="name">
-          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>Question</th>
+          <th
+            class="custom-mat-header-th"
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            Question
+          </th>
           <td mat-cell *matCellDef="let row" [innerHtml]="row.name"></td>
         </ng-container>
 
@@ -191,13 +246,22 @@
 
         <!-- FileName Column -->
         <ng-container matColumnDef="fileName">
-          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>File Name</th>
+          <th
+            class="custom-mat-header-th"
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+          >
+            File Name
+          </th>
           <td mat-cell *matCellDef="let row">{{ row.fileName }}</td>
         </ng-container>
 
         <!-- Explanation Column -->
         <ng-container matColumnDef="explanation_added">
-          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>Explanation Added?</th>
+          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
+            Explanation Added?
+          </th>
           <td mat-cell *matCellDef="let row">
             {{ row.explanation_added }}
           </td>
@@ -205,13 +269,17 @@
 
         <!-- Tag Column -->
         <ng-container matColumnDef="tags">
-          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>Tag</th>
+          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
+            Tag
+          </th>
           <td mat-cell *matCellDef="let row">{{ row.tags }}</td>
         </ng-container>
 
         <!-- actions Column -->
         <ng-container matColumnDef="actions">
-          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>Actions</th>
+          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
+            Actions
+          </th>
           <td mat-cell *matCellDef="let row">
             <span
               class="action-btn"
@@ -237,7 +305,10 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+        ></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>

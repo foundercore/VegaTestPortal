@@ -67,10 +67,14 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   isFilterApply = false;
 
   subjectList: string[] = [];
+  subjectFilteredOptions: Observable<string[]>;
   topicList: string[] = [];
+  topicListFilteredOptions: Observable<string[]>;
   subTopicList: string[] = [];
   tags: string[] | undefined = [];
+  tagsFilteredOptions: Observable<string[]>;
   questionTypeList: string[] = [];
+  questionTypeListFilteredOptions: Observable<string[]>;
 
   @ViewChild(MatTable)
   table!: MatTable<any>;
@@ -102,10 +106,43 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
       this.subjectList = results[2];
       this.topicList = results[3];
       this.subTopicList = results[4];
+      this.subjectFilteredOptions = this.filterGroup.controls[
+        'subjectCntrl'
+      ].valueChanges.pipe(
+        startWith(''),
+        map((value: String) => {
+          const filterValue = value.toLowerCase();
+          return this.subjectList.filter((option) =>
+            option.toLowerCase().includes(filterValue)
+          );
+        })
+      );
+      this.questionTypeListFilteredOptions = this.filterGroup.controls[
+        'questionTypeCntrl'
+      ].valueChanges.pipe(
+        startWith(''),
+        map((value: String) => {
+          const filterValue = value.toLowerCase();
+          return this.questionTypeList.filter((option) =>
+            option.toLowerCase().includes(filterValue)
+          );
+        })
+      );
+      this.topicListFilteredOptions = this.filterGroup.controls[
+        'topicCntrl'
+      ].valueChanges.pipe(
+        startWith(''),
+        map((value: String) => {
+          const filterValue = value.toLowerCase();
+          return this.topicList.filter((option) =>
+            option.toLowerCase().includes(filterValue)
+          );
+        })
+      );
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngAfterViewInit() {
     let hasFilters = false;
@@ -249,15 +286,13 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
         this.filterGroup.controls.questionTypeCntrl.value !== null &&
         this.filterGroup.controls.questionTypeCntrl.value.length !== 0
       ) {
-        searchQuestion.type =
-          this.filterGroup.controls.questionTypeCntrl.value;
+        searchQuestion.type = this.filterGroup.controls.questionTypeCntrl.value;
       }
       if (
         this.filterGroup.controls.subjectCntrl.value !== null &&
         this.filterGroup.controls.subjectCntrl.value.length !== 0
       ) {
-        searchQuestion.subject =
-          this.filterGroup.controls.subjectCntrl.value;
+        searchQuestion.subject = this.filterGroup.controls.subjectCntrl.value;
       }
       if (
         this.filterGroup.controls.tagCntrl.value !== null &&
@@ -276,8 +311,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
         this.filterGroup.controls.fileNameCntrl.value !== null &&
         this.filterGroup.controls.fileNameCntrl.value.length !== 0
       ) {
-        searchQuestion.filename =
-          this.filterGroup.controls.fileNameCntrl.value;
+        searchQuestion.filename = this.filterGroup.controls.fileNameCntrl.value;
       }
       if (
         this.filterGroup.controls.migrationSectionNameCntrl.value !== null &&
@@ -286,7 +320,6 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
         searchQuestion.migrationSectionName =
           this.filterGroup.controls.migrationSectionNameCntrl.value;
       }
-
     }
 
     return searchQuestion;
@@ -311,8 +344,9 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id
-      }`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
+      row.id
+    }`;
   }
 
   openBulkUploadDialog() {
@@ -324,7 +358,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
 
   openMigrateUploadDialog() {
     const dialogRef = this.dialog.open(QuestionMigrateUploadDialogComponent);
-    dialogRef.afterClosed().subscribe((result) => { });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 
   deleteQuestion(row: QuestionModel) {

@@ -8,61 +8,128 @@
 </h1>
 <div mat-dialog-content>
   <div class="add-user-content">
-    <div class="example-container"  [formGroup]="assignmentFormGroup">
-
+    <div class="example-container" [formGroup]="assignmentFormGroup">
       <mat-form-field appearance="outline">
         <mat-label>Valid From</mat-label>
-        <input matInput required [matDatepicker]="validfrom_datepicker" formControlName="validFrom" name="validFrom" (dateChange)=validDateFromChangeTrigger($event)>
-        <mat-datepicker-toggle matSuffix [for]="validfrom_datepicker"></mat-datepicker-toggle>
+        <input
+          matInput
+          required
+          [matDatepicker]="validfrom_datepicker"
+          formControlName="validFrom"
+          name="validFrom"
+          (dateChange)="validDateFromChangeTrigger($event)"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="validfrom_datepicker"
+        ></mat-datepicker-toggle>
         <mat-datepicker #validfrom_datepicker>
           <mat-datepicker-actions>
             <button mat-button matDatepickerCancel>Cancel</button>
-            <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+            <button mat-raised-button color="primary" matDatepickerApply>
+              Apply
+            </button>
           </mat-datepicker-actions>
         </mat-datepicker>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Valid To</mat-label>
-        <input matInput required [matDatepicker]="validto_datepicker"  [min]="minValidDateTo"  formControlName="validTo" (dateChange)=validDateToChangeTrigger($event)>
-        <mat-datepicker-toggle matSuffix [for]="validto_datepicker"></mat-datepicker-toggle>
+        <input
+          matInput
+          required
+          [matDatepicker]="validto_datepicker"
+          [min]="minValidDateTo"
+          formControlName="validTo"
+          (dateChange)="validDateToChangeTrigger($event)"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="validto_datepicker"
+        ></mat-datepicker-toggle>
         <mat-datepicker #validto_datepicker>
           <mat-datepicker-actions>
             <button mat-button matDatepickerCancel>Cancel</button>
-            <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+            <button mat-raised-button color="primary" matDatepickerApply>
+              Apply
+            </button>
           </mat-datepicker-actions>
         </mat-datepicker>
-        <mat-error *ngIf="assignmentFormGroup.controls.validTo.hasError('matDatepickerMin')">
-          Valid To date should be greater than or equal to <strong>Valid To Date</strong>
+        <mat-error
+          *ngIf="
+            assignmentFormGroup.controls.validTo.hasError('matDatepickerMin')
+          "
+        >
+          Valid To date should be greater than or equal to
+          <strong>Valid To Date</strong>
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Description</mat-label>
-        <input matInput required  formControlName="description" />
-        <mat-error *ngIf="assignmentFormGroup.controls.description.hasError('required')">
+        <input matInput required formControlName="description" />
+        <mat-error
+          *ngIf="assignmentFormGroup.controls.description.hasError('required')"
+        >
           Description is <strong>required</strong>
         </mat-error>
       </mat-form-field>
 
-
       <mat-form-field appearance="outline">
         <mat-label>Passcode</mat-label>
         <input matInput formControlName="passcode" />
-        <mat-error *ngIf="assignmentFormGroup.controls.passcode.hasError('required')">
+        <mat-error
+          *ngIf="assignmentFormGroup.controls.passcode.hasError('required')"
+        >
           Passcode is <strong>required</strong>
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Assign Batch</mat-label>
-        <mat-select required formControlName="assignedToBatch" multiple>
+        <mat-chip-list #chipList aria-label="Fruit selection">
+          <mat-chip
+            *ngFor="let batch of selectedAssignedBatches"
+            [selectable]="selectable"
+            [removable]="removable"
+            (removed)="remove(batch)"
+          >
+            {{ batch.name }}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+        <input
+          type="text"
+          placeholder="Batches"
+          aria-label="Number"
+          #batchInput
+          [formControl]="searchBatch"
+          [matAutocomplete]="batch"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="addChip($event)"
+        />
+        <mat-autocomplete
+          autoActiveFirstOption
+          #batch="matAutocomplete"
+          (optionSelected)="selected($event)"
+        >
+          <mat-option
+            *ngFor="let option of filteredBatchList | async"
+            [value]="option.id.batchId"
+          >
+            <mat-checkbox [checked]="option.selected">{{
+              option.name
+            }}</mat-checkbox>
+          </mat-option>
+        </mat-autocomplete>
+        <!-- <mat-select multiple>
           <mat-option
             *ngFor="let batch of batchList"
             [value]="batch.id.batchId"
             >{{ batch.name }}</mat-option
           >
-        </mat-select>
+        </mat-select> -->
       </mat-form-field>
 
       <!-- <mat-form-field appearance="outline">
@@ -76,30 +143,68 @@
         </mat-select>
       </mat-form-field> -->
 
-
       <mat-form-field appearance="outline">
         <mat-label>Release Date</mat-label>
-        <input matInput required [matDatepicker]="release_datepicker" [min]="minReleaseDate"  [max]="maxReleaseDate"  formControlName="releaseDate">
-        <mat-datepicker-toggle matSuffix [for]="release_datepicker"></mat-datepicker-toggle>
+        <input
+          matInput
+          required
+          [matDatepicker]="release_datepicker"
+          [min]="minReleaseDate"
+          [max]="maxReleaseDate"
+          formControlName="releaseDate"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="release_datepicker"
+        ></mat-datepicker-toggle>
         <mat-datepicker #release_datepicker>
           <mat-datepicker-actions>
             <button mat-button matDatepickerCancel>Cancel</button>
-            <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+            <button mat-raised-button color="primary" matDatepickerApply>
+              Apply
+            </button>
           </mat-datepicker-actions>
         </mat-datepicker>
-        <mat-error *ngIf="assignmentFormGroup.controls.releaseDate.hasError('matDatepickerMin') || assignmentFormGroup.controls.releaseDate.hasError('matDatepickerMax')">
-          Release Date should be between <strong>Valid from Date</strong> and <strong>Valid To Date</strong>
+        <mat-error
+          *ngIf="
+            assignmentFormGroup.controls.releaseDate.hasError(
+              'matDatepickerMin'
+            ) ||
+            assignmentFormGroup.controls.releaseDate.hasError(
+              'matDatepickerMax'
+            )
+          "
+        >
+          Release Date should be between <strong>Valid from Date</strong> and
+          <strong>Valid To Date</strong>
         </mat-error>
       </mat-form-field>
-
-
-
-
     </div>
     <div class="btn-grp-cls">
-      <button *ngIf="!data.data" mat-raised-button class="save-btn-cls" (click)="add()">{{ 'COMMON_TAG.SAVE' | translate }}</button>
-      <button *ngIf="data.data && !data.isView" mat-raised-button class="save-btn-cls" (click)="edit()">{{ 'COMMON_TAG.UPDATE' | translate }}</button>
-      <button *ngIf="!data.data" mat-raised-button class="reset-btn-cls" (click)="reset()">{{ 'COMMON_TAG.RESET' | translate }}</button>
+      <button
+        *ngIf="!data.data"
+        mat-raised-button
+        class="save-btn-cls"
+        (click)="add()"
+      >
+        {{ "COMMON_TAG.SAVE" | translate }}
+      </button>
+      <button
+        *ngIf="data.data && !data.isView"
+        mat-raised-button
+        class="save-btn-cls"
+        (click)="edit()"
+      >
+        {{ "COMMON_TAG.UPDATE" | translate }}
+      </button>
+      <button
+        *ngIf="!data.data"
+        mat-raised-button
+        class="reset-btn-cls"
+        (click)="reset()"
+      >
+        {{ "COMMON_TAG.RESET" | translate }}
+      </button>
     </div>
   </div>
 </div>
