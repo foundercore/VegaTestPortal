@@ -183,4 +183,10 @@ export class TestConfigService extends BaseService {
     const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${model.testId}/update-metadata`;
     return this.http.post<any>(Url, model, this.headers);
   }
+
+  updateQuestionSequence(test_id:string,section_id:string,questionList:any[]): Observable<any>{
+    const url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${test_id}/section/${section_id}/question/update`;
+    questionList.map((x,index) => x.sequenceNumber = index);
+    return this.http.post<any>(url, questionList, this.headers);
+  }
 }

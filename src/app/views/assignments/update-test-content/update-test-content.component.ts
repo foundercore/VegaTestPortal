@@ -1,7 +1,7 @@
+import { Section } from './../models/sections';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SectionComponent } from '../popups/section/section.component';
-import { Section } from '../models/sections';
 import { TestconfigComponent } from '../popups/test-config/test-config.component';
 import { QuestionslistComponent } from '../popups/questions-list/questions-list.component';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -62,6 +62,8 @@ export class UpdateTestContentComponent implements OnInit {
   actualTotalNumberOfRecords: any;
   remarks: string = '';
   breadcrumModified: boolean;
+  filter = '';
+
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
@@ -116,7 +118,8 @@ export class UpdateTestContentComponent implements OnInit {
     });
   }
 
-  editSection(section: Section) {
+  editSection(event,section: Section) {
+    event.stopPropagation();
     const dialogRef = this.dialog.open(EditSectionComponent, {
       maxWidth: '700px',
       width: '100%',
@@ -331,12 +334,6 @@ export class UpdateTestContentComponent implements OnInit {
             var data = JSON.parse(remarks.remarks);
             this.remarks = data.rejectionReason;
           }
-
-          console.log('this.gettest==', res);
-          console.log(
-            'this.ListOfQuestions_Added_In_All_Sections',
-            this.ListOfQuestions_Added_In_All_Sections
-          );
           this.setDataSourceOfPaginator(res?.sections);
           this.prepareExpandedStateArray(false, res?.sections?.length);
         });
@@ -353,7 +350,7 @@ export class UpdateTestContentComponent implements OnInit {
 
     if (this.currentOpenedSection) {
       this.ques = this.currentOpenedSection?.questions;
-      this.sectionQuestionList = this.ques;
+      this.sectionQuestionList = this.ques?.sort((x,y) => (x.sequenceNumber > y.sequenceNumber) ? 1 : (y.sequenceNumber > x.sequenceNumber) ? -1 : 0);
       this.totalNumberOfRecords = this.currentOpenedSection?.questions
         ? this.currentOpenedSection?.questions.length
         : 0;
@@ -388,7 +385,8 @@ export class UpdateTestContentComponent implements OnInit {
     }
   }
 
-  removeSection(section: Section) {
+  removeSection(event,section: Section) {
+    event.stopPropagation();
     Swal.fire({
       title: 'Are you sure?',
       text: 'want to delete section.',
@@ -596,5 +594,15 @@ export class UpdateTestContentComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.sectionQuestionList, event.previousIndex, event.currentIndex);
+  }
+
+  saveQuestionSequence(event,section: Section){
+    event.stopPropagation();
+    this.testConfigService.updateQuestionSequence( this.testId,section.id,section.questions).subscribe(resp => {
+      this.toastrService.success('Sequence is successfully saved');
+    },error => {
+      this.toastrService.error('Failed to save Sequence');
+    })
+
   }
 }
