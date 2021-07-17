@@ -6,16 +6,17 @@ import {
   Output,
   EventEmitter,
   Input,
+  ViewChild,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatChip } from '@angular/material/chips/chip';
 
 export class FilterModel {
-  subtopic: string;
-  subject: string;
-  topic: string;
-  difficulty: string;
-  state:string;
+  subtopic: string[];
+  subject: string[];
+  topic: string[];
+  difficulty: string[];
+  state: string[];
 }
 
 @Component({
@@ -25,14 +26,15 @@ export class FilterModel {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterComponent implements OnInit {
-
-
-  subtopicList = [ ];
-  subjectLists = [ ];
-  topicLists = [ ];
+  subtopicList = [];
+  subjectLists = [];
+  topicLists = [];
   difficultyLevels = ['EASY', 'MEDIUM', 'HARD'];
-  states = ['CORRECT','INCORRECT','SKIPPED'];
+  states = ['CORRECT', 'INCORRECT', 'SKIPPED'];
 
+  filteredTopics = this.topicLists;
+  filteredSubjects = this.subjectLists;
+  filteredSubtopics = this.subtopicList;
 
   @Input() data = new EventEmitter();
 
@@ -41,25 +43,30 @@ export class FilterComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.data.subscribe(resp =>{
-
-      resp.forEach(section => {
-        section.answers.forEach(element => {
-            if(!this.subtopicList.includes(element.subTopic) && element.subTopic.length != 0){
-              this.subtopicList.push(element.subtopic);
-            }
-            if(!this.subjectLists.includes(element.subject) && element.subject.length != 0){
-              this.subjectLists.push(element.subject);
-            }
-            if(!this.subjectLists.includes(element.topic) && element.topic.length != 0){
-              this.topicLists.push(element.topic);
-            }
-
+    this.data.subscribe((resp) => {
+      resp.forEach((section) => {
+        section.answers.forEach((element) => {
+          if (
+            !this.subtopicList.includes(element.subTopic) &&
+            element.subTopic.length != 0
+          ) {
+            this.subtopicList.push(element.subtopic);
+          }
+          if (
+            !this.subjectLists.includes(element.subject) &&
+            element.subject.length != 0
+          ) {
+            this.subjectLists.push(element.subject);
+          }
+          if (
+            !this.subjectLists.includes(element.topic) &&
+            element.topic.length != 0
+          ) {
+            this.topicLists.push(element.topic);
+          }
         });
       });
-
-
-    })
+    });
   }
 
   filterGroup = new FormGroup({
@@ -67,7 +74,7 @@ export class FilterComponent implements OnInit {
     subjectCntrl: new FormControl(),
     topicCntrl: new FormControl(),
     difficulty: new FormControl(),
-    state : new FormControl()
+    state: new FormControl(),
   });
 
   applyFilter() {
@@ -81,14 +88,48 @@ export class FilterComponent implements OnInit {
     this.filterParameters.emit({ filterData: filterValues });
   }
 
-  resetFilter(){
+  resetFilter() {
     this.filterGroup.reset();
     const filterValues = new FilterModel();
     this.filterParameters.emit({ filterData: filterValues });
-
   }
 
   toggleSelection(chip: MatChip) {
     chip.toggleSelected();
- }
+  }
+
+  onsubKey(event) {
+    this.filteredSubjects = this.searchSubject(event.target.value);
+  }
+
+  searchSubject(value: string) {
+    let filter = value.toLowerCase();
+    return this.subjectLists.filter((option) =>
+      option.toLowerCase().includes(filter)
+    );
+  }
+
+  onTopicKey(event) {
+    this.filteredTopics = this.searchTopic(event.target.value);
+  }
+
+  searchTopic(value: string) {
+    let filter = value.toLowerCase();
+    return this.topicLists.filter((option) =>
+      option.toLowerCase().includes(filter)
+    );
+  }
+
+  onSubTopicKey(event) {
+    this.filteredSubtopics = this.searchSubtopic(event.target.value);
+  }
+
+  searchSubtopic(value: string) {
+    let filter = value.toLowerCase();
+    return this.subtopicList.filter((option) =>
+      option.toLowerCase().includes(filter)
+    );
+  }
+
+
 }

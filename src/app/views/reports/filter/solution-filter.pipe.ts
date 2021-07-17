@@ -14,20 +14,20 @@ export class SolutionFilterPipe implements PipeTransform {
     // filter items array, items which match and return true will be
     // kept, false will be filtered out
     let filterItems = items;
-    if(filter?.filterData?.state != '' && filter?.filterData?.state != undefined)
-    filterItems = items.filter(item => item.answerStatus === filter.filterData.state.toUpperCase());
+    if( filter?.filterData?.state != undefined && filter?.filterData?.state.length != 0)
+    filterItems = items.filter(item =>  filter.filterData.state.includes(item.answerStatus));
 
-    if(filter?.filterData?.difficulty != '' && filter?.filterData?.difficulty != undefined)
-    filterItems = items.filter(item => item.difficultyLevel === filter.filterData.difficulty.toUpperCase());
+    if(filter?.filterData?.difficulty != undefined && filter?.filterData?.difficulty.length != 0 )
+    filterItems = items.filter(item =>   filter.filterData.difficulty.includes(item.difficultyLevel ));
 
-    if(filter?.filterData?.subject != '' && filter?.filterData?.subject != undefined)
-    filterItems = items.filter(item => item.subject === filter.filterData.subject.toUpperCase());
+    if( filter?.filterData?.subject != undefined  && filter?.filterData?.subject.length != 0)
+    filterItems = items.filter(item =>   filter.filterData.subject.includes(item.subject));
 
-    if(filter?.filterData?.topic != '' && filter?.filterData?.topic != undefined)
-    filterItems = items.filter(item => item.topic === filter.filterData.topic.toUpperCase());
+    if(filter?.filterData?.topic != undefined && filter?.filterData?.topic.length != 0 )
+    filterItems = items.filter(item =>   filter.filterData.topic.includes(item.topic));
 
-    if(filter?.filterData?.subtopic != '' && filter?.filterData?.subtopic != undefined)
-    filterItems = items.filter(item => item.subTopic === filter.filterData.subtopic.toUpperCase());
+    if(filter?.filterData?.subtopic != undefined  && filter?.filterData?.subtopic.length != 0 )
+    filterItems = items.filter(item =>  filter.filterData.subtopic.includes(item.subTopic));
 
 
 

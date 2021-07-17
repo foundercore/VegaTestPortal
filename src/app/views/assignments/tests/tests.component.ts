@@ -368,7 +368,7 @@ export class TestsComponent implements OnInit, AfterViewInit {
             height: 'auto',
             hasBackdrop: false,
             backdropClass: 'dialog-backdrop',
-            data: { testData: element, userType: this.userType },
+            data: { testData: element, userType: this.userType,  testType: 'preview'},
           });
           dialogRef.afterClosed().subscribe((result) => {
             this.GetAllquestionPapers();

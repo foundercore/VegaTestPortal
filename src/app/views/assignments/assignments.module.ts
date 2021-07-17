@@ -23,6 +23,7 @@ import { EditTestComponent } from './popups/edit-test/edit-test.component';
 import { AddStudentsComponent } from './add-students/add-students.component';
 import { ViewAssignmentComponent } from './view-assignment/view-assignment.component';
 import { AssignmentFormComponent } from './assignment-form/assignment-form.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 
@@ -55,8 +56,8 @@ import { AssignmentFormComponent } from './assignment-form/assignment-form.compo
     RouterModule,
     CountdownModule,
     AngularEditorModule,
-    NgScrollbarModule
-
+    NgScrollbarModule,
+    SharedModule
   ],
   entryComponents : [
     AssessmentEditorComponent,
