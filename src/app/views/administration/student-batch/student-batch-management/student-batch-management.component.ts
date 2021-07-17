@@ -122,7 +122,7 @@ export class StudentBatchManagementComponent implements OnInit {
   }
 
   openAddStudentDialog(row:any){
-    const dialogRef = this.dialog.open(AddBatchStudentComponent, { disableClose: true, data: row });
+    const dialogRef = this.dialog.open(AddBatchStudentComponent, { disableClose: true, data: row, maxHeight:'auto' });
     dialogRef.afterClosed().subscribe((result) => {
       this.refreshUserList();
     });

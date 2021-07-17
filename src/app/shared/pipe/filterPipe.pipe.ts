@@ -6,12 +6,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FilterPipePipe implements PipeTransform {
 
-  transform(items: any[], filter: string): any {
-    if (!items || !filter) {
+  transform(items: any[],  keys: string, query: string): any {
+    if (!items || !query) {
         return items;
     }
-    // filter items array, items which match and return true will be
-    // kept, false will be filtered out
-    return items.filter(item => item.answerStatus === filter.toUpperCase());
+
+    return (items || []).filter(item => keys.split(',').some(key => item.hasOwnProperty(key) && new RegExp(query, 'gi').test(item[key])));
+
   }
 }

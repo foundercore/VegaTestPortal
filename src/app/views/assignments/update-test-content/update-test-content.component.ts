@@ -1,19 +1,15 @@
+import { Section } from './../models/sections';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SectionComponent } from '../popups/section/section.component';
-import { Section } from '../models/sections';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { TestconfigComponent } from '../popups/test-config/test-config.component';
 import { QuestionslistComponent } from '../popups/questions-list/questions-list.component';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { TestConfigService } from '../services/test-config-service';
 import { ToastrService } from 'ngx-toastr';
 import { TestConfigurationVM } from '../models/test-configuration';
-import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
 import { SelectionModel } from '@angular/cdk/collections';
-import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { EditSectionComponent } from '../popups/edit-section/edit-section.component';
 import { QuestionModel } from 'src/app/models/questions/question-model';
 import { RejectstatusComponent } from '../popups/reject-status/reject-status.component';
@@ -21,12 +17,9 @@ import { TestVM } from '../models/postTestVM';
 import { Status } from '../models/statusEnum';
 import { EditTestComponent } from '../popups/edit-test/edit-test.component';
 import { EditTestMetaData } from '../models/editTestMetaData';
-import { forkJoin, merge, Observable, of as observableOf, Subject } from 'rxjs';
-import { catchError, filter, map, startWith, switchMap } from 'rxjs/operators';
-import { SearchQuestionPaperVM } from '../models/searchQuestionPaperVM';
-import { error } from '@angular/compiler/src/util';
 import { Location } from '@angular/common';
 import { BreadcrumbNavService } from '../../layout/breadcrumb/breadcrumb-nav.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-update-test-content',
@@ -34,18 +27,10 @@ import { BreadcrumbNavService } from '../../layout/breadcrumb/breadcrumb-nav.ser
   styleUrls: ['./update-test-content.component.css'],
 })
 export class UpdateTestContentComponent implements OnInit {
-  public dataSource = new MatTableDataSource([]);
-  @ViewChild(MatSort, { static: false })
-  set sort(value: MatSort) {
-    if (this.dataSource) this.dataSource.sort = value;
-  }
-  @ViewChild(MatPaginator, { static: false, read: true })
-  set paginator(value: MatPaginator) {
-    this.dataSource.paginator = value;
-  }
-  // @ViewChild(MatPaginator) _paginator: MatPaginator;
+
+  public sectionQuestionList = [];
+
   totalNumberOfRecords = 0;
-  public pageOptions = PAGE_OPTIONS;
   currentOpenedSection = new Section();
   panelOpenState: boolean = false;
   modelsections: any = ([] = []);
@@ -53,7 +38,7 @@ export class UpdateTestContentComponent implements OnInit {
   ques = [];
   testId: string = '';
   controlparms: TestConfigurationVM;
-  //dataSource = new MatTableDataSource<any>();
+
   selection = new SelectionModel<QuestionModel>(true, []);
   displayedColumns: string[] = [
     'select',
@@ -77,6 +62,8 @@ export class UpdateTestContentComponent implements OnInit {
   actualTotalNumberOfRecords: any;
   remarks: string = '';
   breadcrumModified: boolean;
+  filter = '';
+
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
@@ -90,43 +77,8 @@ export class UpdateTestContentComponent implements OnInit {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    console.log('paginator inside ngAfterViewInit=>', this.paginator);
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
     this.testId = this.route.snapshot.paramMap.get('id');
     this.getQuestionPaperbyId();
-
-    //this.dataSource.paginator = this.paginator;
-    // merge(this.sort.sortChange, this.paginator.page)
-    //   .pipe(
-    //     startWith({}),
-    //     switchMap((res) => {
-    //       console.log('Res from switch map=>', res);
-    //       this.isLoadingResults = true;
-    //       const searchQuestion = this.createSearchObject();
-    //       return this.testConfigService.getAllQuestionPaper(searchQuestion);
-    //     }),
-    //     map((data) => {
-    //       console.log('data in map=>', data);
-    //       this.isLoadingResults = false;
-    //       this.isRateLimitReached = false;
-    //       this.actualTotalNumberOfRecords = data.totalRecords;
-    //       return data.tests.map((x) => {
-    //         x.explanation_added =
-    //           x.explanation && x.explanation.length ? 'Yes' : 'No';
-    //         return x;
-    //       });
-    //     }),
-    //     catchError(() => {
-    //       this.isLoadingResults = false;
-    //       this.isRateLimitReached = true;
-    //       return observableOf([]);
-    //     })
-    //   )
-    //   .subscribe((data) => {
-    //     this.dataSource.data = data;
-    //     console.log('This.datasource=', this.dataSource);
-    //   });
   }
 
   addSection() {
@@ -166,7 +118,8 @@ export class UpdateTestContentComponent implements OnInit {
     });
   }
 
-  editSection(section: Section) {
+  editSection(event,section: Section) {
+    event.stopPropagation();
     const dialogRef = this.dialog.open(EditSectionComponent, {
       maxWidth: '700px',
       width: '100%',
@@ -195,7 +148,6 @@ export class UpdateTestContentComponent implements OnInit {
         model.difficultyLevel = result?.difficultyLevel;
         model.testId = this.route.snapshot.paramMap.get('id');
         var sectionId = result?.sectionId;
-        //debugger;
         this.testConfigService
           .editSection(model.testId, sectionId, model)
           .subscribe(
@@ -241,7 +193,6 @@ export class UpdateTestContentComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('Result accepted from edit-test dialog box =>', result);
-      //this.toastrService.success('Test details updated successfully');
       this.getQuestionPaperbyId();
     });
   }
@@ -302,9 +253,9 @@ export class UpdateTestContentComponent implements OnInit {
   }
 
   isAllSelected() {
-    if (this.dataSource) {
+    if (this.sectionQuestionList) {
       const numSelected = this.selection.selected.length;
-      const numRows = this.dataSource?.data.length;
+      const numRows = this.sectionQuestionList?.length;
       return numSelected === numRows;
     }
     return false;
@@ -314,8 +265,7 @@ export class UpdateTestContentComponent implements OnInit {
   masterToggle() {
     this.isAllSelected()
       ? this.selection.clear()
-      : this.dataSource.data.forEach((row) => this.selection.select(row));
-    console.log('this.dataSource.data', this.dataSource.data);
+      : this.sectionQuestionList.forEach((row) => this.selection.select(row));
   }
 
   TestConfig() {
@@ -384,12 +334,6 @@ export class UpdateTestContentComponent implements OnInit {
             var data = JSON.parse(remarks.remarks);
             this.remarks = data.rejectionReason;
           }
-
-          console.log('this.gettest==', res);
-          console.log(
-            'this.ListOfQuestions_Added_In_All_Sections',
-            this.ListOfQuestions_Added_In_All_Sections
-          );
           this.setDataSourceOfPaginator(res?.sections);
           this.prepareExpandedStateArray(false, res?.sections?.length);
         });
@@ -406,98 +350,34 @@ export class UpdateTestContentComponent implements OnInit {
 
     if (this.currentOpenedSection) {
       this.ques = this.currentOpenedSection?.questions;
-      //this.dataSource = null;
-      this.dataSource = new MatTableDataSource(this.ques);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.sectionQuestionList = this.ques?.sort((x,y) => (x.sequenceNumber > y.sequenceNumber) ? 1 : (y.sequenceNumber > x.sequenceNumber) ? -1 : 0);
       this.totalNumberOfRecords = this.currentOpenedSection?.questions
         ? this.currentOpenedSection?.questions.length
         : 0;
-      console.log(
-        'Setting paginator datasource=>',
-        this.dataSource,
-        'with section=>',
-        this.currentOpenedSection
-      );
-      //this.sort.sortChange
-
-      // merge(this.sort.sortChange, this.paginator.page)
-      //   .pipe(
-      //     startWith({}),
-      //     switchMap(() => {
-      //       this.isLoadingResults = true;
-      //       const searchQuestion = this.createSearchObject();
-      //       return this.testConfigService.getAllQuestionPaper(searchQuestion);
-      //     }),
-      //     map((data) => {
-      //       console.log('data in map=>', data);
-      //       this.isLoadingResults = false;
-      //       this.isRateLimitReached = false;
-      //       this.actualTotalNumberOfRecords = data.totalRecords;
-      //       return data.tests.map((x) => {
-      //         x.explanation_added =
-      //           x.explanation && x.explanation.length ? 'Yes' : 'No';
-      //         return x;
-      //       });
-      //     }),
-      //     catchError(() => {
-      //       this.isLoadingResults = false;
-      //       this.isRateLimitReached = true;
-      //       return observableOf([]);
-      //     })
-      //   )
-      //   .subscribe((data) => {
-      //     this.dataSource.data = data;
-      //     console.log('This.datasource=', this.dataSource);
-      //   });
     }
   }
 
   prepareExpandedStateArray(state, length?, index?) {
-    // console.log(
-    //   'prepareExpandedStateArray => state=>',
-    //   state,
-    //   ' length=>',
-    //   length,
-    //   ' index=>',
-    //   index
-    // );
-    // console.log(
-    //   'currentOpenedSection=>',
-    //   this.currentOpenedSection,
-    //   ' datasource of paginator=>',
-    //   this.dataSource.data
-    // );
     if (index >= 0) {
       for (var i = 0; i < length; i++) {
         if (index == i)
           this.expandedStateArray[i] = !this.expandedStateArray[i];
         else this.expandedStateArray[i] = false;
       }
-      //console.log('expandedStateArray first=>', this.expandedStateArray);
       return;
     }
     for (var i = 0; i < length; i++) {
       if (!this.expandedStateArray[i]) this.expandedStateArray[i] = state;
     }
-    // console.log('expandedStateArray second=>', this.expandedStateArray);
   }
 
   getSectionId(section?: Section, index?) {
     this.currentOpenedSection = section;
-    //this.prepareExpandedStateArray(false, this.modelsections?.length);
     this.prepareExpandedStateArray(true, this.modelsections?.length, index);
     this.section = section;
     if (section != null) {
       this.ques = section?.questions;
-      //this.ques2 = section?.questions;
-      //this.dataSource = null;
-      this.dataSource = new MatTableDataSource(this.ques);
-
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-
-      console.log('dataSource inside getSectionId=>', this.dataSource);
+      this.sectionQuestionList = this.ques;
       this.totalNumberOfRecords = section?.questions
         ? section?.questions.length
         : 0;
@@ -505,7 +385,8 @@ export class UpdateTestContentComponent implements OnInit {
     }
   }
 
-  removeSection(section: Section) {
+  removeSection(event,section: Section) {
+    event.stopPropagation();
     Swal.fire({
       title: 'Are you sure?',
       text: 'want to delete section.',
@@ -704,12 +585,24 @@ export class UpdateTestContentComponent implements OnInit {
   }
 
   applyFilter(e) {
-    this.dataSource.filter = (e.target as HTMLInputElement).value
-      .trim()
-      .toLowerCase();
+
   }
 
   goBack() {
     this.location.back();
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.sectionQuestionList, event.previousIndex, event.currentIndex);
+  }
+
+  saveQuestionSequence(event,section: Section){
+    event.stopPropagation();
+    this.testConfigService.updateQuestionSequence( this.testId,section.id,section.questions).subscribe(resp => {
+      this.toastrService.success('Sequence is successfully saved');
+    },error => {
+      this.toastrService.error('Failed to save Sequence');
+    })
+
   }
 }

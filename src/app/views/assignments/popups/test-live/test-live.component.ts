@@ -43,7 +43,6 @@ export class TestLiveComponent implements OnInit {
   optionsSelected = [];
   appState: any;
   userName = '';
-  isUserAdmin = false;
   submissionData: any;
   currentSectionSubmittedData: any;
   studentName = '';
@@ -79,7 +78,6 @@ export class TestLiveComponent implements OnInit {
     this.store.select('appState').subscribe((data) => {
       this.userName = data?.user?.userName;
       this.studentName = data?.user?.firstName + ' ' + data?.user?.lastName;
-      this.isUserAdmin = data?.user?.authorities.some(x => x.authority == 'ROLE_USER_ADMIN');
     });
     if (
       this._data.testData.questionPaperId != null &&
