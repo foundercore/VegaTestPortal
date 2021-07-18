@@ -58,12 +58,22 @@
                 "
                 class="question-card"
               >
-                <div style="display: flex; margin-bottom: 20px">
-                  <div class="numberCircle">{{ i + 1 }}</div>
-                  <div
-                    class="questionName"
-                    [innerHtml]="transform(answer.name)"
-                  ></div>
+
+
+                <div style="display: flex; margin-bottom: 10px">
+                   <div class="numberCircle">{{ i + 1 }}</div>
+                  <div>
+                    <div style="margin-bottom: 10px">
+                      <strong>Passage</strong>
+                    </div>
+                    <div [ngClass]="{'limitTextHeight': isReadMore}" [innerHtml]="transform(answer.passage)" disabled>
+                      Passage
+                    </div>
+                    <button style="font-family: cursive;" mat-button color="primary" (click)="showText()">
+                      {{ isReadMore ? 'read more >>':' << read less' }}
+                    </button>
+                  </div>
+
                   <div
                     style="
                       position: absolute;
@@ -91,7 +101,10 @@
                     </mat-chip-list>
                   </div>
                 </div>
-
+              <div
+                    class="questionName"
+                    [innerHtml]="transform(answer.name)"
+                  ></div>
                 <div style="margin-left: 30px">
                   <div
                     class="option"
@@ -154,17 +167,6 @@
                   </div>
                   <div [ngClass]="{'limitTextHeight': isReadMore}" [innerHtml]="transform(answer.explanation)" disabled>
                     Explanation
-                  </div>
-                  <button style="font-family: cursive;" mat-button color="primary" (click)="showText()">
-                    {{ isReadMore ? 'read more >>':' << read less' }}
-                  </button>
-                </div>
-                 <div style="margin: 20px 30px">
-                  <div style="margin-bottom: 10px">
-                    <strong>Passage</strong>
-                  </div>
-                  <div [ngClass]="{'limitTextHeight': isReadMore}" [innerHtml]="transform(answer.passage)" disabled>
-                    Passage
                   </div>
                   <button style="font-family: cursive;" mat-button color="primary" (click)="showText()">
                     {{ isReadMore ? 'read more >>':' << read less' }}
