@@ -21,6 +21,7 @@ import { Location } from '@angular/common';
 import { BreadcrumbNavService } from '../../layout/breadcrumb/breadcrumb-nav.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { X } from '@angular/cdk/keycodes';
+import { repeat } from 'rxjs/operators';
 
 @Component({
   selector: 'app-update-test-content',
@@ -41,6 +42,13 @@ export class UpdateTestContentComponent implements OnInit {
   controlparms: TestConfigurationVM;
 
   selection = new SelectionModel<QuestionModel>(true, []);
+  testStages: {name:string,status?:number}[] = [
+    {name:'Draft',status:-1},
+    {name:'Pending Verification',status:-1},
+    {name:'Verified',status:-1},
+    {name:'Published',status:-1},
+  ];
+
   displayedColumns: string[] = [
     'select',
     'name',
@@ -312,6 +320,19 @@ export class UpdateTestContentComponent implements OnInit {
             this.breadcrumbNavService.pushOnClickCrumb({ label: res.name });
           this.breadcrumModified = true;
           this.quest = res;
+          let stageFound = false;
+          this.testStages = this.testStages.map(element => {
+              if(stageFound){
+                element.status = -1;
+              }
+             else if((element.name.toUpperCase() ==  res?.status) || (element.name == "Pending Verification" && res?.status == "PENDING_VERIFICATION")){
+                  element.status = 0;
+                  stageFound = true;
+              }else {
+                element.status = 1;
+              }
+              return element;
+          });
           this.controlparms = res?.controlParam;
           this.modelsections = res?.sections;
 
