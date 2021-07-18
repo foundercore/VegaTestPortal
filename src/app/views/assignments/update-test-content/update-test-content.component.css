@@ -294,3 +294,85 @@ Edit Section btn
   width: 24px;
   height: 24px;
 }
+
+
+/**
+Arrow Flow Diagram CSS
+**/
+
+
+.box {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  overflow: hidden;
+}
+
+.box-item {
+  display: block;
+  position: relative;
+  float: left;
+  color: white;
+  height: 40px;
+  line-height: 40px;
+  margin-right: 10px;
+  padding: 0 10px;
+  background-color: #fcc;
+  border-radius: 4px;
+  padding-left: 15px;
+}
+.box-item:before {
+  content: "";
+  position: absolute;
+  right: -9px;
+  height: 0;
+  width: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 10px solid #fcc;
+  border-radius: 4px;
+}
+
+.complete-stage:before {
+  border-left: 10px solid #00c851 !important;
+}
+
+.in-progress-stage:before{
+  border-left: 10px solid #33b5e5 !important;
+}
+.in-complete-stage:before{
+  border-left: 10px solid #cccccc !important;
+}
+
+
+.box-item:after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  height: 0;
+  width: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 10px solid #fff;
+  border-radius: 4px;
+}
+/* .box-item:first-child:after {
+  display: none;
+} */
+/* .box-item:last-child {
+  margin-right: 0;
+}
+.box-item:last-child:before {
+  display: none;
+} */
+.complete-stage{
+background-color: #00c851 !important;
+}
+.in-progress-stage{
+  background-color: #33b5e5 !important;
+}
+.in-complete-stage{
+  background-color: #cccccc !important;
+}
