@@ -20,6 +20,7 @@ import { EditTestMetaData } from '../models/editTestMetaData';
 import { Location } from '@angular/common';
 import { BreadcrumbNavService } from '../../layout/breadcrumb/breadcrumb-nav.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { X } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-update-test-content',
@@ -377,7 +378,7 @@ export class UpdateTestContentComponent implements OnInit {
     this.section = section;
     if (section != null) {
       this.ques = section?.questions;
-      this.sectionQuestionList = this.ques;
+      this.sectionQuestionList = this.ques?.sort((x,y) => (x.sequenceNumber > y.sequenceNumber) ? 1 : (y.sequenceNumber > x.sequenceNumber) ? -1 : 0);
       this.totalNumberOfRecords = section?.questions
         ? section?.questions.length
         : 0;
@@ -594,6 +595,11 @@ export class UpdateTestContentComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.sectionQuestionList, event.previousIndex, event.currentIndex);
+    this.sectionQuestionList = this.sectionQuestionList.map((x,index) => {
+      x.sequenceNumber = index;
+      return x;
+    }
+     );
   }
 
   saveQuestionSequence(event,section: Section){
