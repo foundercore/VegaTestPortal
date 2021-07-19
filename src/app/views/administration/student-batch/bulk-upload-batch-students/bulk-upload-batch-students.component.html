@@ -11,8 +11,13 @@
       <mat-form-field appearance="outline">
         <mat-label>Batch Name</mat-label>
         <mat-select  formControlName="name" required>
+          <input 
+          class="search-container"
+          placeholder="Search Batch"
+          (keyup)="search($event)"
+        />
           <mat-option>None</mat-option>
-          <mat-option *ngFor="let batch of batchList" [value]="batch">
+          <mat-option *ngFor="let batch of filteredBatchList" [value]="batch">
             {{batch.name}}
           </mat-option>
         </mat-select>

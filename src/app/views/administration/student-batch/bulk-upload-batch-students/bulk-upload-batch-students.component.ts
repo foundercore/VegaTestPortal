@@ -16,6 +16,7 @@ import { AddUserDialogComponent } from '../../user/add-user-dialog/add-user-dial
 export class BulkUploadBatchStudentsComponent implements OnInit {
   batchList = [];
   emailPattern = '^(s?[^s,]+@[^s,]+.[^s,]+s?,)*(s?[^s,]+@[^s,]+.[^s,]+)$';
+  filteredBatchList = [];
 
   batchFormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -35,6 +36,8 @@ export class BulkUploadBatchStudentsComponent implements OnInit {
           (x) => (x.student_count = x.students !== null ? x.students.length : 0)
         );
         this.batchList = data;
+        this.filteredBatchList = this.batchList;
+
       },
       (err) => {}
     );
@@ -66,5 +69,16 @@ export class BulkUploadBatchStudentsComponent implements OnInit {
           this.tosterService.error(error.error.apierror.debugMessage);
         }
       );
+  }
+
+  search(event) {
+    this.filteredBatchList = this.searchBatch(event.target.value);
+  }
+
+  searchBatch(value: string) {
+    let filter = value.toLowerCase();
+    return this.batchList.filter((option) =>
+    option.name.toLowerCase().includes(filter)
+    );
   }
 }
