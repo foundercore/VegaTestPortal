@@ -56,13 +56,13 @@
 
 <div class="student-dash-main">
   <div class="student-dash-list-grid">
-    <mat-tab-group (selectedTabChange)="onTabChanged($event)">
-      <ng-container *ngFor="let tab of tagSet; let index = index">
-        <mat-tab label="{{ tab }}">
-          <ng-template mat-tab-label>
-            <span>{{ tab }}</span>
-          </ng-template>
-          <div class="student-result-container mat-elevation-z8">
+    <div class="student-result-container mat-elevation-z8">
+      <mat-tab-group class="custom-tabs" (selectedTabChange)="onTabChanged($event)">
+        <ng-container *ngFor="let tab of tagSet; let index = index">
+          <mat-tab label="{{ tab }}">
+            <ng-template mat-tab-label>
+              <span>{{ tab }}</span>
+            </ng-template>
             <div
               class="example-table-container"
               style="height: 400px; overflow: auto"
@@ -165,9 +165,9 @@
 
               <mat-paginator [pageSizeOptions]="pageOptions"></mat-paginator>
             </div>
-          </div>
-        </mat-tab>
-      </ng-container>
-    </mat-tab-group>
+          </mat-tab>
+        </ng-container>
+      </mat-tab-group>
+    </div>
   </div>
 </div>

@@ -4,6 +4,7 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -26,6 +27,7 @@ import { CustomDialogConfirmationComponent } from 'src/app/shared/components/cus
   templateUrl: './student-dashboard.component.html',
   styleUrls: ['./student-dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 export class StudentDashboardComponent implements OnInit {
   resultStats = [
