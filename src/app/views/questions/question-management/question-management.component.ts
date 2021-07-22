@@ -76,6 +76,10 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   questionTypeList: string[] = [];
   questionTypeListFilteredOptions: Observable<string[]>;
 
+  filteredTopics = [];
+  filteredSubjects = [];
+  filteredQuestions = [];
+
   @ViewChild(MatTable)
   table!: MatTable<any>;
 
@@ -142,7 +146,11 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.filteredTopics = this.topicList;
+    this.filteredSubjects = this.subjectList;
+    this.filteredQuestions = this.questionTypeList;
+  }
 
   ngAfterViewInit() {
     let hasFilters = false;
@@ -405,5 +413,38 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
         }
       });
     }
+  }
+
+  onsubKey(event) {
+    this.filteredSubjects = this.searchSubject(event.target.value);
+  }
+
+  searchSubject(value: string) {
+    let filter = value.toLowerCase();
+    return this.subjectList.filter((option) =>
+      option.toLowerCase().includes(filter)
+    );
+  }
+
+  onTopicKey(event) {
+    this.filteredTopics = this.searchTopic(event.target.value);
+  }
+
+  searchTopic(value: string) {
+    let filter = value.toLowerCase();
+    return this.topicList.filter((option) =>
+      option.toLowerCase().includes(filter)
+    );
+  }
+
+  quesSearch(event){
+    this.filteredQuestions = this.searchQues(event.target.value);
+  }
+
+  searchQues(value: string) {
+    let filter = value.toLowerCase();
+    return this.questionTypeList.filter((option) =>
+      option.toLowerCase().includes(filter)
+    );
   }
 }

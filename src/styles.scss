@@ -423,3 +423,16 @@ mat-checkbox span { white-space: pre-wrap; }
     display: none;
   }
 }
+
+.search-container {
+  width: 90%;
+  margin: 10px 10px 10px 16px;
+  border-radius: 5px;
+  border: 1px solid #9e9e9e;
+  font-size: 14px;
+  height: 2rem;
+  background: transparent;
+  outline: none;
+  font-family: Verdana;
+  padding : .375rem .75rem;
+}

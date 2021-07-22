@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { map, merge } from 'rxjs/operators';
+import { interval, forkJoin, of, Observable, combineLatest } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,7 +23,7 @@ import {
   Metric,
   StudentReportModel,
 } from 'src/app/models/reports/student-report-model';
-import { FilterModel } from '../filter/filter.component';
+import { FilterModel } from '../solution-filter/solution-filter.component';
 
 @Component({
   selector: 'app-student-report',
@@ -22,19 +31,26 @@ import { FilterModel } from '../filter/filter.component';
   styleUrls: ['./student-report.component.scss'],
 })
 export class StudentReportComponent implements OnInit {
-
-
   solutionSectionSelection;
 
   solutionSectionSelectedIndex = 0;
 
   solutionSectionArray = [];
 
-  solutionSectionWiseStats: StudentReportModel[] =  [];
+  explanationMap = new Map();
+
+  passageMap = new Map();
+
+  solutionSectionWiseStats: StudentReportModel[] = [];
 
   solutionSectionWiseSelectedStats = new EventEmitter<StudentReportModel>();
 
-  rankingDisplayedColumn: string[] = ['rank','name', 'totalMarks', 'marksReceived'];
+  rankingDisplayedColumn: string[] = [
+    'rank',
+    'name',
+    'totalMarks',
+    'marksReceived',
+  ];
 
   displayedColumns: string[] = [
     'name',
@@ -56,7 +72,6 @@ export class StudentReportComponent implements OnInit {
 
   filterData = new EventEmitter();
 
-
   rankingDetailsResult;
 
   metrics;
@@ -67,7 +82,7 @@ export class StudentReportComponent implements OnInit {
 
   quickView = 'Charts';
 
-  currentSolutionSelection:{filterData ?:FilterModel} = {};
+  currentSolutionSelection: { filterData?: FilterModel } = {};
 
   public pageOptions = PAGE_OPTIONS;
 
@@ -92,7 +107,8 @@ export class StudentReportComponent implements OnInit {
     private testConfigService: TestConfigService,
     private activatedRoute: ActivatedRoute,
     public _sanitizer: DomSanitizer,
-    public breadcrumbNavService: BreadcrumbNavService
+    public breadcrumbNavService: BreadcrumbNavService,
+    private ref:ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -108,27 +124,42 @@ export class StudentReportComponent implements OnInit {
   }
 
   getAssignmentResults() {
-    this.activatedRoute.params.subscribe((params) => {
-      let assignmentId = params.id;
-      console.log('assignmentId=>', assignmentId); // Print the parameter to the console.
+    combineLatest([
+      this.activatedRoute.params,
+      this.activatedRoute.parent.params,
+    ]).subscribe((params) => {
+      let assignmentId = params[0].id;
+      let userName = params[1]?.student_id ? params[1]?.student_id: this.userName;
       this.testConfigService
-        .getStudentAssignmentResult(assignmentId, this.userName)
+        .getStudentAssignmentResult(assignmentId, userName)
         .subscribe(
           (res) => {
             this.fetchedWholeAssignmentResult = res;
             this.getSectionWiseStats(this.fetchedWholeAssignmentResult);
             this.filterData.emit(this.fetchedWholeAssignmentResult.sections);
-            this.solutionSectionWiseSelectedStats.emit(this.solutionSectionWiseStats[0]);
-            this.fetchedWholeAssignmentResult?.sections.forEach((section,i) => {
-              this.solutionSectionArray.push(
-                {index: i,name:section.sectionName})
-            });
-            if(this.solutionSectionArray.length != 0 ){
+            this.solutionSectionWiseSelectedStats.emit(
+              this.solutionSectionWiseStats[0]
+            );
+            this.fetchedWholeAssignmentResult?.sections.forEach(
+              (section, i) => {
+                this.solutionSectionArray.push({
+                  index: i,
+                  name: section.sectionName,
+                });
+              }
+            );
+            if (this.solutionSectionArray.length != 0) {
               this.solutionSectionSelection = this.solutionSectionArray[0];
               this.solutionSectionSelectedIndex = 0;
             }
-
+            this.fetchedWholeAssignmentResult.sections.forEach((section) =>
+              section.answers.forEach((answers) => {
+                this.explanationMap.set(answers.questionId, true);
+                this.passageMap.set(answers.questionId, true);
+              })
+            );
             this.breadcrumbNavService.pushOnClickCrumb({ label: res.testName });
+            this.ref.detectChanges();
             this.createAssignmentChartData(res.summary.metric);
             this.isLoading = false;
             this.metrics = res.summary.metric;
@@ -145,24 +176,29 @@ export class StudentReportComponent implements OnInit {
   getRankingDetails() {
     this.activatedRoute.params.subscribe((params) => {
       this.testConfigService.getRankingDetails(params.id).subscribe((resp) => {
-        let sorted = resp.slice().sort(function(a,b){return b.marksReceived - a.marksReceived})
+        let sorted = resp.slice().sort(function (a, b) {
+          return b.marksReceived - a.marksReceived;
+        });
         let tempRank = 0;
         let tempMarkRecived;
         let loginStudentIndex = -1;
         let loginStudentUserName = this.userName;
-        let ranks = sorted.map(function(v,index,userName){
-          if(tempMarkRecived == undefined || tempMarkRecived != v.marksReceived){
-            tempRank ++;
+        let ranks = sorted.map(function (v, index, userName) {
+          if (
+            tempMarkRecived == undefined ||
+            tempMarkRecived != v.marksReceived
+          ) {
+            tempRank++;
           }
-          if(v.username == loginStudentUserName){
+          if (v.username == loginStudentUserName) {
             loginStudentIndex = index;
           }
           tempMarkRecived = v.marksReceived;
-         v.rank = tempRank;
-         return v;
+          v.rank = tempRank;
+          return v;
         });
 
-        if(loginStudentIndex != -1){
+        if (loginStudentIndex != -1) {
           let delStudnt = ranks.splice(loginStudentIndex, 1);
           ranks = delStudnt.concat(ranks);
         }
@@ -180,9 +216,7 @@ export class StudentReportComponent implements OnInit {
     }
   }
 
-
-  getSectionWiseStats(fetchedWholeAssignmentResult){
-
+  getSectionWiseStats(fetchedWholeAssignmentResult) {
     var totScore = 0,
       negativeMarks = 0,
       totalTimeInSecs = 0,
@@ -192,7 +226,7 @@ export class StudentReportComponent implements OnInit {
       totalAccuracyPerc = 0,
       noOfRows = 0;
 
-     fetchedWholeAssignmentResult.summary.sections.map((sec) => {
+    fetchedWholeAssignmentResult.summary.sections.map((sec) => {
       var studentReportModel = new StudentReportModel();
       studentReportModel.name = sec.sectionName;
       studentReportModel.questions = sec.metric.totalQuestions;
@@ -219,8 +253,7 @@ export class StudentReportComponent implements OnInit {
       if (studentReportModel.accuracy > 0) noOfRows++;
       this.solutionSectionWiseStats.push(studentReportModel);
     });
-
-   }
+  }
 
   showFilteredData(filterMode?) {
     this.currentSelection = filterMode;
@@ -324,15 +357,14 @@ export class StudentReportComponent implements OnInit {
     }
   }
 
-  rankFlag : boolean;
+  rankFlag: boolean;
 
   onTabChanged($event) {
-     if ($event.tab.textLabel === 'Ranking') {
-      if(this.dataSource.data){
+    if ($event.tab.textLabel === 'Ranking') {
+      if (this.dataSource.data) {
         this.dataSource.data = this.rankingDetailsResult;
         this.rankFlag = true;
-      }
-      else{
+      } else {
         this.rankFlag = false;
       }
     }
@@ -415,10 +447,10 @@ export class StudentReportComponent implements OnInit {
       title: 'Time Statistics',
       config: {
         colorScheme: ['#fb3', '#00c851', '#ff3547'],
-        yAxisLabel:'Time',
-        xAxisLabel:'',
-        showXAxisLabel:false,
-        showYAxisLabel:true
+        yAxisLabel: 'Time',
+        xAxisLabel: '',
+        showXAxisLabel: false,
+        showYAxisLabel: true,
       },
       data: [
         {
@@ -437,22 +469,31 @@ export class StudentReportComponent implements OnInit {
     });
   }
 
-
-  toggleSolutionSection(selected){
-      this.solutionSectionSelection = selected;
-      this.solutionSectionSelectedIndex = selected.index;
-      this.solutionSectionWiseSelectedStats.emit(this.solutionSectionWiseStats[selected.index])
+  toggleSolutionSection(selected) {
+    this.solutionSectionSelection = selected;
+    this.solutionSectionSelectedIndex = selected.index;
+    this.solutionSectionWiseSelectedStats.emit(
+      this.solutionSectionWiseStats[selected.index]
+    );
   }
 
-
-  filterSolutionData(event){
+  filterSolutionData(event) {
     this.currentSolutionSelection = event;
   }
 
-  isReadMore = true
-
-  showText() {
-     this.isReadMore = !this.isReadMore
+  showExplanation(i) {
+    if (this.explanationMap.get(i)) {
+      this.explanationMap.set(i, false);
+    } else {
+      this.explanationMap.set(i, true);
+    }
   }
 
+  showPassage(questionId) {
+    if (this.passageMap.get(questionId)) {
+      this.passageMap.set(questionId, false);
+    } else {
+      this.passageMap.set(questionId, true);
+    }
+  }
 }

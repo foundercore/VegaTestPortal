@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { FilterModel } from './filter.component';
+import { FilterModel } from './solution-filter.component';
 
 @Pipe({
   name: 'solutionFilterPipe',

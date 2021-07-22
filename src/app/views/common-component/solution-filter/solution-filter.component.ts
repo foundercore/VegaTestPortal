@@ -20,12 +20,12 @@ export class FilterModel {
 }
 
 @Component({
-  selector: 'app-filter',
-  templateUrl: './filter.component.html',
-  styleUrls: ['./filter.component.css'],
+  selector: 'app-solution-filter',
+  templateUrl: './solution-filter.component.html',
+  styleUrls: ['./solution-filter.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterComponent implements OnInit {
+export class SolutionFilterComponent implements OnInit {
   subtopicList = [];
   subjectLists = [];
   topicLists = [];

@@ -1,8 +1,10 @@
+import { filter } from 'rxjs/operators';
 import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
   ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -23,8 +25,9 @@ import { CustomDialogConfirmationComponent } from 'src/app/shared/components/cus
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.component.html',
-  styleUrls: ['./student-dashboard.component.css'],
+  styleUrls: ['./student-dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 export class StudentDashboardComponent implements OnInit {
   resultStats = [
@@ -37,6 +40,8 @@ export class StudentDashboardComponent implements OnInit {
       value: 30,
     },
   ];
+
+  tagSet = new Set();
 
   resultData: any[] = [];
 
@@ -61,11 +66,21 @@ export class StudentDashboardComponent implements OnInit {
 
   public pageOptions = PAGE_OPTIONS;
 
-  displayedColumns: string[] = ['testName', 'attempted', 'marksObtained','actions'];
+  displayedColumns: string[] = [
+    'testName',
+    'attempted',
+    'marksObtained',
+    'actions',
+  ];
 
   dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+
+  totalTest: number;
+  notAttempted: number;
+  attempt: number;
+  attempted: any[] = [];
 
   constructor(
     public translate: TranslateService,
@@ -75,7 +90,9 @@ export class StudentDashboardComponent implements OnInit {
     private testConfigService: TestConfigService,
     private router: Router,
     private toastrService: ToastrService
-  ) {}
+  ) {
+    this.tagSet.add('All');
+  }
 
   ngOnInit(): void {
     this.store.select('appState').subscribe((data) => {
@@ -93,6 +110,15 @@ export class StudentDashboardComponent implements OnInit {
       console.log('this.resultData==', this.resultData);
       this.dataSource = new MatTableDataSource<any>(this.resultData);
       this.dataSource.paginator = this.paginator;
+      this.totalTest = this.resultData.length;
+      this.resultData.forEach((assignment) => {
+        if (assignment.attempted) this.attempted.push(assignment);
+      });
+      this.notAttempted = this.totalTest - this.attempted.length;
+      this.attempt = this.attempted.length;
+      this.resultData.forEach((assignments) => {
+        if (assignments.tags != null) this.tagSet.add(assignments.tags);
+      });
     });
   }
 
@@ -107,9 +133,9 @@ export class StudentDashboardComponent implements OnInit {
       this.buttontext = 'Preview Test';
     } else {
       console.log(element);
-      const timeNow = new Date().setHours(0, 0, 0, 0);;
-      const testValidFrom = new Date(element.validFrom).setHours(0, 0, 0, 0);;
-      const testvalidTo = new Date(element.validTo).setHours(0, 0, 0, 0);;
+      const timeNow = new Date().setHours(0, 0, 0, 0);
+      const testValidFrom = new Date(element.validFrom).setHours(0, 0, 0, 0);
+      const testvalidTo = new Date(element.validTo).setHours(0, 0, 0, 0);
       if (timeNow < testValidFrom) {
         this.toastrService.error('Test is yet to start');
         return;
@@ -136,10 +162,14 @@ export class StudentDashboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((dialogResult) => {
       if (dialogResult) {
-        if (element.passcode !== null && String(element.passcode.trim()).length > 1) {
+        if (
+          element.passcode !== null &&
+          String(element.passcode.trim()).length > 1
+        ) {
           this.verifyPasscode(element);
+        } else {
+          this.openTestPopup(element, 'live');
         }
-        else { this.openTestPopup(element, 'live'); }
       }
     });
   }
@@ -153,7 +183,7 @@ export class StudentDashboardComponent implements OnInit {
     }
   }
 
-  openTestPopup(element,testType) {
+  openTestPopup(element, testType) {
     const dialogRef = this.dialog.open(TestLiveComponent, {
       maxWidth: '1700px',
       width: '100%',
@@ -183,24 +213,24 @@ export class StudentDashboardComponent implements OnInit {
         confirmButtonText: 'Verify',
         showCancelButton: true,
         confirmButtonColor: 'rgb(39, 125, 161)',
-        cancelButtonColor:'rgb(221, 51, 51)'
+        cancelButtonColor: 'rgb(221, 51, 51)',
       }).then((result) => {
         if (result.value && result.value == element.passcode) {
-          this.openTestPopup(element,'live');
+          this.openTestPopup(element, 'live');
           this.toastrService.success('Passcode Verified successfully');
         } else if (result.value && result.value != element.passcode) {
           this.toastrService.error('Invalid Passcode');
- }
+        }
       });
     }
   }
 
   viewResult(row: any) {
-     this.testConfigService
+    this.testConfigService
       .getStudentAssignmentResult(row.assignmentId, this.userName)
       .subscribe(
         (res) => {
-           this.router
+          this.router
             .navigate(['/home/dashboard/assignment_report/' + row.assignmentId])
             .then(() => console.log('Navigate to score card'))
             .catch((err) =>
@@ -214,4 +244,18 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   takeTest(row: any) {}
+
+  onTabChanged($event) {
+    const filterValue = $event.tab.textLabel;
+    let filteredData = this.resultData.filter(
+      (d) => d.testName === filterValue
+    );
+    if (filteredData.length == 0) {
+      filteredData = this.resultData;
+    }
+    this.dataSource = new MatTableDataSource(filteredData);
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
 }
