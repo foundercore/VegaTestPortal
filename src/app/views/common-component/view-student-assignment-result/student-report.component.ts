@@ -1,6 +1,8 @@
-import { map } from 'rxjs/operators';
+import { map, merge } from 'rxjs/operators';
+import { interval, forkJoin, of, Observable, combineLatest } from 'rxjs';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   OnInit,
@@ -106,6 +108,7 @@ export class StudentReportComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     public _sanitizer: DomSanitizer,
     public breadcrumbNavService: BreadcrumbNavService,
+    private ref:ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -121,11 +124,14 @@ export class StudentReportComponent implements OnInit {
   }
 
   getAssignmentResults() {
-    this.activatedRoute.params.subscribe((params) => {
-      let assignmentId = params.id;
-      console.log('assignmentId=>', assignmentId); // Print the parameter to the console.
+    combineLatest([
+      this.activatedRoute.params,
+      this.activatedRoute.parent.params,
+    ]).subscribe((params) => {
+      let assignmentId = params[0].id;
+      let userName = params[1]?.student_id ? params[1]?.student_id: this.userName;
       this.testConfigService
-        .getStudentAssignmentResult(assignmentId, this.userName)
+        .getStudentAssignmentResult(assignmentId, userName)
         .subscribe(
           (res) => {
             this.fetchedWholeAssignmentResult = res;
@@ -153,6 +159,7 @@ export class StudentReportComponent implements OnInit {
               })
             );
             this.breadcrumbNavService.pushOnClickCrumb({ label: res.testName });
+            this.ref.detectChanges();
             this.createAssignmentChartData(res.summary.metric);
             this.isLoading = false;
             this.metrics = res.summary.metric;

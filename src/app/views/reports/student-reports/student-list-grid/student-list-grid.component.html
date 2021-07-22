@@ -1,4 +1,4 @@
-<div class="student-dash-list-grid">
+<div class="student-dash-list-grid" *ngIf="showGrid">
     <div class="student-result-container mat-elevation-z8">
       <div class="example-table-container"  style="    height: 400px;
       overflow: auto;">
@@ -51,5 +51,4 @@
       <mat-paginator [pageSizeOptions]="pageOptions"></mat-paginator>
     </div>
   </div>
-
-
+  <router-outlet></router-outlet>

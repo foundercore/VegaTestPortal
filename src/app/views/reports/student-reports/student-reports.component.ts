@@ -1,8 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
@@ -24,20 +24,30 @@ export class StudentReportsComponent implements OnInit {
   filteredStudentList: IUserResponseModel[] = [];
   resultData;
 
-  public pageOptions = PAGE_OPTIONS;
-
   displayedColumns: string[] = ['testName', 'attempted', 'marksObtained','actions'];
-
-  dataSource = new MatTableDataSource<any>();
-
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  show = true;
 
   constructor(
     public translate: TranslateService,
     public dialog: MatDialog,
     private router: Router,
-    private userService: UserService
-  ) {}
+    private userService: UserService,
+    public _router: Router,
+    private ref: ChangeDetectorRef
+
+  ) {
+    router.events.subscribe((val) => {
+      // see also
+      if(val instanceof NavigationEnd){
+        if(val.url.includes('assignment_report')){
+          this.show = false;
+        }else{
+          this.show = true;
+        }
+        ref.detectChanges();
+      }
+  });
+  }
 
   ngOnInit(): void {
     this.userService.getUserList().subscribe(
@@ -51,24 +61,21 @@ export class StudentReportsComponent implements OnInit {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
 
   selectStudent(data){
     if(data.value){
+      this.selectedStudent = data.value;
       this.router
-      .navigate(['/home/reports/student/selected-student/' + data.value.userName],{ state: { example: 'bar' } })
+      .navigate(['/home/reports/student/selected-student/' + data.value.userName,data.value.displayName])
       .then(() => console.log('Navigate to Student Report Selected Student - '+  data.value.userName))
       .catch((err) =>
         console.log('Error=> Navigate to Student Report Selected Student - ' + data.value.userName, err)
       );
     } else {
+      this.selectedStudent = null;
       this.router
       .navigate(['/home/reports/student'])
       .then(() => console.log('Navigate to Student Report'))
@@ -76,7 +83,6 @@ export class StudentReportsComponent implements OnInit {
         console.log('Error => Navigate to Student Report =>', err)
       );
     }
-    this.selectedStudent = data.value;
   }
 
   search(event) {
