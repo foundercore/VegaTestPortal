@@ -21,7 +21,7 @@ import {
   Metric,
   StudentReportModel,
 } from 'src/app/models/reports/student-report-model';
-import { FilterModel } from '../filter/filter.component';
+import { FilterModel } from '../solution-filter/solution-filter.component';
 
 @Component({
   selector: 'app-student-report',

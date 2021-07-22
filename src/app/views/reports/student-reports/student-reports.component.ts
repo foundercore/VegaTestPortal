@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,31 +9,16 @@ import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { IUserResponseModel } from 'src/app/models/user/user-model';
 import { TestAssignmentServiceService } from 'src/app/services/assignment/test-assignment-service.service';
 import { UserService } from 'src/app/services/users/users.service';
-import { TestConfigService } from '../assignments/services/test-config-service';
+import { TestConfigService } from 'src/app/views/assignments/services/test-config-service';
 
 @Component({
-  selector: 'app-reports',
-  templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-student-reports',
+  templateUrl: './student-reports.component.html',
+  styleUrls: ['./student-reports.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ReportsComponent implements OnInit {
+export class StudentReportsComponent implements OnInit {
 
-
-
-  single: any[] | undefined;
-  // options
-  gradient: boolean = true;
-  showLegend: boolean = true;
-  showLabels: boolean = true;
-  isDoughnut: boolean = false;
-  searchText: string = '';
-  appState: any;
-  currentSectionSubmittedData: any;
-  studentName: string = '';
-  userType: string = '';
-  buttontext: string = '';
-  createdId: string = '';
   selectedStudent;
   studentList : IUserResponseModel[] = [];
   filteredStudentList: IUserResponseModel[] = [];
@@ -49,11 +34,8 @@ export class ReportsComponent implements OnInit {
 
   constructor(
     public translate: TranslateService,
-    private testAssignmentService: TestAssignmentServiceService,
     public dialog: MatDialog,
-    private testConfigService: TestConfigService,
     private router: Router,
-    private toastrService: ToastrService,
     private userService: UserService
   ) {}
 
@@ -68,16 +50,6 @@ export class ReportsComponent implements OnInit {
     );
   }
 
-  getAssignments(username) {
-    this.testAssignmentService.getAssignmentByUsername(username).subscribe((resp) => {
-      this.resultData = resp;
-      this.dataSource = new MatTableDataSource<any>(this.resultData);
-      this.dataSource.paginator = this.paginator;
-    });
-  }
-
-
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -88,21 +60,24 @@ export class ReportsComponent implements OnInit {
   }
 
 
-
-  viewResult(row: any) {
-    this.router
-    .navigate(['/home/reports/student/assignment_report/' + row.assignmentId])
-    .then(() => console.log('Navigate to score card'))
-    .catch((err) =>
-      console.log('Error=> Navigate to score card=>', err)
-    );
-  }
-
   selectStudent(data){
+    if(data.value){
+      this.router
+      .navigate(['/home/reports/student/selected-student/' + data.value.userName],{ state: { example: 'bar' } })
+      .then(() => console.log('Navigate to Student Report Selected Student - '+  data.value.userName))
+      .catch((err) =>
+        console.log('Error=> Navigate to Student Report Selected Student - ' + data.value.userName, err)
+      );
+    } else {
+      this.router
+      .navigate(['/home/reports/student'])
+      .then(() => console.log('Navigate to Student Report'))
+      .catch((err) =>
+        console.log('Error => Navigate to Student Report =>', err)
+      );
+    }
     this.selectedStudent = data.value;
-    this.getAssignments(data.value.userName);
   }
-
 
   search(event) {
     this.filteredStudentList = this.searchStudent(event.target.value);
@@ -115,3 +90,4 @@ export class ReportsComponent implements OnInit {
     );
   }
 }
+

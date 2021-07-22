@@ -1,0 +1,39 @@
+<div class="student-dash-main">
+
+  <div style="display: flex;
+  width: 100%;
+  margin: 0px 20px;">
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Select Student</mat-label>
+        <mat-select  required (selectionChange)="selectStudent($event)">
+          <input
+          class="search-container"
+          placeholder="Search Batch"
+          (keyup)="search($event)"
+        />
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let student of filteredStudentList" [value]="student">
+            {{student.displayName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="assignment-search-bar">
+      <mat-form-field style="width: 600px" appearance="outline">
+        <mat-label>Search tests</mat-label>
+        <input
+          matInput
+          placeholder="Search Tests"
+          #input
+          (keyup)="applyFilter($event)"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div style="width:100%;">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

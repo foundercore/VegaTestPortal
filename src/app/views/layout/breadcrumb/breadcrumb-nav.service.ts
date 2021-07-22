@@ -41,22 +41,22 @@ export class BreadcrumbNavService {
     let routeFromRoot = '';
 
     while (routeSnapshot) {
-      if (!routeSnapshot.url.length) {
+      if (!routeSnapshot) {
         break;
       }
 
-      const urlSegment = routeSnapshot.url[0].path;
-      const route = routeFromRoot += `/${urlSegment}`;
-      const label = routeSnapshot.data.breadcrumb;
-      if(label){
-        crumbs.push({
-          urlSegment,
-          route,
-          label,
-        });
+      if (routeSnapshot.url.length) {
+        const urlSegment = routeSnapshot.url[0].path;
+        const route = routeFromRoot += `/${urlSegment}`;
+        const label = routeSnapshot.data.breadcrumb;
+        if(label){
+          crumbs.push({
+            urlSegment,
+            route,
+            label,
+          });
+        }
       }
-
-
       routeSnapshot = routeSnapshot.firstChild;
     }
     this.nonClickCrumbs = [];

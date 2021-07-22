@@ -41,6 +41,7 @@
 
     <div class="container-fluid">
       <div class="row">
+
         <div class="col-lg-8">
           <mat-tab-group
             class="invisible-tabs"
@@ -176,17 +177,16 @@
             </mat-tab>
           </mat-tab-group>
         </div>
+
         <div class="col-lg-4 fixed">
           <div class="menu sticky-top p-3 bg-light">
-            <app-filter
-              [data]="filterData"
-              (filterParameters)="filterSolutionData($event)"
-            ></app-filter>
-            <app-solution-right-panel
-              [data]="solutionSectionWiseSelectedStats"
-            ></app-solution-right-panel>
+            <app-solution-filter
+            [data]="filterData"
+            (filterParameters)="filterSolutionData($event)" ></app-solution-filter>
+          <app-solution-right-panel
+            [data]="solutionSectionWiseSelectedStats" ></app-solution-right-panel>
           </div>
-        </div>
+       </div>
       </div>
     </div>
   </mat-tab>

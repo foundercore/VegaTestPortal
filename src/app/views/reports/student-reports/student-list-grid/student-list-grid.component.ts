@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
@@ -9,34 +10,18 @@ import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { IUserResponseModel } from 'src/app/models/user/user-model';
 import { TestAssignmentServiceService } from 'src/app/services/assignment/test-assignment-service.service';
 import { UserService } from 'src/app/services/users/users.service';
-import { TestConfigService } from '../assignments/services/test-config-service';
+import { TestConfigService } from 'src/app/views/assignments/services/test-config-service';
 
 @Component({
-  selector: 'app-reports',
-  templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-student-list-grid',
+  templateUrl: './student-list-grid.component.html',
+  styleUrls: ['./student-list-grid.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ReportsComponent implements OnInit {
+export class StudentListGridComponent implements OnInit {
 
-
-
-  single: any[] | undefined;
-  // options
-  gradient: boolean = true;
-  showLegend: boolean = true;
-  showLabels: boolean = true;
-  isDoughnut: boolean = false;
-  searchText: string = '';
-  appState: any;
   currentSectionSubmittedData: any;
   studentName: string = '';
-  userType: string = '';
-  buttontext: string = '';
-  createdId: string = '';
-  selectedStudent;
-  studentList : IUserResponseModel[] = [];
-  filteredStudentList: IUserResponseModel[] = [];
   resultData;
 
   public pageOptions = PAGE_OPTIONS;
@@ -51,21 +36,15 @@ export class ReportsComponent implements OnInit {
     public translate: TranslateService,
     private testAssignmentService: TestAssignmentServiceService,
     public dialog: MatDialog,
-    private testConfigService: TestConfigService,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
-    private toastrService: ToastrService,
-    private userService: UserService
   ) {}
 
   ngOnInit(): void {
-    this.userService.getUserList().subscribe(
-      (data) => {
-        this.studentList = data;
-        this.filteredStudentList = data;
-      },
-      (err) => {
-      }
-    );
+
+    this.activatedRoute.params.subscribe((params) => {
+        this.getAssignments(params.student_id);
+    })
   }
 
   getAssignments(username) {
@@ -97,21 +76,5 @@ export class ReportsComponent implements OnInit {
       console.log('Error=> Navigate to score card=>', err)
     );
   }
-
-  selectStudent(data){
-    this.selectedStudent = data.value;
-    this.getAssignments(data.value.userName);
-  }
-
-
-  search(event) {
-    this.filteredStudentList = this.searchStudent(event.target.value);
-  }
-
-  searchStudent(value: string) {
-    let filter = value.toLowerCase();
-    return this.studentList.filter((option) =>
-    option.displayName.toLowerCase().includes(filter)
-    );
-  }
 }
+
