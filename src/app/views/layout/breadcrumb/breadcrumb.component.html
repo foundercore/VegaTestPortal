@@ -15,7 +15,7 @@
         {{ crumb.label || crumb.urlSegment }}
     </a>
     </li>
-    <li *ngFor="let crumb of service.nonClickCrumbs">
+    <li *ngFor="let crumb of nonClickCrumbs">
       <span>
         {{ crumb.label }}
     </span>

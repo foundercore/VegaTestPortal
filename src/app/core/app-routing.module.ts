@@ -9,7 +9,7 @@ import { RegisterComponent } from '../views/bootstrap/register/register.componen
 import { LoggedInAuthGuard } from '../guard/loggedin.guard';
 import { RoleGuard } from '../guard/role.guard';
 import { Role } from './constants';
-import { StudentReportComponent } from '../views/reports/student-report/student-report.component';
+import { StudentReportComponent } from '../views/common-component/view-student-assignment-result/student-report.component';
 
 const routes: Routes = [
   {
@@ -49,11 +49,12 @@ const routes: Routes = [
       },
       {
         path: 'reports',
-        component: ReportsComponent,
-        canActivate: [RoleGuard],
-        data: { roles: [Role.ADMIN, Role.STAFF] },
+        loadChildren: () => import('../views/reports/reports.module').then(  (m) => m.ReportsModule ),
+        runGuardsAndResolvers: 'always',
+        data: {
+          breadcrumb: 'Reports'
+        },
       },
-
       {
         path: 'tests',
         canActivate: [RoleGuard],

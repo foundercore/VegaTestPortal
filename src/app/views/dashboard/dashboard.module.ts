@@ -1,3 +1,4 @@
+import { CommonComponentModule } from './../common-component/common-component.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
@@ -11,7 +12,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LayoutModule } from '../layout/layout.module';
 import { Role } from 'src/app/core/constants';
 import { RoleGuard } from 'src/app/guard/role.guard';
-import { StudentReportComponent } from '../reports/student-report/student-report.component';
+import { StudentReportComponent } from '../common-component/view-student-assignment-result/student-report.component';
 
 const routes: Routes = [
   {
@@ -44,6 +45,7 @@ const routes: Routes = [
     VegaMaterialModule,
     SharedModule,
     RouterModule.forChild(routes),
+    CommonComponentModule
   ],
   exports: [RouterModule]
 })

@@ -1,0 +1,102 @@
+.student-dash-card {
+  max-width: 400px;
+}
+
+.student-dash-main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.action-btn {
+  cursor: pointer;
+}
+
+.student-result-container {
+  position: relative;
+  min-height: 200px;
+}
+
+table {
+  width: 100%;
+}
+
+.loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-occured {
+  color: #980000;
+  max-width: 360px;
+  text-align: center;
+}
+
+.student-dash-list-grid {
+  margin: 20px;
+  width: 100%;
+}
+
+.assignment-search-bar{
+  width: 100%;
+  height: 60px;
+  padding-left: 20px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.admin-dashboard-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  padding: 20px 20px 0px 20px;
+
+  .stats-conatiner {
+    display: flex;
+    justify-content: space-evenly;
+    width: 55%;
+
+    .stats-card {
+      display: flex;
+      width: 25%;
+      height: 63px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+        rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+      .icon {
+        width: 40%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        background: #2596be;
+      }
+      .stats {
+        display: inline-flex;
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        * {
+          margin: 0;
+        }
+      }
+    }
+  }
+
+}
+
+
+.custom-tabs .mat-tab-body-content {
+  padding-top: 0px !important;
+}
+

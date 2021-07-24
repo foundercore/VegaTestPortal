@@ -27,6 +27,10 @@ export class AddBatchStudentComponent implements OnInit {
 
   availableStudentList = [];
 
+  filteredStudentList = [];
+
+  filteredTaggedStudentList = [];
+
   isUserAdmin = false;
 
   leftSideSelection = new SelectionModel<string>(true, []);
@@ -48,6 +52,7 @@ export class AddBatchStudentComponent implements OnInit {
       .getStudentBatch(this.data.id.batchId)
       .subscribe((resp) => {
         this.taggedStudentList = resp.students !== null ? resp.students : [];
+        this.filteredTaggedStudentList = this.taggedStudentList;
         this.previousStudentList = Array.from(
           resp.students !== null ? resp.students : []
         );
@@ -56,6 +61,7 @@ export class AddBatchStudentComponent implements OnInit {
             .filter((x) => x.roles.includes('ROLE_STUDENT'))
             .map((x) => x.email)
             .filter((x) => !this.taggedStudentList.includes(x));
+            this.filteredStudentList = this.availableStudentList;
         });
       });
   }
@@ -120,6 +126,8 @@ export class AddBatchStudentComponent implements OnInit {
     this.availableStudentList = this.availableStudentList.filter(
       (x) => !this.leftSideSelection.selected.includes(x)
     );
+    this.filteredTaggedStudentList = this.taggedStudentList;
+    this.filteredStudentList = this.availableStudentList;
     this.leftSideSelection.clear();
   }
 
@@ -130,6 +138,8 @@ export class AddBatchStudentComponent implements OnInit {
     this.taggedStudentList = this.taggedStudentList.filter(
       (x) => !this.rightSideSelection.selected.includes(x)
     );
+    this.filteredTaggedStudentList = this.taggedStudentList;
+    this.filteredStudentList = this.availableStudentList;
     this.rightSideSelection.clear();
   }
 
@@ -186,4 +196,29 @@ export class AddBatchStudentComponent implements OnInit {
       this.rightSideSelection.isSelected(row) ? 'deselect' : 'select'
     } row ${row.position + 1}`;
   }
+
+  
+
+  search(event) {
+    this.filteredStudentList = this.searchStudent(event.target.value);
+  }
+
+  searchStudent(value: string) {
+    let filter = value.toLowerCase();
+    return this.availableStudentList.filter((option) =>
+    option.toLowerCase().includes(filter)
+    );
+  }
+
+  searchTagStudent(event) {
+    this.filteredTaggedStudentList = this.searchTagged(event.target.value);
+  }
+
+  searchTagged(value: string) {
+    let filter = value.toLowerCase();
+    return this.taggedStudentList.filter((option) =>
+    option.toLowerCase().includes(filter)
+    );
+  }
+
 }
