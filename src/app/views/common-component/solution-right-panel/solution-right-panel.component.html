@@ -6,7 +6,7 @@
       <div class="stats">
         <div class="card-subtitle">
           <span>  {{actualData?.questions}} </span><br>
-          <span><i class="fas fa-align-justify icon-space primary" ></i>Total Questions</span>
+          <span><i class="fas fa-align-justify icon-space primary" ></i>{{ 'STU_DASHBOARD_QUICKVIEW.TOTAL_QUESTION' | translate }}</span>
         </div>
       </div>
       </div>
@@ -15,7 +15,7 @@
       <div class="stats">
         <div class="card-subtitle">
           <span> {{actualData?.attempt}} </span><br>
-          <span><i class="fas fa-pen icon-space info" ></i>Attempted Questions</span>
+          <span><i class="fas fa-pen icon-space info" ></i>{{ 'STU_DASHBOARD_QUICKVIEW.ATTEMP_QUES' | translate }}</span>
         </div>
       </div>
     </div>
@@ -23,7 +23,7 @@
       <div class="stats">
         <div class="card-subtitle">
           <span> {{actualData?.skipped}} </span><br>
-          <span><i class="fas fa-forward icon-space warning" ></i>Skipped Questions</span>
+          <span><i class="fas fa-forward icon-space warning" ></i>{{ 'STU_DASHBOARD_QUICKVIEW.SKIPPED_QUEST' | translate }}</span>
         </div>
       </div>
 
@@ -32,7 +32,7 @@
       <div class="stats">
         <div class="card-subtitle">
           <span> {{ actualData?.correct}} </span><br>
-          <span><i class="fas fa-check-circle success icon-space"></i> Correct Questions</span>
+          <span><i class="fas fa-check-circle success icon-space"></i>{{ 'STU_DASHBOARD_QUICKVIEW.CORRECT_QUES' | translate }}</span>
         </div>
       </div>
     </div>
@@ -41,7 +41,7 @@
       <div class="stats">
         <div class="card-subtitle">
           <span> {{actualData?.incorrect}} </span><br>
-          <span><i class="fas fa-times-circle icon-space  failure" ></i>Incorrect Questions</span>
+          <span><i class="fas fa-times-circle icon-space  failure" ></i>{{ 'STU_DASHBOARD_QUICKVIEW.INCORRECT_QUES' | translate }}</span>
         </div>
       </div>
     </div>
@@ -51,7 +51,7 @@
     <div class="stats">
       <div class="card-subtitle">
         <span> {{actualData?.timeTaken | minuteSeconds}} </span><br>
-        <span><i class="fas fa-clock icon-space info" ></i>Time Taken</span>
+        <span><i class="fas fa-clock icon-space info" ></i>{{ 'STUDENT_SOLUTION_TAG.TIME_TAKEN' | translate }}</span>
       </div>
     </div>
   </div>
@@ -60,7 +60,7 @@
     <div class="stats">
       <div class="card-subtitle">
         <span> {{actualData?.score}} </span><br>
-        <span><i class="fas fa-bullseye icon-space info" ></i>Score</span>
+        <span><i class="fas fa-bullseye icon-space info" ></i>{{ 'STUDENT_SOLUTION_TAG.SCORE' | translate }}</span>
       </div>
     </div>
   </div>
@@ -70,7 +70,7 @@
     <div class="stats">
       <div class="card-subtitle">
         <span> {{actualData?.correct}} </span><br>
-        <span><i class="fas fa-poll icon-space info" ></i>Accuracy</span>
+        <span><i class="fas fa-poll icon-space info" ></i>{{ 'STUDENT_SOLUTION_TAG.ACCURACY' | translate }}</span>
       </div>
     </div>
   </div>

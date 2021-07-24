@@ -80,8 +80,8 @@
     "RANKING": "Ranking",
     "RANK": "Rank",
     "NAME": "Name",
-    "TOTAL_MARKS": "Total Mark",
-    "MARK_RECEIVED": "Mark Received"
+    "TOTAL_MARKS": "Total Marks",
+    "MARK_RECEIVED": "Marks Received"
   },
   "STUDENT_SOLUTION_TAG": {
     "SOLUTION": "Solution",
@@ -98,7 +98,8 @@
     "SUBJECT": "Subject",
     "SUB_TOPIC": "Subtopic",
     "DIFFICULTY": "Difficulty",
-    "STATE": "State"
+    "STATE": "State",
+    "EXPLANATION" : "Explanation"
   },
   "HEADER_TAGS": {
     "DASHBORAD": "Dashboard",

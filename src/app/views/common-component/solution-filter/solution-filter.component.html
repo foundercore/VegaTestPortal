@@ -3,7 +3,7 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <i class="fas fa-filter filter-icon"></i> Filter
+          <i class="fas fa-filter filter-icon"></i> {{ 'STUDENT_SOLUTION_TAG.FILTER' | translate }}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div
@@ -14,7 +14,7 @@
           <tr>
             <div>
               <mat-form-field appearance="outline" class="form-field-padding">
-                <mat-label>Subject</mat-label>
+                <mat-label>{{ 'STUDENT_SOLUTION_TAG.SUBJECT' | translate }}</mat-label>
                 <mat-select formControlName="subjectCntrl" multiple>
                   <input
                     class="search-container"
@@ -34,7 +34,7 @@
           <tr>
             <div>
               <mat-form-field appearance="outline" class="form-field-padding">
-                <mat-label>Topic</mat-label>
+                <mat-label>{{ 'STUDENT_SOLUTION_TAG.TOPIC' | translate }}</mat-label>
                 <mat-select formControlName="topicCntrl" multiple>
                   <input
                     class="search-container"
@@ -54,7 +54,7 @@
           <tr>
             <div>
               <mat-form-field appearance="outline" class="form-field-padding">
-                <mat-label>Subtopic</mat-label>
+                <mat-label>{{ 'STUDENT_SOLUTION_TAG.SUB_TOPIC' | translate }}</mat-label>
                 <mat-select formControlName="subTopicCntrl" multiple>
                   <input
                     class="search-container"
@@ -74,7 +74,7 @@
           <tr>
             <div>
               <mat-form-field appearance="outline" class="form-field-padding">
-                <mat-label>Difficulty</mat-label>
+                <mat-label>{{ 'STUDENT_SOLUTION_TAG.DIFFICULTY' | translate }}</mat-label>
                 <mat-select formControlName="difficulty" multiple>
                   <mat-option
                     *ngFor="let level of difficultyLevels"
@@ -89,7 +89,7 @@
           <tr>
             <div>
               <mat-form-field appearance="outline" class="form-field-padding">
-                <mat-label>State</mat-label>
+                <mat-label>{{ 'STUDENT_SOLUTION_TAG.STATE' | translate }}</mat-label>
                 <mat-select formControlName="state" multiple>
                   <mat-option *ngFor="let state of states" [value]="state"
                     >{{ state }}
@@ -107,7 +107,7 @@
           (click)="applyFilter()"
           style="background: #0d6efd; color: white; margin-right: 20px"
         >
-          Apply
+        {{ 'COMMON_TAG.APPLY' | translate }}
         </button>
         <button
           mat-raised-button
@@ -115,7 +115,7 @@
           (click)="resetFilter()"
           style="background: #ff3547; color: white"
         >
-          Reset
+        {{ 'COMMON_TAG.RESET' | translate }}
         </button>
       </div>
     </mat-expansion-panel>
