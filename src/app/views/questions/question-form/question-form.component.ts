@@ -1,7 +1,7 @@
 import { QuestionModel } from './../../../models/questions/question-model';
 import { QuestionManagementService } from './../../../services/question-management/question-management.service';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { QuestionOption } from 'src/app/models/questions/question-option-model';
@@ -12,13 +12,14 @@ import { forkJoin } from 'rxjs';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { TranslateService } from '@ngx-translate/core';
 import { Location } from '@angular/common';
+declare var WirisPlugin: any;
 
 @Component({
   selector: 'app-question-form',
   templateUrl: './question-form.component.html',
   styleUrls: ['./question-form.component.scss']
 })
-export class QuestionFormComponent implements OnInit {
+export class QuestionFormComponent implements OnInit,AfterViewInit {
 
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -114,6 +115,10 @@ export class QuestionFormComponent implements OnInit {
       })
 
      }
+  ngAfterViewInit(): void {
+      this.bindEquationToEditor();
+
+  }
 
   ngOnInit() {
     this.activateRouter.params.subscribe(params => {
@@ -275,5 +280,51 @@ export class QuestionFormComponent implements OnInit {
   cancel() {
     this.location.back()
     // this.router.navigate(['home/questionmanagement']);
+  }
+
+
+  bindEquationToEditor(){
+    var genericIntegrationProperties_name_editor = {
+      target : document.getElementById('name_editor').getElementsByClassName('angular-editor-textarea')[0],
+      toolbar : document.getElementById('name_editor').getElementsByClassName('angular-editor-toolbar-set')[document.getElementById('name_editor').getElementsByClassName('angular-editor-toolbar-set').length -1]
+    };
+
+    var genericIntegrationProperties_description_editor = {
+      target : document.getElementById('description_editor').getElementsByClassName('angular-editor-textarea')[0],
+      toolbar : document.getElementById('description_editor').getElementsByClassName('angular-editor-toolbar-set')[document.getElementById('description_editor').getElementsByClassName('angular-editor-toolbar-set').length -1]
+    };
+
+    var genericIntegrationProperties_explanation_editor = {
+      target : document.getElementById('explanation_editor').getElementsByClassName('angular-editor-textarea')[0],
+      toolbar : document.getElementById('explanation_editor').getElementsByClassName('angular-editor-toolbar-set')[document.getElementById('explanation_editor').getElementsByClassName('angular-editor-toolbar-set').length -1]
+    };
+
+
+    var genericIntegrationProperties_passage_editor = {
+      target : document.getElementById('passage_editor').getElementsByClassName('angular-editor-textarea')[0],
+      toolbar : document.getElementById('passage_editor').getElementsByClassName('angular-editor-toolbar-set')[document.getElementById('passage_editor').getElementsByClassName('angular-editor-toolbar-set').length -1]
+    };
+
+
+    // GenericIntegration instance.
+    var genericIntegrationInstance = new WirisPlugin.GenericIntegration(genericIntegrationProperties_name_editor);
+    genericIntegrationInstance.init();
+    genericIntegrationInstance.listeners.fire('onTargetReady', {});
+
+
+    var genericIntegrationInstance = new WirisPlugin.GenericIntegration(genericIntegrationProperties_description_editor);
+    genericIntegrationInstance.init();
+    genericIntegrationInstance.listeners.fire('onTargetReady', {});
+
+    var genericIntegrationInstance = new WirisPlugin.GenericIntegration(genericIntegrationProperties_explanation_editor);
+    genericIntegrationInstance.init();
+    genericIntegrationInstance.listeners.fire('onTargetReady', {});
+
+
+    var genericIntegrationInstance = new WirisPlugin.GenericIntegration(genericIntegrationProperties_passage_editor);
+    genericIntegrationInstance.init();
+    genericIntegrationInstance.listeners.fire('onTargetReady', {});
+
+
   }
 }

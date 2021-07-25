@@ -5,27 +5,27 @@
     </a>
     <ul class="navbar-links">
       <li>
-        <a [routerLink]="['./dashboard']">Dashboard</a>
+        <a [routerLink]="['./dashboard']">{{ 'HEADER_TAGS.DASHBORAD' | translate }}</a>
       </li>
       <li *ngIf="authorizationService.isAdminAndStaff">
-        <a [routerLink]="['./questionmanagement']">Question</a>
+        <a [routerLink]="['./questionmanagement']">{{ 'HEADER_TAGS.QUESTION' | translate }}</a>
       </li>
       <li *ngIf="authorizationService.isAdminAndStaff">
-        <a [routerLink]="['./tests']">Tests</a>
+        <a [routerLink]="['./tests']">{{ 'HEADER_TAGS.TESTS' | translate }}</a>
       </li>
       <li class="navbar-dropdown" *ngIf="authorizationService.isAdmin">
         <a style="cursor: pointer"
           >Administration <i class="fa fa-caret-down"></i>
         </a>
         <div class="dropdown">
-          <a [routerLink]="['./administrations/users']">User</a>
-          <a [routerLink]="['./administrations/batch']">Batch</a>
+          <a [routerLink]="['./administrations/users']">{{ 'HEADER_TAGS.USER' | translate }}</a>
+          <a [routerLink]="['./administrations/batch']">{{ 'HEADER_TAGS.BATCH' | translate }}</a>
         </div>
       </li>
       <li class="navbar-dropdown" *ngIf="authorizationService.isAdminAndStaff">
-        <a  style="cursor: pointer">Reports <i class="fa fa-caret-down"></i></a>
+        <a  style="cursor: pointer">{{ 'HEADER_TAGS.REPORTS' | translate }} <i class="fa fa-caret-down"></i></a>
         <div class="dropdown">
-          <a [routerLink]="['./reports/student']">Student Report</a>
+          <a [routerLink]="['./reports/student']">{{ 'HEADER_TAGS.STUDENT_REPORT' | translate }}</a>
           <!-- <a [routerLink]="['./reports/batch']">Batch Report</a> -->
         </div>
       </li>
@@ -44,15 +44,15 @@
       <mat-menu #menu="matMenu">
         <button mat-menu-item (click)="showProfile()">
           <mat-icon>supervised_user_circle</mat-icon>
-          <span>Profile</span>
+          <span>{{ 'HEADER_TAGS.PROFILE' | translate }}</span>
         </button>
         <button mat-menu-item (click)="changePassword()">
           <mat-icon>vpn_key</mat-icon>
-          <span>Change Password</span>
+          <span>{{ 'HEADER_TAGS.CHANGE_PASS' | translate }}</span>
         </button>
         <button mat-menu-item (click)="logout()">
           <mat-icon>logout</mat-icon>
-          <span>Signout</span>
+          <span>{{ 'HEADER_TAGS.SIGNOUT' | translate }}</span>
         </button>
       </mat-menu>
     </div>

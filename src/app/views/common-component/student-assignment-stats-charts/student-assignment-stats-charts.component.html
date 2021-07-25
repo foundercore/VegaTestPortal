@@ -9,12 +9,12 @@
               <div class="sub-stats">
                 <div class="stats">
                   <div class="card-subtitle">
-                    <span><i class="fas fa-align-justify icon-space primary" ></i>Total Questions : </span><span> {{metric.totalQuestions}} </span>
+                    <span><i class="fas fa-align-justify icon-space primary" ></i>{{ "STU_DASHBOARD_QUICKVIEW.TOTAL_QUESTION" | translate }} : </span><span> {{metric.totalQuestions}} </span>
                   </div>
                 </div>
                 <div class="stats">
                   <div class="card-subtitle">
-                    <span><i class="fas fa-pen icon-space info" ></i>Attempted Questions : </span><span>  {{metric.attempted}}  </span>
+                    <span><i class="fas fa-pen icon-space info" ></i>{{ "STU_DASHBOARD_QUICKVIEW.ATTEMP_QUES" | translate }} : </span><span>  {{metric.attempted}}  </span>
                   </div>
                 </div>
               </div>
@@ -26,14 +26,14 @@
               <div class="sub-stats">
                 <div class="stats">
                   <div class="card-subtitle">
-                    <span><i class="fas fa-align-justify icon-space primary" ></i>Total Mark : </span><span> {{metric.totalMarks}} </span>
+                    <span><i class="fas fa-align-justify icon-space primary" ></i>{{ "STU_DASHBOARD_QUICKVIEW.TOTAL_MARKS" | translate }} : </span><span> {{metric.totalMarks}} </span>
                   </div>
                 </div>
 
                 <div class="stats">
                   <div class="card-subtitle">
 
-                    <span><i class="fas fa-pen icon-space info" ></i>Received Mark : </span><span> {{metric.marksReceived}} </span>
+                    <span><i class="fas fa-pen icon-space info" ></i>{{ "STU_DASHBOARD_QUICKVIEW.RCV_MARKS" | translate }} : </span><span> {{metric.marksReceived}} </span>
                   </div>
                 </div>
               </div>
@@ -48,7 +48,7 @@
 
                 <div class="stats">
                   <div class="card-subtitle">
-                    <span><i class="fas fa-hourglass-start  success icon-space" ></i>Avg. Correct Time : </span>
+                    <span><i class="fas fa-hourglass-start  success icon-space" ></i>{{ "STU_DASHBOARD_QUICKVIEW.AVG_CRCT_TIME" | translate }} : </span>
                     <span *ngIf="metric.correct != 0"> {{metric.correctTimeInSec / metric.correct  | minuteSeconds}} </span>
                     <span *ngIf="metric.correct == 0"> 0 </span>
                   </div>
@@ -56,7 +56,7 @@
 
                 <div class="stats">
                   <div class="card-subtitle">
-                    <span><i class="fas fa-hourglass-end icon-space failure" ></i>Avg. Incorrect Time : </span>
+                    <span><i class="fas fa-hourglass-end icon-space failure" ></i>{{ "STU_DASHBOARD_QUICKVIEW.AVG_INCRCT_TIME" | translate }} : </span>
                     <span *ngIf="metric.incorrect != 0"> {{metric.incorrectTimeInSec / metric.incorrect | minuteSeconds}} </span>
                     <span *ngIf="metric.incorrect == 0"> 0 </span>
                   </div>
@@ -64,7 +64,7 @@
 
                 <div class="stats">
                   <div class="card-subtitle">
-                    <span><i class="fas fa-hourglass-half icon-space warning" ></i>Avg. Skipped Time : </span>
+                    <span><i class="fas fa-hourglass-half icon-space warning" ></i>{{ "STU_DASHBOARD_QUICKVIEW.AVG_SKIP_TIME" | translate }} : </span>
                     <span *ngIf="metric.skipped != 0"> {{metric.skippedTimeInSec/ metric.skipped | minuteSeconds}}</span>
                     <span *ngIf="metric.skipped == 0"> 0 </span>
 

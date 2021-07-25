@@ -1,32 +1,117 @@
 {
   "COMMON_TAG": {
-      "ADD": "Add",
-      "UPLOAD": "Upload",
-      "DOWNLOAD": "Download",
-      "DOWNLOAD_TEMPLATE": "Download Template",
-      "MIGRATE": "Migrate",
-      "DELETE": "Delete",
-      "SAVE": "Save",
-      "RESET": "Reset",
-      "FILTER": "Filter",
-      "CANCEL": "Cancel",
-      "ACTIONS": "Actions",
-      "UPDATE": "Update",
-      "BACK": "Back",
-      "NEXT": "Next",
-      "SEARCH": "Search"
+    "ADD": "Add",
+    "UPLOAD": "Upload",
+    "DOWNLOAD": "Download",
+    "DOWNLOAD_TEMPLATE": "Download Template",
+    "MIGRATE": "Migrate",
+    "DELETE": "Delete",
+    "SAVE": "Save",
+    "RESET": "Reset",
+    "FILTER": "Filter",
+    "CANCEL": "Cancel",
+    "ACTIONS": "Actions",
+    "UPDATE": "Update",
+    "BACK": "Back",
+    "NEXT": "Next",
+    "SEARCH": "Search",
+    "APPLY": "Apply"
   },
-  "USER_MANAGEMENT_TAG":{
-    "NAME":"Name",
-    "EMAIL":"Email",
-    "ROLES_TAG":"Role Tag",
-    "BATCH":"Batch"
-
+  "USER_MANAGEMENT_TAG": {
+    "NAME": "Name",
+    "EMAIL": "Email",
+    "ROLES_TAG": "Role Tag",
+    "BATCH": "Batch"
   },
-  "QUESTION_MANAGEMENT_TAG":{
-    "QUESTION_MIGRATOR_DIALOG_TITLE":"Question Migrator",
-    "QUESTION_MIGRATOR_JSON_FILE_LABEL":"Question json:"
-
-
+  "QUESTION_MANAGEMENT_TAG": {
+    "QUESTION_MIGRATOR_DIALOG_TITLE": "Question Migrator",
+    "QUESTION_MIGRATOR_JSON_FILE_LABEL": "Question json:"
+  },
+  "DASHBOARD_TAGS": {
+    "DASHBOARD": "Dashboard",
+    "TOTAL_TEST": "Total Test",
+    "ATTEMPTED": "Attempted",
+    "UNATTEMPTED": "Unattempted",
+    "NOT_ATTEMPTED": "Not Attempted",
+    "TEST_NAME": "Test Name",
+    "TEST_STATUS": "Test Status",
+    "MARKS_OBTAINED": "Marks Obtained",
+    "ACTIONS": "Actions",
+    "TAKE_TEST": "Take Test",
+    "VIEW_RESULT": "View Result",
+    "CHANGE_PASSWORD": "Change Password",
+    "SIGNOUT": "Signout",
+    "PROFILE": "Profile"
+  },
+  "PROFILE_TAGS": {
+    "PROFILE" :"Profile",
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "DISPLAY_NAME": "Display Name",
+    "GENDER": "Gender",
+    "ADDRESS": "Address",
+    "STATE": "State",
+    "EMAIL": "Email"
+  },
+  "STU_DASHBOARD_QUICKVIEW": {
+    "QUICKVIEW": "Quick View",
+    "QUESITONS_STAS": "Questions Statistics",
+    "MARKS_STATS": "Marks Statistics",
+    "TIME_STATS": "Time Statistics",
+    "TOTAL_QUESTION": "Total Questions",
+    "ATTEMP_QUES": "Attempted Questions",
+    "TOTAL_MARKS": "Total Marks",
+    "RCV_MARKS": "Received Marks",
+    "AVG_CRCT_TIME": "Average Correct Time",
+    "AVG_INCRCT_TIME": "Average Incorrect Time",
+    "AVG_SKIP_TIME": "Average Skipped Time",
+    "MARKS": "Marks",
+    "TIME": "Time",
+    "SKIPPED_QUEST": "Skipped Questions",
+    "CORRECT_QUES": "Correct Questions",
+    "INCORRECT_QUES": "Incorrect Questions",
+    "SKIPPED_MARKS": "Skipped Marks",
+    "POSITIVE_MARKS": "Positive Marks",
+    "NEGATIVE_MARKS": "Negative Marks",
+    "TOTAL_SKIPPED_TIME": "Total Skipped Time",
+    "TOTAL_CORRECT_TIME": "Total Correct Time",
+    "TOTAL_INCORRECT_TIME": "Total Incorrect Time"
+  },
+  "STUDENT_RANKING_TAG": {
+    "RANKING": "Ranking",
+    "RANK": "Rank",
+    "NAME": "Name",
+    "TOTAL_MARKS": "Total Marks",
+    "MARK_RECEIVED": "Marks Received"
+  },
+  "STUDENT_SOLUTION_TAG": {
+    "SOLUTION": "Solution",
+    "SECTION": "Section",
+    "PASSAGE": "Passage",
+    "READ_MORE": "Read More",
+    "READ_LESS": "Read Less",
+    "CORRECT_ANSWER": "Correct Answer",
+    "TIME_TAKEN": "Time Taken",
+    "SCORE": "Score",
+    "ACCURACY": "Accuracy",
+    "FILTER": "Filter",
+    "TOPIC": "Topic",
+    "SUBJECT": "Subject",
+    "SUB_TOPIC": "Subtopic",
+    "DIFFICULTY": "Difficulty",
+    "STATE": "State",
+    "EXPLANATION" : "Explanation"
+  },
+  "HEADER_TAGS": {
+    "DASHBORAD": "Dashboard",
+    "QUESTION": "Question",
+    "TESTS": "Tests",
+    "USER": "User",
+    "BATCH": "Batch",
+    "REPORTS": "Reports",
+    "STUDENT_REPORT": "Student Report",
+    "PROFILE": "Profile",
+    "CHANGE_PASS": "Change Password",
+    "SIGNOUT": "Signout"
   }
 }

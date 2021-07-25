@@ -5,7 +5,7 @@
   <mat-tab label="QuickView">
     <ng-template mat-tab-label>
       <mat-icon class="example-tab-icon">bar_chart</mat-icon>
-      Quick View
+      {{ "STU_DASHBOARD_QUICKVIEW.QUICKVIEW" | translate }}
     </ng-template>
     <div class="tab-body">
       <app-student-assignment-stats-charts
@@ -18,7 +18,7 @@
   <mat-tab label="Questions">
     <ng-template mat-tab-label>
       <mat-icon class="example-tab-icon">question_answer</mat-icon>
-      Solution
+      {{ "STUDENT_SOLUTION_TAG.SOLUTION" | translate }}
     </ng-template>
 
     <div style="position: relative; height: 50px">
@@ -41,7 +41,6 @@
 
     <div class="container-fluid">
       <div class="row">
-
         <div class="col-lg-8">
           <mat-tab-group
             class="invisible-tabs"
@@ -59,19 +58,34 @@
                 "
                 class="question-card"
               >
-
-
                 <div style="display: flex; margin-bottom: 10px">
-                   <div class="numberCircle">{{ i + 1 }}</div>
+                  <div class="numberCircle">{{ i + 1 }}</div>
                   <div>
                     <div style="margin-bottom: 10px">
-                      <strong>Passage</strong>
+                      <strong>{{
+                        "STUDENT_SOLUTION_TAG.PASSAGE" | translate
+                      }}</strong>
                     </div>
-                    <div [ngClass]="{'limitTextHeight': passageMap.get(answer.questionId)}" [innerHtml]="transform(answer.passage)" disabled>
-                      Passage
+                    <div
+                      [ngClass]="{
+                        limitTextHeight: passageMap.get(answer.questionId)
+                      }"
+                      [innerHtml]="transform(answer.passage)"
+                      disabled
+                    >
+                      {{ "STUDENT_SOLUTION_TAG.PASSAGE" | translate }}
                     </div>
-                    <button style="font-family: cursive;" mat-button color="primary" (click)="showPassage(answer.questionId)">
-                      {{ passageMap.get(answer.questionId) ? 'read more >>':' << read less' }}
+                    <button
+                      style="font-family: cursive"
+                      mat-button
+                      color="primary"
+                      (click)="showPassage(answer.questionId)"
+                    >
+                      {{
+                        passageMap.get(answer.questionId)
+                          ? "read more >>"
+                          : " << read less"
+                      }}
                     </button>
                   </div>
 
@@ -102,10 +116,10 @@
                     </mat-chip-list>
                   </div>
                 </div>
-              <div
-                    class="questionName"
-                    [innerHtml]="transform(answer.name)"
-                  ></div>
+                <div
+                  class="questionName"
+                  [innerHtml]="transform(answer.name)"
+                ></div>
                 <div style="margin-left: 30px">
                   <div
                     class="option"
@@ -140,8 +154,8 @@
                     <span
                       *ngIf="answer.correctOptions?.includes(option.key)"
                       class="badge badge-pill badge-primary ml-2"
-                      >Correct Answer</span
-                    >
+                      >{{ "STUDENT_SOLUTION_TAG.CORRECT_ANSWER" | translate }}
+                    </span>
                   </div>
                 </div>
 
@@ -164,13 +178,30 @@
                 <mat-divider style="margin-top: 20px"></mat-divider>
                 <div style="margin: 20px 30px">
                   <div style="margin-bottom: 10px">
-                    <strong>Explanation</strong>
+                    <strong>{{
+                      "STUDENT_SOLUTION_TAG.EXPLANATION" | translate
+                    }}</strong>
                   </div>
-                  <div [ngClass]="{'limitTextHeight': explanationMap.get(answer.questionId)}" [innerHtml]="transform(answer.explanation)" disabled>
-                    Passage
+                  <div
+                    [ngClass]="{
+                      limitTextHeight: explanationMap.get(answer.questionId)
+                    }"
+                    [innerHtml]="transform(answer.explanation)"
+                    disabled
+                  >
+                    {{ "STUDENT_SOLUTION_TAG.EXPLANATION" | translate }}
                   </div>
-                  <button style="font-family: cursive;" mat-button color="primary" (click)="showExplanation(answer.questionId)">
-                    {{ explanationMap.get(answer.questionId) ? 'read more >>':' << read less' }}
+                  <button
+                    style="font-family: cursive"
+                    mat-button
+                    color="primary"
+                    (click)="showExplanation(answer.questionId)"
+                  >
+                    {{
+                      explanationMap.get(answer.questionId)
+                        ? "read more >>"
+                        : " << read less"
+                    }}
                   </button>
                 </div>
               </div>
@@ -181,12 +212,14 @@
         <div class="col-lg-4 fixed">
           <div class="menu sticky-top p-3 bg-light">
             <app-solution-filter
-            [data]="filterData"
-            (filterParameters)="filterSolutionData($event)" ></app-solution-filter>
-          <app-solution-right-panel
-            [data]="solutionSectionWiseSelectedStats" ></app-solution-right-panel>
+              [data]="filterData"
+              (filterParameters)="filterSolutionData($event)"
+            ></app-solution-filter>
+            <app-solution-right-panel
+              [data]="solutionSectionWiseSelectedStats"
+            ></app-solution-right-panel>
           </div>
-       </div>
+        </div>
       </div>
     </div>
   </mat-tab>
@@ -196,7 +229,7 @@
       <span style="margin-right: 2px"
         ><i class="fas fa-flag-checkered"></i
       ></span>
-      Ranking
+      {{ "STUDENT_RANKING_TAG.RANKING" | translate }}
     </ng-template>
 
     <div *ngIf="!rankFlag">
@@ -210,28 +243,28 @@
         <table mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="rank">
             <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
-              Rank
+              {{ "STUDENT_RANKING_TAG.RANK" | translate }}
             </th>
             <td mat-cell *matCellDef="let row">{{ row?.rank }}</td>
           </ng-container>
 
           <ng-container matColumnDef="name">
             <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
-              <div>Name</div>
+              <div>{{ "STUDENT_RANKING_TAG.NAME" | translate }}</div>
             </th>
             <td mat-cell *matCellDef="let row">{{ row.name }}</td>
           </ng-container>
 
           <ng-container matColumnDef="totalMarks">
             <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
-              Total Mark
+              {{ "STUDENT_RANKING_TAG.TOTAL_MARKS" | translate }}
             </th>
             <td mat-cell *matCellDef="let row">{{ row.totalMarks }}</td>
           </ng-container>
 
           <ng-container matColumnDef="marksReceived">
             <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
-              Mark Recieved
+              {{ "STUDENT_RANKING_TAG.MARK_RECEIVED" | translate }}
             </th>
             <td mat-cell *matCellDef="let row">{{ row.marksReceived }}</td>
           </ng-container>
