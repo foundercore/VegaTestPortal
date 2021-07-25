@@ -17,14 +17,12 @@
     flex-wrap: wrap;
     //justify-content: space-around;
     justify-content: flex-start;
-    .mat-form-field{
+    .mat-form-field {
       margin-right: 40px;
       width: 310px !important;
     }
   }
 }
-
-
 
 .btn-grp-cls {
   position: relative;
@@ -42,4 +40,8 @@
   background: red;
   color: white;
   margin-left: 20px;
+}
+
+.mat-dialog-content {
+  max-height: none !important;
 }

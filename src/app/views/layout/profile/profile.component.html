@@ -1,5 +1,5 @@
 <h1 mat-dialog-title class="title">
-  <span>Profile</span>
+  <span>{{ 'PROFILE_TAGS.PROFILE' | translate }}</span>
 
   <button mat-dialog-close>
     <mat-icon>close</mat-icon>
@@ -10,7 +10,7 @@
     <div class="example-container"  [formGroup]="userFormGroup">
 
       <mat-form-field appearance="outline">
-        <mat-label>First Name</mat-label>
+        <mat-label>{{ 'PROFILE_TAGS.FIRST_NAME' | translate }}</mat-label>
         <input matInput required  formControlName="firstname" />
         <mat-error *ngIf="userFormGroup.controls.firstname.hasError('required')">
           First Name is <strong>required</strong>
@@ -19,7 +19,7 @@
 
 
       <mat-form-field appearance="outline">
-        <mat-label>Last Name</mat-label>
+        <mat-label>{{ 'PROFILE_TAGS.LAST_NAME' | translate }}</mat-label>
         <input matInput required formControlName="lastname" />
         <mat-error *ngIf="userFormGroup.controls.lastname.hasError('required')">
           Last Name is <strong>required</strong>
@@ -27,7 +27,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Display Name</mat-label>
+        <mat-label>{{ 'PROFILE_TAGS.DISPLAY_NAME' | translate }}</mat-label>
         <input matInput required formControlName="displayName" />
         <mat-error *ngIf="userFormGroup.controls.lastname.hasError('required')">
           Last Name is <strong>required</strong>
@@ -35,7 +35,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Gender</mat-label>
+        <mat-label>{{ 'PROFILE_TAGS.GENDER' | translate }}</mat-label>
         <mat-select formControlName="gender" required>
           <mat-option value="M">Male</mat-option>
           <mat-option value="F">Female</mat-option>
@@ -47,7 +47,7 @@
 
 
       <mat-form-field style="width: 660px !important" appearance="outline">
-        <mat-label>Address</mat-label>
+        <mat-label>{{ 'PROFILE_TAGS.ADDRESS' | translate }}</mat-label>
         <textarea matInput placeholder="Ex. 100 Main St" required formControlName="address" ></textarea>
         <mat-error *ngIf="userFormGroup.controls.address.hasError('required')">
           Address is <strong>required</strong>
@@ -56,7 +56,7 @@
 
 
       <mat-form-field appearance="outline">
-        <mat-label>State</mat-label>
+        <mat-label>{{ 'PROFILE_TAGS.STATE' | translate }}</mat-label>
         <input matInput placeholder="Ex. Delhi" required formControlName="state" />
         <mat-error *ngIf="userFormGroup.controls.state.hasError('required')">
           State is <strong>required</strong>
@@ -65,7 +65,7 @@
 
 
       <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
+        <mat-label>{{ 'PROFILE_TAGS.EMAIL' | translate }}</mat-label>
         <input type="email" matInput placeholder="Ex. pat@example.com" required formControlName="email" />
       </mat-form-field>
 
