@@ -1,6 +1,6 @@
 <h1 mat-dialog-title class="title">
-  <span *ngIf="!data">Add Batch</span>
-  <span *ngIf="data">View Batch</span>
+  <span *ngIf="!data">{{ 'ADD_BATCH_TAG.ADD_BATCH' | translate }}</span>
+  <span *ngIf="data">{{ 'ADD_BATCH_TAG.VIEW_BATCH' | translate }}</span>
   <button mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
@@ -10,7 +10,7 @@
     <div class="example-container"  [formGroup]="batchFormGroup">
 
       <mat-form-field appearance="outline">
-        <mat-label>Name</mat-label>
+        <mat-label>{{ 'ADD_BATCH_TAG.NAME' | translate }}</mat-label>
         <input matInput required  formControlName="name" />
         <mat-error *ngIf="batchFormGroup.controls.name.hasError('required')">
           Name is <strong>required</strong>
@@ -18,7 +18,7 @@
       </mat-form-field>
 
       <mat-form-field style="width: 660px !important" appearance="outline">
-        <mat-label>Description</mat-label>
+        <mat-label>{{ 'ADD_BATCH_TAG.DESCRIPTION' | translate }}</mat-label>
         <textarea matInput  required formControlName="description" ></textarea>
         <mat-error *ngIf="batchFormGroup.controls.description.hasError('required')">
           Description is <strong>required</strong>
@@ -26,7 +26,7 @@
       </mat-form-field>
     </div>
     <mat-list *ngIf="data">
-      <div mat-subheader>Students Tagged to Batch</div>
+      <div mat-subheader>{{ 'ADD_BATCH_TAG.STU_TAGGED_TO_BATCH' | translate }}</div>
       <mat-list-item *ngFor="let student of data.students">
         <i mat-list-icon class="fas fa-user-graduate"></i>
         <div mat-line>{{student}}</div>

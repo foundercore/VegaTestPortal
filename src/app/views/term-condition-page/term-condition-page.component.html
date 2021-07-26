@@ -1,8 +1,8 @@
-<h2 mat-dialog-title>Term And Conditions</h2>
+<h2 mat-dialog-title>{{ "COMMON_TAG.TANDC" | translate }}</h2>
 <mat-dialog-content class="mat-typography">
   TERMS AND CONDITIONS FOR ONLINE COURSES.
   <div [innerHTML]="termAndCondition">...</div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button (click)="accept()" cdkFocusInitial>Accept</button>
+  <button mat-button (click)="accept()" cdkFocusInitial>{{ "COMMON_TAG.ACCEPT" | translate }}</button>
 </mat-dialog-actions>
