@@ -37,7 +37,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     explanation: new FormControl(),
     description: new FormControl(),
     type: new FormControl(),
-    answerText : new FormControl(),
+    answerText: new FormControl(),
   });
 
   secondStepFromGroup = new FormGroup({
@@ -82,7 +82,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
   // answerOptionFormGrp = new FormGroup({});
 
   answerOptionFormGrp: FormGroup;
-  optionArrays: FormArray;
+  optionArrays: FormArray  ;
 
   optionCount = '0';
 
@@ -479,11 +479,18 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
   }
 
   onTypeChange($event) {
-    this.answerOptionFormGrp = this.fb.group({
-      optionArrays: this.fb.array([]),
-    }); 
-    
-    
-    this.questionForthFormGrp.controls['answerText'].reset();
+    if ($event.value == 'MCQ') {
+      this.answerOptionFormGrp = this.fb.group({
+        optionArrays: this.fb.array([]),
+      });
+
+      for (let i = 0; i < 4; i++) {
+        this.addOption();
+      }
+    }
+
+    if ($event.value == 'TITA') {
+      this.questionForthFormGrp.controls['answerText'].reset();
+    }
   }
 }
