@@ -148,7 +148,7 @@
     <div>
       <h5>Answer Configuration</h5>
       <div class="w-100-div flex-container">
-        <div class="w-100-div" style="margin-bottom: 20px">
+        <div *ngIf="questionPreviewGroup.controls['type'].value === 'TITA'" class="w-100-div" style="margin-bottom: 20px">
           <mat-label style="color: rgba(0, 0, 0, 0.38)">Answer Text</mat-label>
           <div
             class="text-area-div disabled"
@@ -156,31 +156,36 @@
           ></div>
         </div>
 
-        <div class="w-100-div" style="margin-bottom: 20px">
+        <div  *ngIf="questionPreviewGroup.controls['type'].value === 'MCQ'" class="w-100-div" style="margin-bottom: 20px">
           <mat-label style="color: rgba(0, 0, 0, 0.38)">Options</mat-label>
-          <div class="w-100-div flex-container">
-            <div
-              [formGroup]="answerOptionFormGrp"
-              class="w-50-div"
-              style="margin-bottom: 20px; align-items: center; display: flex"
-              *ngFor="let option of options; let i = index"
-            >
-              <div>
+          <div [formGroup]="answerOptionFormGrp" class="w-100-div flex-container">
+            <form  formArrayName="optionArrays" class="w-50-div" *ngFor="let option of answerOptionFormGrp.get('optionArrays')['controls']; let i = index">
+              <div [formGroupName]="i" style="margin: 10px">
                 <mat-checkbox
                   style="margin: 0 12px"
-                  formControlName="{{ option.key }}"
+                  formControlName="flag"
                   [disabled]="true"
                 ></mat-checkbox>
+                <label id="example-radio-group-label" style="margin-bottom: 10px"
+                  >Option marked as correct
+                  </label
+                >
+               
+                <angular-editor
+                  id="answer_option_{{ i }}"
+                  [config]="descriptionEditorconfig"
+                  formControlName="value"
+                >
+                </angular-editor>
               </div>
-              <div class="answer-option disabled">
-                <div [innerHTML]="option.value"></div>
-              </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
   </form>
+
+  
   <div style="display: flex; justify-content: flex-end">
     <button mat-button (click)="cancel()" class="cancel-btn">
       {{ "COMMON_TAG.CANCEL" | translate }}
