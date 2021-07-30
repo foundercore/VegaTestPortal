@@ -345,6 +345,10 @@ export class TestsComponent implements OnInit, AfterViewInit {
 
   startTest(element) {
 
+    this.router.navigate([ '/test_preview', element.questionPaperId]);
+
+    return;
+
     let buttonText = '';
     if (this.userType === 'ROLE_USER_ADMIN' || this.userType === 'ROLE_STAFF') {
       buttonText = 'Preview Test';

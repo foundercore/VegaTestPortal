@@ -1,36 +1,29 @@
-import { E, X } from '@angular/cdk/keycodes';
-import { Component, OnInit, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { id } from '@swimlane/ngx-charts';
 import { ToastrService } from 'ngx-toastr';
+import { timer } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import Swal from 'sweetalert2';
-import { QuestionMarkedForReviewModel } from '../../models/questionMarkedForReview';
-import { TestConfigService } from '../../services/test-config-service';
-import { CalculatorComponent } from '../calculator/calculator.component';
-import { timer } from 'rxjs';
-import { MatTabGroup } from '@angular/material/tabs';
-import { ButtonStyleAttributesModel } from '../../models/buttonStyleAttributesModel';
+import { ButtonStyleAttributesModel } from '../../assignments/models/buttonStyleAttributesModel';
+import { QuestionMarkedForReviewModel } from '../../assignments/models/questionMarkedForReview';
+import { CalculatorComponent } from '../../assignments/popups/calculator/calculator.component';
+import { TestLiveComponent } from '../../assignments/popups/test-live/test-live.component';
+import { TestConfigService } from '../../assignments/services/test-config-service';
 
 @Component({
-  selector: 'app-test-live',
-  templateUrl: './test-live.component.html',
-  styleUrls: ['./test-live.component.css'],
-  encapsulation: ViewEncapsulation.None
+  selector: 'app-live-test',
+  templateUrl: './live-test.component.html',
+  styleUrls: ['./live-test.component.scss']
 })
-export class TestLiveComponent implements OnInit {
+export class LiveTestComponent implements  OnInit {
   @ViewChild('TabGroup', { static: false }) Tab_Group: MatTabGroup;
   timeSeconds = 0;
   timeElapsedInSecond = 0;
   testId = '';
-  testData: any;
 
   questionNumber = 0;
   buttonStyle: ButtonStyleAttributesModel[] = [];
@@ -46,7 +39,6 @@ export class TestLiveComponent implements OnInit {
   submissionData: any;
   currentSectionSubmittedData: any;
   studentName = '';
-  testType = 'preview';
   // scrollbar
   disabled = false;
   compact = false;
@@ -60,9 +52,12 @@ export class TestLiveComponent implements OnInit {
   toasterPostion = {
     positionClass: 'toast-bottom-right'
   };
+
+  @Input() testData;
+
+  @Input() isTestLive = false;
+
   constructor(
-    @Inject(MAT_DIALOG_DATA) public _data: any,
-    public dialogRef: MatDialogRef<TestLiveComponent>,
     public dialog: MatDialog,
     private testConfigService: TestConfigService,
     private toastrService: ToastrService,
@@ -73,20 +68,19 @@ export class TestLiveComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this._data);
-    this.testType = this._data.testType;
+
     this.store.select('appState').subscribe((data) => {
       this.userName = data?.user?.userName;
       this.studentName = data?.user?.firstName + ' ' + data?.user?.lastName;
     });
     if (
-      this._data.testData.questionPaperId != null &&
-      this._data.testData.questionPaperId != undefined
+      this.testData.questionPaperId != null &&
+      this.testData.questionPaperId != undefined
     ) {
-      this.testId = this._data.testData.questionPaperId;
+      this.testId = this.testData.questionPaperId;
     } else {
-      this.testId = this._data.testData.testId;
-      this.assignmentId = this._data.testData.assignmentId;
+      this.testId = this.testData.testId;
+      this.assignmentId = this.testData.assignmentId;
     }
     this.getQuestionPaperbyId();
     this.getUserSubmissionData();
@@ -110,7 +104,7 @@ export class TestLiveComponent implements OnInit {
             this.GetQuestionPapers();
           }
           await this.getUserSubmissionData();
-          if (this.testType === 'live') {
+          if (this.isTestLive) {
             this.observableTimer(this.submissionData?.totalTestTimeTakenInSec);
           } else {
             this.CountDownTimerValue = new Date(this.timeSeconds * 1000)
@@ -726,7 +720,7 @@ export class TestLiveComponent implements OnInit {
   }
 
   close() {
-    this.dialogRef.close();
+    //this.dialogRef.close();
     this.timerSource.unsubscribe();
   }
 
@@ -742,3 +736,4 @@ export class TestLiveComponent implements OnInit {
   }
 
 }
+

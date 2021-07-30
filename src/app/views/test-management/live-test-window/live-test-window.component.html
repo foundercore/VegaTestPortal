@@ -1,0 +1,2 @@
+<app-live-test-instruction *ngIf="!isTestStarted" (startTestEvent)="startTest($event)"></app-live-test-instruction>
+<app-live-test *ngIf="isTestStarted" [testData]="testData"></app-live-test>

@@ -10,6 +10,9 @@ import { LoggedInAuthGuard } from '../guard/loggedin.guard';
 import { RoleGuard } from '../guard/role.guard';
 import { Role } from './constants';
 import { StudentReportComponent } from '../views/common-component/view-student-assignment-result/student-report.component';
+import { LiveTestComponent } from '../views/test-management/live-test/live-test.component';
+import { LiveTestInstructionComponent } from '../views/test-management/live-test-instruction/live-test-instruction.component';
+import { LiveTestWindowComponent } from '../views/test-management/live-test-window/live-test-window.component';
 
 const routes: Routes = [
   {
@@ -20,6 +23,10 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+  },
+  {
+    path:'test_preview/:test_id',
+    component: LiveTestWindowComponent,
   },
   {
     path: 'home',

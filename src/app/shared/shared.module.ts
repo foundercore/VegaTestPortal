@@ -15,6 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { StackedVerticalBarChartComponent } from './charts/stacked-vertical-bar-chart/stacked-vertical-bar-chart.component';
+import { MathDirective } from './directives/math/math.directive';
 
 
 
@@ -28,7 +29,8 @@ import { StackedVerticalBarChartComponent } from './charts/stacked-vertical-bar-
     CustomDialogConfirmationComponent,
     DialogConformationComponent,
     MinuteSecondsPipe,
-    FilterPipePipe
+    FilterPipePipe,
+    MathDirective
   ],
   imports: [
     CommonModule,
@@ -49,7 +51,7 @@ import { StackedVerticalBarChartComponent } from './charts/stacked-vertical-bar-
     DialogConformationComponent,
     MinuteSecondsPipe,
     FilterPipePipe,
-
+    MathDirective,
     //Export module
     FormsModule,
     ReactiveFormsModule,

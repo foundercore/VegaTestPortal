@@ -1,0 +1,297 @@
+<div class="live-test-container">
+  <div class="header">
+      <div>
+        {{ testData?.name }}
+      </div>
+      <div>
+        <button class="auto-btn p-0 m-1" style="height: fit-content"  mat-raised-button (click)="calculate()" *ngIf="testData?.calculatorRequired">
+          <mat-icon>calculate</mat-icon>
+        </button>
+      </div>
+  </div>
+  <div class="content">
+    <div class="question-content">
+        <div style="height:1000px;">
+          Content
+        </div>
+
+    </div>
+    <div class="question-legend">Legend</div>
+  </div>
+  <div class="footer">
+    <div class="footer-part1">
+        <div>
+          <button class="mark-review-btn" mat-raised-button   (click)="setQuestionAsMarkerdForReview()">
+            Mark For Review
+         </button>
+         <button class="clear-response-btn"  mat-raised-button (click)="clearResponse()" >
+            Clear Response
+         </button>
+       </div>
+       <div>
+        <button class="save-next-btn"  mat-raised-button (click)="saveAndNextAnswers()" >
+          Save And Next
+        </button>
+       </div>
+
+    </div>
+    <div style="flex-basis: 500px; display: flex; justify-content: center;">
+      <div>
+          <button class="save-exit-btn" mat-raised-button (click)="SaveandExit()">
+            Save And Exit
+          </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!--
+
+<div class="card border-0">
+  <div class="card-header d-flex bg-transparent p-0 border-0">
+    <div class="row w-100 mx-0 align-items-center justify-content-space-between" style="background: #2596be; padding: 1rem;">
+      <div class="col-md-6 left__col p-0 d-flex align-items-center">
+        <h4 class="ml-5" style="width: 100%;text-align: center; font-weight: 700; color: white;">
+          {{ testData?.name }}
+        </h4>
+      </div>
+      <div class="col-md-6 right__col d-flex justify-content-end">
+        <button
+          class="auto-btn p-0 m-1"
+          style="height: fit-content"
+          mat-raised-button
+          (click)="calculate()"
+          *ngIf="testData?.calculatorRequired"
+        >
+          <mat-icon>calculate</mat-icon>
+        </button>
+        <div class="d-flex ">
+          <div class="student__box d-flex align-items-center">
+          </div>
+            <h4 class="mb-0 ml-5" style="color: white;font-weight: 600;">
+              {{ CountDownTimerValue }}
+            </h4>
+        </div>
+
+      </div>
+    </div>
+    <button *ngIf="!isTestLive" class="btn close__btn close_btn_test " (click)="close()">
+      <span class="position-center">&times;</span>
+    </button>
+  </div>
+  <div class="card-body position-relative main__scroll__card">
+    <div class="question__box" style="display: none">
+      <div class="d-flex">
+        <div class="student__box d-flex align-items-center">
+          <h5>Question Time</h5>
+        </div>
+        <div class="time d-flex p-2 align-items-center">
+          <img src="assets/images/clock.png" alt="" />
+          <h4 class="mb-0 ml-5">
+            <countdown [config]="{ leftTime: timeSeconds }"></countdown>
+          </h4>
+        </div>
+      </div>
+    </div>
+    <mat-tab-group
+      class="pt-2"
+      (selectedTabChange)="selectSection($event)"
+      #TabGroup
+    >
+       <div *ngIf="testData?.sections">
+        <span *ngFor="let section of testData?.sections" class="section_tab">
+          <mat-tab label="{{ section?.name }}">
+            <div class="row mx-0 scroll__box">
+              <div class="col-lg-9 position-relative">
+                <div class="left__content inner__scroll">
+                  <ng-scrollbar
+                    #scrollable
+                    [invertX]="invertX"
+                    [invertY]="invertY"
+                    [trackX]="true"
+                    [compact]="compact"
+                    [shown]="shown"
+                    [disabled]="disabled"
+                  >
+
+              <p style="font-size: 24px;">
+                <strong>Question : {{questionNumber + 1}}</strong>
+              </p>
+                <div *ngIf="question?.name">
+
+                  <div class="row">
+                    <div class="col col-xs-6 " style=" border-right: 4px solid #333;" *ngIf="question?.passageContent">
+                      <p [innerHTML]="question?.passageContent"> </p>
+                    </div>
+                    <div class="col col-xs-6">
+                      <p [innerHTML]="question?.name"></p>
+                        <mat-form-field appearance="outline" *ngIf="question.type == 'TITA'" style="width: 100%;">
+                          <mat-label>Answer here...</mat-label>
+                          <input matInput placeholder="Answer here..." [(ngModel)]="titaText">
+                        </mat-form-field>
+
+                      <ul>
+                        <li *ngFor="let opt of question?.options">
+                          <div class="row">
+                            <mat-checkbox
+                              [checked]="optionsSelected[opt?.key - 1]"
+                              (change)="setOptionSelected(opt?.key)"
+                              class="col-1"
+                            >
+
+                            </mat-checkbox>
+                            <span
+                              class="col-10"
+                              style="margin-left: -15px"
+                              [innerHTML]="opt?.value"
+                            >
+                            </span>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+
+                      <div  *ngIf="!isTestLive">
+                      Correct Option:
+                      <div class="correct-option-div"  [innerHTML]="question?.answer?.options">
+                      </div>
+                      Explanation:
+                      <div class="explanation-div" [innerHTML]="question?.explanation">
+                      </div>
+                    </div>
+                    </div>
+
+                    <div class="testLive__NoQuestion" *ngIf="!question?.name">
+                      <div class="testLive__NoQuestion_text">
+                        No question added !!!
+                      </div>
+                    </div>
+
+                  </ng-scrollbar>
+                </div>
+                <div
+                  class="
+                    btn__box
+                    d-flex
+                    justify-content-space-between
+                    pb-3
+                    pt-3
+                  "
+                  *ngIf="isTestLive"
+                >
+                  <button
+                    class="btn btn-secondary"
+                    mat-raised-button style="background-color:orange"
+                    (click)="setQuestionAsMarkerdForReview()"
+                  >
+                    Mark For Review
+                  </button>
+                  <button
+                    class="btn btn-secondary" style="background-color:#ff3547"
+                    mat-raised-button
+                    (click)="clearResponse()"
+                  >
+                    Clear Response
+                  </button>
+                  <button
+                    class="btn btn-secondary" style="background-color:#2596be"
+                    mat-raised-button
+                    (click)="saveAndNextAnswers()"
+                  >
+                    Save And Next
+                  </button>
+                </div>
+
+              </div>
+
+              <div class="col-lg-3 mh position-relative">
+                <div class="scoll_height" style="height:65.2%;">
+                  <ng-scrollbar
+                    #scrollable
+                    [invertX]="invertX"
+                    [invertY]="invertY"
+                    [trackX]="true"
+                    [compact]="compact"
+                    [shown]="shown"
+                    [disabled]="disabled"
+                  >
+                    <ul class="list-unstyled">
+
+                      <div
+                        class="testLive__NoQuestion1"
+                        *ngIf="!question?.name"
+                      >
+                        <div class="testLive__NoQuestion_text1">
+                          No question added !!!
+                        </div>
+                      </div>
+                    </ul>
+
+                    <div class="num__box">
+
+                      <button
+                        class="auto-btn"
+                        mat-raised-button
+                        *ngFor="let ques of sectionsWithPapers; let i = index"
+                        (click)="getQuestion(ques, i)"
+                        [ngStyle]="buttonStyle[i]"
+                        style="min-width: 50px;color: white;font-weight: bold;"
+                      >
+                        {{ i + 1 }}
+                      </button>
+
+                    </div>
+                  </ng-scrollbar>
+                </div>
+                <ul class="border index__box list-unstyled mb-2 px-2" style="border-width: 3px !important; text-align: center;">
+                  <li class="p-b2 text-center lead" style="font-weight: 700; font-size: 20;">Legend</li>
+                  <li class="btn btn-primary d-inline-block border-0">
+                    Current Question
+                  </li>
+                  <li
+                    *ngIf="isTestLive"
+                    class="btn btn-warning d-inline-block border-0" style=" color:#ffffff"
+                  >
+                    Marked Question.
+                  </li>
+                  <li
+                    *ngIf="isTestLive"
+                    class="btn btn-secondary d-inline-block border-0" style="background-color:#2596be"
+                  >
+                    Saved Question.
+                  </li>
+                  <li
+                    *ngIf="isTestLive"
+                    class="btn btn-success d-inline-block border-0"
+                  >
+                    Not Attempted.
+                  </li>
+
+                </ul>
+                <div
+                  *ngIf="isTestLive"
+                  class="text-center save__btn- pt-1"
+                >
+                   <button
+                    class="btn-primary save__btn w-100 mx-auto bg-danger"
+                    style="color: white;font-size:17px;font-weight:bold"
+                    mat-raised-button
+                    (click)="SaveandExit()"
+                  >
+                    Save And Exit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        </span>
+      </div>
+    </mat-tab-group>
+    <div class="testLive__NoSections" *ngIf="testData?.sections === null">
+      No Sections added !!!
+    </div>
+  </div>
+</div> -->
