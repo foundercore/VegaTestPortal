@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output } from '@angular/core';
 import { Subject, ReplaySubject, Observable } from 'rxjs';
 
 
@@ -12,7 +12,11 @@ declare global {
   interface Window {
     MathJax: {
       typesetPromise: () => void;
+      tex2chtml:(input:string,option:any) => any;
       startup: {
+        promise: Promise<any>;
+      };
+      tex2chtmlPromise:(input) => {
         promise: Promise<any>;
       };
     };
@@ -69,5 +73,10 @@ export class MathService {
       element.innerHTML = math;
       window.MathJax.typesetPromise();
     });
+  }
+
+  convert(input: string){
+    let html = window.MathJax.tex2chtml(input, {em: 12, ex: 6, display: false});
+     return html;
   }
 }

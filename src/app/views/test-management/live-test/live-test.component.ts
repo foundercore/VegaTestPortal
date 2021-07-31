@@ -1,18 +1,18 @@
-import { Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
-import { timer } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { forkJoin, timer } from 'rxjs';
+import { MathService } from 'src/app/shared/directives/math/math.service';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import Swal from 'sweetalert2';
 import { ButtonStyleAttributesModel } from '../../assignments/models/buttonStyleAttributesModel';
 import { QuestionMarkedForReviewModel } from '../../assignments/models/questionMarkedForReview';
 import { CalculatorComponent } from '../../assignments/popups/calculator/calculator.component';
-import { TestLiveComponent } from '../../assignments/popups/test-live/test-live.component';
 import { TestConfigService } from '../../assignments/services/test-config-service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-live-test',
@@ -20,7 +20,6 @@ import { TestConfigService } from '../../assignments/services/test-config-servic
   styleUrls: ['./live-test.component.scss']
 })
 export class LiveTestComponent implements  OnInit {
-  @ViewChild('TabGroup', { static: false }) Tab_Group: MatTabGroup;
   timeSeconds = 0;
   timeElapsedInSecond = 0;
   testId = '';
@@ -30,9 +29,7 @@ export class LiveTestComponent implements  OnInit {
 
   questionNavigationButtonColorArray = [];
   sectionsWithPapers = [];
-  question: any;
   sections = [];
-  currentSectionId: string;
   optionsSelected = [];
   appState: any;
   userName = '';
@@ -53,16 +50,30 @@ export class LiveTestComponent implements  OnInit {
     positionClass: 'toast-bottom-right'
   };
 
+  isLoading = true;
+
+  sectionQuestionMap = new Map<string,any>();
+
+  currentSectionId: string;
+
+  currentSelectedSection: any;
+
+  currentSelectedQuestion: any;
+
   @Input() testData;
 
   @Input() isTestLive = false;
+
+  @ViewChild('TabGroup', { static: false }) Tab_Group: MatTabGroup;
 
   constructor(
     public dialog: MatDialog,
     private testConfigService: TestConfigService,
     private toastrService: ToastrService,
     private store: Store<AppState>,
-    private router: Router
+    private router: Router,
+    public mathService: MathService,
+    private location: Location
   ) {
 
   }
@@ -82,45 +93,69 @@ export class LiveTestComponent implements  OnInit {
       this.testId = this.testData.testId;
       this.assignmentId = this.testData.assignmentId;
     }
-    this.getQuestionPaperbyId();
-    this.getUserSubmissionData();
+    this.initializeQuestion();
+    if(this.isTestLive){
+      this.getUserSubmissionData();
+    }
   }
 
-  getQuestionPaperbyId() {
-    // debugger;
-    this.testConfigService
-      .getQuestionPaper(this.testId)
-      .pipe(finalize(() => { }))
-      .subscribe(
-        async (res: any) => {
-          // debugger;
-          this.testData = res;
-          this.timeSeconds = this.convertminutestoseconds(
-            this.testData.totalDurationInMinutes
-          );
+  initializeQuestion() {
+    this.timeSeconds = this.convertminutestoseconds(
+      this.testData.totalDurationInMinutes
+    );
+    if (this.testData.sections !== null) {
+      this.getQuestionPapers();
+    }
+    if (this.isTestLive) {
+      this.observableTimer(this.submissionData?.totalTestTimeTakenInSec);
+    } else {
+      this.CountDownTimerValue = new Date(this.timeSeconds * 1000) .toISOString().substr(11, 8);
+    }
+  }
 
+  getQuestionPapers() {
+    this.testData?.sections?.forEach((section,index) => {
+      if (section != null && section.questions != null) {
+        // sort question by Sequence
+        section.questions.sort((a, b) =>
+          a.sequenceNumber < b.sequenceNumber ? -1 : 1
+        );
 
-          if (res.sections !== null) {
-            this.GetQuestionPapers();
+        let questionRequest  = [];
+
+        section.questions.forEach((question) => {
+          if (question != null) {
+            questionRequest.push(this.testConfigService.getQuestionbyQestionId(question?.id));
           }
-          await this.getUserSubmissionData();
-          if (this.isTestLive) {
-            this.observableTimer(this.submissionData?.totalTestTimeTakenInSec);
-          } else {
-            this.CountDownTimerValue = new Date(this.timeSeconds * 1000)
-              .toISOString()
-              .substr(11, 8);
-          }
+        });
+
+        forkJoin(questionRequest).subscribe(questionList => {
+            questionList.map(question => {
+              question['sectionId'] = section.id;
+              return question;
+            })
+            this.sections = this.sections.concat(questionList);
+            this.sectionQuestionMap.set(section.id,questionList);
+            if(index == 0 ){
+              this.selectSection(section);
+            }
+            if(this.isTestLive){
+              this.setCurrentQuestionSelectedOption();
+              this.setColoursForQuestionNavigationButtons();
+            }
+            this.isLoading = false;
         },
-        (error) => {
+        error => {
           this.toastrService.error(
-            error?.error?.message ? error?.error?.message : error?.message,
-            'Error', this.toasterPostion
+            error?.error?.message
+              ? error?.error?.message
+              : error?.message
+            , '', this.toasterPostion
           );
-        }
-      );
+        })
+      }
+    });
   }
-
 
 
   observableTimer(totalTestTimeTakenInSec = 0) {
@@ -148,19 +183,14 @@ export class LiveTestComponent implements  OnInit {
 
   async setQuestionAsMarkerdForReview() {
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
-    quesForMarkedAsReview.answerText = this.question.name;
+    quesForMarkedAsReview.answerText = this.currentSelectedQuestion.name;
     quesForMarkedAsReview.markForReview = true;
     quesForMarkedAsReview.assignmentId = this.assignmentId;
-    quesForMarkedAsReview.questionId = this.question.id.questionId;
-    quesForMarkedAsReview.sectionId = this.question.sectionId;
+    quesForMarkedAsReview.questionId = this.currentSelectedQuestion.id.questionId;
+    quesForMarkedAsReview.sectionId = this.currentSelectedQuestion.sectionId;
     quesForMarkedAsReview.selectedOptions = (this.getSelectedOption() as any);
     quesForMarkedAsReview.timeElapsedInSec = this.timeElapsedInSecond;
-    console.log(
-      'questionMarkedForReview object=>',
-      quesForMarkedAsReview,
-      ' current question => ',
-      this.question
-    );
+
     this.testConfigService
       .setQuestionAsMarkedForReview(
         quesForMarkedAsReview.assignmentId,
@@ -182,7 +212,7 @@ export class LiveTestComponent implements  OnInit {
 
     let marked = false;
     this.sectionsWithPapers.map((sec, i) => {
-      if (sec.id.questionId === this.question.id.questionId) {
+      if (sec.id.questionId === this.currentSelectedQuestion.id.questionId) {
         if (this.buttonStyle[i].background === 'orange') {
           marked = true;
         }
@@ -193,15 +223,15 @@ export class LiveTestComponent implements  OnInit {
   }
 
   async saveAndNextAnswers(moveToNext = true) {
-    console.log('this.question=>', this.question);
+    console.log('this.question=>', this.currentSelectedQuestion);
     this.isCurrentQuestionMarkedForReview();
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
     quesForMarkedAsReview.answerText = this.titaText;
     quesForMarkedAsReview.markForReview = this.getSelectedOption() != null
       || this.titaText != null ? false : true;
     quesForMarkedAsReview.assignmentId = this.assignmentId;
-    quesForMarkedAsReview.questionId = this.question.id.questionId;
-    quesForMarkedAsReview.sectionId = this.question.sectionId;
+    quesForMarkedAsReview.questionId = this.currentSelectedQuestion.id.questionId;
+    quesForMarkedAsReview.sectionId = this.currentSelectedQuestion.sectionId;
     quesForMarkedAsReview.selectedOptions = (this.getSelectedOption() as any);
     quesForMarkedAsReview.timeElapsedInSec = this.timeElapsedInSecond;
 
@@ -266,7 +296,7 @@ export class LiveTestComponent implements  OnInit {
     this.timeElapsedInSecond = 0;
     if (this.questionNumber < this.sectionsWithPapers.length - 1) {
       this.questionNumber = this.questionNumber + 1;
-      this.question = this.sectionsWithPapers[this.questionNumber];
+      this.currentSelectedQuestion = this.sectionsWithPapers[this.questionNumber];
     } else {
       this.goToNextSection();
       // this.toastrService.error(
@@ -324,8 +354,8 @@ export class LiveTestComponent implements  OnInit {
     questionForClearResponse.answerText = null;
     questionForClearResponse.assignmentId = this.assignmentId;
     questionForClearResponse.markForReview = false;
-    questionForClearResponse.questionId = this.question.id.questionId;
-    questionForClearResponse.sectionId = this.question.sectionId;
+    questionForClearResponse.questionId = this.currentSelectedQuestion.id.questionId;
+    questionForClearResponse.sectionId = this.currentSelectedQuestion.sectionId;
     questionForClearResponse.selectedOptions = (this.getSelectedOption() as any);
     questionForClearResponse.timeElapsedInSec = this.timeElapsedInSecond;
     this.testConfigService
@@ -350,7 +380,7 @@ export class LiveTestComponent implements  OnInit {
       submittedFetchedData.sections.map((sec) => {
         if (sec.sectionId === this.currentSectionId) {
           sec.answers.map((ans) => {
-            if (ans.questionId === this.question?.id.questionId) {
+            if (ans.questionId === this.currentSelectedQuestion?.id.questionId) {
               this.titaText = ans.answerText;
             }
           });
@@ -366,7 +396,7 @@ export class LiveTestComponent implements  OnInit {
     fetchedSubmissionState?.sections.map((section) => {
       if (section.sectionId === this.currentSectionId) {
         section.answers.map((ans) => {
-          if (ans?.questionId === this.question?.id.questionId) {
+          if (ans?.questionId === this.currentSelectedQuestion?.id.questionId) {
             const selectedOptions = ans.selectedOptions;
 
             this.optionsSelected = [];
@@ -414,103 +444,35 @@ export class LiveTestComponent implements  OnInit {
     });
   }
 
-  GetQuestionPapers() {
-    if (this.testData?.sections.length > 0) {
-      const sections = this.testData?.sections;
-      console.log('Current Sections => ', sections);
-      if (sections != null) {
-        sections.forEach((element) => {
-          if (element != null && element.questions != null) {
-            // sort question by Passage
-            element.questions.sort((a, b) =>
-              a.passageContent < b.passageContent ? -1 : 1
-            );
-            element.questions.forEach((element2) => {
-              if (element2 != null) {
-                const checkdata = this.sectionsWithPapers.find(
-                  (x) => x.id.questionId == element2.id
-                );
-                if (checkdata == null) {
-                  this.testConfigService
-                    .getQuestionbyQestionId(element2?.id)
-                    .subscribe(
-                      (res: any) => {
-                        res.sectionId = element.id;
-                        res.iscolorActive = false;
-                        res.ismarked = false;
-                        this.sections.push(res);
-                        this.sections[0].iscolorActive = true;
-                        this.selectSection1(this.sections[0].sectionId);
-                        this.question = this.sections[0];
-                        this.setCurrentQuestionSelectedOption();
-                        this.setColoursForQuestionNavigationButtons();
-                        // this.setColoursForQuestionNavigationButtons();
-                        // console.log('this.sections==', this.sections);
-                      },
-                      (error) => {
-                        this.toastrService.error(
-                          error?.error?.message
-                            ? error?.error?.message
-                            : error?.message
-                          , '', this.toasterPostion
-                        );
-                      }
-                    );
-                }
-              }
-            });
-          }
-        });
-      }
-    }
-  }
 
   // function called by question number buttons
-  async getQuestion(ques: any, currentQuestionIndex: number) {
+  async selectQuestion(ques: any, currentQuestionIndex: number) {
     // first save the response on previous question
-    await this.saveAndNextAnswers(false);
+    if(this.isTestLive){
+      await this.saveAndNextAnswers(false);
+    }
     this.timeElapsedInSecond = 0;
     // move to the next question
     {
       this.questionNumber = currentQuestionIndex;
       this.optionsSelected = [];
-      this.question = this.sectionsWithPapers.find(
+      this.currentSelectedQuestion = this.sectionsWithPapers.find(
         (x) =>
           x.id.questionId == ques.id.questionId && x.sectionId == ques.sectionId
       );
-      this.sectionsWithPapers.forEach((element) => {
-        if (ques.id.questionId == element.id.questionId) {
-          element.iscolorActive = true;
-        } else {
-          element.iscolorActive = false;
-        }
-      });
-
-      this.getUserSubmissionData();
-      this.setColoursForQuestionNavigationButtons();
+      if(this.isTestLive){
+        this.getUserSubmissionData();
+        this.setColoursForQuestionNavigationButtons();
+      }
     }
   }
 
-  selectSection1(id: string = '') {
-    this.currentSectionId = id;
+  selectSection(section ) {
+    this.currentSectionId = section.id;
     this.optionsSelected = [];
-    this.setCurrentQuestionSelectedOption();
-    this.setColoursForQuestionNavigationButtons();
-    this.sectionsWithPapers = this.sections.filter((x) => x.sectionId == id);
-    if (this.sectionsWithPapers.length > 0) {
-      this.sectionsWithPapers.forEach((element) => {
-        element.color = 'grey';
-      });
-      this.sectionsWithPapers[0].color = 'green';
-    }
-    const submissionfilterdata = this.submissionData?.sections.filter(
-      (x) => x.sectionId == id
-    );
-    this.currentSectionSubmittedData = this.submissionData?.sections.filter(
-      (x) => x.sectionId == id
-    );
-
-    this.setColoursForQuestionNavigationButtons();
+    this.sectionsWithPapers = this.sectionQuestionMap.get(section.id);
+    this.currentSelectedSection = section;
+    this.currentSelectedQuestion = this.sectionsWithPapers[0];
   }
 
 
@@ -544,7 +506,7 @@ export class LiveTestComponent implements  OnInit {
               if (sub_ans.markForReview) {
                 if (!colorAppliedIndexesArray[i]) {
                   // set color orange
-                  if (ques.id.questionId === this.question?.id.questionId) {
+                  if (ques.id.questionId === this.currentSelectedQuestion?.id.questionId) {
                     this.setButtonColor(i, 'orange', 'green');
                   }
                   else { this.setButtonColor(i, 'orange', 'none'); }
@@ -555,7 +517,7 @@ export class LiveTestComponent implements  OnInit {
                 (sub_ans.answerText !== null && sub_ans.answerText !== '')
               ) {
                 if (!colorAppliedIndexesArray[i]) {
-                  if (ques.id.questionId === this.question?.id.questionId) {
+                  if (ques.id.questionId === this.currentSelectedQuestion?.id.questionId) {
                     this.setButtonColor(i, '#2596be', 'green');
                   }
                   else { this.setButtonColor(i, '#2596be', 'none'); }
@@ -567,7 +529,7 @@ export class LiveTestComponent implements  OnInit {
                 if (!colorAppliedIndexesArray[i]) {
                   // set color grey
                   // this.setButtonColor(i, 'grey');
-                  if (ques.id.questionId === this.question?.id.questionId) {
+                  if (ques.id.questionId === this.currentSelectedQuestion?.id.questionId) {
                     this.setButtonColor(i, 'grey', 'green');
                   }
                   else { this.setButtonColor(i, 'grey', 'none'); }
@@ -588,7 +550,7 @@ export class LiveTestComponent implements  OnInit {
             if (!colorAppliedIndexesArray[i]) {
               // set color green
               // this.setButtonColor(i, 'green');
-              if (ques.id.questionId === this.question?.id.questionId) {
+              if (ques.id.questionId === this.currentSelectedQuestion?.id.questionId) {
                 this.setButtonColor(i, 'grey', 'green');
               }
               else { this.setButtonColor(i, 'grey', 'none'); }
@@ -608,7 +570,7 @@ export class LiveTestComponent implements  OnInit {
       if (!colorAppliedIndexesArray[i]) {
         // set color grey
         // this.setButtonColor(i, 'grey');
-        if (ques.id.questionId === this.question?.id.questionId) {
+        if (ques.id.questionId === this.currentSelectedQuestion?.id.questionId) {
           this.setButtonColor(i, 'grey', 'green');
         }
         else { this.setButtonColor(i, 'grey', 'none'); }
@@ -621,14 +583,19 @@ export class LiveTestComponent implements  OnInit {
     });
   }
 
-  selectSection(event) {
-    this.saveAndNextAnswers(false);
-    // debugger;
+  changeSection(event) {
+    const section = this.testData?.sections[event];
+
+    if(!this.isTestLive){
+      this.selectSection(section);
+      return;
+    }
+
+    if(this.isTestLive){
+      this.saveAndNextAnswers(false);
+    }
+
     this.questionNumber = 0;
-    const section = this.testData?.sections.find(
-      (x) => x.name == event.tab.textLabel
-    );
-    console.log('Currect section object =>', section);
     this.optionsSelected = [];
     this.currentSectionId = section.id;
     this.getUserSubmissionData();
@@ -644,7 +611,7 @@ export class LiveTestComponent implements  OnInit {
         });
         this.sectionsWithPapers[0].color = 'green';
       }
-      this.question = this.sectionsWithPapers.find(
+      this.currentSelectedQuestion = this.sectionsWithPapers.find(
         (x) =>
           x.id.questionId == this.sectionsWithPapers[0].id.questionId &&
           x.sectionId == section.id
@@ -659,7 +626,6 @@ export class LiveTestComponent implements  OnInit {
               if (element.markForReview) {
                 this.sectionsWithPapers.forEach((element2) => {
                   if (element2.questionId == element.questionId) {
-                    element2.ismarked = true;
                     element2.color = 'blue';
                   }
                 });
@@ -670,6 +636,7 @@ export class LiveTestComponent implements  OnInit {
       }
     }
   }
+
   async SaveandExit() {
     await this.saveAndNextAnswers(false);
     Swal.fire({
@@ -735,5 +702,8 @@ export class LiveTestComponent implements  OnInit {
     });
   }
 
+  exit(){
+    this.location.back();
+  }
 }
 
