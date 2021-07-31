@@ -211,13 +211,13 @@
 
         <div class="col-lg-4 fixed">
           <div class="menu sticky-top p-3 bg-light">
+            <app-solution-right-panel
+              [data]="solutionSectionWiseSelectedStats"
+            ></app-solution-right-panel>
             <app-solution-filter
               [data]="filterData"
               (filterParameters)="filterSolutionData($event)"
             ></app-solution-filter>
-            <app-solution-right-panel
-              [data]="solutionSectionWiseSelectedStats"
-            ></app-solution-right-panel>
           </div>
         </div>
       </div>
