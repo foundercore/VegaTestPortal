@@ -39,6 +39,12 @@ export class TestAssignmentServiceService extends BaseService {
   }
 
 
+
+  getAssignment(assignmentId){
+    const url = `${this.BASE_SERVICE_URL}/api/v1/test/assignment/${assignmentId}`;
+    return this.http.get<any>(url);
+  }
+
   getAssignmentByUsername(username:string){
     const url = `${this.BASE_SERVICE_URL}/api/v1/test/assignment/by-name/${username}/list`;
     return this.http.get<any>(url);

@@ -1,3 +1,4 @@
+import { TestAssignmentServiceService } from 'src/app/services/assignment/test-assignment-service.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -30,6 +31,12 @@ export class LiveTestInstructionComponent implements OnInit {
 
   testData;
 
+  assignmentData;
+
+  assignmentId;
+
+  isTestLive = false;
+
   sectionList = [
     {
       number:'NUMBER',
@@ -38,11 +45,12 @@ export class LiveTestInstructionComponent implements OnInit {
     }
   ];
 
-  @Output() startTestEvent = new EventEmitter<{isTestStarted:boolean,testData: any}>();
+  @Output() startTestEvent = new EventEmitter<{isTestStarted:boolean,testData: any,assignmentId?:string,isTestLive:boolean,assignmentData?:any}>();
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private testConfigService: TestConfigService,
+    private testAssignmentService:TestAssignmentServiceService,
     private store: Store<AppState>,
     private location: Location
     )
@@ -53,7 +61,17 @@ export class LiveTestInstructionComponent implements OnInit {
         this.userName = data.user.userName;
       });
 
-      this.activatedRoute.params.pipe( mergeMap(params => this.testConfigService.getQuestionPaper(params.test_id)))
+      this.activatedRoute.params.subscribe(params => {
+        if(params.assignmentId){
+          this.testAssignmentService.getAssignment(params.assignmentId).subscribe(resp => {
+              this.assignmentData = resp;
+          })
+          this.assignmentId = params.assignmentId;
+          this.isTestLive = true;
+        }
+      })
+
+      this.activatedRoute.params.pipe( mergeMap(params => this.testConfigService.getQuestionPaper(params.testId)))
       .subscribe(resp =>{
             this.testData = resp;
             console.log(resp);
@@ -85,7 +103,10 @@ export class LiveTestInstructionComponent implements OnInit {
   startTest(){
       this.startTestEvent.emit({
        isTestStarted:true,
-       testData: this.testData
+       testData: this.testData,
+       assignmentId:this.assignmentId,
+       isTestLive:this.isTestLive,
+       assignmentData:this.assignmentData
       });
   }
 }

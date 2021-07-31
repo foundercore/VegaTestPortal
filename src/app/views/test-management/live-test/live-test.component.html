@@ -85,11 +85,13 @@
         <div class="question-legend-marker-btn-grp">
           <button class="question-legend-marker-btn" mat-raised-button
             *ngFor="let ques of sectionsWithPapers; let i = index" (click)="selectQuestion(ques, i)"
-            [ngClass]="{'selected': ques.id=== currentSelectedQuestion.id}"
+            [ngClass]="{'selected': ques.id=== currentSelectedQuestion.id,
+            'visited':visitedQuestionList.includes(ques?.id?.questionId),
+            'answered':answeredQuestionList.includes(ques?.id?.questionId),
+            'review':markForReviewQuestionList.includes(ques?.id?.questionId)}"
             [ngStyle]="buttonStyle[i]">
             {{ i + 1 }}
           </button>
-
         </div>
       </div>
     </div>

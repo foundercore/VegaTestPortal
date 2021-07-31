@@ -11,8 +11,9 @@ export class LiveTestWindowComponent implements OnInit {
 
   testData;
 
-  isTestLive = false;
+  assignmentData;
 
+  isTestLive = false;
 
   constructor() { }
 
@@ -23,6 +24,8 @@ export class LiveTestWindowComponent implements OnInit {
   startTest(event){
     this.isTestStarted = event.isTestStarted;
     this.testData = event.testData;
+    this.isTestLive = event.isTestLive;
+    this.assignmentData = event.assignmentData;
   }
 
 }

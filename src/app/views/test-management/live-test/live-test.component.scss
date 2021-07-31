@@ -126,8 +126,8 @@
   color: black;
 }
 .mark_review{
-  background-color: rgb(121,79,153);
-  border: 1px solid rgb(113,91,130);
+  background-color: orange;
+  border: 1px solid #e89e15;
 }
 .basic-btn{
   color: white;
@@ -187,9 +187,19 @@
     border: 2px solid #212529;
 }
 
+.visited{
+  background-color: rgb(221,64,9) !important;
+  color: white !important;
+}
 
-
-
+.answered{
+  background-color: rgb(106,183,25) !important;
+  color: white !important;
+}
+.review{
+  background-color: orange !important;
+  color: white !important;
+}
 
 ///-------------
 

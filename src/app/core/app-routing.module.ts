@@ -25,7 +25,11 @@ const routes: Routes = [
     component: RegisterComponent,
   },
   {
-    path:'test_preview/:test_id',
+    path:'test_preview/:testId',
+    component: LiveTestWindowComponent,
+  },
+  {
+    path:'live_test/:testId/:assignmentId',
     component: LiveTestWindowComponent,
   },
   {

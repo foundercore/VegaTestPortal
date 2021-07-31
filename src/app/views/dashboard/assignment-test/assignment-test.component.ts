@@ -88,6 +88,7 @@ export class AssignmentTestComponent implements OnInit, OnChanges {
   }
 
   startTest(element) {
+    console.log(element)
     const timeNow = new Date().setHours(0, 0, 0, 0);
     const testValidFrom = new Date(element.validFrom).setHours(0, 0, 0, 0);
     const testvalidTo = new Date(element.validTo).setHours(0, 0, 0, 0);
@@ -99,6 +100,10 @@ export class AssignmentTestComponent implements OnInit, OnChanges {
       this.toastrService.error('Test has ended already');
       return;
     }
+
+    this.router.navigate([ '/live_test', element.testId,element.assignmentId]);
+
+    return;
 
     const dialogData = new CustomDialogConfirmationModel(
       'Want to start test?',
