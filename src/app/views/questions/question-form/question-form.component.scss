@@ -47,7 +47,7 @@
 }
 
 .form-field-padding{
-  padding-right: 20px;
+  margin-right : 50px;
 }
 
 .w-100-div{
@@ -98,3 +98,12 @@
     max-height: 10rem;
     min-height: 10rem;
   }
+
+::ng-deep .mat-stepper-horizontal-line {
+  flex: none !important;
+  min-width: 450px !important;
+}
+
+::ng-deep .mat-horizontal-stepper-header-container {
+  justify-content: center !important;
+}

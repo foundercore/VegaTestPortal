@@ -52,28 +52,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     difficulty: new FormControl(),
   });
 
-  questionFirstFormGrp = new FormGroup({
-    name: new FormControl(),
-    description: new FormControl(),
-    subject: new FormControl(),
-    topic: new FormControl(),
-    subTopic: new FormControl(),
-    difficulty: new FormControl(),
-  });
-
-  questionSecondFormGrp = new FormGroup({
-    positiveMark: new FormControl(),
-    negativeMark: new FormControl(),
-    skipMark: new FormControl(),
-  });
-
-  questionThirdFormGrp = new FormGroup({
-    type: new FormControl(),
-    tags: new FormControl(),
-    passage: new FormControl(),
-    explanation: new FormControl(),
-  });
-
+  
   questionForthFormGrp = new FormGroup({
     correctOption: new FormControl(),
     answerText: new FormControl(),
