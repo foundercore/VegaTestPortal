@@ -28,3 +28,9 @@ export interface QuestionModel {
   usedInPapers?: {} | undefined;
   explanation_added?: string;
 }
+
+
+
+export class QuestionConstants {
+  static DIFFICULTY_LEVEL: any = ['EASY', 'MEDIUM', 'HARD', 'VERY HARD'];
+}

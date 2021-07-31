@@ -1,4 +1,4 @@
-import { QuestionModel } from './../../../models/questions/question-model';
+import { QuestionConstants, QuestionModel } from './../../../models/questions/question-model';
 import { QuestionManagementService } from './../../../services/question-management/question-management.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
@@ -28,7 +28,7 @@ export class QuestionFormComponent implements OnInit,AfterViewInit {
 
   tags: string[] | undefined = [];
   isNewForm = true;
-  difficultyLevel : string[] = ['EASY','MEDIUM','HARD'];
+  difficultyLevel: string[] = QuestionConstants.DIFFICULTY_LEVEL;
   questionTypeList : string[] = [];
 
   options: QuestionOption[] | undefined = [];
@@ -209,7 +209,7 @@ export class QuestionFormComponent implements OnInit,AfterViewInit {
     let question : QuestionModel = {
       answer: questionAnswer,
       description: this.questionFirstFormGrp.get('description')?.value,
-      difficultyLevel:  this.questionFirstFormGrp.get('difficulty')?.value,
+      difficultyLevel: this.questionFirstFormGrp.get('difficulty')?.value.toUpperCase() ,
       explanation: this.questionThirdFormGrp.get('explanation')?.value,
       name:  this.questionFirstFormGrp.get('name')?.value,
       negativeMark: this.questionSecondFormGrp.get('negativeMark')?.value,
@@ -253,7 +253,7 @@ export class QuestionFormComponent implements OnInit,AfterViewInit {
     if(this.updatedQuestion){
       this.updatedQuestion.answer = questionAnswer;
       this.updatedQuestion.description= this.questionFirstFormGrp.get('description')?.value;
-      this.updatedQuestion.difficultyLevel =  this.questionFirstFormGrp.get('difficulty')?.value;
+      this.updatedQuestion.difficultyLevel = this.questionFirstFormGrp.get('difficulty')?.value;
       this.updatedQuestion.explanation =this.questionThirdFormGrp.get('explanation')?.value;
       this.updatedQuestion.name =  this.questionFirstFormGrp.get('name')?.value;
       this.updatedQuestion.negativeMark = this.questionSecondFormGrp.get('negativeMark')?.value;
