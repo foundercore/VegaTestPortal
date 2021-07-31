@@ -1,4 +1,4 @@
-import { QuestionModel } from './../../../models/questions/question-model';
+import { QuestionConstants, QuestionModel } from './../../../models/questions/question-model';
 import { QuestionManagementService } from './../../../services/question-management/question-management.service';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
@@ -26,8 +26,9 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
 
   tags: string[] | undefined = [];
   isNewForm = true;
-  difficultyLevel: string[] = ['EASY', 'MEDIUM', 'HARD'];
-  questionTypeList: string[] = [];
+
+  difficultyLevel: string[] = QuestionConstants.DIFFICULTY_LEVEL;
+  questionTypeList : string[] = [];
 
   options: QuestionOption[] | undefined = [];
 
@@ -52,7 +53,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     difficulty: new FormControl(),
   });
 
-  
+
   questionForthFormGrp = new FormGroup({
     correctOption: new FormControl(),
     answerText: new FormControl(),
@@ -286,7 +287,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       subject: this.secondStepFromGroup.get('subject')?.value,
       topic: this.secondStepFromGroup.get('topic')?.value,
       subTopic: this.secondStepFromGroup.get('subTopic')?.value,
-      difficultyLevel: this.secondStepFromGroup.get('difficulty')?.value,
+      difficultyLevel: this.secondStepFromGroup.get('difficulty')?.value.toUpperCase() ,
     };
 
     console.log(question);

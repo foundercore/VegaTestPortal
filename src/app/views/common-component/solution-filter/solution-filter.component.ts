@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatChip } from '@angular/material/chips/chip';
+import { QuestionConstants } from 'src/app/models/questions/question-model';
 
 export class FilterModel {
   subtopic: string[];
@@ -29,7 +30,7 @@ export class SolutionFilterComponent implements OnInit {
   subtopicList = [];
   subjectLists = [];
   topicLists = [];
-  difficultyLevels = ['EASY', 'MEDIUM', 'HARD'];
+  difficultyLevels = QuestionConstants.DIFFICULTY_LEVEL;
   states = ['CORRECT', 'INCORRECT', 'SKIPPED'];
 
   filteredTopics = this.topicLists;
