@@ -7,6 +7,7 @@ import { mergeMap, map } from 'rxjs/operators';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import { TestConfigService } from '../../assignments/services/test-config-service';
 import { Location } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-live-test-instruction',
@@ -37,6 +38,8 @@ export class LiveTestInstructionComponent implements OnInit {
 
   isTestLive = false;
 
+  isPassCode = false;
+
   sectionList = [
     {
       number:'NUMBER',
@@ -45,6 +48,8 @@ export class LiveTestInstructionComponent implements OnInit {
     }
   ];
 
+  passcode;
+
   @Output() startTestEvent = new EventEmitter<{isTestStarted:boolean,testData: any,assignmentId?:string,isTestLive:boolean,assignmentData?:any}>();
 
   constructor(
@@ -52,7 +57,8 @@ export class LiveTestInstructionComponent implements OnInit {
     private testConfigService: TestConfigService,
     private testAssignmentService:TestAssignmentServiceService,
     private store: Store<AppState>,
-    private location: Location
+    private location: Location,
+    private toastrService:ToastrService
     )
     {
 
@@ -65,6 +71,9 @@ export class LiveTestInstructionComponent implements OnInit {
         if(params.assignmentId){
           this.testAssignmentService.getAssignment(params.assignmentId).subscribe(resp => {
               this.assignmentData = resp;
+              if(this.assignmentData.passcode.length > 0){
+                  this.isPassCode = true;
+              }
           })
           this.assignmentId = params.assignmentId;
           this.isTestLive = true;
@@ -101,6 +110,12 @@ export class LiveTestInstructionComponent implements OnInit {
   }
 
   startTest(){
+      if(this.isPassCode && this.isTestLive){
+        if(this.passcode != this.assignmentData.passcode){
+          this.toastrService.error('Invalid Passcode');
+          return;
+        }
+      }
       this.startTestEvent.emit({
        isTestStarted:true,
        testData: this.testData,

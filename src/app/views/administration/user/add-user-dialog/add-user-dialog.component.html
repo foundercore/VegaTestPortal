@@ -73,7 +73,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>{{ 'ADD_USER_DIALOG.EMAIL' | translate }}</mat-label>
-        <input type="email" matInput placeholder="Ex. pat@example.com" required formControlName="email" />
+        <input type="email" matInput placeholder="Ex. pat@example.com" required formControlName="email" style='text-transform:lowercase'/>
         <mat-error *ngIf="userFormGroup.controls.email.hasError('required')">
           Email is <strong>required</strong>
         </mat-error>

@@ -135,6 +135,7 @@
       flex-direction: row;
       width: 150px;
       justify-content: space-between;
+      margin-top: 10px;
       .primary{
         box-shadow: 0 4px 12px 0 rgba(6,137,50,.15);
         background-color: #1ba94c;
@@ -149,4 +150,15 @@
 }
 
 
-
+.passcode{
+  display: flex;
+  .form-group{
+    display: flex;
+    align-items: center;
+    display: flex;
+    margin: 20px 0;
+    label{
+      margin-right: 10px;
+    }
+  }
+}

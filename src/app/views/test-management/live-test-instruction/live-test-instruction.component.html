@@ -68,6 +68,12 @@
           <div class="test-confirmation-form-label">Logged in as</div>
           <div class="test-confirmation-form-username">{{userName}}</div>
 
+          <div *ngIf="isPassCode" class="passcode">
+            <div class="form-group">
+              <label for="usr">Passcode:</label>
+              <input type="text" class="form-control" id="usr" [(ngModel)]="passcode">
+            </div>
+          </div>
           <div class="test-confirmation-form-btn">
             <button mat-button class="primary" (click)="startTest()">Start</button>
             <button mat-flat-button color="warn" (click)="cancel()">Cancel</button>
