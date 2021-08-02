@@ -53,17 +53,6 @@
             >
             </angular-editor>
           </div>
-          <div class="w-100-div" style="margin-bottom: 20px">
-            <div class="heading">
-              <mat-label>Description</mat-label>
-            </div>
-            <angular-editor
-              id="description_editor"
-              formControlName="description"
-              [config]="descriptionEditorconfig"
-            >
-            </angular-editor>
-          </div>
         </div>
 
         <div class="w-100-div">
@@ -201,13 +190,6 @@
           </div>
 
           <div class="w-100-div flex-container">
-            <mat-form-field
-              appearance="outline"
-              class="w-25-field form-field-padding"
-            >
-              <mat-label>Book Reference</mat-label>
-              <input matInput type="text" formControlName="bookReference" />
-            </mat-form-field>
 
             <mat-form-field
               appearance="outline"
@@ -318,7 +300,7 @@
           (click)="updateQuestion()"
           class="next-save-btn"
         >
-          {{ "COMMON_TAG.UPDATE" | translate }}
+          {{ "COMMON_TAG.SAVE" | translate }}
         </button>
       </div>
     </mat-step>

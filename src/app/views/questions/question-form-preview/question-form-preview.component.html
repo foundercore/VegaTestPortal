@@ -49,13 +49,6 @@
           ></div>
         </div>
 
-        <div class="w-50-div" style="margin-bottom: 20px">
-          <mat-label style="color: rgba(0, 0, 0, 0.38)">Description</mat-label>
-          <div
-            class="text-area-div disabled"
-            [innerHtml]="questionPreviewGroup.controls['description'].value"
-          ></div>
-        </div>
       </div>
     </div>
 
@@ -120,13 +113,6 @@
           <input matInput formControlName="tags" />
         </mat-form-field>
 
-        <mat-form-field
-          appearance="outline"
-          class="w-25-field form-field-padding"
-        >
-          <mat-label>Book Reference</mat-label>
-          <input matInput type="text" formControlName="bookReference" />
-        </mat-form-field>
 
         <div class="w-50-div" style="margin-bottom: 20px">
           <mat-label style="color: rgba(0, 0, 0, 0.38)">Explanation</mat-label>
@@ -170,7 +156,7 @@
                   >Option marked as correct
                   </label
                 >
-               
+
                 <angular-editor
                   id="answer_option_{{ i }}"
                   [config]="descriptionEditorconfig"
@@ -185,7 +171,7 @@
     </div>
   </form>
 
-  
+
   <div style="display: flex; justify-content: flex-end">
     <button mat-button (click)="cancel()" class="cancel-btn">
       {{ "COMMON_TAG.CANCEL" | translate }}
