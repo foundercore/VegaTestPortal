@@ -34,6 +34,15 @@ input:-webkit-autofill:active
  -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
 
+/* Loader */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #dcdcdc;
+}
+
+
 .text-right {
   text-align: right;
 }

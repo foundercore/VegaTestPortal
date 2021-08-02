@@ -53,7 +53,9 @@
     </span>
   </div>
 </div>
-
+<div class="loading-container" *ngIf="isLoading">
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+</div>
 <mat-tab-group
   style="padding: 0 20px"
   class="custom-tabs"
@@ -165,7 +167,9 @@
                   mat-row
                   *matRowDef="let row; columns: displayedColumns"
                 ></tr>
+                
               </table>
+
 
               <mat-paginator [pageSizeOptions]="pageOptions"></mat-paginator>
             </div>
@@ -175,3 +179,6 @@
     </mat-tab>
   </ng-container>
 </mat-tab-group>
+
+
+

@@ -41,7 +41,7 @@ export class StudentDashboardComponent implements OnInit {
     },
   ];
 
-  tagSet = new Set();
+  tagSet = new Set([]);
 
   resultData: any[] = [];
 
@@ -59,6 +59,7 @@ export class StudentDashboardComponent implements OnInit {
   userType: string = '';
   buttontext: string = '';
   createdId: string = '';
+  isLoading = true;
 
   colorScheme = {
     domain: ['#52D726', '#FF0000'],
@@ -91,7 +92,7 @@ export class StudentDashboardComponent implements OnInit {
     private router: Router,
     private toastrService: ToastrService
   ) {
-    this.tagSet.add('All');
+    this.tagSet.add('Other');
   }
 
   ngOnInit(): void {
@@ -105,20 +106,32 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   getMyAssignments() {
+    this.isLoading = true;
     this.testAssignmentService.getMyAssignment().subscribe((resp) => {
       this.resultData = resp;
       console.log('this.resultData==', this.resultData);
       this.dataSource = new MatTableDataSource<any>(this.resultData);
       this.dataSource.paginator = this.paginator;
       this.totalTest = this.resultData.length;
+      let nonClassifiedTest = false;
       this.resultData.forEach((assignment) => {
-        if (assignment.attempted) this.attempted.push(assignment);
+        if (assignment.attempted) {
+          this.attempted.push(assignment);
+        }
+        if (assignment.testType === null || assignment.testType === 'null'){
+          nonClassifiedTest = true;
+        } else if (assignment.testType != null) {
+          this.tagSet.add(assignment.testType);
+        }
       });
+      // if non classified test exists add other tag
+      if (nonClassifiedTest){
+        this.tagSet.delete('Other');
+        this.tagSet.add('Other');
+      }
       this.notAttempted = this.totalTest - this.attempted.length;
       this.attempt = this.attempted.length;
-      this.resultData.forEach((assignments) => {
-        if (assignments.tags != null) this.tagSet.add(assignments.tags);
-      });
+      this.isLoading = false;
     });
   }
 
@@ -247,8 +260,13 @@ export class StudentDashboardComponent implements OnInit {
 
   onTabChanged($event) {
     const filterValue = $event.tab.textLabel;
+    const filterArray = [];
+    filterArray.push(filterValue);
+    if (filterValue === 'Others'){
+      filterArray.push('null');
+    }
     let filteredData = this.resultData.filter(
-      (d) => d.testName === filterValue
+      (d) => filterArray.includes(d.testType)
     );
     if (filteredData.length == 0) {
       filteredData = this.resultData;
