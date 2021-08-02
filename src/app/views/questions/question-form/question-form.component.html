@@ -1,7 +1,16 @@
 <mat-card style="margin: 20px; width: calc(100% - 90px)">
-  <mat-card-header style="justify-content: center">
-    <mat-card-title style="font-weight: bold; font-size: 30px" *ngIf="isNewForm">Add Question</mat-card-title>
-    <mat-card-title style="font-weight: bold; font-size: 30px" *ngIf="!isNewForm">Edit Question</mat-card-title>
+  <mat-card-header>
+    <mat-card-title
+      style="font-weight: bold; font-size: 22px; margin-left: 10px"
+      *ngIf="isNewForm"
+      >Add Question</mat-card-title
+    >
+
+    <mat-card-title
+      style="font-weight: bold; font-size: 30px"
+      *ngIf="!isNewForm"
+      >Edit Question</mat-card-title
+    >
   </mat-card-header>
   <mat-horizontal-stepper linear #stepper>
     <mat-step [stepControl]="stepOneFormGroup">
@@ -10,7 +19,9 @@
 
         <div class="w-100-div flex-container">
           <div class="w-100-div" style="margin-bottom: 20px">
-            <mat-label>Passage</mat-label>
+            <div class="heading">
+              <mat-label>Passage</mat-label>
+            </div>
             <angular-editor
               id="passage_editor"
               formControlName="passage"
@@ -19,7 +30,9 @@
             </angular-editor>
           </div>
           <div class="w-100-div" style="margin-bottom: 20px">
-            <mat-label>Question Text</mat-label>
+            <div class="heading">
+              <mat-label>Question Text</mat-label>
+            </div>
             <div id="toolbar"></div>
             <angular-editor
               id="name_editor"
@@ -29,7 +42,9 @@
             </angular-editor>
           </div>
           <div class="w-100-div" style="margin-bottom: 20px">
-            <mat-label>Explanation</mat-label>
+            <div class="heading">
+              <mat-label>Explanation</mat-label>
+            </div>
             <!-- <input matInput type="text" formControlName="explanation"> -->
             <angular-editor
               id="explanation_editor"
@@ -39,7 +54,9 @@
             </angular-editor>
           </div>
           <div class="w-100-div" style="margin-bottom: 20px">
-            <mat-label>Description</mat-label>
+            <div class="heading">
+              <mat-label>Description</mat-label>
+            </div>
             <angular-editor
               id="description_editor"
               formControlName="description"
@@ -127,7 +144,9 @@
         [formGroup]="questionForthFormGrp"
       >
         <div class="w-100-div" style="margin-bottom: 30px">
-          <mat-label>Answer Text</mat-label>
+          <div class="heading">
+            <mat-label>Answer Text</mat-label>
+          </div>
           <angular-editor
             id="answer_editor"
             formControlName="answerText"
@@ -151,111 +170,69 @@
       <form [formGroup]="secondStepFromGroup">
         <ng-template matStepLabel>Basic Information</ng-template>
 
-        <div class="w-100-div flex-container">
-          <mat-form-field
-            appearance="outline"
-            class="w-25-field form-field-padding"
-          >
-            <mat-label>Subject</mat-label>
-            <input matInput type="text" formControlName="subject" />
-          </mat-form-field>
-
-          <mat-form-field
-            appearance="outline"
-            class="w-25-field form-field-padding"
-          >
-            <mat-label>Topic</mat-label>
-            <input matInput type="text" formControlName="topic" />
-          </mat-form-field>
-
-          <mat-form-field
-            appearance="outline"
-            class="w-25-field form-field-padding"
-          >
-            <mat-label>Sub Topic</mat-label>
-            <input matInput type="text" formControlName="subTopic" />
-          </mat-form-field>
+        <div class="heading">
+          <mat-label>Subject Configuration</mat-label>
         </div>
+        <div class="stats-shadow">
+          <div class="w-100-div flex-container">
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
+              <mat-label>Subject</mat-label>
+              <input matInput type="text" formControlName="subject" />
+            </mat-form-field>
 
-        <div class="w-100-div flex-container">
-          <mat-form-field
-            appearance="outline"
-            class="w-25-field form-field-padding"
-          >
-            <mat-label>Book Reference</mat-label>
-            <input matInput type="text" formControlName="bookReference" />
-          </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
+              <mat-label>Topic</mat-label>
+              <input matInput type="text" formControlName="topic" />
+            </mat-form-field>
 
-          <mat-form-field
-            appearance="outline"
-            class="w-25-field form-field-padding"
-          >
-            <mat-label>Tags</mat-label>
-            <mat-chip-list #chipList aria-label="Tag selection">
-              <mat-chip
-                *ngFor="let tag of tags"
-                [selectable]="true"
-                [removable]="true"
-                (removed)="removeTag(tag)"
-              >
-                {{ tag }}
-                <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
-              </mat-chip>
-              <input
-                placeholder="New tag..."
-                [matChipInputFor]="chipList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                [matChipInputAddOnBlur]="true"
-                (matChipInputTokenEnd)="addTag($event)"
-              />
-            </mat-chip-list>
-          </mat-form-field>
-        </div>
-
-        <div class="w-100-div flex-container">
-          <mat-form-field
-            appearance="outline"
-            class="w-25-field form-field-padding"
-          >
-            <mat-label>Positive Mark</mat-label>
-            <input
-              matInput
-              type="number"
-              min="0"
-              max="100"
-              formControlName="positiveMark"
-            />
-          </mat-form-field>
-          <mat-form-field
-            appearance="outline"
-            class="w-25-field form-field-padding"
-          >
-            <mat-label>Negative Mark</mat-label>
-            <input
-              matInput
-              type="number"
-              min="0"
-              max="100"
-              formControlName="negativeMark"
-            />
-          </mat-form-field>
-          <mat-form-field
-            appearance="outline"
-            class="w-25-field form-field-padding"
-          >
-            <mat-label>Skip Mark</mat-label>
-            <input
-              matInput
-              type="number"
-              min="0"
-              max="100"
-              formControlName="skipMark"
-            />
-          </mat-form-field>
-
-
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
+              <mat-label>Sub Topic</mat-label>
+              <input matInput type="text" formControlName="subTopic" />
+            </mat-form-field>
+          </div>
 
           <div class="w-100-div flex-container">
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
+              <mat-label>Book Reference</mat-label>
+              <input matInput type="text" formControlName="bookReference" />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
+              <mat-label>Tags</mat-label>
+              <mat-chip-list #chipList aria-label="Tag selection">
+                <mat-chip
+                  *ngFor="let tag of tags"
+                  [selectable]="true"
+                  [removable]="true"
+                  (removed)="removeTag(tag)"
+                >
+                  {{ tag }}
+                  <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+                </mat-chip>
+                <input
+                  placeholder="New tag..."
+                  [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="true"
+                  (matChipInputTokenEnd)="addTag($event)"
+                />
+              </mat-chip-list>
+            </mat-form-field>
             <mat-form-field
               appearance="outline"
               class="w-25-field form-field-padding"
@@ -268,6 +245,53 @@
                   >{{ level }}</mat-option
                 >
               </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="heading">
+          <mat-label>Marking Scheme</mat-label>
+        </div>
+        <div class="stats-shadow">
+          <div class="w-100-div flex-container">
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
+              <mat-label>Positive Mark</mat-label>
+              <input
+                matInput
+                type="number"
+                min="0"
+                max="100"
+                formControlName="positiveMark"
+              />
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
+              <mat-label>Negative Mark</mat-label>
+              <input
+                matInput
+                type="number"
+                min="0"
+                max="100"
+                formControlName="negativeMark"
+              />
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
+              <mat-label>Skip Mark</mat-label>
+              <input
+                matInput
+                type="number"
+                min="0"
+                max="100"
+                formControlName="skipMark"
+              />
             </mat-form-field>
           </div>
         </div>
