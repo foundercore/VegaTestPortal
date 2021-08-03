@@ -128,12 +128,12 @@
             "
           >
             <div [formGroupName]="i" style="margin: 10px">
-              <div class="heading">
+              <div class="sub-heading">
                 <mat-checkbox
-                  style="margin: 0 12px"
+                  style="margin: 0 12px 2px"
                   formControlName="flag"
                 ></mat-checkbox>
-                <label id="example-radio-group-label" style="color: white"
+                <label id="example-radio-group-label"
                   >Mark option as correct
                 </label>
                 <button
@@ -143,8 +143,8 @@
                   aria-label="Example icon-button with a heart icon"
                   (click)="removeOption(i)"
                 >
-                  <mat-icon style="margin-bottom: 12px; color: white"
-                    >delete</mat-icon
+                  <mat-icon style="margin-bottom: 12px; color: rgb(0 0 0 / 55%);"
+                    >close</mat-icon
                   >
                 </button>
               </div>
