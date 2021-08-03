@@ -1,4 +1,7 @@
-import { QuestionConstants, QuestionModel } from './../../../models/questions/question-model';
+import {
+  QuestionConstants,
+  QuestionModel,
+} from './../../../models/questions/question-model';
 import { QuestionManagementService } from './../../../services/question-management/question-management.service';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
@@ -12,6 +15,7 @@ import { forkJoin } from 'rxjs';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { TranslateService } from '@ngx-translate/core';
 import { Location } from '@angular/common';
+import { MatStepper } from '@angular/material/stepper';
 declare var WirisPlugin: any;
 
 @Component({
@@ -28,7 +32,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
   isNewForm = true;
 
   difficultyLevel: string[] = QuestionConstants.DIFFICULTY_LEVEL;
-  questionTypeList : string[] = [];
+  questionTypeList: string[] = [];
 
   options: QuestionOption[] | undefined = [];
 
@@ -53,7 +57,6 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     difficulty: new FormControl(),
   });
 
-
   questionForthFormGrp = new FormGroup({
     correctOption: new FormControl(),
     answerText: new FormControl(),
@@ -62,7 +65,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
   // answerOptionFormGrp = new FormGroup({});
 
   answerOptionFormGrp: FormGroup;
-  optionArrays: FormArray  ;
+  optionArrays: FormArray;
 
   optionCount = '0';
 
@@ -287,7 +290,9 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       subject: this.secondStepFromGroup.get('subject')?.value,
       topic: this.secondStepFromGroup.get('topic')?.value,
       subTopic: this.secondStepFromGroup.get('subTopic')?.value,
-      difficultyLevel: this.secondStepFromGroup.get('difficulty')?.value.toUpperCase() ,
+      difficultyLevel: this.secondStepFromGroup
+        .get('difficulty')
+        ?.value.toUpperCase(),
     };
 
     console.log(question);
@@ -472,5 +477,13 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     if ($event.value == 'TITA') {
       this.questionForthFormGrp.controls['answerText'].reset();
     }
+  }
+
+  goBack(stepper: MatStepper) {
+    stepper.previous();
+  }
+
+  nextStep(stepper: MatStepper) {
+    stepper.next();
   }
 }

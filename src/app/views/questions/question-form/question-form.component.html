@@ -1,17 +1,44 @@
 <mat-card style="margin: 20px; width: calc(100% - 90px)">
-  <mat-card-header>
-    <mat-card-title
-      style="font-weight: bold; font-size: 22px; margin-left: 10px"
-      *ngIf="isNewForm"
-      >Add Question</mat-card-title
-    >
+  <div
+    *ngIf="stepper.selectedIndex === 0"
+    style="float: right; margin-right: 20px; margin-top: 5px"
+  >
+    <button mat-button (click)="cancel()" class="cancel-btn">
+      {{ "COMMON_TAG.CANCEL" | translate }}
+    </button>
+    <button mat-button (click)="nextStep(stepper)" class="next-save-btn">
+      {{ "COMMON_TAG.NEXT" | translate }}
+    </button>
+  </div>
 
-    <mat-card-title
-      style="font-weight: bold; font-size: 30px"
-      *ngIf="!isNewForm"
-      >Edit Question</mat-card-title
+  <div
+    *ngIf="stepper.selectedIndex === 1"
+    style="float: right; margin-right: 20px; margin-top: 5px"
+  >
+    <button mat-button (click)="cancel()" class="cancel-btn">
+      {{ "COMMON_TAG.CANCEL" | translate }}
+    </button>
+    <button mat-button (click)="goBack(stepper)" class="back-btn">
+      {{ "COMMON_TAG.BACK" | translate }}
+    </button>
+    <button
+      *ngIf="isNewForm"
+      mat-button
+      (click)="createQuestion()"
+      class="next-save-btn"
     >
-  </mat-card-header>
+      {{ "COMMON_TAG.SAVE" | translate }}
+    </button>
+    <button
+      *ngIf="!isNewForm"
+      mat-button
+      (click)="updateQuestion()"
+      class="next-save-btn"
+    >
+      {{ "COMMON_TAG.SAVE" | translate }}
+    </button>
+  </div>
+
   <mat-horizontal-stepper linear #stepper>
     <mat-step [stepControl]="stepOneFormGroup">
       <form [formGroup]="stepOneFormGroup">
@@ -80,16 +107,17 @@
         class="w-100-div"
         style="margin-bottom: 20px"
       >
-        <mat-label>Question Options</mat-label>
-        <button
-          mat-icon-button
-          color="primary"
-          aria-label="Example icon-button with a heart icon"
-          (click)="addOption()"
-        >
-          <mat-icon>add</mat-icon>
-        </button>
-
+        <div class="heading-clone">
+          <mat-label>Question Options</mat-label>
+          <button
+            mat-icon-button
+            color="white"
+            aria-label="Example icon-button with a heart icon"
+            (click)="addOption()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
         <div [formGroup]="answerOptionFormGrp" class="w-100-div flex-container">
           <form
             formArrayName="optionArrays"
@@ -100,22 +128,26 @@
             "
           >
             <div [formGroupName]="i" style="margin: 10px">
-              <mat-checkbox
-                style="margin: 0 12px"
-                formControlName="flag"
-              ></mat-checkbox>
-              <label id="example-radio-group-label" style="margin-bottom: 10px"
-                >Mark option as correct
-              </label>
-              <button
-                style="float: right"
-                mat-icon-button
-                color="primary"
-                aria-label="Example icon-button with a heart icon"
-                (click)="removeOption(i)"
-              >
-                <mat-icon>delete</mat-icon>
-              </button>
+              <div class="heading">
+                <mat-checkbox
+                  style="margin: 0 12px"
+                  formControlName="flag"
+                ></mat-checkbox>
+                <label id="example-radio-group-label" style="color: white"
+                  >Mark option as correct
+                </label>
+                <button
+                  style="float: right"
+                  mat-icon-button
+                  color="primary"
+                  aria-label="Example icon-button with a heart icon"
+                  (click)="removeOption(i)"
+                >
+                  <mat-icon style="margin-bottom: 12px; color: white"
+                    >delete</mat-icon
+                  >
+                </button>
+              </div>
 
               <angular-editor
                 id="answer_option_{{ i }}"
@@ -144,15 +176,6 @@
           </angular-editor>
         </div>
       </form>
-
-      <div style="float: right; margin-top: 20px">
-        <button mat-button (click)="cancel()" class="cancel-btn">
-          {{ "COMMON_TAG.CANCEL" | translate }}
-        </button>
-        <button mat-button matStepperNext class="next-save-btn">
-          {{ "COMMON_TAG.NEXT" | translate }}
-        </button>
-      </div>
     </mat-step>
 
     <mat-step [stepControl]="secondStepFromGroup">
@@ -190,7 +213,6 @@
           </div>
 
           <div class="w-100-div flex-container">
-
             <mat-form-field
               appearance="outline"
               class="w-25-field form-field-padding"
@@ -278,31 +300,6 @@
           </div>
         </div>
       </form>
-
-      <div style="float: right; margin-top: 20px">
-        <button mat-button (click)="cancel()" class="cancel-btn">
-          {{ "COMMON_TAG.CANCEL" | translate }}
-        </button>
-        <button mat-button matStepperPrevious class="back-btn">
-          {{ "COMMON_TAG.BACK" | translate }}
-        </button>
-        <button
-          *ngIf="isNewForm"
-          mat-button
-          (click)="createQuestion()"
-          class="next-save-btn"
-        >
-          {{ "COMMON_TAG.SAVE" | translate }}
-        </button>
-        <button
-          *ngIf="!isNewForm"
-          mat-button
-          (click)="updateQuestion()"
-          class="next-save-btn"
-        >
-          {{ "COMMON_TAG.SAVE" | translate }}
-        </button>
-      </div>
     </mat-step>
   </mat-horizontal-stepper>
 </mat-card>
