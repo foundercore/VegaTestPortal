@@ -48,6 +48,8 @@ export class LiveTestComponent implements  OnInit {
     positionClass: 'toast-bottom-right'
   };
 
+  timerStarted = false;
+
   isLoading = true;
 
   sectionQuestionMap = new Map<string,any>();
@@ -105,6 +107,8 @@ export class LiveTestComponent implements  OnInit {
     this.initializeQuestion();
     if(this.isTestLive){
       this.getUserAllSubmissionData();
+    }else {
+      this.CountDownTimerValue = new Date(this.timeSeconds * 1000) .toISOString().substr(11, 8);
     }
   }
 
@@ -114,11 +118,6 @@ export class LiveTestComponent implements  OnInit {
     );
     if (this.testData.sections !== null) {
       this.getQuestionPapers();
-    }
-    if (this.isTestLive) {
-      this.observableTimer(this.submissionData?.totalTestTimeTakenInSec);
-    } else {
-      this.CountDownTimerValue = new Date(this.timeSeconds * 1000) .toISOString().substr(11, 8);
     }
   }
 
@@ -343,9 +342,13 @@ export class LiveTestComponent implements  OnInit {
       .getSudentSubmissionState(this.assignmentId, this.userName)
       .subscribe(
         (res: any) => {
-
-          //reveiew This
           this.submissionData = res;
+
+          if(!this.timerStarted){
+            this.observableTimer(this.submissionData?.totalTestTimeTakenInSec);
+            this.timerStarted = true;
+          }
+          //reveiew This
           this.optionsSelected = [];
           this.previousOptionsSelected = [];
           this.setTITAQuestionFetchedAns(this.submissionData);
