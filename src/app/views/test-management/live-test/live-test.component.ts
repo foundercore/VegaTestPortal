@@ -638,7 +638,7 @@ export class LiveTestComponent implements  OnInit {
       (res: any) => {
         this.close();
         this.router
-          .navigate(['/home/assignment_report/' + this.assignmentId])
+          .navigate(['/home/dashboard/assignment_report/' + this.assignmentId])
           .then(() => console.log('Navigate to score card'))
           .catch((err) =>
             console.log('Error=> Navigate to score card=>', err)
