@@ -7,7 +7,6 @@ import { CountdownModule } from "ngx-countdown";
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { VegaMaterialModule } from "src/app/core/material.module";
 import { SharedModule } from "src/app/shared/shared.module";
-import { AssignmentsRoutingModule } from "../assignments/assignments-routing.module";
 import { LiveTestInstructionComponent } from "./live-test-instruction/live-test-instruction.component";
 import { LiveTestWindowComponent } from "./live-test-window/live-test-window.component";
 import { LiveTestComponent } from "./live-test/live-test.component";
@@ -20,7 +19,6 @@ import { LiveTestComponent } from "./live-test/live-test.component";
   ],
   imports: [
     CommonModule,
-    AssignmentsRoutingModule,
     VegaMaterialModule,
     FormsModule,
     ReactiveFormsModule,
