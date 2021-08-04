@@ -135,7 +135,7 @@
               >
                 <mat-icon>remove_red_eye</mat-icon>
               </span>
-              <span
+              <span *ngIf="authorizationService.isAdmin"
                 class="action-btn"
                 matTooltip="Edit Test"
                 routerLink="/home/tests/update-test/{{
@@ -151,7 +151,7 @@
               >
                 <mat-icon>delete_forever</mat-icon>
               </span> -->
-              <span
+              <span *ngIf="authorizationService.isAdmin"
                 class="action-btn"
                 matTooltip="Clone Test"
                 (click)="cloneTest(element)"

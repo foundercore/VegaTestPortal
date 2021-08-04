@@ -25,6 +25,7 @@ import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { TranslateService } from '@ngx-translate/core';
 import { DialogConformationComponent } from 'src/app/shared/components/dialog-conformation/dialog-conformation.component';
 import { Location } from '@angular/common';
+import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
 
 @Component({
   selector: 'app-question-management',
@@ -96,7 +97,8 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     public translate: TranslateService,
     private toastr: ToastrService,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public authorizationService: AuthorizationService
   ) {
     forkJoin([
       this.questionService.getQuestionType(),
