@@ -16,6 +16,11 @@ import { LiveTestWindowComponent } from '../views/test-management/live-test-wind
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: '/login'
+  },
+  {
     path: 'login',
     component: LoginComponent,
     canActivate: [LoggedInAuthGuard],

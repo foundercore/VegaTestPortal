@@ -7,7 +7,7 @@ import { ViewAssignmentComponent } from './view-assignment/view-assignment.compo
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'view',
     component: TestsComponent,
   },
   {

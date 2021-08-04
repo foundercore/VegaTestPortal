@@ -11,7 +11,7 @@
         <a [routerLink]="['./questionmanagement']">{{ 'HEADER_TAGS.QUESTION' | translate }}</a>
       </li>
       <li *ngIf="authorizationService.isAdminAndStaff">
-        <a [routerLink]="['./tests']">{{ 'HEADER_TAGS.TESTS' | translate }}</a>
+        <a [routerLink]="['./tests/view']">{{ 'HEADER_TAGS.TESTS' | translate }}</a>
       </li>
       <li class="navbar-dropdown" *ngIf="authorizationService.isAdmin">
         <a style="cursor: pointer"
