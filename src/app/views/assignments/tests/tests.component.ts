@@ -18,6 +18,7 @@ import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 
 import { finalize } from 'rxjs/operators';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
+import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
 import { CustomDialogConfirmationModel } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation-model';
 import { CustomDialogConfirmationComponent } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation.component';
 import { AppState } from 'src/app/state_management/_states/auth.state';
@@ -69,14 +70,15 @@ export class TestsComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog,
     public toastrService: ToastrService,
     private router: Router,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    public authorizationService: AuthorizationService
   ) {}
   ngAfterViewInit(): void {
     this.store.select('appState').subscribe((data) => {
       this.userName = data.user.userName;
       this.studentName = data.user.firstName + ' ' + data.user.lastName;
       this.userType = data?.user?.authorities[0]?.authority;
-      console.log('data', data);
+      console.log('data', this.userType);
     });
 
     // this.dataSource = new MatTableDataSource(this.alltest);

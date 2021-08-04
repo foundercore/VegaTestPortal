@@ -76,7 +76,7 @@ export class StudentDashboardComponent implements OnInit {
 
   dataSource = new MatTableDataSource<any>();
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  // @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   totalTest: number;
   notAttempted: number;
@@ -111,7 +111,7 @@ export class StudentDashboardComponent implements OnInit {
       this.resultData = resp;
       console.log('this.resultData==', this.resultData);
       this.dataSource = new MatTableDataSource<any>(this.resultData);
-      this.dataSource.paginator = this.paginator;
+      // this.dataSource.paginator = this.paginator;
       this.totalTest = this.resultData.length;
       let nonClassifiedTest = false;
       this.resultData.forEach((assignment) => {
@@ -191,9 +191,9 @@ export class StudentDashboardComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    // if (this.dataSource.paginator) {
+    //   this.dataSource.paginator.firstPage();
+    // }
   }
 
   openTestPopup(element, testType) {
@@ -272,8 +272,8 @@ export class StudentDashboardComponent implements OnInit {
       filteredData = this.resultData;
     }
     this.dataSource = new MatTableDataSource(filteredData);
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    // if (this.dataSource.paginator) {
+    //   this.dataSource.paginator.firstPage();
+    // }
   }
 }
