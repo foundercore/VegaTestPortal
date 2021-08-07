@@ -1,2 +1,2 @@
-<app-admin-dashboard *ngIf="!authorizationService.isStudent"></app-admin-dashboard>
-<app-student-dashboard *ngIf="authorizationService.isStudent"></app-student-dashboard>
+<app-admin-dashboard *ngIf="authorizationService.isAdmin"></app-admin-dashboard>
+<app-student-dashboard *ngIf="authorizationService.isStudent || authorizationService.isStaff"></app-student-dashboard>

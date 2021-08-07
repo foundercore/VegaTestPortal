@@ -108,9 +108,10 @@ export class StudentDashboardComponent implements OnInit {
   getMyAssignments() {
     this.isLoading = true;
     this.testAssignmentService.getMyAssignment().subscribe((resp) => {
+      this.isLoading = false;
       this.resultData = resp;
       console.log('this.resultData==', this.resultData);
-      this.dataSource = new MatTableDataSource<any>(this.resultData);
+      this.dataSource.data = this.resultData;
       this.dataSource.paginator = this.paginator;
       this.totalTest = this.resultData.length;
       let nonClassifiedTest = false;
@@ -132,7 +133,9 @@ export class StudentDashboardComponent implements OnInit {
       this.notAttempted = this.totalTest - this.attempted.length;
       this.attempt = this.attempted.length;
       this.isLoading = false;
-    });
+    }, err => { this.isLoading = false; },
+      () => { this.isLoading = false; }
+      );
   }
 
   extractContent(s) {
@@ -191,9 +194,9 @@ export class StudentDashboardComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    // if (this.dataSource.paginator) {
+    //   this.dataSource.paginator.firstPage();
+    // }
   }
 
   openTestPopup(element, testType) {
@@ -271,9 +274,9 @@ export class StudentDashboardComponent implements OnInit {
     if (filteredData.length == 0) {
       filteredData = this.resultData;
     }
-    this.dataSource = new MatTableDataSource(filteredData);
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    this.dataSource.data = filteredData;
+    // if (this.dataSource.paginator) {
+    //   this.dataSource.paginator.firstPage();
+    // }
   }
 }
