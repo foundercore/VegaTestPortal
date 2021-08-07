@@ -101,9 +101,9 @@
                     <mat-chip-list aria-label="Fish selection">
                       <mat-chip
                         [ngClass]="{
-                          'success-bg': answer.answerStatus == 'CORRECT',
-                          'failure-bg': answer.answerStatus == 'INCORRECT',
-                          'warning-bg': answer.answerStatus == 'SKIPPED'
+                          'success-bg': answer?.answerStatus == 'CORRECT',
+                          'failure-bg': answer?.answerStatus == 'INCORRECT',
+                          'warning-bg': answer?.answerStatus == 'SKIPPED'
                         }"
                         selected
                       >
@@ -111,7 +111,7 @@
                           class="fas fa-hourglass-half"
                           style="margin-right: 5px"
                         ></i>
-                        {{ answer.timeElapsedInSec | minuteSeconds }}</mat-chip
+                        {{ answer?.timeElapsedInSec | minuteSeconds }}</mat-chip
                       >
                     </mat-chip-list>
                   </div>
@@ -124,8 +124,8 @@
                   <div
                     class="option"
                     [ngClass]="{
-                      correct: answer.correctOptions?.includes(option.key),
-                      selected: answer.selectedOptions?.includes(option.key),
+                      correct: answer?.correctOptions?.includes(option.key),
+                      selected: answer?.selectedOptions?.includes(option.key),
                       wrong: !answer.correctOptions?.includes(option.key)
                     }"
                     *ngFor="let option of answer.inputOptions; let i = index"
@@ -133,15 +133,15 @@
                     <div class="markcontainer">
                       <i
                         *ngIf="
-                          answer.answerStatus == 'CORRECT' &&
-                          answer.correctOptions.includes(option.key)
+                          answer?.answerStatus == 'CORRECT' &&
+                          answer?.correctOptions?.includes(option.key)
                         "
                         class="fas fa-check-circle success"
                       ></i>
                       <i
                         *ngIf="
-                          answer.answerStatus == 'INCORRECT' &&
-                          answer.selectedOptions.includes(option.key)
+                          answer?.answerStatus == 'INCORRECT' &&
+                          answer?.selectedOptions?.includes(option.key)
                         "
                         class="fas fa-times-circle failure"
                       ></i>
@@ -152,27 +152,27 @@
                     ></div>
 
                     <span
-                      *ngIf="answer.correctOptions?.includes(option.key)"
+                      *ngIf="answer?.correctOptions?.includes(option.key)"
                       class="badge badge-pill badge-primary ml-2"
                       >{{ "STUDENT_SOLUTION_TAG.CORRECT_ANSWER" | translate }}
                     </span>
                   </div>
                 </div>
 
-                <div *ngIf="answer.type == 'TITA'" style="margin-left: 30px">
+                <div *ngIf="answer?.type == 'TITA'" style="margin-left: 30px">
                   <div class="option correct">
                     <div
-                      [innerHtml]="transform(answer.correctAnswerText)"
+                      [innerHtml]="transform(answer?.correctAnswerText)"
                     ></div>
                   </div>
                   <div
                     class="option"
                     [ngClass]="{
-                      correct: answer.answerStatus == 'CORRECT',
-                      wrong: answer.answerStatus == 'INCORRECT'
+                      correct: answer?.answerStatus == 'CORRECT',
+                      wrong: answer?.answerStatus == 'INCORRECT'
                     }"
                   >
-                    <div [innerHtml]="transform(answer.answerText)"></div>
+                    <div [innerHtml]="transform(answer?.answerText)"></div>
                   </div>
                 </div>
                 <mat-divider style="margin-top: 20px"></mat-divider>
@@ -184,7 +184,7 @@
                   </div>
                   <div
                     [ngClass]="{
-                      limitTextHeight: explanationMap.get(answer.questionId)
+                      limitTextHeight: explanationMap.get(answer?.questionId)
                     }"
                     [innerHtml]="transform(answer.explanation)"
                     disabled
