@@ -146,18 +146,16 @@ export class StudentReportComponent implements OnInit {
                   index: i,
                   name: section.sectionName,
                 });
+                section.answers.forEach((answers) => {
+                  this.explanationMap.set(answers.questionId, true);
+                  this.passageMap.set(answers.questionId, true);
+                })
               }
             );
             if (this.solutionSectionArray.length != 0) {
               this.solutionSectionSelection = this.solutionSectionArray[0];
               this.solutionSectionSelectedIndex = 0;
             }
-            this.fetchedWholeAssignmentResult.sections.forEach((section) =>
-              section.answers.forEach((answers) => {
-                this.explanationMap.set(answers.questionId, true);
-                this.passageMap.set(answers.questionId, true);
-              })
-            );
             this.breadcrumbNavService.pushOnClickCrumb({ label: res.testName });
             this.ref.detectChanges();
             this.createAssignmentChartData(res.summary.metric);
