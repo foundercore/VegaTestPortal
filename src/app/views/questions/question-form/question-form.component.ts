@@ -158,9 +158,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
             for (let i = 0; i < resp.answer.options.length; i++) {
               for (let j = 0; j < resp.options.length; j++) {
                 if (resp.answer.options[i] == resp.options[j].key) {
-                  this.answerOptionFormGrp.controls.optionArrays['controls'][
-                    resp.options[j].key
-                  ]['controls'].flag.setValue(true);
+                  this.answerOptionFormGrp.controls.optionArrays['controls'][j]['controls'].flag.setValue(true);
                 }
               }
             }
