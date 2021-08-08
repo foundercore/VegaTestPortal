@@ -66,119 +66,120 @@
       <ng-template mat-tab-label>
         <span>{{ tab }}</span>
       </ng-template>
-      <div class="student-dash-main">
-        <div class="student-dash-list-grid">
-          <div class="student-result-container mat-elevation-z8">
-            <div
-              class="example-table-container"
-              style="height: 400px; overflow: auto"
-            >
-              <table mat-table [dataSource]="dataSource" class="example-table">
-                <ng-container matColumnDef="testName">
-                  <th
-                    class="custom-mat-header-th"
-                    mat-header-cell
-                    *matHeaderCellDef
-                  >
-                    {{ "DASHBOARD_TAGS.TEST_NAME" | translate }}
-                  </th>
-                  <td mat-cell *matCellDef="let row">{{ row.testName }}</td>
-                </ng-container>
 
-                <ng-container matColumnDef="attempted">
-                  <th
-                    class="custom-mat-header-th"
-                    mat-header-cell
-                    *matHeaderCellDef
-                  >
-                    {{ "DASHBOARD_TAGS.TEST_STATUS" | translate }}
-                  </th>
-                  <td mat-cell *matCellDef="let row">
-                    <span
-                      *ngIf="row.attempted"
-                      style="color: green; font-weight: bold"
-                      >{{ "DASHBOARD_TAGS.ATTEMPTED" | translate }}</span
-                    >
-                    <span
-                      *ngIf="!row.attempted"
-                      style="color: #ffc107; font-weight: bold"
-                      >{{ "DASHBOARD_TAGS.NOT_ATTEMPTED" | translate }}</span
-                    >
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="marksObtained">
-                  <th
-                    class="custom-mat-header-th"
-                    mat-header-cell
-                    *matHeaderCellDef
-                  >
-                    {{ "DASHBOARD_TAGS.MARKS_OBTAINED" | translate }}
-                  </th>
-                  <td mat-cell *matCellDef="let row">
-                    <span *ngIf="row.attempted">
-                      <span style="font-weight: 600; font-size: 16px">{{
-                        row.marksReceived
-                      }}</span>
-                      out of
-                      <span style="font-weight: 600; font-size: 16px">
-                        {{ row.totalMarks }}
-                      </span>
-                    </span>
-                    <span *ngIf="!row.attempted">
-                      <span>-</span>
-                    </span>
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="actions">
-                  <th
-                    class="custom-mat-header-th"
-                    mat-header-cell
-                    *matHeaderCellDef
-                  >
-                    {{ "DASHBOARD_TAGS.ACTIONS" | translate }}
-                  </th>
-                  <td mat-cell *matCellDef="let row">
-                    <span
-                      *ngIf="row.attempted"
-                      class="action-btn"
-                      style="display: flex"
-                      (click)="viewResult(row)"
-                      ><mat-icon>assignment</mat-icon>&nbsp;&nbsp;
-                      {{ "DASHBOARD_TAGS.VIEW_RESULT" | translate }}
-                    </span>
-                    <span
-                      *ngIf="!row.attempted"
-                      class="action-btn"
-                      style="display: flex"
-                      (click)="startTest(row)"
-                      ><mat-icon>play_circle_filled</mat-icon>&nbsp;&nbsp;
-                      {{ "DASHBOARD_TAGS.TAKE_TEST" | translate }}
-                    </span>
-                  </td>
-                </ng-container>
-
-                <tr
-                  mat-header-row
-                  *matHeaderRowDef="displayedColumns; sticky: true"
-                ></tr>
-                <tr
-                  mat-row
-                  *matRowDef="let row; columns: displayedColumns"
-                ></tr>
-                
-              </table>
-
-
-              <mat-paginator [pageSizeOptions]="pageOptions"></mat-paginator>
-            </div>
-          </div>
-        </div>
-      </div>
     </mat-tab>
   </ng-container>
 </mat-tab-group>
 
 
 
+<div class="student-dash-main">
+  <div class="student-dash-list-grid">
+    <div class="student-result-container mat-elevation-z8">
+      <div
+        class="example-table-container"
+        style="height: 400px; overflow: auto"
+      >
+        <table mat-table [dataSource]="dataSource" class="example-table">
+          <ng-container matColumnDef="testName">
+            <th
+              class="custom-mat-header-th"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              {{ "DASHBOARD_TAGS.TEST_NAME" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.testName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="attempted">
+            <th
+              class="custom-mat-header-th"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              {{ "DASHBOARD_TAGS.TEST_STATUS" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <span
+                *ngIf="row.attempted"
+                style="color: green; font-weight: bold"
+                >{{ "DASHBOARD_TAGS.ATTEMPTED" | translate }}</span
+              >
+              <span
+                *ngIf="!row.attempted"
+                style="color: #ffc107; font-weight: bold"
+                >{{ "DASHBOARD_TAGS.NOT_ATTEMPTED" | translate }}</span
+              >
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="marksObtained">
+            <th
+              class="custom-mat-header-th"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              {{ "DASHBOARD_TAGS.MARKS_OBTAINED" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <span *ngIf="row.attempted">
+                <span style="font-weight: 600; font-size: 16px">{{
+                  row.marksReceived
+                }}</span>
+                out of
+                <span style="font-weight: 600; font-size: 16px">
+                  {{ row.totalMarks }}
+                </span>
+              </span>
+              <span *ngIf="!row.attempted">
+                <span>-</span>
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th
+              class="custom-mat-header-th"
+              mat-header-cell
+              *matHeaderCellDef
+            >
+              {{ "DASHBOARD_TAGS.ACTIONS" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <span
+                *ngIf="row.attempted"
+                class="action-btn"
+                style="display: flex"
+                (click)="viewResult(row)"
+                ><mat-icon>assignment</mat-icon>&nbsp;&nbsp;
+                {{ "DASHBOARD_TAGS.VIEW_RESULT" | translate }}
+              </span>
+              <span
+                *ngIf="!row.attempted"
+                class="action-btn"
+                style="display: flex"
+                (click)="startTest(row)"
+                ><mat-icon>play_circle_filled</mat-icon>&nbsp;&nbsp;
+                {{ "DASHBOARD_TAGS.TAKE_TEST" | translate }}
+              </span>
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+          ></tr>
+
+        </table>
+
+
+        <mat-paginator [pageSizeOptions]="pageOptions"></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

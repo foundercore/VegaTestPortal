@@ -127,9 +127,11 @@ export class StudentDashboardComponent implements OnInit {
       });
       // if non classified test exists add other tag
       if (nonClassifiedTest){
-        this.tagSet.delete('Other');
         this.tagSet.add('Other');
+      }else {
+        this.tagSet.delete('Other');
       }
+      this.onTabChanged({ 'tab':{'textLabel':this.tagSet.values().next().value}});
       this.notAttempted = this.totalTest - this.attempted.length;
       this.attempt = this.attempted.length;
       this.isLoading = false;
@@ -271,12 +273,10 @@ export class StudentDashboardComponent implements OnInit {
     let filteredData = this.resultData.filter(
       (d) => filterArray.includes(d.testType)
     );
-    if (filteredData.length == 0) {
-      filteredData = this.resultData;
-    }
+    this.dataSource.paginator = this.paginator;
     this.dataSource.data = filteredData;
-    // if (this.dataSource.paginator) {
-    //   this.dataSource.paginator.firstPage();
-    // }
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }
