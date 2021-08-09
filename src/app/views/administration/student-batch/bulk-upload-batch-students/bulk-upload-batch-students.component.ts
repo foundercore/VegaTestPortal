@@ -57,7 +57,7 @@ export class BulkUploadBatchStudentsComponent implements OnInit {
     this.studentBatchService
       .addStudentInBatch(
         this.batchFormGroup.controls['name'].value.id.batchId,
-        this.batchFormGroup.controls['listOfStudent'].value.split(',')
+        this.batchFormGroup.controls['listOfStudent'].value.toLowerCase().split(',')
       )
       .subscribe(
         (resp) => {
@@ -81,4 +81,11 @@ export class BulkUploadBatchStudentsComponent implements OnInit {
     option.name.toLowerCase().includes(filter)
     );
   }
+
+  onClick(event){
+    if(event.code == "Space"){
+      event.stopPropagation();
+    }
+  }
+
 }
