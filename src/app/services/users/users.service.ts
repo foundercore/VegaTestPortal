@@ -1,5 +1,5 @@
 import { IUserCreateRequestModel, IUserUpdateRequestModel } from './../../models/user/user-model';
-import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -76,5 +76,12 @@ export class UserService extends BaseService {
     return this.http.get<any>(url);
   }
 
+  resetPassword(newPassword: string,userId :string){
+    const url = `${this.BASE_SERVICE_URL}/api/v1/users/update/password/id`;
+    let params = new HttpParams();
+      params = params.append('newPassword', newPassword);
+      params = params.append('userId', userId);
+      return this.http.put<any>(url,params);
+  }
 
 }

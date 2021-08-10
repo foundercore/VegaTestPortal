@@ -41,6 +41,10 @@ export class ChangePasswordComponent implements OnInit {
 
   appState: any;
 
+  isPasswordReset = false;
+
+  userName;
+
   constructor( private userService: UserService,
     private tosterService: ToastrService,
     private store: Store<AppState>,
@@ -49,10 +53,38 @@ export class ChangePasswordComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
-    this.store.select('appState').subscribe(data =>
-      {
-        this.appState = data;
-      });
+    if(this.data){
+        this.isPasswordReset = true;
+        this.userName = this.data.email;
+    } else {
+      this.store.select('appState').subscribe(data =>
+        {
+          this.appState = data;
+          this.userName = this.appState.user.email;
+        });
+    }
+  }
+
+  change(){
+    if(this.isPasswordReset){
+        this.resetPassword();
+    } else {
+      this.changePassword();
+    }
+  }
+
+  resetPassword(){
+    if(!this.changePasswordFormGroup.invalid){
+      this.userService.resetPassword(this.changePasswordFormGroup.controls['password'].value,this.data.userName).subscribe(resp => {
+        this.tosterService.success("Password change successfully");
+        this.dialogRef.close();
+      },error => {
+        this.tosterService.error("Failed to change password");
+      })
+
+  } else {
+    return
+  }
   }
 
   changePassword(){
