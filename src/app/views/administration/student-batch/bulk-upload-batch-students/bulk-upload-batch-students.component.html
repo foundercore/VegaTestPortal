@@ -11,11 +11,15 @@
       <mat-form-field appearance="outline">
         <mat-label>Batch Name</mat-label>
         <mat-select  formControlName="name" required>
-          <input 
-          class="search-container"
-          placeholder="Search Batch"
-          (keyup)="search($event)"
-        />
+          <div class="drop-down-search-container">
+            <input
+            class="search-container"
+            placeholder="Search Batch"
+            type="search"
+            (keyup)="search($event)"
+            autocomplete="off"
+          />
+          </div>
           <mat-option>None</mat-option>
           <mat-option *ngFor="let batch of filteredBatchList" [value]="batch">
             {{batch.name}}
@@ -28,7 +32,7 @@
 
       <mat-form-field style="width: 660px !important" appearance="outline">
         <mat-label>Student Emails</mat-label>
-        <textarea matInput  required formControlName="listOfStudent" ></textarea>
+        <textarea matInput  required formControlName="listOfStudent" rows="10" style='text-transform:lowercase'></textarea>
         <mat-error *ngIf="batchFormGroup.controls.listOfStudent.hasError('required')">
           Student Emails is <strong>required</strong>
         </mat-error>

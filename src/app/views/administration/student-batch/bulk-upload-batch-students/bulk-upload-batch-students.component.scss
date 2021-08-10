@@ -42,3 +42,10 @@
   color: white;
   margin-left: 20px;
 }
+
+.drop-down-search-container{
+  position: sticky;
+  top: 10px;
+  z-index: 1;
+  background: white;
+}

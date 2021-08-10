@@ -102,7 +102,7 @@ export class AddUserDialogComponent implements OnInit {
       roles: this.userFormGroup.controls.roles.value,
       state: this.userFormGroup.controls.state.value,
       password: this.userFormGroup.controls.password.value,
-      email: this.userFormGroup.controls.email.value,
+      email: this.userFormGroup.controls.email.value.toLowerCase(),
     };
     this.userService.createUsers(user).subscribe(
       (resp) => {
