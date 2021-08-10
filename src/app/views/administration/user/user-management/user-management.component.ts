@@ -12,6 +12,7 @@ import { UserService } from 'src/app/services/users/users.service';
 import { DialogConformationComponent } from 'src/app/shared/components/dialog-conformation/dialog-conformation.component';
 import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
 import { UserBulkUploadDialogComponent } from '../user-bulk-upload-dialog/user-bulk-upload-dialog.component';
+import { ViewStudentBatchDialogComponent } from '../view-student-batch-dialog/view-student-batch-dialog.component';
 
 @Component({
   selector: 'app-user-managemnt',
@@ -25,7 +26,6 @@ export class UserManagementComponent implements OnInit, AfterViewInit  {
     'displayName',
     'email',
     'roles',
-    'batch',
     'actions'
   ];
 
@@ -144,6 +144,9 @@ export class UserManagementComponent implements OnInit, AfterViewInit  {
       case 'view':
           this.openViewUserdDialog(row);
           break;
+      case 'view_batch':
+      this.viewStudentBatchDialog(row);
+      break;
       default:
         break;
     }
@@ -180,6 +183,11 @@ export class UserManagementComponent implements OnInit, AfterViewInit  {
     dialogRef.afterClosed().subscribe((result) => {
       this.refreshUserList();
     });
+  }
+
+  viewStudentBatchDialog(row: any) {
+    row.isView = true;
+    const dialogRef = this.dialog.open(ViewStudentBatchDialogComponent, { disableClose: false, data: row });
   }
 
   deleteUser(user: any){

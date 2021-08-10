@@ -44,6 +44,11 @@ export class UserService extends BaseService {
     return this.http.get<any>(url);
   }
 
+  getLinkedBatch(emailId:string): Observable<any>{
+    const url = `${this.BASE_SERVICE_URL}/api/v1/student/linked-batches`;
+    return this.http.post<any>(url,emailId);
+  }
+
   bulkCreateUser(file: any){
     const fd = new FormData();
     fd.append('file', file!.data);
@@ -70,5 +75,6 @@ export class UserService extends BaseService {
     const url = `${this.BASE_SERVICE_URL}/api/v1/users/my/profile`;
     return this.http.get<any>(url);
   }
+
 
 }
