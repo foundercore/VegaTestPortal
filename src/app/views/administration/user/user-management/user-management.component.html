@@ -122,12 +122,16 @@
                 >
                   <mat-icon>delete_forever</mat-icon>
                 </span>
-                <span class="action-btn"
+                <span class="action-btn" *ngIf="row.roles.includes('ROLE_STUDENT')"
                        matTooltip="View Batch"
                        (click)="performGridAction('view_batch', row)">
                   <mat-icon>group_add</mat-icon>
                 </span>
-
+                <span class="action-btn"  *ngIf=" ( this.authorizationService.isAdminRole() &&  !row.roles.includes('ROLE_USER_ADMIN') )"
+                      matTooltip="Change Password"
+                      (click)="performGridAction('change_password', row)">
+                     <mat-icon>vpn_key</mat-icon>
+               </span>
               </td>
             </ng-container>
 

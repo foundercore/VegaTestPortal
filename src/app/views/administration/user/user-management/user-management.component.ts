@@ -10,6 +10,7 @@ import { PAGE_OPTIONS, Role } from 'src/app/core/constants';
 import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
 import { UserService } from 'src/app/services/users/users.service';
 import { DialogConformationComponent } from 'src/app/shared/components/dialog-conformation/dialog-conformation.component';
+import { ChangePasswordComponent } from 'src/app/views/layout/change-password/change-password.component';
 import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
 import { UserBulkUploadDialogComponent } from '../user-bulk-upload-dialog/user-bulk-upload-dialog.component';
 import { ViewStudentBatchDialogComponent } from '../view-student-batch-dialog/view-student-batch-dialog.component';
@@ -145,8 +146,11 @@ export class UserManagementComponent implements OnInit, AfterViewInit  {
           this.openViewUserdDialog(row);
           break;
       case 'view_batch':
-      this.viewStudentBatchDialog(row);
-      break;
+          this.viewStudentBatchDialog(row);
+          break;
+      case 'change_password':
+          this.changePasswordDialog(row);
+          break;
       default:
         break;
     }
@@ -189,6 +193,14 @@ export class UserManagementComponent implements OnInit, AfterViewInit  {
     row.isView = true;
     const dialogRef = this.dialog.open(ViewStudentBatchDialogComponent, { disableClose: false, data: row });
   }
+
+  changePasswordDialog(row: any) {
+    const dialogRef = this.dialog.open(ChangePasswordComponent,{ disableClose: false, data: row });
+    dialogRef.afterClosed().subscribe((result) => {
+      dialogRef.close();
+    });
+  }
+
 
   deleteUser(user: any){
     const dialogRef = this.dialog.open(DialogConformationComponent, { disableClose: true});
