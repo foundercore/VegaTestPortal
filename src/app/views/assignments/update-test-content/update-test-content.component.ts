@@ -625,7 +625,7 @@ export class UpdateTestContentComponent implements OnInit {
 
   saveQuestionSequence(event,section: Section){
     event.stopPropagation();
-    this.testConfigService.updateQuestionSequence( this.testId,section.id,section.questions).subscribe(resp => {
+    this.testConfigService.updateQuestionSequence( this.testId,section.id,this.sectionQuestionList).subscribe(resp => {
       this.toastrService.success('Sequence is successfully saved');
     },error => {
       this.toastrService.error('Failed to save Sequence');
