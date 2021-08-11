@@ -24,4 +24,4 @@ import { StudentReportComponent } from "./view-student-assignment-result/student
     SharedModule,
   ],
 })
-export class CommonComponentModule {}
+export class CommonComponentModule { }
