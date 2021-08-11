@@ -747,18 +747,20 @@ export class TestLiveComponent implements OnInit {
     if (this.sectionsWithPapers && this.sectionsWithPapers.length > 0){
       this.sectionsWithPapers.sort((a, b) =>
         {
-          if (a.sequenceNumber ){
+
+          if (a.sequenceNumber == 0 && b.sequenceNumber == 0 ) {
+            const passage1 = a.passageContent ? a.passageContent : '';
+
+            const passage2 = b.passageContent ? b.passageContent : '';
+
+            const passageName1 = passage1 + (a.name ? a.name : '');
+            const passageName2 = passage2 + (b.name ? b.name : '');
+            return (passageName1 < passageName2 ? -1 : (passageName1 > passageName2 ? 1 : 0));
+          } else {
             return a.sequenceNumber - b.sequenceNumber;
+
           }
 
-          const passage1 = a.passageContent ? a.passageContent : '';
-
-          const passage2 = b.passageContent ? b.passageContent : '';
-
-          const passageName1 = passage1 + (a.name ? a.name : '');
-          const passageName2 = passage2 + (b.name ? b.name : '');
-          return (passageName1 < passageName2 ? -1 : (passageName1 > passageName2 ? 1 : 0));
-        
       });
     }
     return this.sectionsWithPapers;
