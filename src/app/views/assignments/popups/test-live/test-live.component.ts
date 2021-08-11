@@ -199,6 +199,9 @@ export class TestLiveComponent implements OnInit {
   }
 
   async saveAndNextAnswers(moveToNext = true) {
+    if (this.testType === 'preview'){
+      return;
+    }
     console.log('this.question=>', this.question);
     this.isCurrentQuestionMarkedForReview();
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
@@ -229,7 +232,7 @@ export class TestLiveComponent implements OnInit {
 
         },
         (err) => {
-          if (String(err.error.apierror.message).includes(
+          if (String(err.message).includes(
             'already submitted by student'
           )) {
             Swal.fire({
@@ -239,7 +242,7 @@ export class TestLiveComponent implements OnInit {
             });
           }
           else {
-            this.toastrService.error('Error - ' + err.error.apierror.message, '', this.toasterPostion);
+            this.toastrService.error('Error - ' + err.message, '', this.toasterPostion);
           }
           console.log('Error while making the question for save', err);
         }
@@ -301,6 +304,7 @@ export class TestLiveComponent implements OnInit {
   }
 
   async getUserSubmissionData() {
+    if(this.testType !== 'preview'){
     await this.testConfigService
       .getSudentSubmissionState(this.assignmentId, this.userName)
       .subscribe(
@@ -312,13 +316,12 @@ export class TestLiveComponent implements OnInit {
           this.setColoursForQuestionNavigationButtons();
         },
         (error) => {
-          console.error(
-            'Error in fetching user submitted data => Reasons can be: 1)This user doesn\'t has any submitted data 2). Internet connectivity issue'
+          console.error('Error in fetching user submitted data => Reasons can be: 1)This user doesn\'t has any submitted data 2). Internet connectivity issue'
           );
           this.setColoursForQuestionNavigationButtons();
         }
       );
-
+      }
   }
 
   async clearResponse() {
@@ -425,25 +428,23 @@ export class TestLiveComponent implements OnInit {
       const sections = this.testData?.sections;
       console.log('Current Sections => ', sections);
       if (sections != null) {
-        sections.forEach((element) => {
-          if (element != null && element.questions != null) {
-            // sort question by Passage
-            element.questions.sort((a, b) =>
-              a.passageContent < b.passageContent ? -1 : 1
-            );
-            element.questions.forEach((element2) => {
-              if (element2 != null) {
-                const checkdata = this.sectionsWithPapers.find(
-                  (x) => x.id.questionId == element2.id
+        sections.forEach((tempSection) => {
+          if (tempSection != null && tempSection.questions != null) {
+            tempSection.questions.forEach((sectionQuestion) => {
+              if (sectionQuestion != null) {
+                const checkData = this.sectionsWithPapers.find(
+                  (x) => x.id.questionId === sectionQuestion.id
                 );
-                if (checkdata == null) {
+                if (checkData == null) {
                   this.testConfigService
-                    .getQuestionbyQestionId(element2?.id)
+                    .getQuestionbyQuestionId(sectionQuestion?.id)
                     .subscribe(
                       (res: any) => {
-                        res.sectionId = element.id;
+                        // debugger;
+                        res.sectionId = tempSection.id;
                         res.iscolorActive = false;
                         res.ismarked = false;
+                        res.sequenceNumber = sectionQuestion.sequenceNumber;
                         this.sections.push(res);
                         this.sections[0].iscolorActive = true;
                         this.selectSection1(this.sections[0].sectionId);
@@ -503,6 +504,7 @@ export class TestLiveComponent implements OnInit {
     this.setCurrentQuestionSelectedOption();
     this.setColoursForQuestionNavigationButtons();
     this.sectionsWithPapers = this.sections.filter((x) => x.sectionId == id);
+    this.sortQuestions();
     if (this.sectionsWithPapers.length > 0) {
       this.sectionsWithPapers.forEach((element) => {
         element.color = 'grey';
@@ -643,7 +645,7 @@ export class TestLiveComponent implements OnInit {
       this.sectionsWithPapers = this.sections.filter(
         (x) => x.sectionId == section.id
       );
-
+      this.sortQuestions();
       if (this.sectionsWithPapers.length > 0) {
         this.sectionsWithPapers.forEach((element) => {
           element.color = 'grey';
@@ -739,6 +741,27 @@ export class TestLiveComponent implements OnInit {
         this.buttonStyle[i] = new ButtonStyleAttributesModel(color, border);
       }
     });
+  }
+
+  sortQuestions(){
+    if (this.sectionsWithPapers && this.sectionsWithPapers.length > 0){
+      this.sectionsWithPapers.sort((a, b) =>
+        {
+          if (a.sequenceNumber ){
+            return a.sequenceNumber - b.sequenceNumber;
+          }
+
+          const passage1 = a.passageContent ? a.passageContent : '';
+
+          const passage2 = b.passageContent ? b.passageContent : '';
+
+          const passageName1 = passage1 + (a.name ? a.name : '');
+          const passageName2 = passage2 + (b.name ? b.name : '');
+          return (passageName1 < passageName2 ? -1 : (passageName1 > passageName2 ? 1 : 0));
+        
+      });
+    }
+    return this.sectionsWithPapers;
   }
 
 }

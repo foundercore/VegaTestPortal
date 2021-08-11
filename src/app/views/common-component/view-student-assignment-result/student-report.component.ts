@@ -178,20 +178,20 @@ export class StudentReportComponent implements OnInit {
           return b.marksReceived - a.marksReceived;
         });
         let tempRank = 0;
-        let tempMarkRecived;
+        let tempMarkReceived;
         let loginStudentIndex = -1;
         let loginStudentUserName = this.userName;
         let ranks = sorted.map(function (v, index, userName) {
           if (
-            tempMarkRecived == undefined ||
-            tempMarkRecived != v.marksReceived
+            tempMarkReceived == undefined ||
+            tempMarkReceived != v.marksReceived
           ) {
             tempRank++;
           }
           if (v.username == loginStudentUserName) {
             loginStudentIndex = index;
           }
-          tempMarkRecived = v.marksReceived;
+          tempMarkReceived = v.marksReceived;
           v.rank = tempRank;
           return v;
         });
