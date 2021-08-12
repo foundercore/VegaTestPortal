@@ -1,0 +1,9 @@
+<h2 style="border-bottom: 1px solid;
+margin-bottom: 20px;">Batch List</h2>
+<div  class="example-list"  *ngIf="batchList.length > 0; else elseBlock">
+  <div class="example-box" *ngFor="let item of batchList"  >{{item.name}}</div>
+</div>
+
+<ng-template #elseBlock>
+  No Batch is tag to student
+</ng-template>

@@ -1,3 +1,4 @@
+import { ViewStudentBatchDialogComponent } from './view-student-batch-dialog/view-student-batch-dialog.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AddUserDialogComponent } from './add-user-dialog/add-user-dialog.component';
@@ -20,7 +21,7 @@ const routes: Routes = [
     AddUserDialogComponent,
     UserBulkUploadDialogComponent,
     UserManagementComponent,
-
+    ViewStudentBatchDialogComponent
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,5 @@
 import { IUserCreateRequestModel, IUserUpdateRequestModel } from './../../models/user/user-model';
-import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -44,6 +44,11 @@ export class UserService extends BaseService {
     return this.http.get<any>(url);
   }
 
+  getLinkedBatch(emailId:string): Observable<any>{
+    const url = `${this.BASE_SERVICE_URL}/api/v1/student/linked-batches`;
+    return this.http.post<any>(url,emailId);
+  }
+
   bulkCreateUser(file: any){
     const fd = new FormData();
     fd.append('file', file!.data);
@@ -69,6 +74,14 @@ export class UserService extends BaseService {
   getProfile(){
     const url = `${this.BASE_SERVICE_URL}/api/v1/users/my/profile`;
     return this.http.get<any>(url);
+  }
+
+  resetPassword(newPassword: string,userId :string){
+    const url = `${this.BASE_SERVICE_URL}/api/v1/users/update/password/id`;
+    let params = new HttpParams();
+      params = params.append('newPassword', newPassword);
+      params = params.append('userId', userId);
+      return this.http.put<any>(url,params);
   }
 
 }

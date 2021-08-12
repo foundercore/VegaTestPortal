@@ -372,7 +372,7 @@ export class UpdateTestContentComponent implements OnInit {
 
     if (this.currentOpenedSection) {
       this.ques = this.currentOpenedSection?.questions;
-      this.sectionQuestionList = this.ques?.sort((x,y) => (x.sequenceNumber > y.sequenceNumber) ? 1 : (y.sequenceNumber > x.sequenceNumber) ? -1 : 0);
+      this.sectionQuestionList = this.getSortedQuestions(this.ques);
       this.totalNumberOfRecords = this.currentOpenedSection?.questions
         ? this.currentOpenedSection?.questions.length
         : 0;
@@ -399,7 +399,7 @@ export class UpdateTestContentComponent implements OnInit {
     this.section = section;
     if (section != null) {
       this.ques = section?.questions;
-      this.sectionQuestionList = this.ques?.sort((x,y) => (x.sequenceNumber > y.sequenceNumber) ? 1 : (y.sequenceNumber > x.sequenceNumber) ? -1 : 0);
+      this.sectionQuestionList = this.getSortedQuestions(this.ques);
       this.totalNumberOfRecords = section?.questions
         ? section?.questions.length
         : 0;
@@ -625,11 +625,31 @@ export class UpdateTestContentComponent implements OnInit {
 
   saveQuestionSequence(event,section: Section){
     event.stopPropagation();
-    this.testConfigService.updateQuestionSequence( this.testId,section.id,section.questions).subscribe(resp => {
+    this.testConfigService.updateQuestionSequence( this.testId,section.id,this.sectionQuestionList).subscribe(resp => {
       this.toastrService.success('Sequence is successfully saved');
     },error => {
       this.toastrService.error('Failed to save Sequence');
     })
 
+  }
+
+  getSortedQuestions(questions: any[]) {
+    if (questions && questions.length > 0) {
+      questions.sort((a, b) => {
+        if (a.sequenceNumber == 0 && b.sequenceNumber == 0 ) {
+          const passage1 = a.passageContent ? a.passageContent : '';
+
+          const passage2 = b.passageContent ? b.passageContent : '';
+
+          const passageName1 = passage1 + (a.name ? a.name : '');
+          const passageName2 = passage2 + (b.name ? b.name : '');
+          return (passageName1 < passageName2 ? -1 : (passageName1 > passageName2 ? 1 : 0));
+        } else {
+          return a.sequenceNumber - b.sequenceNumber;
+
+        }
+      });
+    }
+    return questions;
   }
 }

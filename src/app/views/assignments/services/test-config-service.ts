@@ -112,7 +112,7 @@ export class TestConfigService extends BaseService {
     return this.http.delete<any>(Url, this.headers);
   }
 
-  getQuestionbyQestionId(questionId: string = ''): Observable<any> {
+  getQuestionbyQuestionId(questionId: string = ''): Observable<any> {
     const Url = `${this.BASE_SERVICE_URL}/api/v1/question/${questionId}`;
     return this.http.get<any>(Url, this.headers);
   }
