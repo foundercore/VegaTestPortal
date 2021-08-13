@@ -133,7 +133,7 @@ export class LiveTestComponent implements  OnInit {
 
         section.questions.forEach((question) => {
           if (question != null) {
-            questionRequest.push(this.testConfigService.getQuestionbyQestionId(question?.id));
+            questionRequest.push(this.testConfigService.getQuestionbyQuestionId(question?.id));
           }
         });
 
