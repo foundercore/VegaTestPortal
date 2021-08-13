@@ -4,7 +4,7 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -27,7 +27,7 @@ import { CustomDialogConfirmationComponent } from 'src/app/shared/components/cus
   templateUrl: './student-dashboard.component.html',
   styleUrls: ['./student-dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class StudentDashboardComponent implements OnInit {
   resultStats = [
@@ -107,37 +107,45 @@ export class StudentDashboardComponent implements OnInit {
 
   getMyAssignments() {
     this.isLoading = true;
-    this.testAssignmentService.getMyAssignment().subscribe((resp) => {
-      this.isLoading = false;
-      this.resultData = resp;
-      console.log('this.resultData==', this.resultData);
-      this.dataSource.data = this.resultData;
-      this.dataSource.paginator = this.paginator;
-      this.totalTest = this.resultData.length;
-      let nonClassifiedTest = false;
-      this.resultData.forEach((assignment) => {
-        if (assignment.attempted) {
-          this.attempted.push(assignment);
+    this.testAssignmentService.getMyAssignment().subscribe(
+      (resp) => {
+        this.isLoading = false;
+        this.resultData = resp;
+        console.log('this.resultData==', this.resultData);
+        this.dataSource.data = this.resultData;
+        this.dataSource.paginator = this.paginator;
+        this.totalTest = this.resultData.length;
+        let nonClassifiedTest = false;
+        this.resultData.forEach((assignment) => {
+          if (assignment.attempted) {
+            this.attempted.push(assignment);
+          }
+          if (assignment.testType === null || assignment.testType === 'null') {
+            nonClassifiedTest = true;
+          } else if (assignment.testType != null) {
+            this.tagSet.add(assignment.testType);
+          }
+        });
+        // if non classified test exists add other tag
+        if (nonClassifiedTest) {
+          this.tagSet.add('Other');
+        } else {
+          this.tagSet.delete('Other');
         }
-        if (assignment.testType === null || assignment.testType === 'null'){
-          nonClassifiedTest = true;
-        } else if (assignment.testType != null) {
-          this.tagSet.add(assignment.testType);
-        }
-      });
-      // if non classified test exists add other tag
-      if (nonClassifiedTest){
-        this.tagSet.add('Other');
-      }else {
-        this.tagSet.delete('Other');
+        this.onTabChanged({
+          tab: { textLabel: this.tagSet.values().next().value },
+        });
+        this.notAttempted = this.totalTest - this.attempted.length;
+        this.attempt = this.attempted.length;
+        this.isLoading = false;
+      },
+      (err) => {
+        this.isLoading = false;
+      },
+      () => {
+        this.isLoading = false;
       }
-      this.onTabChanged({ 'tab':{'textLabel':this.tagSet.values().next().value}});
-      this.notAttempted = this.totalTest - this.attempted.length;
-      this.attempt = this.attempted.length;
-      this.isLoading = false;
-    }, err => { this.isLoading = false; },
-      () => { this.isLoading = false; }
-      );
+    );
   }
 
   extractContent(s) {
@@ -266,13 +274,58 @@ export class StudentDashboardComponent implements OnInit {
   onTabChanged($event) {
     const filterValue = $event.tab.textLabel;
     const filterArray = [];
+    let filteredData;
     filterArray.push(filterValue);
-    if (filterValue === 'Others'){
-      filterArray.push('null');
+    if (this.filterVar === 'A') {
+      if (filterValue === 'Others') {
+        filterArray.push('null');
+      }
+      filteredData = this.resultData.filter(
+        (d) => filterArray.includes(d.testType) && d.attempted
+      );
+    } else if (this.filterVar === 'UA') {
+      if (filterValue === 'Others') {
+        filterArray.push('null');
+      }
+      filteredData = this.resultData.filter(
+        (d) => filterArray.includes(d.testType) && !d.attempted
+      );
+    } else {
+      if (filterValue === 'Others') {
+        filterArray.push('null');
+      }
+      filteredData = this.resultData.filter((d) =>
+        filterArray.includes(d.testType)
+      );
     }
-    let filteredData = this.resultData.filter(
-      (d) => filterArray.includes(d.testType)
-    );
+
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.data = filteredData;
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  filterVar: string = 'NA';
+
+  statsFilter(filterParam) {
+    const filterArray = [];
+    this.filterVar = filterParam;
+    let filteredData;
+    if (filterParam === 'UA') {
+      filteredData = this.resultData.filter(
+        (d) => filterArray.includes(d.testType) && !d.attempted
+      );
+    } else if (filterParam === 'A') {
+      filteredData = this.resultData.filter(
+        (d) => filterArray.includes(d.testType) && d.attempted
+      );
+    } else {
+      filteredData = this.resultData.filter((d) =>
+        filterArray.includes(d.testType)
+      );
+    }
+
     this.dataSource.paginator = this.paginator;
     this.dataSource.data = filteredData;
     if (this.dataSource.paginator) {

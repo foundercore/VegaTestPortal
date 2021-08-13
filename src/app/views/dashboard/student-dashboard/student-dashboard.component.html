@@ -18,7 +18,7 @@
           >assignment</mat-icon
         >
       </div>
-      <div class="stats">
+      <div (click)="statsFilter('T')" class="stats">
         <h4>{{ totalTest }}</h4>
         <p>{{ "DASHBOARD_TAGS.TOTAL_TEST" | translate }}</p>
       </div>
@@ -32,7 +32,7 @@
           >playlist_add_check</mat-icon
         >
       </div>
-      <div class="stats">
+      <div (click)="statsFilter('A')" class="stats">
         <h4>{{ attempt }}</h4>
         <p>{{ "DASHBOARD_TAGS.ATTEMPTED" | translate }}</p>
       </div>
@@ -46,7 +46,7 @@
           >signal_cellular_no_sim</mat-icon
         >
       </div>
-      <div class="stats">
+      <div (click)="statsFilter('UA')" class="stats">
         <h4>{{ notAttempted }}</h4>
         <p>{{ "DASHBOARD_TAGS.UNATTEMPTED" | translate }}</p>
       </div>
