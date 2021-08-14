@@ -83,7 +83,7 @@
                       <p   [appMath]="question?.passageContent"> </p>
                     </div>
                     <div class="col col-xs-6">
-                      <p [innerHTML]="question?.name"></p>
+                      <p [appMath]="question?.name"></p>
                         <mat-form-field appearance="outline" *ngIf="question.type == 'TITA'" style="width: 100%;">
                           <mat-label>Answer here...</mat-label>
                           <input matInput placeholder="Answer here..." [(ngModel)]="titaText">
