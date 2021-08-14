@@ -54,6 +54,7 @@ import { LoadingComponent } from './components/loading/loading.component';
     MinuteSecondsPipe,
     FilterPipePipe,
     MathDirective,
+
     //Export module
     FormsModule,
     ReactiveFormsModule,

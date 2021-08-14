@@ -21,6 +21,25 @@ table {
   width: 100%;
 }
 
+.mat-column-actions{
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+}
+
+.mat-column-marksObtained{
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+}
+
+.mat-column-attempted{
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+}
+
+
 .loading-shade {
   position: absolute;
   top: 0;
@@ -55,7 +74,7 @@ table {
 
 .admin-dashboard-container {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: nowrap;
   justify-content: space-between;
   padding: 20px 20px 0px 20px;
 
@@ -65,6 +84,7 @@ table {
     width: 55%;
 
     .stats-card {
+      cursor: pointer;
       display: flex;
       width: 25%;
       height: 63px;
@@ -92,6 +112,14 @@ table {
       }
     }
   }
+
+  // .stats-conatiner {
+
+  //   .stats-card :active {
+  //     background-color: chartreuse;
+  //     color: chocolate;
+  //   }
+  // }
 
 }
 

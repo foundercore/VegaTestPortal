@@ -49,7 +49,7 @@ export class MathService {
   }
 
   private async registerMathJaxAsync(config: MathJaxConfig): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       const script: HTMLScriptElement = document.createElement("script");
       script.id = config.id;
       script.type = "text/javascript";
