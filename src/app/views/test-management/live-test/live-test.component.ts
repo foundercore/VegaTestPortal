@@ -12,7 +12,8 @@ import { ButtonStyleAttributesModel } from '../../assignments/models/buttonStyle
 import { QuestionMarkedForReviewModel } from '../../assignments/models/questionMarkedForReview';
 import { CalculatorComponent } from '../../assignments/popups/calculator/calculator.component';
 import { TestConfigService } from '../../assignments/services/test-config-service';
-import { Location } from '@angular/common';
+import { DOCUMENT, Location } from '@angular/common';
+import { Inject } from '@angular/core';
 
 @Component({
   selector: 'app-live-test',
@@ -47,6 +48,8 @@ export class LiveTestComponent implements  OnInit {
   toasterPostion = {
     positionClass: 'toast-bottom-right'
   };
+
+  elem: any;
 
   timerStarted = false;
 
@@ -87,12 +90,15 @@ export class LiveTestComponent implements  OnInit {
     private store: Store<AppState>,
     private router: Router,
     public mathService: MathService,
-    private location: Location
+    private location: Location,
+    @Inject(DOCUMENT) private document: any
   ) {
 
   }
 
   ngOnInit(): void {
+    this.elem = this.document.documentElement;
+    this.openFullscreen();
 
     this.store.select('appState').subscribe((data) => {
       this.userName = data?.user?.userName;
@@ -637,6 +643,7 @@ export class LiveTestComponent implements  OnInit {
     this.testConfigService.saveandExit(this.assignmentId).subscribe(
       (res: any) => {
         this.close();
+        this.closeFullscreen();
         this.router
           .navigate(['/home/dashboard/assignment_report/' + this.assignmentId])
           .then(() => console.log('Navigate to score card'))
@@ -681,7 +688,39 @@ export class LiveTestComponent implements  OnInit {
   }
 
   exit(){
+    this.closeFullscreen();
     this.location.back();
   }
+
+  openFullscreen() {
+    if (this.elem.requestFullscreen) {
+      this.elem.requestFullscreen();
+    } else if (this.elem.mozRequestFullScreen) {
+      /* Firefox */
+      this.elem.mozRequestFullScreen();
+    } else if (this.elem.webkitRequestFullscreen) {
+      /* Chrome, Safari and Opera */
+      this.elem.webkitRequestFullscreen();
+    } else if (this.elem.msRequestFullscreen) {
+      /* IE/Edge */
+      this.elem.msRequestFullscreen();
+    }
+  }
+
+  closeFullscreen() {
+    if (this.document.exitFullscreen) {
+      this.document.exitFullscreen();
+    } else if (this.document.mozCancelFullScreen) {
+      /* Firefox */
+      this.document.mozCancelFullScreen();
+    } else if (this.document.webkitExitFullscreen) {
+      /* Chrome, Safari and Opera */
+      this.document.webkitExitFullscreen();
+    } else if (this.document.msExitFullscreen) {
+      /* IE/Edge */
+      this.document.msExitFullscreen();
+    }
+  }
+
 }
 
