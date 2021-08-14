@@ -71,7 +71,7 @@ export class LiveTestInstructionComponent implements OnInit {
         if(params.assignmentId){
           this.testAssignmentService.getAssignment(params.assignmentId).subscribe(resp => {
               this.assignmentData = resp;
-              if(this.assignmentData.passcode.length > 0){
+              if(this.assignmentData.passcode && this.assignmentData.passcode.length > 0){
                   this.isPassCode = true;
               }
           })

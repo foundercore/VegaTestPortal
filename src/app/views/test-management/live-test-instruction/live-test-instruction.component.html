@@ -6,11 +6,10 @@
             <img style="height: 70px" src="../../../../assets/images/app-logo.jpg" />
           </div>
           <span class="candidate-name">
-              Hey {{displayName}},
+            Welcome {{displayName}},
           </span>
           <h1 class="test-name">
-              <span>Welcome to</span>
-              <span>{{testName}}</span>
+               <span>{{testName}}</span>
            </h1>
           <div class="question-stats">
               <div class="duration">
@@ -22,8 +21,17 @@
                 <span>{{totalQuestion}} questions</span>
               </div>
            </div>
-           <div>
-
+           <div class="test-confirmation-form">
+              <div *ngIf="isPassCode" class="passcode">
+                <div class="form-group">
+                  <label for="usr">Passcode:</label>
+                  <input type="text" class="form-control" id="usr" [(ngModel)]="passcode">
+                </div>
+              </div>
+              <div class="test-confirmation-form-btn">
+                <button mat-button class="primary" (click)="startTest()">Start</button>
+                <button mat-flat-button color="warn" (click)="cancel()">Cancel</button>
+              </div>
            </div>
         </div>
     </div>
@@ -63,22 +71,7 @@
               <p><strong>3.</strong> To change an answer to a question, first select the question and then click on the new answer option followed by a click on the Next button.</p>
               <p><strong>4.</strong> Questions that are saved or marked for review after answering will ONLY be considered for evaluation.</p>
         </div>
-        <div class="test-confirmation-form">
-          <h2 class="test-instructions-article-label">Confirmation Form</h2>
-          <div class="test-confirmation-form-label">Logged in as</div>
-          <div class="test-confirmation-form-username">{{userName}}</div>
 
-          <div *ngIf="isPassCode" class="passcode">
-            <div class="form-group">
-              <label for="usr">Passcode:</label>
-              <input type="text" class="form-control" id="usr" [(ngModel)]="passcode">
-            </div>
-          </div>
-          <div class="test-confirmation-form-btn">
-            <button mat-button class="primary" (click)="startTest()">Start</button>
-            <button mat-flat-button color="warn" (click)="cancel()">Cancel</button>
-          </div>
-        </div>
       </article>
     </div>
 
