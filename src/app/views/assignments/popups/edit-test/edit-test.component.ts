@@ -94,6 +94,7 @@ export class EditTestComponent implements OnInit {
         [Validators.required]
       ),
       totalMarks: new FormControl(this.editTest_data.questionPaper.totalMarks, []),
+      type: new FormControl(this.editTest_data.questionPaper.type,[]),
       tags: new FormControl(this.editTest_data.questionPaper.tags, []),
       calculatorRequired: new FormControl(this.editTest_data.questionPaper.calculatorRequired, []),
       instructions: new FormControl(
@@ -207,6 +208,7 @@ export class EditTestComponent implements OnInit {
     model.instructions = this.testForm.value.instructions;
     model.totalDurationInMinutes = this.testForm.value.duration;
     model.tags = this.tags;
+    model.type = this.testForm.value.type;
     model.calculatorRequired = this.testForm.value.calculatorRequired;
     // TODO - make it summation of all the positive marks of teh section questions
     model.totalMarks = 5;
