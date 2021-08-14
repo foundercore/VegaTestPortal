@@ -1,4 +1,3 @@
-import { filter } from 'rxjs/operators';
 import {
   Component,
   OnInit,
@@ -16,12 +15,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { TestAssignmentServiceService } from 'src/app/services/assignment/test-assignment-service.service';
 import { AppState } from 'src/app/state_management/_states/auth.state';
-import Swal from 'sweetalert2';
-import { TestLiveComponent } from '../../assignments/popups/test-live/test-live.component';
 import { TestConfigService } from '../../assignments/services/test-config-service';
 import { ToastrService } from 'ngx-toastr';
-import { CustomDialogConfirmationModel } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation-model';
-import { CustomDialogConfirmationComponent } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation.component';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -144,49 +139,18 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   startTest(element) {
-    if (this.userType === 'ROLE_USER_ADMIN') {
-      this.buttontext = 'Preview Test';
-    } else {
-      console.log(element);
-      const timeNow = new Date().setHours(0, 0, 0, 0);
-      const testValidFrom = new Date(element.validFrom).setHours(0, 0, 0, 0);
-      const testvalidTo = new Date(element.validTo).setHours(0, 0, 0, 0);
-      if (timeNow < testValidFrom) {
-        this.toastrService.error('Test is yet to start');
-        return;
-      }
-      if (timeNow > testvalidTo) {
-        this.toastrService.error('Test has ended already');
-        return;
-      }
-      this.buttontext = 'Start Test';
+    const timeNow = new Date().setHours(0, 0, 0, 0);
+    const testValidFrom = new Date(element.validFrom).setHours(0, 0, 0, 0);
+    const testvalidTo = new Date(element.validTo).setHours(0, 0, 0, 0);
+    if (timeNow < testValidFrom) {
+      this.toastrService.error('Test is yet to start');
+      return;
     }
-
-    const dialogData = new CustomDialogConfirmationModel(
-      'Please read the instructions carefully before starting the test',
-      element.testName,
-      this.buttontext,
-      'Not Now'
-    );
-
-    const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
-      width: '80vw',
-      height: '80vh',
-      data: dialogData,
-    });
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        if (
-          element.passcode !== null &&
-          String(element.passcode.trim()).length > 1
-        ) {
-          this.verifyPasscode(element);
-        } else {
-          this.openTestPopup(element, 'live');
-        }
-      }
-    });
+    if (timeNow > testvalidTo) {
+      this.toastrService.error('Test has ended already');
+      return;
+    }
+    this.router.navigate([ '/live_test', element.testId,element.assignmentId]);
   }
 
   applyFilter(event: Event) {
@@ -194,47 +158,6 @@ export class StudentDashboardComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openTestPopup(element, testType) {
-    const dialogRef = this.dialog.open(TestLiveComponent, {
-      maxWidth: '1700px',
-      width: '100%',
-      minHeight: '100vh',
-      height: 'auto',
-      hasBackdrop: false,
-      backdropClass: 'dialog-backdrop',
-      data: { testData: element, testType: testType },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      this.getMyAssignments();
-    });
-  }
-
-  verifyPasscode(element) {
-    console.log('VerifyPasscode received element=>', element);
-    if (element.passcode !== null) {
-      //popup to ask for passcode and verify it
-      console.log(
-        'VerifyPasscode received element.passcode=>',
-        element.passcode
-      );
-      Swal.fire({
-        title: 'Verify Yourself',
-        text: 'Enter Passcode:',
-        input: 'text',
-        confirmButtonText: 'Verify',
-        showCancelButton: true,
-        confirmButtonColor: 'rgb(39, 125, 161)',
-        cancelButtonColor: 'rgb(221, 51, 51)',
-      }).then((result) => {
-        if (result.value && result.value == element.passcode) {
-          this.openTestPopup(element, 'live');
-          this.toastrService.success('Passcode Verified successfully');
-        } else if (result.value && result.value != element.passcode) {
-          this.toastrService.error('Invalid Passcode');
-        }
-      });
-    }
-  }
 
   viewResult(row: any) {
     this.testConfigService

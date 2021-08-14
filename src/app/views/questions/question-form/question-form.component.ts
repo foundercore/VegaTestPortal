@@ -396,19 +396,6 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       ],
     };
 
-    var genericIntegrationProperties_description_editor = {
-      target: document
-        .getElementById('description_editor')
-        .getElementsByClassName('angular-editor-textarea')[0],
-      toolbar: document
-        .getElementById('description_editor')
-        .getElementsByClassName('angular-editor-toolbar-set')[
-        document
-          .getElementById('description_editor')
-          .getElementsByClassName('angular-editor-toolbar-set').length - 1
-      ],
-    };
-
     var genericIntegrationProperties_explanation_editor = {
       target: document
         .getElementById('explanation_editor')
@@ -438,12 +425,6 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     // GenericIntegration instance.
     var genericIntegrationInstance = new WirisPlugin.GenericIntegration(
       genericIntegrationProperties_name_editor
-    );
-    genericIntegrationInstance.init();
-    genericIntegrationInstance.listeners.fire('onTargetReady', {});
-
-    var genericIntegrationInstance = new WirisPlugin.GenericIntegration(
-      genericIntegrationProperties_description_editor
     );
     genericIntegrationInstance.init();
     genericIntegrationInstance.listeners.fire('onTargetReady', {});
