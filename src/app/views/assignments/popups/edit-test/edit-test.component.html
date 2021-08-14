@@ -32,27 +32,20 @@
       
       <mat-checkbox formControlName="calculatorRequired" style="padding-bottom: 15px;"> Calculator Required?  </mat-checkbox>
 
-
-      <!-- <label for="name" class="label">Total Marks</label>
-      <mat-form-field appearance="outline" style="width: 100%">
+       <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Type</mat-label>
         <input
-          type="number"
           matInput
-          placeholder="Total Marks"
-          formControlName="totalMarks"
+          placeholder="Type"
+          formControlName="type"
         />
-        <mat-error *ngIf="hasError('totalMarks', 'required')"
-          >Total Marks is required</mat-error
+        <mat-error *ngIf="hasError('type', 'required')"
+          >Type has error</mat-error
         >
-      </mat-form-field> -->
-      <!-- <label for="name" class="label">Tags</label> -->
-      <!-- <mat-form-field appearance="outline" style="width: 100%">
-        <input
-          matInput
-          placeholder="Tags"
-          formControlName="tags"
-        />
-      </mat-form-field> -->
+        
+      </mat-form-field>
+
+      
        <mat-form-field
              appearance="outline" style="width: 100%"
           >

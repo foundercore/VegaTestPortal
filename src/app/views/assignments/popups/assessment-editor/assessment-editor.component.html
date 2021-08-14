@@ -6,35 +6,16 @@
     </button>
   </div>
   <div class="card-body">
-    <!-- <form action="">
-            <label for="name" class="label">Test Name</label>
-            <input type="text" name="name" class="form-control">
-
-            <label for="name" class="label mt-4">Duration (Mins)</label>
-            <input type="text" name="name" class="form-control">
-
-            <div class="text-center pt-4">
-                <button class="btn btn-primary save-btn mx-1">
-                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                    Save
-                </button>
-                <button class="btn btn-outline-secondary mx-1">
-                    <i class="fa fa-repeat" aria-hidden="true"></i>
-                    Reset
-                </button>
-            </div>
-        </form> -->
     <form [formGroup]="testForm" autocomplete="off">
-      <label for="name" class="label">Test Name</label>
       <mat-form-field appearance="outline" style="width: 100%">
+         <mat-label>Test Name</mat-label>
         <input matInput placeholder="Test Name" formControlName="testName" />
         <mat-error *ngIf="hasError('testName', 'required')"
           >Test Name is required</mat-error
         >
       </mat-form-field>
-
-      <label for="name" class="label mt-4">Duration (Mins)</label>
       <mat-form-field appearance="outline" style="width: 100%">
+         <mat-label>Duration (Mins)</mat-label>
         <input
           type="number"
           matInput
@@ -49,8 +30,20 @@
           >Duration should be greater than 0</span
         >
       </mat-form-field>
+      <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label>Type</mat-label>
+        <input
+          matInput
+          placeholder="Type"
+          formControlName="type"
+        />
+        <mat-error *ngIf="hasError('type', 'required')"
+          >Type has error</mat-error
+        >
+        
+      </mat-form-field>
 
-      <label for="description" class="label mt-4">Instruction</label>
+      <label for="description" class="label">Instruction</label>
 
       <angular-editor
         id="name_editor"

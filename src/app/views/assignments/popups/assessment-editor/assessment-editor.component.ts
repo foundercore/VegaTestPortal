@@ -54,6 +54,7 @@ export class AssessmentEditorComponent implements OnInit {
       testName: new FormControl('', [Validators.required]),
       duration: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
+      type: new FormControl('')
     });
   }
   public hasError = (controlName: string, errorName: string) => {
