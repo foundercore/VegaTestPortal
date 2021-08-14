@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   ViewChild,
   ViewEncapsulation,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -21,6 +22,7 @@ import { TestConfigService } from '../../assignments/services/test-config-servic
 import { ToastrService } from 'ngx-toastr';
 import { CustomDialogConfirmationModel } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation-model';
 import { CustomDialogConfirmationComponent } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -30,27 +32,36 @@ import { CustomDialogConfirmationComponent } from 'src/app/shared/components/cus
   encapsulation: ViewEncapsulation.None,
 })
 export class StudentDashboardComponent implements OnInit {
-  resultStats = [
-    {
-      name: 'Passed',
-      value: 60,
-    },
-    {
-      name: 'Failed',
-      value: 30,
-    },
-  ];
 
-  tagSet = new Set([]);
+
+
+  public typeFilter = (x,selectedTabName) => {
+    if(selectedTabName == "Other"){
+      return  x.testType == "null" || x.testType == null
+    } else {
+      return  x.testType == selectedTabName
+    }
+  };
+
+  public attemptedFilter = (x,filterValue) => {
+        if(filterValue == "A") {
+          return  x.attempted
+        } else if (filterValue == "UA"){
+          return !x.attempted
+        }
+      return true;
+  };
+
+
+  tagArray = [];
 
   resultData: any[] = [];
 
-  single: any[] | undefined;
-  // options
-  gradient: boolean = true;
-  showLegend: boolean = true;
-  showLabels: boolean = true;
-  isDoughnut: boolean = false;
+  currentFilterValue = "NA";
+
+  selectedTabIndex = new FormControl(0);
+
+
   searchText: string = '';
   appState: any;
   userName: string = '';
@@ -61,9 +72,6 @@ export class StudentDashboardComponent implements OnInit {
   createdId: string = '';
   isLoading = true;
 
-  colorScheme = {
-    domain: ['#52D726', '#FF0000'],
-  };
 
   public pageOptions = PAGE_OPTIONS;
 
@@ -76,12 +84,11 @@ export class StudentDashboardComponent implements OnInit {
 
   dataSource = new MatTableDataSource<any>();
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator | undefined;
 
   totalTest: number;
   notAttempted: number;
   attempt: number;
-  attempted: any[] = [];
 
   constructor(
     public translate: TranslateService,
@@ -90,9 +97,10 @@ export class StudentDashboardComponent implements OnInit {
     private store: Store<AppState>,
     private testConfigService: TestConfigService,
     private router: Router,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
-    this.tagSet.add('Other');
+
   }
 
   ngOnInit(): void {
@@ -100,7 +108,6 @@ export class StudentDashboardComponent implements OnInit {
       this.userName = data?.user?.userName;
       this.studentName = data?.user?.firstName + ' ' + data?.user?.lastName;
       this.userType = data?.user?.authorities[0]?.authority;
-      console.log('data', data);
     });
     this.getMyAssignments();
   }
@@ -109,35 +116,17 @@ export class StudentDashboardComponent implements OnInit {
     this.isLoading = true;
     this.testAssignmentService.getMyAssignment().subscribe(
       (resp) => {
-        this.isLoading = false;
         this.resultData = resp;
-        console.log('this.resultData==', this.resultData);
-        this.dataSource.data = this.resultData;
+        const stats = this.getDataStats();
+        this.totalTest = stats.totalTest;
+        this.notAttempted = this.totalTest - stats.attempted;
+        this.attempt = stats.attempted;
+        this.tagArray = [...stats.tagSets];
         this.dataSource.paginator = this.paginator;
-        this.totalTest = this.resultData.length;
-        let nonClassifiedTest = false;
-        this.resultData.forEach((assignment) => {
-          if (assignment.attempted) {
-            this.attempted.push(assignment);
-          }
-          if (assignment.testType === null || assignment.testType === 'null') {
-            nonClassifiedTest = true;
-          } else if (assignment.testType != null) {
-            this.tagSet.add(assignment.testType);
-          }
-        });
-        // if non classified test exists add other tag
-        if (nonClassifiedTest) {
-          this.tagSet.add('Other');
-        } else {
-          this.tagSet.delete('Other');
-        }
-        this.onTabChanged({
-          tab: { textLabel: this.tagSet.values().next().value },
-        });
-        this.notAttempted = this.totalTest - this.attempted.length;
-        this.attempt = this.attempted.length;
         this.isLoading = false;
+        this.changeDetectorRef.detectChanges();
+        this.onTabChanged(0);
+        this.changeDetectorRef.detectChanges();
       },
       (err) => {
         this.isLoading = false;
@@ -203,10 +192,6 @@ export class StudentDashboardComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    // if (this.dataSource.paginator) {
-    //   this.dataSource.paginator.firstPage();
-    // }
   }
 
   openTestPopup(element, testType) {
@@ -269,67 +254,53 @@ export class StudentDashboardComponent implements OnInit {
       );
   }
 
-  takeTest(row: any) {}
 
-  onTabChanged($event) {
-    const filterValue = $event.tab.textLabel;
-    const filterArray = [];
-    let filteredData;
-    filterArray.push(filterValue);
-    if (this.filterVar === 'A') {
-      if (filterValue === 'Others') {
-        filterArray.push('null');
-      }
-      filteredData = this.resultData.filter(
-        (d) => filterArray.includes(d.testType) && d.attempted
-      );
-    } else if (this.filterVar === 'UA') {
-      if (filterValue === 'Others') {
-        filterArray.push('null');
-      }
-      filteredData = this.resultData.filter(
-        (d) => filterArray.includes(d.testType) && !d.attempted
-      );
-    } else {
-      if (filterValue === 'Others') {
-        filterArray.push('null');
-      }
-      filteredData = this.resultData.filter((d) =>
-        filterArray.includes(d.testType)
-      );
-    }
-
+  onTabChanged(index) {
+    this.selectedTabIndex.setValue(index)
+    let filterData = this.filterData(this.tagArray[index],this.currentFilterValue);
     this.dataSource.paginator = this.paginator;
-    this.dataSource.data = filteredData;
+    this.dataSource.data = filterData;
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
-  filterVar: string = 'NA';
-
   statsFilter(filterParam) {
-    const filterArray = [];
-    this.filterVar = filterParam;
-    let filteredData;
-    if (filterParam === 'UA') {
-      filteredData = this.resultData.filter(
-        (d) => filterArray.includes(d.testType) && !d.attempted
-      );
-    } else if (filterParam === 'A') {
-      filteredData = this.resultData.filter(
-        (d) => filterArray.includes(d.testType) && d.attempted
-      );
-    } else {
-      filteredData = this.resultData.filter((d) =>
-        filterArray.includes(d.testType)
-      );
-    }
-
+    this.currentFilterValue = filterParam;
+    let filterData = this.filterData(this.tagArray[this.selectedTabIndex.value],this.currentFilterValue);
     this.dataSource.paginator = this.paginator;
-    this.dataSource.data = filteredData;
+    this.dataSource.data = filterData;
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  filterData(selectedTabName,filterValue){
+    let filteredData = this.resultData.filter( x => this.attemptedFilter(x,filterValue) && this.typeFilter(x,selectedTabName));
+     return filteredData;
+  }
+
+  getDataStats (){
+    let stats = {
+      tagSets : new Set([]),
+      attempted: 0,
+      totalTest: 0
+    }
+    let isOtherTag = false;
+    this.resultData.forEach((assignment) => {
+      if (assignment.attempted) {
+        stats.attempted ++;
+      }
+      if (assignment.testType === null || assignment.testType === 'null') {
+        isOtherTag = true;
+      } else if (assignment.testType != null) {
+        stats.tagSets.add(assignment.testType);
+      }
+    });
+    if(isOtherTag){
+      stats.tagSets.add("Other");
+    }
+    stats.totalTest = this.resultData.length;
+    return stats;
   }
 }
