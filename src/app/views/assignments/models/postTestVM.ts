@@ -1,9 +1,10 @@
 export class TestVM{
-    minimumDurationInMinutes : number =0;
-    name : string = "";
-    totalDurationInMinutes : number = 0;
-    testId : string = "";
-    instructions : string ="";
-    status : string = "";
+    minimumDurationInMinutes = 0;
+    name = '';
+    totalDurationInMinutes = 0;
+    testId = '';
+    instructions = '';
+    status = '';
+    type = '';
 
 }

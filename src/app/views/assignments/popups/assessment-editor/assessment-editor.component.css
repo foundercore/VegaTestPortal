@@ -1,4 +1,7 @@
-
+.contentBody {
+    overflow: auto;
+    max-height: 500px ;
+}
 
 .duration__err {
     position: absolute;

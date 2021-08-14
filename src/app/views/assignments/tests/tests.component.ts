@@ -162,6 +162,7 @@ export class TestsComponent implements OnInit, AfterViewInit {
         model.minimumDurationInMinutes = +result?.duration;
         model.name = result?.testName;
         model.instructions = result?.description;
+        model.type = result?.type;
         model.status = Status.DRAFT;
         this.testConfigService.createQuestionPaper(model).subscribe(
           (res: any) => {
