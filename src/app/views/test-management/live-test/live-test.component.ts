@@ -367,9 +367,11 @@ export class LiveTestComponent implements  OnInit {
 
         },
         (error) => {
-          console.error(
+          console.log(
             'Error in fetching user submitted data => Reasons can be: 1)This user doesn\'t has any submitted data 2). Internet connectivity issue'
           );
+          this.timeSeconds = this.convertminutestoseconds( this.currentSelectedSection.durationInMinutes);
+          this.observableTimer(0);
          }
       );
 
