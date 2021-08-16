@@ -49,4 +49,10 @@ export class TestAssignmentServiceService extends BaseService {
     const url = `${this.BASE_SERVICE_URL}/api/v1/test/assignment/by-name/${username}/list`;
     return this.http.get<any>(url);
   }
+
+
+  resetStudentAssignment(assignment_id:string,username:string){
+    const url = `${this.BASE_SERVICE_URL}/api/v1/test/assignment/submission/${assignment_id}/${username}/remove`;
+    return this.http.delete<any>(url);
+  }
 }
