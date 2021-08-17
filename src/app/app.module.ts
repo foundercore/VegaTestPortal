@@ -28,6 +28,7 @@ import { CountdownModule } from 'ngx-countdown';
 import { TermConditionPageComponent } from './views/term-condition-page/term-condition-page.component';
 import { ReportsModule } from './views/reports/reports.module';
 import { BreadcrumbNavService } from './views/layout/breadcrumb/breadcrumb-nav.service';
+import { TestManagementModule } from './views/test-management/test-management.module';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -43,7 +44,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   imports: [
     //User Module
     BootstrapModule,
-
+    TestManagementModule,
     //System Module
     HttpClientModule,
     FontAwesomeModule,

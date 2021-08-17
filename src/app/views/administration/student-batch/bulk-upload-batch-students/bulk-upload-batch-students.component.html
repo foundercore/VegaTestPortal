@@ -10,7 +10,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Batch Name</mat-label>
-        <mat-select  formControlName="name" required>
+        <mat-select  formControlName="name" required  (keyup)="onClick($event)">
           <div class="drop-down-search-container">
             <input
             class="search-container"

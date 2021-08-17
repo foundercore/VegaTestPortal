@@ -1,8 +1,11 @@
-import { QuestionConstants, QuestionModel } from './../../../models/questions/question-model';
+import {
+  QuestionConstants,
+  QuestionModel,
+} from './../../../models/questions/question-model';
 import { QuestionManagementService } from './../../../services/question-management/question-management.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { QuestionOption } from 'src/app/models/questions/question-option-model';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,63 +15,59 @@ import { forkJoin } from 'rxjs';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { TranslateService } from '@ngx-translate/core';
 import { Location } from '@angular/common';
+import { MatStepper } from '@angular/material/stepper';
 declare var WirisPlugin: any;
 
 @Component({
   selector: 'app-question-form',
   templateUrl: './question-form.component.html',
-  styleUrls: ['./question-form.component.scss']
+  styleUrls: ['./question-form.component.scss'],
 })
-export class QuestionFormComponent implements OnInit,AfterViewInit {
-
-
+export class QuestionFormComponent implements OnInit, AfterViewInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  updatedQuestion? : QuestionModel | undefined;
+  updatedQuestion?: QuestionModel | undefined;
 
   tags: string[] | undefined = [];
   isNewForm = true;
+
   difficultyLevel: string[] = QuestionConstants.DIFFICULTY_LEVEL;
-  questionTypeList : string[] = [];
+  questionTypeList: string[] = [];
 
   options: QuestionOption[] | undefined = [];
 
-  questionFirstFormGrp = new FormGroup ({
+  stepOneFormGroup = new FormGroup({
     name: new FormControl(),
+    passage: new FormControl(),
+    explanation: new FormControl(),
     description: new FormControl(),
+    type: new FormControl(),
+    answerText: new FormControl(),
+  });
+
+  secondStepFromGroup = new FormGroup({
+    positiveMark: new FormControl(),
+    negativeMark: new FormControl(),
+    skipMark: new FormControl(),
+    bookReference: new FormControl(),
+    tags: new FormControl(),
     subject: new FormControl(),
     topic: new FormControl(),
     subTopic: new FormControl(),
     difficulty: new FormControl(),
   });
 
-  questionSecondFormGrp = new FormGroup ({
-    positiveMark: new FormControl(),
-    negativeMark: new FormControl(),
-    skipMark: new FormControl(),
-  })
-
-  questionThirdFormGrp = new FormGroup ({
-    type: new FormControl(),
-    tags: new FormControl(),
-    passage: new FormControl(),
-    explanation: new FormControl(),
-    bookReference: new FormControl()
-  })
-
-  questionForthFormGrp = new FormGroup ({
+  questionForthFormGrp = new FormGroup({
     correctOption: new FormControl(),
-    answerText: new FormControl()
+    answerText: new FormControl(),
   });
 
+  // answerOptionFormGrp = new FormGroup({});
 
-  answerOptionFormGrp = new FormGroup({
+  answerOptionFormGrp: FormGroup;
+  optionArrays: FormArray;
 
-  })
-
-  optionCount = "0";
-
-
+  optionCount = '0';
 
   descriptionEditorconfig: AngularEditorConfig = {
     editable: true,
@@ -89,16 +88,17 @@ export class QuestionFormComponent implements OnInit,AfterViewInit {
       },
       {
         name: 'redText',
-        class: 'redText'
+        class: 'redText',
       },
       {
         name: 'titleText',
         class: 'titleText',
         tag: 'h1',
       },
-    ]
+    ],
   };
 
+  optionItems = [];
 
   constructor(
     private router: Router,
@@ -106,70 +106,121 @@ export class QuestionFormComponent implements OnInit,AfterViewInit {
     private activateRouter: ActivatedRoute,
     public translate: TranslateService,
     private questionManagementService: QuestionManagementService,
-    private location: Location
-    ) {
-
-      forkJoin([this.questionManagementService.getQuestionType()
-      ]).subscribe(results => {
+    private location: Location,
+    private fb: FormBuilder
+  ) {
+    forkJoin([this.questionManagementService.getQuestionType()]).subscribe(
+      (results) => {
         this.questionTypeList = results[0];
-      })
+        this.questionTypeList = this.questionTypeList.filter(
+          (x) => x === 'MCQ' || x === 'TITA'
+        );
+      }
+    );
 
-     }
+    this.answerOptionFormGrp = this.fb.group({
+      optionArrays: this.fb.array([]),
+    });
+  }
+
   ngAfterViewInit(): void {
-      this.bindEquationToEditor();
-
+    this.bindEquationToEditor();
   }
 
   ngOnInit() {
-    this.activateRouter.params.subscribe(params => {
-      if(params.id) {
-        this.questionManagementService.getQuestion(params.id).subscribe(resp => {
-          console.log(resp);
-          this.isNewForm = false;
-          this.updatedQuestion =resp;
-          this.questionFirstFormGrp.get('description')?.setValue(resp.description);
-          this.questionFirstFormGrp.get('difficulty')?.setValue(resp.difficultyLevel);
-          this.questionThirdFormGrp.get('explanation')?.setValue(resp.explanation);
-          this.questionFirstFormGrp.get('name')?.setValue(resp.name);
-          this.questionSecondFormGrp.get('negativeMark')?.setValue(resp.negativeMark);
-          this.options = resp.options;
-          this.questionThirdFormGrp.get('passage')?.setValue(resp.passageContent);
-          this.questionSecondFormGrp.get('positiveMark')?.setValue(resp.positiveMark);
-          this.questionThirdFormGrp.get('bookReference')?.setValue(resp.reference);
-          this.questionSecondFormGrp.get('skipMark')?.setValue(resp.skipMark);
-          this.questionFirstFormGrp.get('subject')?.setValue(resp.subject);
-          this.questionFirstFormGrp.get('subTopic')?.setValue(resp.subTopic);
-          this.questionForthFormGrp.get('answerText')?.setValue(resp.answer.answerText);
-          if(resp.tags){
-            this.tags = resp.tags;
-          }
-          this.questionFirstFormGrp.get('topic')?.setValue(resp.topic);
-          this.questionThirdFormGrp.get('type')?.setValue(resp.type);
-          this.options.forEach(x => {
-            const newCntrl = new FormControl();
-            this.answerOptionFormGrp.addControl(x.key,newCntrl);
-            this.optionCount = parseInt(x.key) > parseInt(this.optionCount)  ? x.key : String(parseInt(this.optionCount));
-          })
-          resp.answer.options.forEach(x => {
-            this.answerOptionFormGrp.controls[x].setValue(true);
+    this.activateRouter.params.subscribe((params) => {
+      if (params.id) {
+        this.questionManagementService
+          .getQuestion(params.id)
+          .subscribe((resp) => {
+            this.isNewForm = false;
+            this.updatedQuestion = resp;
+            this.stepOneFormGroup.get('passage')?.setValue(resp.passageContent);
+            this.stepOneFormGroup.get('name')?.setValue(resp.name);
+            this.stepOneFormGroup
+              .get('explanation')
+              ?.setValue(resp.explanation);
+            this.stepOneFormGroup
+              .get('description')
+              ?.setValue(resp.description);
+            this.stepOneFormGroup.get('type')?.setValue(resp.type);
+            this.options = resp.options;
+            this.options.forEach((x) => {
+              this.addOption();
+            });
+
+            this.answerOptionFormGrp
+              .get('optionArrays')
+              ['controls'].forEach((x, i) => {
+                x.get('value').setValue(resp.options[i].value);
+              });
+
+            for (let i = 0; i < resp.answer.options.length; i++) {
+              for (let j = 0; j < resp.options.length; j++) {
+                if (resp.answer.options[i] == resp.options[j].key) {
+                  this.answerOptionFormGrp.controls.optionArrays['controls'][j]['controls'].flag.setValue(true);
+                }
+              }
+            }
+
+            this.questionForthFormGrp
+              .get('answerText')
+              ?.setValue(resp.answer.answerText);
+
+            this.secondStepFromGroup
+              .get('positiveMark')
+              ?.setValue(resp.positiveMark);
+            this.secondStepFromGroup
+              .get('negativeMark')
+              ?.setValue(resp.negativeMark);
+            this.secondStepFromGroup.get('skipMark')?.setValue(resp.skipMark);
+            this.secondStepFromGroup
+              .get('bookReference')
+              ?.setValue(resp.reference);
+            if (resp.tags) {
+              this.tags = resp.tags;
+            }
+            this.secondStepFromGroup.get('subject')?.setValue(resp.subject);
+            this.secondStepFromGroup.get('topic')?.setValue(resp.topic);
+            this.secondStepFromGroup.get('subTopic')?.setValue(resp.subTopic);
+            this.secondStepFromGroup
+              .get('difficulty')
+              ?.setValue(resp.difficultyLevel);
           });
-        })
       }
-     });
+    });
   }
 
-  addOption() {
-    this.options?.push({key:this.optionCount,value:''});
-    const newCntrl = new FormControl();
-    this.answerOptionFormGrp.addControl(this.optionCount,newCntrl);
-    this.optionCount = String(parseInt(this.optionCount) + 1);
+  createOption() {
+    return this.fb.group({
+      flag: [''],
+      value: [''],
+    });
   }
 
-  removeOption(index: number,option: QuestionOption) {
-    this.options?.splice(index, 1);
-    this.answerOptionFormGrp.removeControl(option.key);
-
+  addOption(): void {
+    this.optionArrays = this.answerOptionFormGrp.get(
+      'optionArrays'
+    ) as FormArray;
+    this.optionArrays.push(this.createOption());
   }
+
+  removeOption(index) {
+    console.log(index);
+    (<FormArray>this.answerOptionFormGrp.get('optionArrays')).removeAt(index);
+  }
+
+  // addOption() {
+  //   this.options?.push({ key: this.optionCount, value: '' });
+  //   const newCntrl = new FormControl();
+  //   this.answerOptionFormGrp.addControl(this.optionCount, newCntrl);
+  //   this.optionCount = String(parseInt(this.optionCount) + 1);
+  // }
+
+  // removeOption(index: number, option: QuestionOption) {
+  //   this.options?.splice(index, 1);
+  //   this.answerOptionFormGrp.removeControl(option.key);
+  // }
 
   addTag(event: MatChipInputEvent): void {
     const input = event.input;
@@ -188,143 +239,230 @@ export class QuestionFormComponent implements OnInit,AfterViewInit {
   removeTag(tag: string): void {
     const index = this.tags?.indexOf(tag);
 
-    if (index !=undefined && index >= 0) {
+    if (index != undefined && index >= 0) {
       this.tags?.splice(index, 1);
     }
   }
 
-  createQuestion(){
+  createQuestion() {
     const answerOptions = [];
+    const trueOptions = [];
 
-    for (const field in this.answerOptionFormGrp.controls) {
-      if(this.answerOptionFormGrp.controls[field].value)
-                answerOptions.push(field);
-     }
+    // for (const field in this.answerOptionFormGrp.controls) {
+    //   if (this.answerOptionFormGrp.controls[field].value)
+    //     answerOptions.push(field);
+    // }
 
-    let questionAnswer : QuestionAnswer = {
-      answerText : this.questionForthFormGrp.get('answerText')?.value,
-      options :answerOptions
-    }
+    this.answerOptionFormGrp.get('optionArrays')['controls'].forEach((x, i) =>
+      answerOptions.push({
+        key: i,
+        flag: x.get('flag').value ? '1' : '0',
+        value: x.get('value').value,
+      })
+    );
 
-    let question : QuestionModel = {
-      answer: questionAnswer,
-      description: this.questionFirstFormGrp.get('description')?.value,
-      difficultyLevel: this.questionFirstFormGrp.get('difficulty')?.value.toUpperCase() ,
-      explanation: this.questionThirdFormGrp.get('explanation')?.value,
-      name:  this.questionFirstFormGrp.get('name')?.value,
-      negativeMark: this.questionSecondFormGrp.get('negativeMark')?.value,
-      options: this.options,
-      passageContent:  this.questionThirdFormGrp.get('passage')?.value,
-      positiveMark: this.questionSecondFormGrp.get('positiveMark')?.value,
-      reference:  this.questionThirdFormGrp.get('bookReference')?.value,
-      skipMark: this.questionSecondFormGrp.get('skipMark')?.value,
-      subject:  this.questionFirstFormGrp.get('subject')?.value,
-      subTopic:  this.questionFirstFormGrp.get('subTopic')?.value,
-      tags:  this.tags,
-      topic:  this.questionFirstFormGrp.get('topic')?.value,
-      type:  this.questionThirdFormGrp.get('type')?.value
+    answerOptions.forEach((x) => {
+      if (x.flag == 1) {
+        trueOptions.push(x.key);
+      }
+    });
+
+    let questionAnswer: QuestionAnswer = {
+      answerText: this.questionForthFormGrp.get('answerText')?.value,
+      options: trueOptions,
     };
 
+    let question: QuestionModel = {
+      answer: questionAnswer,
+      passageContent: this.stepOneFormGroup.get('passage')?.value,
+      name: this.stepOneFormGroup.get('name')?.value,
+      explanation: this.stepOneFormGroup.get('explanation')?.value,
+      description: this.stepOneFormGroup.get('description')?.value,
+      type: this.stepOneFormGroup.get('type')?.value,
+      options: answerOptions,
+      positiveMark: this.secondStepFromGroup.get('positiveMark')?.value,
+      negativeMark: this.secondStepFromGroup.get('negativeMark')?.value,
+      skipMark: this.secondStepFromGroup.get('skipMark')?.value,
+      reference: this.secondStepFromGroup.get('bookReference')?.value,
+      tags: this.tags,
+      subject: this.secondStepFromGroup.get('subject')?.value,
+      topic: this.secondStepFromGroup.get('topic')?.value,
+      subTopic: this.secondStepFromGroup.get('subTopic')?.value,
+      difficultyLevel: this.secondStepFromGroup
+        .get('difficulty')
+        ?.value.toUpperCase(),
+    };
 
-    this.questionManagementService.createQuestion(question).subscribe(resp => {
+    console.log(question);
+
+    this.questionManagementService.createQuestion(question).subscribe(
+      (resp) => {
         this.toastr.success('Question Created Successfully');
         this.cancel();
-    }, error => {
-      this.toastr.error(error.error.apierror.message);
-    })
-
+      },
+      (error) => {
+        this.toastr.error(error.error.apierror.message);
+      }
+    );
   }
 
-
-  updateQuestion(){
-
+  updateQuestion() {
     const answerOptions = [];
+    const trueOptions = [];
 
-    for (const field in this.answerOptionFormGrp.controls) {
-      if(this.answerOptionFormGrp.controls[field].value)
-      answerOptions.push(field);
-     }
+    this.answerOptionFormGrp.get('optionArrays')['controls'].forEach((x, i) =>
+      answerOptions.push({
+        key: i,
+        flag: x.get('flag').value ? '1' : '0',
+        value: x.get('value').value,
+      })
+    );
 
-    let questionAnswer : QuestionAnswer = {
-      answerText : this.questionForthFormGrp.get('answerText')?.value,
-      options :answerOptions
-    }
+    answerOptions.forEach((x) => {
+      if (x.flag == 1) {
+        trueOptions.push(x.key);
+      }
+    });
+
+    // for (const field in this.answerOptionFormGrp.controls) {
+    //   if (this.answerOptionFormGrp.controls[field].value)
+    //     answerOptions.push(field);
+    // }
+
+    let questionAnswer: QuestionAnswer = {
+      answerText: this.questionForthFormGrp.get('answerText')?.value,
+      options: trueOptions,
+    };
     //this.updatedQuestion.
-    if(this.updatedQuestion){
+    if (this.updatedQuestion) {
       this.updatedQuestion.answer = questionAnswer;
-      this.updatedQuestion.description= this.questionFirstFormGrp.get('description')?.value;
-      this.updatedQuestion.difficultyLevel = this.questionFirstFormGrp.get('difficulty')?.value;
-      this.updatedQuestion.explanation =this.questionThirdFormGrp.get('explanation')?.value;
-      this.updatedQuestion.name =  this.questionFirstFormGrp.get('name')?.value;
-      this.updatedQuestion.negativeMark = this.questionSecondFormGrp.get('negativeMark')?.value;
-      this.updatedQuestion.options = this.options;
-      this.updatedQuestion.passageContent = this.questionThirdFormGrp.get('passage')?.value;
-      this.updatedQuestion.positiveMark = this.questionSecondFormGrp.get('positiveMark')?.value;
-      this.updatedQuestion.reference =  this.questionThirdFormGrp.get('bookReference')?.value;
-      this.updatedQuestion.skipMark = this.questionSecondFormGrp.get('skipMark')?.value;
-      this.updatedQuestion.subject =  this.questionFirstFormGrp.get('subject')?.value;
-      this.updatedQuestion.subTopic =  this.questionFirstFormGrp.get('subTopic')?.value;
-      this.updatedQuestion.tags = this.tags;
-      this.updatedQuestion.topic =  this.questionFirstFormGrp.get('topic')?.value;
-      this.updatedQuestion.type =  this.questionThirdFormGrp.get('type')?.value;
+      this.updatedQuestion.passageContent =
+        this.stepOneFormGroup.get('passage')?.value;
+      this.updatedQuestion.name = this.stepOneFormGroup.get('name')?.value;
+      this.updatedQuestion.explanation =
+        this.stepOneFormGroup.get('explanation')?.value;
+      this.updatedQuestion.description =
+        this.stepOneFormGroup.get('description')?.value;
+      this.updatedQuestion.type = this.stepOneFormGroup.get('type')?.value;
+      this.updatedQuestion.options = answerOptions;
 
-      this.questionManagementService.updateQuestion(this.updatedQuestion).subscribe(resp => {
-        this.toastr.success('Question Updated Successfully');
-        this.cancel();
-        }, error => {
-          this.toastr.error(error.error.apierror.message);
-          })
-        }
+      this.updatedQuestion.positiveMark =
+        this.secondStepFromGroup.get('positiveMark')?.value;
+      this.updatedQuestion.negativeMark =
+        this.secondStepFromGroup.get('negativeMark')?.value;
+      this.updatedQuestion.skipMark =
+        this.secondStepFromGroup.get('skipMark')?.value;
+      this.updatedQuestion.reference =
+        this.secondStepFromGroup.get('bookReference')?.value;
+      this.updatedQuestion.subject =
+        this.secondStepFromGroup.get('subject')?.value;
+      this.updatedQuestion.topic = this.secondStepFromGroup.get('topic')?.value;
+      this.updatedQuestion.subTopic =
+        this.secondStepFromGroup.get('subTopic')?.value;
+      this.updatedQuestion.difficultyLevel =
+        this.secondStepFromGroup.get('difficulty')?.value;
+      this.updatedQuestion.tags = this.tags;
+
+      this.questionManagementService
+        .updateQuestion(this.updatedQuestion)
+        .subscribe(
+          (resp) => {
+            this.toastr.success('Question Updated Successfully');
+            this.cancel();
+          },
+          (error) => {
+            this.toastr.error(error.error.apierror.message);
+          }
+        );
+    }
   }
 
   cancel() {
-    this.location.back()
+    this.location.back();
     // this.router.navigate(['home/questionmanagement']);
   }
 
-
-  bindEquationToEditor(){
+  bindEquationToEditor() {
     var genericIntegrationProperties_name_editor = {
-      target : document.getElementById('name_editor').getElementsByClassName('angular-editor-textarea')[0],
-      toolbar : document.getElementById('name_editor').getElementsByClassName('angular-editor-toolbar-set')[document.getElementById('name_editor').getElementsByClassName('angular-editor-toolbar-set').length -1]
-    };
-
-    var genericIntegrationProperties_description_editor = {
-      target : document.getElementById('description_editor').getElementsByClassName('angular-editor-textarea')[0],
-      toolbar : document.getElementById('description_editor').getElementsByClassName('angular-editor-toolbar-set')[document.getElementById('description_editor').getElementsByClassName('angular-editor-toolbar-set').length -1]
+      target: document
+        .getElementById('name_editor')
+        .getElementsByClassName('angular-editor-textarea')[0],
+      toolbar: document
+        .getElementById('name_editor')
+        .getElementsByClassName('angular-editor-toolbar-set')[
+        document
+          .getElementById('name_editor')
+          .getElementsByClassName('angular-editor-toolbar-set').length - 1
+      ],
     };
 
     var genericIntegrationProperties_explanation_editor = {
-      target : document.getElementById('explanation_editor').getElementsByClassName('angular-editor-textarea')[0],
-      toolbar : document.getElementById('explanation_editor').getElementsByClassName('angular-editor-toolbar-set')[document.getElementById('explanation_editor').getElementsByClassName('angular-editor-toolbar-set').length -1]
+      target: document
+        .getElementById('explanation_editor')
+        .getElementsByClassName('angular-editor-textarea')[0],
+      toolbar: document
+        .getElementById('explanation_editor')
+        .getElementsByClassName('angular-editor-toolbar-set')[
+        document
+          .getElementById('explanation_editor')
+          .getElementsByClassName('angular-editor-toolbar-set').length - 1
+      ],
     };
-
 
     var genericIntegrationProperties_passage_editor = {
-      target : document.getElementById('passage_editor').getElementsByClassName('angular-editor-textarea')[0],
-      toolbar : document.getElementById('passage_editor').getElementsByClassName('angular-editor-toolbar-set')[document.getElementById('passage_editor').getElementsByClassName('angular-editor-toolbar-set').length -1]
+      target: document
+        .getElementById('passage_editor')
+        .getElementsByClassName('angular-editor-textarea')[0],
+      toolbar: document
+        .getElementById('passage_editor')
+        .getElementsByClassName('angular-editor-toolbar-set')[
+        document
+          .getElementById('passage_editor')
+          .getElementsByClassName('angular-editor-toolbar-set').length - 1
+      ],
     };
 
-
     // GenericIntegration instance.
-    var genericIntegrationInstance = new WirisPlugin.GenericIntegration(genericIntegrationProperties_name_editor);
+    var genericIntegrationInstance = new WirisPlugin.GenericIntegration(
+      genericIntegrationProperties_name_editor
+    );
     genericIntegrationInstance.init();
     genericIntegrationInstance.listeners.fire('onTargetReady', {});
 
-
-    var genericIntegrationInstance = new WirisPlugin.GenericIntegration(genericIntegrationProperties_description_editor);
+    var genericIntegrationInstance = new WirisPlugin.GenericIntegration(
+      genericIntegrationProperties_explanation_editor
+    );
     genericIntegrationInstance.init();
     genericIntegrationInstance.listeners.fire('onTargetReady', {});
 
-    var genericIntegrationInstance = new WirisPlugin.GenericIntegration(genericIntegrationProperties_explanation_editor);
+    var genericIntegrationInstance = new WirisPlugin.GenericIntegration(
+      genericIntegrationProperties_passage_editor
+    );
     genericIntegrationInstance.init();
     genericIntegrationInstance.listeners.fire('onTargetReady', {});
+  }
 
+  onTypeChange($event) {
+    if ($event.value == 'MCQ') {
+      this.answerOptionFormGrp = this.fb.group({
+        optionArrays: this.fb.array([]),
+      });
 
-    var genericIntegrationInstance = new WirisPlugin.GenericIntegration(genericIntegrationProperties_passage_editor);
-    genericIntegrationInstance.init();
-    genericIntegrationInstance.listeners.fire('onTargetReady', {});
+      for (let i = 0; i < 4; i++) {
+        this.addOption();
+      }
+    }
 
+    if ($event.value == 'TITA') {
+      this.questionForthFormGrp.controls['answerText'].reset();
+    }
+  }
 
+  goBack(stepper: MatStepper) {
+    stepper.previous();
+  }
+
+  nextStep(stepper: MatStepper) {
+    stepper.next();
   }
 }

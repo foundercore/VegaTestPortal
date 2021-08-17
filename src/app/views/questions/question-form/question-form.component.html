@@ -1,49 +1,65 @@
-<mat-card style="margin: 20px; width: calc(100% - 90px)">
-  <mat-card-header>
-    <mat-card-title *ngIf="isNewForm">Add Question</mat-card-title>
-    <mat-card-title *ngIf="!isNewForm">Edit Question</mat-card-title>
-  </mat-card-header>
+<mat-card style="margin: 20px;">
+  <div
+    *ngIf="stepper.selectedIndex === 0"
+    style="float: right; margin-right: 20px; margin-top: 5px"
+  >
+    <button mat-button (click)="cancel()" class="cancel-btn">
+      {{ "COMMON_TAG.CANCEL" | translate }}
+    </button>
+    <button mat-button (click)="nextStep(stepper)" class="next-save-btn">
+      {{ "COMMON_TAG.NEXT" | translate }}
+    </button>
+  </div>
+
+  <div
+    *ngIf="stepper.selectedIndex === 1"
+    style="float: right; margin-right: 20px; margin-top: 5px"
+  >
+    <button mat-button (click)="cancel()" class="cancel-btn">
+      {{ "COMMON_TAG.CANCEL" | translate }}
+    </button>
+    <button mat-button (click)="goBack(stepper)" class="back-btn">
+      {{ "COMMON_TAG.BACK" | translate }}
+    </button>
+    <button
+      *ngIf="isNewForm"
+      mat-button
+      (click)="createQuestion()"
+      class="next-save-btn"
+    >
+      {{ "COMMON_TAG.SAVE" | translate }}
+    </button>
+    <button
+      *ngIf="!isNewForm"
+      mat-button
+      (click)="updateQuestion()"
+      class="next-save-btn"
+    >
+      {{ "COMMON_TAG.SAVE" | translate }}
+    </button>
+  </div>
+
   <mat-horizontal-stepper linear #stepper>
-    <mat-step [stepControl]="questionFirstFormGrp">
-      <form [formGroup]="questionFirstFormGrp">
-        <ng-template matStepLabel>Basic Information</ng-template>
+    <mat-step [stepControl]="stepOneFormGroup">
+      <form [formGroup]="stepOneFormGroup">
+        <ng-template matStepLabel>Question Configuration</ng-template>
+
         <div class="w-100-div flex-container">
-          <mat-form-field
-            appearance="outline"
-            class="w-25-field form-field-padding"
-          >
-            <mat-label>Subject</mat-label>
-            <input matInput type="text" formControlName="subject" />
-          </mat-form-field>
-          <mat-form-field
-            appearance="outline"
-            class="w-25-field form-field-padding"
-          >
-            <mat-label>Topic</mat-label>
-            <input matInput type="text" formControlName="topic" />
-          </mat-form-field>
-          <mat-form-field
-            appearance="outline"
-            class="w-25-field form-field-padding"
-          >
-            <mat-label>Sub Topic</mat-label>
-            <input matInput type="text" formControlName="subTopic" />
-          </mat-form-field>
-          <mat-form-field
-            appearance="outline"
-            class="w-25-field form-field-padding"
-          >
-            <mat-label>Difficulty Level</mat-label>
-            <mat-select formControlName="difficulty">
-              <mat-option
-                *ngFor="let level of difficultyLevel"
-                [value]="level"
-                >{{ level }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
           <div class="w-100-div" style="margin-bottom: 20px">
-            <mat-label>Name</mat-label>
+            <div class="heading">
+              <mat-label>Passage</mat-label>
+            </div>
+            <angular-editor
+              id="passage_editor"
+              formControlName="passage"
+              [config]="descriptionEditorconfig"
+            >
+            </angular-editor>
+          </div>
+          <div class="w-100-div" style="margin-bottom: 20px">
+            <div class="heading">
+              <mat-label>Question Text</mat-label>
+            </div>
             <div id="toolbar"></div>
             <angular-editor
               id="name_editor"
@@ -53,31 +69,199 @@
             </angular-editor>
           </div>
           <div class="w-100-div" style="margin-bottom: 20px">
-            <mat-label>Description</mat-label>
+            <div class="heading">
+              <mat-label>Explanation</mat-label>
+            </div>
+            <!-- <input matInput type="text" formControlName="explanation"> -->
             <angular-editor
-              id="description_editor"
-              formControlName="description"
+              id="explanation_editor"
+              formControlName="explanation"
               [config]="descriptionEditorconfig"
             >
             </angular-editor>
           </div>
         </div>
-        <div>
-          <button mat-button (click)="cancel()" class="cancel-btn">
-            {{ "COMMON_TAG.CANCEL" | translate }}
+
+        <div class="w-100-div">
+          <mat-form-field
+            appearance="outline"
+            class="w-25-field form-field-padding"
+          >
+            <mat-label>Question Type</mat-label>
+            <mat-select
+              (selectionChange)="onTypeChange($event)"
+              formControlName="type"
+            >
+              <mat-option
+                *ngFor="let questionType of questionTypeList"
+                [value]="questionType"
+                >{{ questionType }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+
+      <div
+        *ngIf="stepOneFormGroup.controls['type'].value === 'MCQ'"
+        class="w-100-div"
+        style="margin-bottom: 20px"
+      >
+        <div class="heading-clone">
+          <mat-label>Question Options</mat-label>
+          <button
+            mat-icon-button
+            color="white"
+            aria-label="Example icon-button with a heart icon"
+            (click)="addOption()"
+          >
+            <mat-icon>add</mat-icon>
           </button>
-          <button mat-button matStepperNext class="next-save-btn">
-            {{ "COMMON_TAG.NEXT" | translate }}
-          </button>
+        </div>
+        <div [formGroup]="answerOptionFormGrp" class="w-100-div flex-container">
+          <form
+            formArrayName="optionArrays"
+            class="w-50-div"
+            *ngFor="
+              let option of answerOptionFormGrp.get('optionArrays')['controls'];
+              let i = index
+            "
+          >
+            <div [formGroupName]="i" style="margin: 10px">
+              <div class="sub-heading">
+                <mat-checkbox
+                  style="margin: 0 12px 2px"
+                  formControlName="flag"
+                ></mat-checkbox>
+                <label id="example-radio-group-label"
+                  >Mark option as correct
+                </label>
+                <button
+                  style="float: right"
+                  mat-icon-button
+                  color="primary"
+                  aria-label="Example icon-button with a heart icon"
+                  (click)="removeOption(i)"
+                >
+                  <mat-icon style="margin-bottom: 12px; color: rgb(0 0 0 / 55%);"
+                    >close</mat-icon
+                  >
+                </button>
+              </div>
+
+              <angular-editor
+                id="answer_option_{{ i }}"
+                [config]="descriptionEditorconfig"
+                formControlName="value"
+              >
+              </angular-editor>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <form
+        *ngIf="stepOneFormGroup.controls['type'].value === 'TITA'"
+        [formGroup]="questionForthFormGrp"
+      >
+        <div class="w-100-div" style="margin-bottom: 30px">
+          <div class="heading">
+            <mat-label>Answer Text</mat-label>
+          </div>
+          <angular-editor
+            id="answer_editor"
+            formControlName="answerText"
+            [config]="descriptionEditorconfig"
+          >
+          </angular-editor>
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="questionSecondFormGrp">
-      <form [formGroup]="questionSecondFormGrp">
-        <ng-template matStepLabel>Marking System</ng-template>
-        <div class="w-100-div flex-container">
-          <div class="w-equal-field">
-            <mat-form-field appearance="outline" class="form-field-padding">
+
+    <mat-step [stepControl]="secondStepFromGroup">
+      <form [formGroup]="secondStepFromGroup">
+        <ng-template matStepLabel>Basic Information</ng-template>
+
+        <div class="heading">
+          <mat-label>Subject Configuration</mat-label>
+        </div>
+        <div class="stats-shadow">
+          <div class="w-100-div flex-container">
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
+              <mat-label>Subject</mat-label>
+              <input matInput type="text" formControlName="subject" />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
+              <mat-label>Topic</mat-label>
+              <input matInput type="text" formControlName="topic" />
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
+              <mat-label>Sub Topic</mat-label>
+              <input matInput type="text" formControlName="subTopic" />
+            </mat-form-field>
+          </div>
+
+          <div class="w-100-div flex-container">
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
+              <mat-label>Tags</mat-label>
+              <mat-chip-list #chipList aria-label="Tag selection">
+                <mat-chip
+                  *ngFor="let tag of tags"
+                  [selectable]="true"
+                  [removable]="true"
+                  (removed)="removeTag(tag)"
+                >
+                  {{ tag }}
+                  <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+                </mat-chip>
+                <input
+                  placeholder="New tag..."
+                  [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="true"
+                  (matChipInputTokenEnd)="addTag($event)"
+                />
+              </mat-chip-list>
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
+              <mat-label>Difficulty Level</mat-label>
+              <mat-select formControlName="difficulty">
+                <mat-option
+                  *ngFor="let level of difficultyLevel"
+                  [value]="level"
+                  >{{ level }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="heading">
+          <mat-label>Marking Scheme</mat-label>
+        </div>
+        <div class="stats-shadow">
+          <div class="w-100-div flex-container">
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
               <mat-label>Positive Mark</mat-label>
               <input
                 matInput
@@ -87,9 +271,10 @@
                 formControlName="positiveMark"
               />
             </mat-form-field>
-          </div>
-          <div class="w-equal-field">
-            <mat-form-field appearance="outline" class="form-field-padding">
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
               <mat-label>Negative Mark</mat-label>
               <input
                 matInput
@@ -99,9 +284,10 @@
                 formControlName="negativeMark"
               />
             </mat-form-field>
-          </div>
-          <div class="w-equal-field">
-            <mat-form-field appearance="outline" class="form-field-padding">
+            <mat-form-field
+              appearance="outline"
+              class="w-25-field form-field-padding"
+            >
               <mat-label>Skip Mark</mat-label>
               <input
                 matInput
@@ -113,193 +299,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div>
-          <button mat-button (click)="cancel()" class="cancel-btn">
-            {{ "COMMON_TAG.CANCEL" | translate }}
-          </button>
-          <button mat-button matStepperPrevious class="back-btn">
-            {{ "COMMON_TAG.BACK" | translate }}
-          </button>
-          <button mat-button matStepperNext class="next-save-btn">
-            {{ "COMMON_TAG.NEXT" | translate }}
-          </button>
-        </div>
       </form>
-    </mat-step>
-    <mat-step [stepControl]="questionThirdFormGrp">
-      <form [formGroup]="questionThirdFormGrp">
-        <ng-template matStepLabel>Question Configuration</ng-template>
-        <div class="w-100-div">
-          <mat-form-field
-            appearance="outline"
-            class="w-25-field form-field-padding"
-          >
-            <mat-label>Question Type</mat-label>
-            <mat-select formControlName="type">
-              <mat-option
-                *ngFor="let questionType of questionTypeList"
-                [value]="questionType"
-                >{{ questionType }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-          <div class="w-100-div" style="margin-bottom: 20px">
-            <mat-label>Explanation</mat-label>
-            <!-- <input matInput type="text" formControlName="explanation"> -->
-            <angular-editor
-              id="explanation_editor"
-              formControlName="explanation"
-              [config]="descriptionEditorconfig"
-            >
-            </angular-editor>
-          </div>
-          <mat-form-field
-            appearance="outline"
-            class="w-50-field form-field-padding"
-          >
-            <mat-label>Book Reference</mat-label>
-            <input matInput type="text" formControlName="bookReference" />
-          </mat-form-field>
-          <mat-form-field
-            appearance="outline"
-            class="w-100-field form-field-padding"
-          >
-            <mat-label>Tags</mat-label>
-            <mat-chip-list #chipList aria-label="Tag selection">
-              <mat-chip
-                *ngFor="let tag of tags"
-                [selectable]="true"
-                [removable]="true"
-                (removed)="removeTag(tag)"
-              >
-                {{ tag }}
-                <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
-              </mat-chip>
-              <input
-                placeholder="New tag..."
-                [matChipInputFor]="chipList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                [matChipInputAddOnBlur]="true"
-                (matChipInputTokenEnd)="addTag($event)"
-              />
-            </mat-chip-list>
-          </mat-form-field>
-        </div>
-        <div class="w-100-div" style="margin-bottom: 20px">
-          <mat-label>Passage</mat-label>
-          <angular-editor
-            id="passage_editor"
-            formControlName="passage"
-            [config]="descriptionEditorconfig"
-          >
-          </angular-editor>
-        </div>
-      </form>
-      <div class="w-100-div" style="margin-bottom: 20px">
-        <mat-label>Question Options</mat-label>
-        <button
-          mat-icon-button
-          color="primary"
-          aria-label="Example icon-button with a heart icon"
-          (click)="addOption()"
-        >
-          <mat-icon>add</mat-icon>
-        </button>
-
-        <div class="w-100-div flex-container">
-          <div class="w-50-div" *ngFor="let option of options; let i = index">
-            <div style="margin: 10px">
-              <button
-                mat-icon-button
-                color="primary"
-                aria-label="Example icon-button with a heart icon"
-                (click)="removeOption(i, option)"
-              >
-                <mat-label>Option - {{ i + 1 }}</mat-label>
-                <mat-icon>delete</mat-icon>
-              </button>
-              <angular-editor
-                id="answer_option_{{ i }}"
-                [(ngModel)]="option.value"
-                [config]="descriptionEditorconfig"
-              >
-              </angular-editor>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <button mat-button (click)="cancel()" class="cancel-btn">
-          {{ "COMMON_TAG.CANCEL" | translate }}
-        </button>
-        <button mat-button matStepperPrevious class="back-btn">
-          {{ "COMMON_TAG.BACK" | translate }}
-        </button>
-        <button mat-button matStepperNext class="next-save-btn">
-          {{ "COMMON_TAG.NEXT" | translate }}
-        </button>
-      </div>
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Answer Configuration</ng-template>
-      <form [formGroup]="questionForthFormGrp">
-        <div class="w-100-div" style="margin-bottom: 30px">
-          <mat-label>Answer Text</mat-label>
-          <angular-editor
-            id="answer_editor"
-            formControlName="answerText"
-            [config]="descriptionEditorconfig"
-          >
-          </angular-editor>
-        </div>
-      </form>
-
-      <label id="example-radio-group-label" style="margin-bottom: 10px"
-        >Mark Correct Answer Option</label
-      >
-      <div class="w-100-div flex-container">
-        <div
-          [formGroup]="answerOptionFormGrp"
-          class="w-50-div"
-          style="margin-bottom: 20px; align-items: center; display: flex"
-          *ngFor="let option of options; let i = index"
-        >
-          <div>
-            <mat-checkbox
-              style="margin: 0 12px"
-              formControlName="{{ option.key }}"
-            ></mat-checkbox>
-          </div>
-          <div class="answer-option">
-            <div [innerHTML]="option.value"></div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <button mat-button (click)="cancel()" class="cancel-btn">
-          {{ "COMMON_TAG.CANCEL" | translate }}
-        </button>
-        <button mat-button matStepperPrevious class="back-btn">
-          {{ "COMMON_TAG.BACK" | translate }}
-        </button>
-        <button
-          *ngIf="isNewForm"
-          mat-button
-          (click)="createQuestion()"
-          class="next-save-btn"
-        >
-          {{ "COMMON_TAG.SAVE" | translate }}
-        </button>
-        <button
-          *ngIf="!isNewForm"
-          mat-button
-          (click)="updateQuestion()"
-          class="next-save-btn"
-        >
-          {{ "COMMON_TAG.UPDATE" | translate }}
-        </button>
-      </div>
     </mat-step>
   </mat-horizontal-stepper>
 </mat-card>

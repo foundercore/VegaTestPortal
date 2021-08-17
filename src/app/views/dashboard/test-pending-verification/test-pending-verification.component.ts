@@ -88,33 +88,8 @@ export class TestPendingVerificationComponent
   }
 
   startTest(element) {
-    const dialogData = new CustomDialogConfirmationModel(
-      'Want to start test?',
-      element.instructions,
-      this.buttontext
-    );
-
-    const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
-      width: '600px',
-      data: dialogData,
-    });
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        const dialogRef = this.dialog.open(TestLiveComponent, {
-          maxWidth: '1700px',
-          width: '100%',
-          minHeight: '100vh',
-          height: 'auto',
-          hasBackdrop: false,
-          backdropClass: 'dialog-backdrop',
-          data: { testData: element, testType: 'preview' },
-        });
-        dialogRef.afterClosed().subscribe((result) => {
-          this.getAllTests();
-        });
-      }
-    });
+    this.router.navigate([ '/test_preview', element.questionPaperId]);
+    return;
   }
 
   applyFilter(event: Event) {

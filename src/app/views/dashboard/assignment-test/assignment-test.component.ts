@@ -7,7 +7,6 @@ import {
   OnChanges,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -15,12 +14,7 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
-import { TestAssignmentServiceService } from 'src/app/services/assignment/test-assignment-service.service';
-import { CustomDialogConfirmationModel } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation-model';
-import { CustomDialogConfirmationComponent } from 'src/app/shared/components/custom-dialog-confirmation/custom-dialog-confirmation.component';
 import { AppState } from 'src/app/state_management/_states/auth.state';
-import Swal from 'sweetalert2';
-import { TestLiveComponent } from '../../assignments/popups/test-live/test-live.component';
 import { TestConfigService } from '../../assignments/services/test-config-service';
 
 @Component({
@@ -81,12 +75,6 @@ export class AssignmentTestComponent implements OnInit, OnChanges {
     this.dataSource.sort = this.sort;
   }
 
-  extractContent(s) {
-    var span = document.createElement('span');
-    span.innerHTML = s;
-    return span.textContent || span.innerText;
-  }
-
   startTest(element) {
     const timeNow = new Date().setHours(0, 0, 0, 0);
     const testValidFrom = new Date(element.validFrom).setHours(0, 0, 0, 0);
@@ -99,71 +87,12 @@ export class AssignmentTestComponent implements OnInit, OnChanges {
       this.toastrService.error('Test has ended already');
       return;
     }
-
-    const dialogData = new CustomDialogConfirmationModel(
-      'Want to start test?',
-      element.testName,
-      'Start Test'
-    );
-    const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
-      width: '600px',
-      data: dialogData,
-    });
-
-    dialogRef.afterClosed().subscribe((dialogResult) => {
-      if (dialogResult) {
-        if (
-          element.passcode !== null &&
-          String(element.passcode.trim()).length > 1
-        ) {
-          this.verifyPasscode(element);
-        } else {
-          this.openTestPopup(element, 'live');
-        }
-      }
-    });
+    this.router.navigate([ '/live_test', element.testId,element.assignmentId]);
   }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  openTestPopup(element, testType) {
-    const dialogRef = this.dialog.open(TestLiveComponent, {
-      maxWidth: '1700px',
-      width: '100%',
-      minHeight: '100vh',
-      height: 'auto',
-      hasBackdrop: false,
-      backdropClass: 'dialog-backdrop',
-      data: { testData: element, testType: testType },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      this.getMyAssignments();
-    });
-  }
-
-  verifyPasscode(element) {
-    console.log('VerifyPasscode received element=>', element);
-    if (element.passcode !== null) {
-      //popup to ask for passcode and verify it
-      console.log(
-        'VerifyPasscode received element.passcode=>',
-        element.passcode
-      );
-      Swal.fire({
-        title: 'Verify Passcode',
-        text: 'Enter Passcode:',
-        input: 'text',
-        showCancelButton: true,
-      }).then((result) => {
-        if (result.value && result.value == element.passcode) {
-          this.openTestPopup(element, 'live');
-          this.toastrService.success('Passcode Verified successfully');
-        } else this.toastrService.error('Invalid Passcode');
-      });
-    }
   }
 
   viewResult(row: any) {
@@ -186,5 +115,4 @@ export class AssignmentTestComponent implements OnInit, OnChanges {
       );
   }
 
-  takeTest(row: any) {}
 }

@@ -86,6 +86,6 @@ export class BulkUploadBatchStudentsComponent implements OnInit {
     if(event.code == "Space"){
       event.stopPropagation();
     }
+    console.log(event)
   }
-
 }

@@ -1,7 +1,7 @@
 <h1 mat-dialog-title class="title">
-  <span *ngIf="!this.data">Add User</span>
-  <span *ngIf="this.data  && !this.data.isView">Edit User</span>
-  <span *ngIf="this.data && this.data.isView">User Preview</span>
+  <span *ngIf="!this.data">{{ 'ADD_USER_DIALOG.ADD_USER' | translate }}</span>
+  <span *ngIf="this.data  && !this.data.isView">{{ 'ADD_USER_DIALOG.EDIT_USER' | translate }}</span>
+  <span *ngIf="this.data && this.data.isView">{{ 'ADD_USER_DIALOG.USER_PREVIEW' | translate }}</span>
 
   <button mat-dialog-close>
     <mat-icon>close</mat-icon>
@@ -12,7 +12,7 @@
     <div class="example-container"  [formGroup]="userFormGroup">
 
       <mat-form-field appearance="outline">
-        <mat-label>First Name</mat-label>
+        <mat-label>{{ 'ADD_USER_DIALOG.FIRST_NAME' | translate }}</mat-label>
         <input matInput required  formControlName="firstname" />
         <mat-error *ngIf="userFormGroup.controls.firstname.hasError('required')">
           First Name is <strong>required</strong>
@@ -21,7 +21,7 @@
 
 
       <mat-form-field appearance="outline">
-        <mat-label>Last Name</mat-label>
+        <mat-label>{{ 'ADD_USER_DIALOG.LAST_NAME' | translate }}</mat-label>
         <input matInput required formControlName="lastname" />
         <mat-error *ngIf="userFormGroup.controls.lastname.hasError('required')">
           Last Name is <strong>required</strong>
@@ -29,7 +29,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Gender</mat-label>
+        <mat-label>{{ 'ADD_USER_DIALOG.GENDER' | translate }}</mat-label>
         <mat-select formControlName="gender" >
           <mat-option value="M">Male</mat-option>
           <mat-option value="F">Female</mat-option>
@@ -41,7 +41,7 @@
 
 
       <mat-form-field appearance="outline">
-        <mat-label>Roles</mat-label>
+        <mat-label>{{ 'ADD_USER_DIALOG.ROLES' | translate }}</mat-label>
         <mat-select multiple formControlName="roles" >
           <mat-option *ngFor="let role of roleList" [value]="role">
             {{role}}
@@ -54,7 +54,7 @@
 
 
       <mat-form-field style="width: 660px !important" appearance="outline">
-        <mat-label>Address</mat-label>
+        <mat-label>{{ 'ADD_USER_DIALOG.ADDRESS' | translate }}</mat-label>
         <textarea matInput placeholder="Ex. 100 Main St" required formControlName="address" ></textarea>
         <mat-error *ngIf="userFormGroup.controls.address.hasError('required')">
           Address is <strong>required</strong>
@@ -63,7 +63,7 @@
 
 
       <mat-form-field appearance="outline">
-        <mat-label>State</mat-label>
+        <mat-label>{{ 'ADD_USER_DIALOG.STATE' | translate }}</mat-label>
         <input matInput placeholder="Ex. Delhi" required formControlName="state" />
         <mat-error *ngIf="userFormGroup.controls.state.hasError('required')">
           State is <strong>required</strong>
@@ -72,8 +72,8 @@
 
 
       <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input type="email" matInput placeholder="Ex. pat@example.com" required formControlName="email" />
+        <mat-label>{{ 'ADD_USER_DIALOG.EMAIL' | translate }}</mat-label>
+        <input type="email" matInput placeholder="Ex. pat@example.com" required formControlName="email" style='text-transform:lowercase'/>
         <mat-error *ngIf="userFormGroup.controls.email.hasError('required')">
           Email is <strong>required</strong>
         </mat-error>
@@ -84,7 +84,7 @@
 
 
       <mat-form-field appearance="outline"  *ngIf="!this.data">
-        <mat-label>Password</mat-label>
+        <mat-label>{{ 'ADD_USER_DIALOG.PASSWORD' | translate }}</mat-label>
         <input matInput required formControlName="password" />
         <mat-error *ngIf="userFormGroup.controls.password.hasError('required')">
           Password is <strong>required</strong>
@@ -107,7 +107,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline"  *ngIf="!this.data">
-        <mat-label>Confirm Password</mat-label>
+        <mat-label>{{ 'ADD_USER_DIALOG.CONFIRM_PASS' | translate }}</mat-label>
         <input matInput formControlName="confirmPassword"  required />
         <mat-error *ngIf="userFormGroup.controls.confirmPassword.hasError('required')">
           Confirm Password is <strong>required</strong>

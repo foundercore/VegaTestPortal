@@ -1,6 +1,6 @@
 <h1 mat-dialog-title class="title">
-  <span *ngIf="!this.data.data">Add Assignment</span>
-  <span *ngIf="this.data.data">Edit Assignment</span>
+  <span *ngIf="!this.data.data">{{ "ASSIGNMENT_FORM_TAGS.ADD_ASSIGNMENT" | translate }}</span>
+  <span *ngIf="this.data.data">{{ "ASSIGNMENT_FORM_TAGS.EDIT_ASSIGNMENT" | translate }}</span>
 
   <button mat-dialog-close>
     <mat-icon>close</mat-icon>
@@ -10,7 +10,7 @@
   <div class="add-user-content">
     <div class="example-container" [formGroup]="assignmentFormGroup">
       <mat-form-field appearance="outline">
-        <mat-label>Valid From</mat-label>
+        <mat-label>{{ "ASSIGNMENT_FORM_TAGS.VALID_FROM" | translate }}</mat-label>
         <input
           matInput
           required
@@ -25,16 +25,16 @@
         ></mat-datepicker-toggle>
         <mat-datepicker #validfrom_datepicker>
           <mat-datepicker-actions>
-            <button mat-button matDatepickerCancel>Cancel</button>
+            <button mat-button matDatepickerCancel> {{ "COMMON_TAG.CANCEL" | translate }}</button>
             <button mat-raised-button color="primary" matDatepickerApply>
-              Apply
+              {{ "COMMON_TAG.APPLY" | translate }}
             </button>
           </mat-datepicker-actions>
         </mat-datepicker>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Valid To</mat-label>
+        <mat-label>{{ "ASSIGNMENT_FORM_TAGS.VALID_TO" | translate }}</mat-label>
         <input
           matInput
           required
@@ -66,7 +66,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Description</mat-label>
+        <mat-label>{{ "ASSIGNMENT_FORM_TAGS.DESCRIPTION" | translate }}</mat-label>
         <input matInput required formControlName="description" />
         <mat-error
           *ngIf="assignmentFormGroup.controls.description.hasError('required')"
@@ -76,7 +76,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Passcode</mat-label>
+        <mat-label>{{ "ASSIGNMENT_FORM_TAGS.PASSCODE" | translate }}</mat-label>
         <input matInput formControlName="passcode" />
         <mat-error
           *ngIf="assignmentFormGroup.controls.passcode.hasError('required')"
@@ -86,7 +86,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Assign Batch</mat-label>
+        <mat-label>{{ "ASSIGNMENT_FORM_TAGS.ASSIGN_BATCH" | translate }}</mat-label>
         <mat-chip-list #chipList aria-label="Fruit selection">
           <mat-chip
             *ngFor="let batch of selectedAssignedBatches"
@@ -144,7 +144,7 @@
       </mat-form-field> -->
 
       <mat-form-field appearance="outline">
-        <mat-label>Release Date</mat-label>
+        <mat-label>{{ "ASSIGNMENT_FORM_TAGS.RELEASE_DATE" | translate }}</mat-label>
         <input
           matInput
           required
@@ -159,9 +159,9 @@
         ></mat-datepicker-toggle>
         <mat-datepicker #release_datepicker>
           <mat-datepicker-actions>
-            <button mat-button matDatepickerCancel>Cancel</button>
+            <button mat-button matDatepickerCancel>{{ "COMMON_TAG.CANCEL" | translate }}</button>
             <button mat-raised-button color="primary" matDatepickerApply>
-              Apply
+              {{ "COMMON_TAG.APPLY" | translate }}
             </button>
           </mat-datepicker-actions>
         </mat-datepicker>

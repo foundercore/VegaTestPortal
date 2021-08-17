@@ -1,20 +1,137 @@
-<mat-card style="margin: 20px; width: calc(100% - 90px)">
-  <mat-card-header style="justify-content: center">
-    <mat-card-title style="font-weight: bold; font-size: 30px"
-      >Question Preview
-    </mat-card-title>
-  </mat-card-header>
+<mat-card style="margin: 20px">
+  <div class="row" style="margin-bottom: 20px">
+    <!-- <div class="col" style="font-weight: bold; font-size: 30px">
+      Question Preview
+    </div> -->
+
+    <div class="col right-align">
+      <button mat-button (click)="cancel()" class="cancel-btn">
+        {{ "COMMON_TAG.CLOSE" | translate }}
+      </button>
+    </div>
+  </div>
 
   <form [formGroup]="questionPreviewGroup">
-    <div>
-      <h5>Basic Information</h5>
+    <div class="heading">
+      <mat-label>Question Configuration</mat-label>
+    </div>
+    <div class="stats-shadow">
+      <div class="w-100-div" style="margin-bottom: 20px">
+        <div class="sub-heading">
+          <mat-label>Passage</mat-label>
+        </div>
+        <div
+          class="text-area-div disabled"
+          [innerHtml]="questionPreviewGroup.controls['passage']?.value"
+        ></div>
+      </div>
+      <div class="w-100-div" style="margin-bottom: 20px">
+        <div class="sub-heading">
+          <mat-label>Explanation</mat-label>
+        </div>
+        <div
+          class="text-area-div disabled"
+          [innerHtml]="questionPreviewGroup.controls['explanation']?.value"
+        ></div>
+      </div>
+      <div class="w-100-div" style="margin-bottom: 20px">
+        <div class="sub-heading">
+          <mat-label>Question Text</mat-label>
+        </div>
+        <div
+          class="text-area-div disabled"
+          [innerHtml]="questionPreviewGroup.controls['name'].value"
+        ></div>
+      </div>
+
+      <div>
+        <div class="w-100-div flex-container">
+          <mat-form-field
+            appearance="outline"
+            class="w-25-field form-field-padding"
+          >
+            <mat-label>Question Type</mat-label>
+            <input type="text" matInput formControlName="type" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="heading">
+          <mat-label>Answer Configuration</mat-label>
+        </div>
+        <div class="w-100-div flex-container">
+          <div
+            *ngIf="questionPreviewGroup.controls['type'].value === 'TITA'"
+            class="w-100-div"
+            style="margin-bottom: 20px"
+          >
+            <mat-label style="color: rgba(0, 0, 0, 0.38)"
+              >Answer Text</mat-label
+            >
+            <div
+              class="text-area-div disabled"
+              [innerHtml]="questionPreviewGroup.controls['answerText']?.value"
+            ></div>
+          </div>
+
+          <div
+            *ngIf="questionPreviewGroup.controls['type'].value === 'MCQ'"
+            class="w-100-div"
+            style="margin-bottom: 20px"
+          >
+            <div
+              [formGroup]="answerOptionFormGrp"
+              class="w-100-div flex-container"
+            >
+              <form
+                formArrayName="optionArrays"
+                class="w-50-div"
+                *ngFor="
+                  let option of answerOptionFormGrp.get('optionArrays')[
+                    'controls'
+                  ];
+                  let i = index
+                "
+              >
+                <div [formGroupName]="i" style="margin: 10px">
+                  <div class="sub-heading">
+                    <mat-checkbox
+                      style="margin: 0 12px"
+                      formControlName="flag"
+                      [disabled]="true"
+                    ></mat-checkbox>
+                    <label
+                      id="example-radio-group-label"
+                      >Option marked as correct
+                    </label>
+                  </div>
+                  <angular-editor
+                    style="color: gray;cursor: not-allowed;"
+                    id="answer_option_{{ i }}"
+                    [config]="descriptionEditorconfig"
+                    formControlName="value"
+                  >
+                  </angular-editor>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="heading">
+      <mat-label>Subject Configuration</mat-label>
+    </div>
+    <div class="stats-shadow">
       <div class="w-100-div flex-container">
         <mat-form-field
           appearance="outline"
           class="w-25-field form-field-padding"
         >
           <mat-label>Subject</mat-label>
-          <input matInput formControlName="subject" />
+          <input matInput type="text" formControlName="subject" />
         </mat-form-field>
 
         <mat-form-field
@@ -22,7 +139,7 @@
           class="w-25-field form-field-padding"
         >
           <mat-label>Topic</mat-label>
-          <input matInput formControlName="topic" />
+          <input matInput type="text" formControlName="topic" />
         </mat-form-field>
 
         <mat-form-field
@@ -30,86 +147,16 @@
           class="w-25-field form-field-padding"
         >
           <mat-label>Sub Topic</mat-label>
-          <input matInput formControlName="subTopic" />
+          <input matInput type="text" formControlName="subTopic" />
         </mat-form-field>
-
-        <mat-form-field
-          appearance="outline"
-          class="w-25-field form-field-padding"
-        >
-          <mat-label>Difficulty Level</mat-label>
-          <input matInput formControlName="difficulty" />
-        </mat-form-field>
-
-        <div class="w-50-div" style="margin-bottom: 20px">
-          <mat-label style="color: rgba(0, 0, 0, 0.38)">Name</mat-label>
-          <div
-            class="text-area-div disabled"
-            [innerHtml]="questionPreviewGroup.controls['name'].value"
-          ></div>
-        </div>
-
-        <div class="w-50-div" style="margin-bottom: 20px">
-          <mat-label style="color: rgba(0, 0, 0, 0.38)">Description</mat-label>
-          <div
-            class="text-area-div disabled"
-            [innerHtml]="questionPreviewGroup.controls['description'].value"
-          ></div>
-        </div>
       </div>
-    </div>
-
-    <div>
-      <h5>Marking System</h5>
-      <div class="w-50-field flex-container">
-        <div class="w-25-field">
-          <mat-form-field appearance="outline" class="form-field-padding">
-            <mat-label>Positive Mark</mat-label>
-            <input
-              matInput
-              type="number"
-              min="0"
-              max="100"
-              formControlName="positiveMark"
-            />
-          </mat-form-field>
-        </div>
-        <div class="w-25-field">
-          <mat-form-field appearance="outline" class="form-field-padding">
-            <mat-label>Negative Mark</mat-label>
-            <input
-              matInput
-              type="number"
-              min="0"
-              max="100"
-              formControlName="negativeMark"
-            />
-          </mat-form-field>
-        </div>
-        <div class="w-25-field">
-          <mat-form-field appearance="outline" class="form-field-padding">
-            <mat-label>Skip Mark</mat-label>
-            <input
-              matInput
-              type="number"
-              min="0"
-              max="100"
-              formControlName="skipMark"
-            />
-          </mat-form-field>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <h5>Question Configuration</h5>
       <div class="w-100-div flex-container">
         <mat-form-field
           appearance="outline"
           class="w-25-field form-field-padding"
         >
-          <mat-label>Question Type</mat-label>
-          <input matInput formControlName="type" />
+          <mat-label>Difficulty Level</mat-label>
+          <input matInput type="text" formControlName="difficulty" />
         </mat-form-field>
 
         <mat-form-field
@@ -119,71 +166,54 @@
           <mat-label>Tags</mat-label>
           <input matInput formControlName="tags" />
         </mat-form-field>
+      </div>
+    </div>
 
+    <div class="heading">
+      <mat-label>Marking Scheme</mat-label>
+    </div>
+    <div class="stats-shadow">
+      <div class="w-100-div flex-container">
         <mat-form-field
           appearance="outline"
           class="w-25-field form-field-padding"
         >
-          <mat-label>Book Reference</mat-label>
-          <input matInput type="text" formControlName="bookReference" />
+          <mat-label>Positive Mark</mat-label>
+          <input
+            matInput
+            type="number"
+            min="0"
+            max="100"
+            formControlName="positiveMark"
+          />
         </mat-form-field>
-
-        <div class="w-50-div" style="margin-bottom: 20px">
-          <mat-label style="color: rgba(0, 0, 0, 0.38)">Explanation</mat-label>
-          <div
-            class="text-area-div disabled"
-            [innerHtml]="questionPreviewGroup.controls['explanation']?.value"
-          ></div>
-        </div>
-        <div class="w-50-div" style="margin-bottom: 20px">
-          <mat-label style="color: rgba(0, 0, 0, 0.38)">Passage</mat-label>
-          <div
-            class="text-area-div disabled"
-            [innerHtml]="questionPreviewGroup.controls['passage']?.value"
-          ></div>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <h5>Answer Configuration</h5>
-      <div class="w-100-div flex-container">
-        <div class="w-100-div" style="margin-bottom: 20px">
-          <mat-label style="color: rgba(0, 0, 0, 0.38)">Answer Text</mat-label>
-          <div
-            class="text-area-div disabled"
-            [innerHtml]="questionPreviewGroup.controls['answerText']?.value"
-          ></div>
-        </div>
-
-        <div class="w-100-div" style="margin-bottom: 20px">
-          <mat-label style="color: rgba(0, 0, 0, 0.38)">Options</mat-label>
-          <div class="w-100-div flex-container">
-            <div
-              [formGroup]="answerOptionFormGrp"
-              class="w-50-div"
-              style="margin-bottom: 20px; align-items: center; display: flex"
-              *ngFor="let option of options; let i = index"
-            >
-              <div>
-                <mat-checkbox
-                  style="margin: 0 12px"
-                  formControlName="{{ option.key }}"
-                  [disabled]="true"
-                ></mat-checkbox>
-              </div>
-              <div class="answer-option disabled">
-                <div [innerHTML]="option.value"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <mat-form-field
+          appearance="outline"
+          class="w-25-field form-field-padding"
+        >
+          <mat-label>Negative Mark</mat-label>
+          <input
+            matInput
+            type="number"
+            min="0"
+            max="100"
+            formControlName="negativeMark"
+          />
+        </mat-form-field>
+        <mat-form-field
+          appearance="outline"
+          class="w-25-field form-field-padding"
+        >
+          <mat-label>Skip Mark</mat-label>
+          <input
+            matInput
+            type="number"
+            min="0"
+            max="100"
+            formControlName="skipMark"
+          />
+        </mat-form-field>
       </div>
     </div>
   </form>
-  <div style="display: flex; justify-content: flex-end">
-    <button mat-button (click)="cancel()" class="cancel-btn">
-      {{ "COMMON_TAG.CANCEL" | translate }}
-    </button>
-  </div>
 </mat-card>

@@ -64,7 +64,7 @@ export class AddStudentsComponent implements OnInit {
 
     const assignmentObj : AssignmentRequest = {
       description : this.data.data.description,
-      passcode: this.data.data.passcode.value,
+      passcode: this.data.data.passcode?.value,
       releaseDate: formatDate(this.data.data.releaseDate, 'yyyy-MM-dd hh:mm:ss', this.locale) ,
       testId: this.data.testId,
       validFrom:formatDate(this.data.data.validFrom , 'yyyy-MM-dd hh:mm:ss', this.locale),

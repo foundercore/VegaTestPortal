@@ -1,6 +1,6 @@
 <div mat-dialog-content>
     <form [formGroup]="cloneForm" autocomplete="off">
-            <label for="name" class="label">Test Name</label>
+            <label for="name" class="label">{{ "DASHBOARD_TAGS.TEST_NAME" | translate }}</label>
             <mat-form-field appearance="outline" style="width: 300px;">
                 <input matInput placeholder="Test Name" formControlName="testName">
                 <mat-error *ngIf="hasError('testName', 'required')">Test Name is required</mat-error>
@@ -10,6 +10,6 @@
 </div>
 
 <div mat-dialog-actions style="flex-direction: row-reverse;">
-  <button mat-button class="reset-btn-cls" mat-dialog-close>Close</button>
-  <button mat-button class="save-btn-cls"  (click)="clone()">Clone</button>
+  <button mat-button class="reset-btn-cls" mat-dialog-close>{{ "COMMON_TAG.CLOSE" | translate }}</button>
+  <button mat-button class="save-btn-cls"  (click)="clone()">{{ "COMMON_TAG.CLONE" | translate }}</button>
 </div>

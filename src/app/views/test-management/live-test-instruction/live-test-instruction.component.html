@@ -1,0 +1,80 @@
+<div class="container-fluid live-test-instruction">
+  <div class="row">
+    <div class="col-lg-4" >
+        <div  class="live-test-instruction-left-section">
+          <div class="logo">
+            <img style="height: 70px" src="../../../../assets/images/app-logo.jpg" />
+          </div>
+          <span class="candidate-name">
+            Welcome {{displayName}},
+          </span>
+          <h1 class="test-name">
+               <span>{{testName}}</span>
+           </h1>
+          <div class="question-stats">
+              <div class="duration">
+                <span>Test duration</span>
+                <span>{{totalTestDuration}} mins</span>
+              </div>
+              <div class="question-number">
+                <span>No. of Questions</span>
+                <span>{{totalQuestion}} questions</span>
+              </div>
+           </div>
+           <div class="test-confirmation-form">
+              <div *ngIf="isPassCode" class="passcode">
+                <div class="form-group">
+                  <label for="usr">Passcode:</label>
+                  <input type="text" class="form-control" id="usr" [(ngModel)]="passcode">
+                </div>
+              </div>
+              <div class="test-confirmation-form-btn">
+                <button mat-button class="primary" (click)="startTest()">Start</button>
+                <button mat-flat-button color="warn" (click)="cancel()">Cancel</button>
+              </div>
+           </div>
+        </div>
+    </div>
+    <div class="col-lg-8" style="padding-right: 0px;" >
+      <article class="live-test-instruction-article">
+        <div class="test-instructions">
+              <h2 class="test-instructions-article-label">Instructions</h2>
+              <div [innerHTML]="instructions"></div>
+        </div>
+        <div class="test-sections-details">
+          <h2 class="test-instructions-article-label">Sections</h2>
+          <span style="padding: 10px 0 15px;">There are {{totalSections}} section that are part of this test:</span>
+          <div cdkDropList class="section-table-list" (cdkDropListDropped)="drop($event)">
+            <div class="section" *ngFor="let section of sectionList" cdkDrag>
+                  <div style="flex: 1 1 25%;padding: 20px 0;">{{section.number}}</div>
+                  <div style="flex: 1 1 50%;padding: 20px 0;">{{section.name}}</div>
+                  <div style="flex: 1 1 25%;padding: 20px 0;">{{section.totalQuestions}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="test-prelogin-instructions">
+              <h2 class="test-instructions-article-label">Navigation</h2>
+              <p><strong>1.</strong> To select a question to answer, you can do one of the following:</p>
+                    <ul class="arrow" style="padding-left:35px;">
+                      <li>Click on the question number on the question palette at the right of your screen to go to that numbered question directly. Note that using this option does NOT save your answer to the current question.</li>
+                      <li>Click on Save and Next to save answer to current question and to go to the next question in sequence.</li>
+                      <li>Click on Mark for Review and Next to save answer to current question, mark it for review, and to go to the next question in sequence.</li>
+                    </ul>
+              <p><strong>2.</strong> For multiple choice type question:</p>
+                    <ul class="arrow" style="padding-left:35px;">
+                      <li>To select your answer, click on one of the option buttons</li>
+                      <li>To change your answer, click the another desired option button</li>
+                      <li>To save your answer, you MUST click on <strong>Next</strong></li>
+                      <li>To deselect a chosen answer, click on the chosen option again or click on the <strong>Unmark</strong> button.</li>
+                      <li>To mark a question for review click on <strong>Mark for Review</strong>.</li>
+                    </ul>
+              <p><strong>3.</strong> To change an answer to a question, first select the question and then click on the new answer option followed by a click on the Next button.</p>
+              <p><strong>4.</strong> Questions that are saved or marked for review after answering will ONLY be considered for evaluation.</p>
+        </div>
+
+      </article>
+    </div>
+
+</div>
+
+

@@ -16,6 +16,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { StackedVerticalBarChartComponent } from './charts/stacked-vertical-bar-chart/stacked-vertical-bar-chart.component';
 import { MathDirective } from './directives/math/math.directive';
+import { LoadingComponent } from './components/loading/loading.component';
 
 
 
@@ -31,6 +32,7 @@ import { MathDirective } from './directives/math/math.directive';
     MinuteSecondsPipe,
     FilterPipePipe,
     MathDirective,
+    LoadingComponent
 
   ],
   imports: [
@@ -39,7 +41,6 @@ import { MathDirective } from './directives/math/math.directive';
     NgxChartsModule,
     ReactiveFormsModule,
     AngularEditorModule,
-
   ],
   exports: [
     //Export Shared Component
@@ -58,6 +59,8 @@ import { MathDirective } from './directives/math/math.directive';
     FormsModule,
     ReactiveFormsModule,
     AngularEditorModule,
+    LoadingComponent
+
   ],
 })
 export class SharedModule { }

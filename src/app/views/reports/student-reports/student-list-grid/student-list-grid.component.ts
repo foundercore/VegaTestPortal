@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { TestAssignmentServiceService } from 'src/app/services/assignment/test-assignment-service.service';
+import { DialogConformationComponent } from 'src/app/shared/components/dialog-conformation/dialog-conformation.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-student-list-grid',
@@ -37,6 +39,7 @@ export class StudentListGridComponent implements OnInit {
     public dialog: MatDialog,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private toastr: ToastrService,
     private ref: ChangeDetectorRef
   ) {
       router.events.subscribe((val) => {
@@ -90,6 +93,22 @@ export class StudentListGridComponent implements OnInit {
     .catch((err) =>
       console.log('Error=> Navigate to score card=>', err)
     );
+  }
+
+  resetTest(row: any){
+    console.log(row)
+    const dialogRef = this.dialog.open(DialogConformationComponent, { disableClose: true,data: {primaryBtnText:'Close',secondaryBtnText:'Reset'}});
+    dialogRef.afterClosed().subscribe((result) => {
+      if(result == 'delete'){
+
+        this.testAssignmentService.resetStudentAssignment(row.assignmentId,this.studentId).subscribe(resp => {
+          this.toastr.success(`Successfully test is reset.`);
+          this.getAssignments(this.studentId);
+        },error =>{
+          this.toastr.error('Unable to reset test');
+        })
+      }
+    });
   }
 }
 

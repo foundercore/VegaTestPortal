@@ -1,13 +1,12 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AssignmentsRoutingModule } from './assignments-routing.module';
 import { TestsComponent } from './tests/tests.component';
 import { UpdateTestContentComponent } from './update-test-content/update-test-content.component';
 import { AssessmentEditorComponent } from './popups/assessment-editor/assessment-editor.component';
 import { SectionComponent } from './popups/section/section.component';
 import { VegaMaterialModule } from 'src/app/core/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { CalculatorComponent } from './popups/calculator/calculator.component';
 import { CountdownModule } from 'ngx-countdown';
 import { TestconfigComponent } from './popups/test-config/test-config.component';
@@ -24,8 +23,36 @@ import { AddStudentsComponent } from './add-students/add-students.component';
 import { ViewAssignmentComponent } from './view-assignment/view-assignment.component';
 import { AssignmentFormComponent } from './assignment-form/assignment-form.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { Role } from 'src/app/core/constants';
+import { RoleGuard } from 'src/app/guard/role.guard';
 
-
+const routes: Routes = [
+  {
+    path: '',
+    component: TestsComponent,
+    canActivate: [RoleGuard],
+    data: { roles: [Role.ADMIN, Role.STAFF] },
+  },
+  {
+    path: 'update-test/:id',
+    component: UpdateTestContentComponent,
+    data: {
+      breadcrumb: 'Update Test',
+    },
+  },
+  {
+    path: 'update-test/:id/view-assignment',
+    component: ViewAssignmentComponent,
+    data: {
+      breadcrumb: 'View Test',
+    },
+  },
+  {
+    path: 'show-result/:id',
+    component: ShowResultComponent,
+    data: { breadcrumb: 'Show Result' },
+  },
+];
 
 @NgModule({
   declarations: [
@@ -49,7 +76,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
   ],
   imports: [
     CommonModule,
-    AssignmentsRoutingModule,
     VegaMaterialModule,
     FormsModule,
     ReactiveFormsModule,
@@ -57,7 +83,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CountdownModule,
     AngularEditorModule,
     NgScrollbarModule,
-    SharedModule
+    SharedModule,
+    RouterModule.forChild(routes),
+
   ],
   entryComponents : [
     AssessmentEditorComponent,
@@ -68,6 +96,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     TestLiveComponent,
     RejectstatusComponent
   ],
+  exports: [RouterModule],
   schemas:[NO_ERRORS_SCHEMA]
 })
 export class AssignmentsModule { }

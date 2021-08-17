@@ -319,18 +319,6 @@ export class TestsComponent implements OnInit, AfterViewInit {
       );
   }
 
-  // private getSearchTestModel() {
-  //   this.searchQuestionPaperModel.pageNumber = this.paginator.pageIndex + 1;
-  //   this.searchQuestionPaperModel.pageSize = this.paginator.pageSize;
-  //   this.searchQuestionPaperModel.sortColumn = this.sort.active
-  //     ? this.sort.active
-  //     : 'lastUpdatedOn';
-  //   this.searchQuestionPaperModel.sortOrder = this.sort.direction
-  //     ? this.sort.direction
-  //     : 'desc';
-  //   this.totalNumberOfRecords = this.paginator.pageSize;
-  // }
-
   resetPaging(): void {
     this.paginator.pageIndex = 0;
   }
@@ -347,37 +335,8 @@ export class TestsComponent implements OnInit, AfterViewInit {
   }
 
   startTest(element) {
-
-    let buttonText = '';
-    if (this.userType === 'ROLE_USER_ADMIN' || this.userType === 'ROLE_STAFF') {
-      buttonText = 'Preview Test';
-    } else {
-      buttonText = 'Start Test';
-    }
-
-    const dialogData = new CustomDialogConfirmationModel("Want to start test?", element.instructions, buttonText);
-
-    const dialogRef = this.dialog.open(CustomDialogConfirmationComponent, {
-      width: "600px",
-      data: dialogData
-    });
-
-    dialogRef.afterClosed().subscribe(dialogResult => {
-      if(dialogResult){
-          const dialogRef = this.dialog.open(TestLiveComponent, {
-            maxWidth: '1700px',
-            width: '100%',
-            minHeight: '100vh',
-            height: 'auto',
-            hasBackdrop: false,
-            backdropClass: 'dialog-backdrop',
-            data: { testData: element, userType: this.userType,  testType: 'preview'},
-          });
-          dialogRef.afterClosed().subscribe((result) => {
-            this.GetAllquestionPapers();
-          });
-      }
-    });
+    this.router.navigate([ '/test_preview', element.questionPaperId]);
+    return;
   }
 
   applyFilter(e: Event) {

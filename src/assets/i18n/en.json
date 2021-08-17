@@ -15,7 +15,11 @@
     "BACK": "Back",
     "NEXT": "Next",
     "SEARCH": "Search",
-    "APPLY": "Apply"
+    "APPLY": "Apply",
+    "CLONE":"Clone",
+    "CLOSE":"Close",
+    "ACCEPT":"Accept",
+    "TANDC":"Term And Conditions"
   },
   "USER_MANAGEMENT_TAG": {
     "NAME": "Name",
@@ -113,5 +117,36 @@
     "PROFILE": "Profile",
     "CHANGE_PASS": "Change Password",
     "SIGNOUT": "Signout"
+  },
+  "ADD_BATCH_TAG":{
+    "ADD_BATCH" :"Add Batch",
+    "VIEW_BATCH" :"View Batch",
+    "NAME" : "Name",
+    "DESCRIPTION":"Description",
+    "STU_TAGGED_TO_BATCH":"Students Tagged to Batch"
+  },
+  "ADD_USER_DIALOG":{
+    "ADD_USER":"Add User",
+    "EDIT_USER":"Edit User",
+    "USER_PREVIEW":"User Preview",
+    "FIRST_NAME":"First Name",
+    "LAST_NAME":"Last Name",
+    "GENDER":"Gender",
+    "ROLES":"Roles",
+    "ADDRESS":"Address",
+    "STATE":"State",
+    "EMAIL":"Email",
+    "PASSWORD":"Password",
+    "CONFIRM_PASS":"Confirm Password"
+  },
+  "ASSIGNMENT_FORM_TAGS":{
+    "ADD_ASSIGNMENT" :"Add Assignment",
+    "EDIT_ASSIGNMENT":"Edit Assignment",
+    "VALID_FROM":"Valid From",
+    "VALID_TO":"Valid To",
+    "DESCRIPTION":"Description",
+    "PASSCODE":"Passcode",
+    "ASSIGN_BATCH":"Assign Batch",
+    "RELEASE_DATE":"Release Date"
   }
 }

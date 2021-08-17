@@ -73,7 +73,7 @@ export class TestLiveComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    console.log(this._data);
     this.testType = this._data.testType;
     this.store.select('appState').subscribe((data) => {
       this.userName = data?.user?.userName;
