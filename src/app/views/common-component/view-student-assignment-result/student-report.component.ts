@@ -135,6 +135,17 @@ export class StudentReportComponent implements OnInit {
         .subscribe(
           (res) => {
             this.fetchedWholeAssignmentResult = res;
+            this.fetchedWholeAssignmentResult.sections.forEach(section => {
+              section.answers.sort((a,b) => {
+                const passage1 = a.passageContent ? a.passageContent : '';
+
+                const passage2 = b.passageContent ? b.passageContent : '';
+
+                const passageName1 = passage1 + (a.name ? a.name : '');
+                const passageName2 = passage2 + (b.name ? b.name : '');
+                return (passageName1 < passageName2 ? -1 : (passageName1 > passageName2 ? 1 : 0));
+              });
+            });
             this.getSectionWiseStats(this.fetchedWholeAssignmentResult);
             this.filterData.emit(this.fetchedWholeAssignmentResult.sections);
             this.solutionSectionWiseSelectedStats.emit(
