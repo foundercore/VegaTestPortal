@@ -49,6 +49,8 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
 
   elem: any;
 
+  isLastSectionQuestion = false;
+
   isSectionTimerTest = false;
 
   timerStarted = false;
@@ -126,8 +128,21 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
     this.testData?.sections?.forEach((section,index) => {
       if (section != null && section.questions != null) {
         // sort question by Sequence
-        section.questions.sort((a, b) =>
-          a.sequenceNumber < b.sequenceNumber ? -1 : 1
+        section.questions.sort((a, b) => {
+
+          if (a.sequenceNumber == 0 && b.sequenceNumber == 0 ) {
+            const passage1 = a.passageContent ? a.passageContent : '';
+
+            const passage2 = b.passageContent ? b.passageContent : '';
+
+            const passageName1 = passage1 + (a.name ? a.name : '');
+            const passageName2 = passage2 + (b.name ? b.name : '');
+            return (passageName1 < passageName2 ? -1 : (passageName1 > passageName2 ? 1 : 0));
+          } else {
+            return a.sequenceNumber < b.sequenceNumber ? -1 : 1;
+
+            }
+          }
         );
         this.sectionQuestionMap.set(section.id,section.questions);
       }
@@ -305,6 +320,11 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
             this.sectionsWithPapers = this.sectionQuestionMap.get(changeSection.id);
             this.currentSelectedSection = changeSection;
           }
+          if(this.questionNumber == this.sectionsWithPapers.length - 1 && this.isSectionTimerTest){
+              this.isLastSectionQuestion = true;
+          } else {
+            this.isLastSectionQuestion = false;
+          }
           this.getUserAllSubmissionData(moveToNext);
         },
         (err) => {
@@ -406,7 +426,9 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
             });
           });
           if(gotoNextQuestion){
-            this.goToNextQuestion();
+            if(!this.isLastSectionQuestion){
+              this.goToNextQuestion();
+            }
           } else {
               this.optionsSelected = [];
               this.setTITAQuestionFetchedAns(this.submissionData);
@@ -530,6 +552,11 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
          }
         );
       if(this.isTestLive){
+        if(this.questionNumber == this.sectionsWithPapers.length - 1 && this.isSectionTimerTest){
+          this.isLastSectionQuestion = true;
+        } else {
+         this.isLastSectionQuestion = false;
+        }
         this.getUserAllSubmissionData(false);
       }
     }
