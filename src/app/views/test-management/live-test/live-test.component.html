@@ -104,15 +104,18 @@
          </button>
        </div>
        <div>
-        <button class="save-next-btn"  mat-raised-button (click)="saveAndNextAnswers()" [disabled]="!isTestLive">
+        <button *ngIf="!isLastSectionQuestion" class="save-next-btn"  mat-raised-button (click)="saveAndNextAnswers()" [disabled]="!isTestLive">
           Save And Next
+        </button>
+        <button *ngIf="isSectionTimerTest && isLastSectionQuestion" class="save-next-btn"  mat-raised-button (click)="saveAndNextAnswers()" [disabled]="!isTestLive">
+          Save
         </button>
        </div>
 
     </div>
     <div style="flex-basis: 350px; display: flex; justify-content: center;">
       <div>
-          <button *ngIf="isTestLive" class="save-exit-btn" mat-raised-button (click)="SaveandExit()">
+          <button *ngIf="isTestLive && !isSectionTimerTest" class="save-exit-btn" mat-raised-button (click)="SaveandExit()">
             Save And Exit
           </button>
           <button *ngIf="!isTestLive" class="exit-btn" mat-raised-button (click)="exit()">
