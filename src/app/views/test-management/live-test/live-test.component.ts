@@ -65,6 +65,10 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
 
   currentSelectedQuestion: any;
 
+  selectedQuestionCorrectAnswer:string | number;
+
+  selectedQuestionExplanation:string;
+
   optionsSelected = [];
 
 
@@ -378,6 +382,8 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
     this.testConfigService.getQuestionbyQuestionId(this.currentSelectedSection.questions[index]?.id)
     .subscribe((question) => {
       this.currentSelectedQuestion = question;
+       this.showCorrectAnswerAndExplanation(question)
+
       if(setAnswer) {
           this.optionsSelected = [];
           this.setTITAQuestionFetchedAns(this.submissionData);
@@ -544,7 +550,11 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
       this.questionNumber = currentQuestionIndex;
       this.optionsSelected = [];
       await this.testConfigService.getQuestionbyQuestionId(this.currentSelectedSection.questions[currentQuestionIndex]?.id).subscribe(
-        question => this.currentSelectedQuestion = question,
+        question =>{
+          this.currentSelectedQuestion = question;
+          this.showCorrectAnswerAndExplanation(question);
+
+        },
         (err)=>{
           this.toastrService.error(
           'Failed to get Question', err, this.toasterPostion
@@ -610,7 +620,10 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
     this.sectionsWithPapers = this.sectionQuestionMap.get(section.id);
     this.currentSelectedSection = section;
     await this.testConfigService.getQuestionbyQuestionId(this.currentSelectedSection.questions[0]?.id).subscribe(
-      question => this.currentSelectedQuestion = question,
+      question => {
+        this.currentSelectedQuestion = question;
+        this.showCorrectAnswerAndExplanation(question);
+      },
       (err)=>{
         this.toastrService.error(
         'Failed to get Question', err, this.toasterPostion
@@ -739,6 +752,20 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
     if(this.timerSource){
       this.timerSource.unsubscribe();
     }
+  }
+
+  showCorrectAnswerAndExplanation(question){
+    if(question?.answer?.options){
+      const isStartWithZero = question.options.some(x => x.key == 0);
+      if(isStartWithZero){
+        this.selectedQuestionCorrectAnswer = parseInt(question?.answer?.options)  + 1;
+      }else {
+        this.selectedQuestionCorrectAnswer = parseInt(question?.answer?.options);
+      }
+    } else {
+      this.selectedQuestionCorrectAnswer = question?.answer?.answerText;
+    }
+    this.selectedQuestionExplanation = question?.explanation;
   }
 }
 
