@@ -97,17 +97,17 @@
                 <div [formGroupName]="i" style="margin: 10px">
                   <div class="sub-heading">
                     <mat-checkbox
-                      style="margin: 0 12px"
+                      style="margin: 0px 10px 0px 5px"
                       formControlName="flag"
                       [disabled]="true"
                     ></mat-checkbox>
-                    <label
-                      id="example-radio-group-label"
-                      >Option marked as correct
+                    <label id="example-radio-group-label"
+                      >{{ i + 1 }}. Option marked as correct
                     </label>
                   </div>
+
                   <angular-editor
-                    style="color: gray;cursor: not-allowed;"
+                    style="color: gray; cursor: not-allowed"
                     id="answer_option_{{ i }}"
                     [config]="descriptionEditorconfig"
                     formControlName="value"
