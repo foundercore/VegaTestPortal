@@ -78,8 +78,7 @@
                   </span>
                   <span *ngIf="metric.correct != 0">
                     {{
-                      (metric.correctTimeInSec / metric.correct) / 60
-                        | number: "1.2-2"
+                      metric.correctTimeInSec / metric.correct | minuteSeconds
                     }}
                   </span>
                   <span *ngIf="metric.correct == 0"> 0 </span>
@@ -95,8 +94,8 @@
                   </span>
                   <span *ngIf="metric.incorrect != 0">
                     {{
-                      (metric.incorrectTimeInSec / metric.incorrect) / 60
-                        | number: "1.2-2"
+                      metric.incorrectTimeInSec / metric.incorrect
+                        | minuteSeconds
                     }}
                   </span>
 
@@ -112,10 +111,9 @@
                   </span>
                   <span *ngIf="metric.skipped != 0">
                     {{
-                      (metric.skippedTimeInSec / metric.skipped) / 60
-                        | number: "1.2-2"
-                    }}</span
-                  >
+                      metric.skippedTimeInSec / metric.skipped | minuteSeconds
+                    }}
+                  </span>
                   <span *ngIf="metric.skipped == 0"> 0 </span>
                 </div>
               </div>
