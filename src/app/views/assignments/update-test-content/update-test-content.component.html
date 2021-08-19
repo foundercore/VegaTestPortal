@@ -63,9 +63,9 @@
 
               <mat-panel-description style="justify-content: flex-end;position: relative;">
                 <span style="position: absolute;left: 0px;">Section Duration : {{ section.durationInMinutes }} mins</span>
-                <ng-container *ngIf="status !== 'PUBLISHED'">
-                  <span class="section-action-btn edit_btn" (click)="editSection($event,section)"  matTooltip="Edit Section Info" ><i class="fas fa-edit"></i></span>
-                  <span class="section-action-btn delete_btn" (click)="removeSection($event,section)"  matTooltip="Delete Section" ><i class="fas fa-trash-alt"></i></span>
+                <ng-container>
+                  <span  *ngIf="status !== 'PUBLISHED'" class="section-action-btn edit_btn" (click)="editSection($event,section)"  matTooltip="Edit Section Info" ><i class="fas fa-edit"></i></span>
+                  <span  *ngIf="status !== 'PUBLISHED'" class="section-action-btn delete_btn" (click)="removeSection($event,section)"  matTooltip="Delete Section" ><i class="fas fa-trash-alt"></i></span>
                   <span class="section-action-btn save_btn" (click)="saveQuestionSequence($event,section)" matTooltip="Save Question sequence in Section"><i class="fas fa-save" ></i></span>
                 </ng-container>
               </mat-panel-description>
