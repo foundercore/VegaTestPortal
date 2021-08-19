@@ -1,82 +1,128 @@
-
 <div class="container-fluid">
   <div class="row">
     <ng-container *ngFor="let item of reportData" [ngSwitch]="item.type">
-         <div class="col-lg-4">
-
-          <app-pie-chart *ngSwitchCase="'Pie'" [data]="item">
-            <div class="chart-stats">
-              <div class="sub-stats">
-                <div class="stats">
-                  <div class="card-subtitle">
-                    <span><i class="fas fa-align-justify icon-space primary" ></i>{{ "STU_DASHBOARD_QUICKVIEW.TOTAL_QUESTION" | translate }} : </span><span> {{metric.totalQuestions}} </span>
-                  </div>
+      <div class="col-lg-4">
+        <app-pie-chart *ngSwitchCase="'Pie'" [data]="item">
+          <div class="chart-stats">
+            <div class="sub-stats">
+              <div class="stats">
+                <div class="card-subtitle">
+                  <span
+                    ><i class="fas fa-align-justify icon-space primary"></i
+                    >{{
+                      "STU_DASHBOARD_QUICKVIEW.TOTAL_QUESTION" | translate
+                    }}
+                    : </span
+                  ><span> {{ metric.totalQuestions }} </span>
                 </div>
-                <div class="stats">
-                  <div class="card-subtitle">
-                    <span><i class="fas fa-pen icon-space info" ></i>{{ "STU_DASHBOARD_QUICKVIEW.ATTEMP_QUES" | translate }} : </span><span>  {{metric.attempted}}  </span>
-                  </div>
+              </div>
+              <div class="stats">
+                <div class="card-subtitle">
+                  <span
+                    ><i class="fas fa-pen icon-space info"></i
+                    >{{
+                      "STU_DASHBOARD_QUICKVIEW.ATTEMP_QUES" | translate
+                    }}
+                    : </span
+                  ><span> {{ metric.attempted }} </span>
                 </div>
               </div>
             </div>
-          </app-pie-chart>
+          </div>
+        </app-pie-chart>
 
-          <app-stacked-vertical-bar-chart *ngSwitchCase="'Stacked Bar Chart'" [data]="item">
-            <div class="chart-stats">
-              <div class="sub-stats">
-                <div class="stats">
-                  <div class="card-subtitle">
-                    <span><i class="fas fa-align-justify icon-space primary" ></i>{{ "STU_DASHBOARD_QUICKVIEW.TOTAL_MARKS" | translate }} : </span><span> {{metric.totalMarks}} </span>
-                  </div>
+        <app-stacked-vertical-bar-chart
+          *ngSwitchCase="'Stacked Bar Chart'"
+          [data]="item"
+        >
+          <div class="chart-stats">
+            <div class="sub-stats">
+              <div class="stats">
+                <div class="card-subtitle">
+                  <span
+                    ><i class="fas fa-align-justify icon-space primary"></i
+                    >{{
+                      "STU_DASHBOARD_QUICKVIEW.TOTAL_MARKS" | translate
+                    }}
+                    : </span
+                  ><span> {{ metric.totalMarks }} </span>
                 </div>
+              </div>
 
-                <div class="stats">
-                  <div class="card-subtitle">
-
-                    <span><i class="fas fa-pen icon-space info" ></i>{{ "STU_DASHBOARD_QUICKVIEW.RCV_MARKS" | translate }} : </span><span> {{metric.marksReceived}} </span>
-                  </div>
+              <div class="stats">
+                <div class="card-subtitle">
+                  <span
+                    ><i class="fas fa-pen icon-space info"></i
+                    >{{
+                      "STU_DASHBOARD_QUICKVIEW.RCV_MARKS" | translate
+                    }}
+                    : </span
+                  ><span> {{ metric.marksReceived }} </span>
                 </div>
               </div>
             </div>
+          </div>
+        </app-stacked-vertical-bar-chart>
 
-          </app-stacked-vertical-bar-chart>
-
-
-          <app-vertical-bar-chart  *ngSwitchCase="'Vertical Bar Chart'"  [data]="item" >
-            <div class="chart-stats">
-              <div class="sub-stats">
-
-                <div class="stats">
-                  <div class="card-subtitle">
-                    <span><i class="fas fa-hourglass-start  success icon-space" ></i>{{ "STU_DASHBOARD_QUICKVIEW.AVG_CRCT_TIME" | translate }} : </span>
-                    <span *ngIf="metric.correct != 0"> {{metric.correctTimeInSec / metric.correct  | minuteSeconds}} </span>
-                    <span *ngIf="metric.correct == 0"> 0 </span>
-                  </div>
+        <app-vertical-bar-chart
+          *ngSwitchCase="'Vertical Bar Chart'"
+          [data]="item"
+        >
+          <div class="chart-stats">
+            <div class="sub-stats">
+              <div class="stats">
+                <div class="card-subtitle">
+                  <span
+                    ><i class="fas fa-hourglass-start success icon-space"></i
+                    >{{ "STU_DASHBOARD_QUICKVIEW.AVG_CRCT_TIME" | translate }} :
+                  </span>
+                  <span *ngIf="metric.correct != 0">
+                    {{
+                      (metric.correctTimeInSec / metric.correct) / 60
+                        | number: "1.2-2"
+                    }}
+                  </span>
+                  <span *ngIf="metric.correct == 0"> 0 </span>
                 </div>
+              </div>
 
-                <div class="stats">
-                  <div class="card-subtitle">
-                    <span><i class="fas fa-hourglass-end icon-space failure" ></i>{{ "STU_DASHBOARD_QUICKVIEW.AVG_INCRCT_TIME" | translate }} : </span>
-                    <span *ngIf="metric.incorrect != 0"> {{metric.incorrectTimeInSec / metric.incorrect | minuteSeconds}} </span>
-                    <span *ngIf="metric.incorrect == 0"> 0 </span>
-                  </div>
+              <div class="stats">
+                <div class="card-subtitle">
+                  <span
+                    ><i class="fas fa-hourglass-end icon-space failure"></i
+                    >{{ "STU_DASHBOARD_QUICKVIEW.AVG_INCRCT_TIME" | translate }}
+                    :
+                  </span>
+                  <span *ngIf="metric.incorrect != 0">
+                    {{
+                      (metric.incorrectTimeInSec / metric.incorrect) / 60
+                        | number: "1.2-2"
+                    }}
+                  </span>
+
+                  <span *ngIf="metric.incorrect == 0"> 0 </span>
                 </div>
+              </div>
 
-                <div class="stats">
-                  <div class="card-subtitle">
-                    <span><i class="fas fa-hourglass-half icon-space warning" ></i>{{ "STU_DASHBOARD_QUICKVIEW.AVG_SKIP_TIME" | translate }} : </span>
-                    <span *ngIf="metric.skipped != 0"> {{metric.skippedTimeInSec/ metric.skipped | minuteSeconds}}</span>
-                    <span *ngIf="metric.skipped == 0"> 0 </span>
-
-                  </div>
+              <div class="stats">
+                <div class="card-subtitle">
+                  <span
+                    ><i class="fas fa-hourglass-half icon-space warning"></i
+                    >{{ "STU_DASHBOARD_QUICKVIEW.AVG_SKIP_TIME" | translate }} :
+                  </span>
+                  <span *ngIf="metric.skipped != 0">
+                    {{
+                      (metric.skippedTimeInSec / metric.skipped) / 60
+                        | number: "1.2-2"
+                    }}</span
+                  >
+                  <span *ngIf="metric.skipped == 0"> 0 </span>
                 </div>
-
               </div>
             </div>
-
-          </app-vertical-bar-chart>
-        </div>
-
+          </div>
+        </app-vertical-bar-chart>
+      </div>
     </ng-container>
   </div>
 </div>
