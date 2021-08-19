@@ -755,7 +755,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
   }
 
   showCorrectAnswerAndExplanation(question){
-    if(question?.answer?.options){
+    if(question?.answer?.options && question?.answer?.options.length > 0){
       const isStartWithZero = question.options.some(x => x.key == 0);
       if(isStartWithZero){
         this.selectedQuestionCorrectAnswer = parseInt(question?.answer?.options)  + 1;
