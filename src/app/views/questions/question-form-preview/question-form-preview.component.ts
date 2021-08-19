@@ -118,21 +118,25 @@ export class QuestionFormPreviewComponent implements OnInit {
                 ?.setValue(resp.answer.answerText);
             }
 
-            this.options = resp.options;
-            this.options.forEach((x) => {
-              this.addOption();
-            });
-
-            this.answerOptionFormGrp
-              .get('optionArrays')
-              ['controls'].forEach((x, i) => {
-                x.get('value').setValue(resp.options[i].value);
+            if (resp.type == 'MCQ') {
+              this.options = resp.options;
+              this.options.forEach((x) => {
+                this.addOption();
               });
 
-            for (let i = 0; i < resp.answer.options.length; i++) {
-              for (let j = 0; j < resp.options.length; j++) {
-                if (resp.answer.options[i] == resp.options[j].key) {
-                  this.answerOptionFormGrp.controls.optionArrays['controls'][j]['controls'].flag.setValue(true);
+              this.answerOptionFormGrp
+                .get('optionArrays')
+                ['controls'].forEach((x, i) => {
+                  x.get('value').setValue(resp.options[i].value);
+                });
+
+              for (let i = 0; i < resp.answer.options.length; i++) {
+                for (let j = 0; j < resp.options.length; j++) {
+                  if (resp.answer.options[i] == resp.options[j].key) {
+                    this.answerOptionFormGrp.controls.optionArrays['controls'][
+                      j
+                    ]['controls'].flag.setValue(true);
+                  }
                 }
               }
             }
