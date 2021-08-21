@@ -18,10 +18,10 @@
           >assignment</mat-icon
         >
       </div>
-      <div (click)="statsFilter('T')" class="stats">
+      <button  mat-raised-button (click)="statsFilter('T')" class="stats">
         <h4>{{ totalTest }}</h4>
         <p>{{ "DASHBOARD_TAGS.TOTAL_TEST" | translate }}</p>
-      </div>
+      </button>
     </span>
     <span class="stats-card">
       <div class="icon">
@@ -32,10 +32,10 @@
           >playlist_add_check</mat-icon
         >
       </div>
-      <div (click)="statsFilter('A')" class="stats">
+      <button  mat-raised-button (click)="statsFilter('A')" class="stats">
         <h4>{{ attempt }}</h4>
         <p>{{ "DASHBOARD_TAGS.ATTEMPTED" | translate }}</p>
-      </div>
+      </button>
     </span>
     <span class="stats-card">
       <div class="icon">
@@ -46,13 +46,15 @@
           >signal_cellular_no_sim</mat-icon
         >
       </div>
-      <div (click)="statsFilter('UA')" class="stats">
+      <button   mat-raised-button (click)="statsFilter('UA')" class="stats">
         <h4>{{ notAttempted }}</h4>
         <p>{{ "DASHBOARD_TAGS.UNATTEMPTED" | translate }}</p>
-      </div>
+      </button>
     </span>
   </div>
 </div>
+
+
 <div class="loading-container" *ngIf="isLoading">
         <mat-spinner *ngIf="isLoading"></mat-spinner>
 </div>
