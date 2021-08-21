@@ -19,8 +19,6 @@ import { TestConfigService } from '../../services/test-config-service';
 })
 export class TestconfigComponent implements OnInit {
 
-  config = new TestConfigurationVM();
-
   public fileName = 'Choose file';
 
   public file: FileUploadModel | undefined;
@@ -28,7 +26,7 @@ export class TestconfigComponent implements OnInit {
   public configurationFormControl = new FormGroup({
       doNotShowReport: new FormControl(false),
       allowCalculator: new FormControl(false),
-      percentile: new FormControl(true),
+      percentile: new FormControl(false),
       shuffleQuestions: new FormControl(false),
       sectionalTest: new FormControl(false),
     }
@@ -44,38 +42,63 @@ export class TestconfigComponent implements OnInit {
   { }
 
   ngOnInit(): void {
-   if(this._data?.controlParms != null && this._data?.controlParms != undefined){
-    this.config = this._data?.controlParms;
-    this.configurationFormControl.setValue({
-      doNotShowReport:this._data?.controlParms.doNotShowReport,
-      allowCalculator:this._data?.controlParms.allowCalculator,
-      percentile:this._data?.controlParms.percentile,
-      shuffleQuestions:this._data?.controlParms.shuffleQuestions,
-      sectionalTest:this._data?.controlParms.shuffleQuestions.sectionalTest
-    })
-   }
+    this.testConfigService.getQuestionPaper(this._data?.testId)
+      .pipe(finalize(() => {}))
+      .subscribe(
+        (res: any) => {
+          this.configurationFormControl.setValue({
+            doNotShowReport:res.controlParam.doNotShowReport,
+            allowCalculator:res.controlParam.allowCalculator,
+            percentile:res.controlParam.percentile,
+            shuffleQuestions:res.controlParam.shuffleQuestions,
+            sectionalTest:res.controlParam.sectionalTest
+          })
+        },
+        (error) => {
+          this.toastrService.error(
+            error?.error?.message ? error?.error?.message : error?.message,
+            'Error'
+          );
+        }
+      );
   }
 
   saveConfiguration(){
 
     if(this._data?.testId != null){
-    forkJoin([
-      this.testConfigService.saveTestConfiguration({
-        doNotShowReport:this.configurationFormControl.controls.doNotShowReport.value,
-        allowCalculator:this.configurationFormControl?.controls.allowCalculator.value,
-        percentile:this.configurationFormControl?.controls.percentile.value,
-        shuffleQuestions:this.configurationFormControl?.controls.shuffleQuestions.value,
-        sectionalTest: this.configurationFormControl?.controls.sectionalTest.value
-      },this._data?.testId),
-      this.testConfigService .savePercentileFile(this.file,this._data?.testId)
+      if(this.file){
+          forkJoin([
+            this.testConfigService.saveTestConfiguration({
+              doNotShowReport:this.configurationFormControl.controls.doNotShowReport.value,
+              allowCalculator:this.configurationFormControl?.controls.allowCalculator.value,
+              percentile:this.configurationFormControl?.controls.percentile.value,
+              shuffleQuestions:this.configurationFormControl?.controls.shuffleQuestions.value,
+              sectionalTest: this.configurationFormControl?.controls.sectionalTest.value
+            },this._data?.testId),
+            this.testConfigService .savePercentileFile(this.file,this._data?.testId)
 
-    ]).subscribe((results) => {
-      this.dialogRef.close();
-      this.toastrService.success("Test configured successfully");
-    }, (error) => {
-      this.toastrService.error(error?.error?.message ? error?.error?.message : error?.message, 'Error');
-    });
-  }
+          ]).subscribe((results) => {
+            this.dialogRef.close();
+            this.toastrService.success("Test configured successfully");
+          }, (error) => {
+            this.toastrService.error(error?.error?.message ? error?.error?.message : error?.message, 'Error');
+          });
+        }
+       else {
+        this.testConfigService.saveTestConfiguration({
+          doNotShowReport:this.configurationFormControl.controls.doNotShowReport.value,
+          allowCalculator:this.configurationFormControl?.controls.allowCalculator.value,
+          percentile:this.configurationFormControl?.controls.percentile.value,
+          shuffleQuestions:this.configurationFormControl?.controls.shuffleQuestions.value,
+          sectionalTest: this.configurationFormControl?.controls.sectionalTest.value
+        },this._data?.testId).subscribe((results) => {
+          this.dialogRef.close();
+          this.toastrService.success("Test configured successfully");
+        }, (error) => {
+          this.toastrService.error(error?.error?.message ? error?.error?.message : error?.message, 'Error');
+        });
+      }
+    }
   }
 
   getQuestionPaperbyId() {
@@ -84,7 +107,6 @@ export class TestconfigComponent implements OnInit {
       .pipe(finalize(() => {}))
       .subscribe(
         (res: any) => {
-          this.config = res.controlParam;
           this.toastrService.success("Reset successfully");
           console.log('this.gettest==', res);
           // }
