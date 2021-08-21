@@ -15,6 +15,16 @@
     </div>
   </mat-tab>
 
+  <mat-tab label="Summary">
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">bar_chart</mat-icon>
+      {{ "STU_DASHBOARD_QUICKVIEW.SUMMARY" | translate }}
+    </ng-template>
+    <div class="tab-body">
+      <app-section-wise-summary  [summaryData]="summaryData" ></app-section-wise-summary>
+    </div>
+  </mat-tab>
+
   <mat-tab label="Questions">
     <ng-template mat-tab-label>
       <mat-icon class="example-tab-icon">question_answer</mat-icon>

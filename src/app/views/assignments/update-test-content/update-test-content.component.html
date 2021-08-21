@@ -29,6 +29,10 @@
       </div>
 
       <div class="col text-right">
+        <button mat-raised-button  class="add-btn mx-2" (click)="openTestConfigDialog()">
+          <span class="ml-2">Test Config</span>
+        </button>
+
         <button *ngIf="quest?.status == 'DRAFT'" mat-raised-button  class="add-btn mx-2" (click)="initiateVerification()">
           <span class="ml-2">Initiate verification</span>
         </button>
@@ -112,7 +116,9 @@
 
 
 
-            <div cdkDropList class="section-question-list" (cdkDropListDropped)="drop($event)">
+            <div cdkDropList class="section-question-list" (cdkDropListDropped)="drop($event)" #container2  cdkDropList
+            cdkDropListLockAxis="y"
+            cdkDropListOrientation="vertical">
               <div class="question-box">
                 <div class="container-fluid">
                   <div class="row">
@@ -152,7 +158,8 @@
               </div>
 
               <div class="section-question-list-content">
-                <div class="question-box " *ngFor="let sectionQuestion of sectionQuestionList | filterPipe : 'name':filter;let index = index" cdkDrag [cdkDragDisabled]="filter.trim().length != 0">
+                <div class="question-box " *ngFor="let sectionQuestion of sectionQuestionList | filterPipe : 'name':filter;let index = index" cdkDrag vsDragScroll
+                [vsDragScrollContainer]="container2" [cdkDragDisabled]="filter.trim().length != 0">
                   <div class="question-box-custom-placeholder" *cdkDragPlaceholder></div>
                   <div class="container-fluid">
                     <div class="row">

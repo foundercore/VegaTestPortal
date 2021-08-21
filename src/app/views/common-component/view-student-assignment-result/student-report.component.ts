@@ -76,6 +76,8 @@ export class StudentReportComponent implements OnInit {
 
   metrics;
 
+  summaryData = new EventEmitter();
+
   currentSelection = 'Section Level';
 
   solution = 'Solution';
@@ -135,6 +137,7 @@ export class StudentReportComponent implements OnInit {
         .subscribe(
           (res) => {
             this.fetchedWholeAssignmentResult = res;
+            this.summaryData.emit(res.summary);
             this.fetchedWholeAssignmentResult.sections.forEach(section => {
               section.answers.sort((a,b) => {
                 const passage1 = a.passageContent ? a.passageContent : '';

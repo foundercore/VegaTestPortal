@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { TestVM } from '../models/postTestVM';
 import { Observable } from 'rxjs';
 import { SearchQuestionPaperVM } from '../models/searchQuestionPaperVM';
@@ -62,9 +62,21 @@ export class TestConfigService extends BaseService {
     return this.http.post<any>(url, model, this.headers);
   }
 
-  TestConfiguration(model: TestConfigurationVM): Observable<any> {
-    const url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${model.testId}/update-control-params`;
+  saveTestConfiguration(model: any,testId: string): Observable<any> {
+    const url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${testId}/update-control-params`;
     return this.http.post<any>(url, model, this.headers);
+  }
+
+
+  savePercentileFile(file: any,paperId: string): Observable<any> {
+    const fd = new FormData();
+    fd.append('file', file!.data);
+    const url = `${this.BASE_SERVICE_URL}/api/v1/test/config/update-percentile-scorecard?paperId=${paperId}`;
+
+    const req = new HttpRequest('POST', url, fd, {
+      reportProgress: true,
+    });
+    return this.http.request(req);
   }
 
   addSection(model: Section): Observable<any> {

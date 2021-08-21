@@ -1,0 +1,22 @@
+table {
+  width: 100%;
+}
+
+
+.summary-tab {
+    display: flex;
+    table{
+      flex: 1;
+       margin: 0px 10px;
+       align-self: baseline;
+    }
+}
+
+
+.section-row-class{
+  max-height: 48px !important;
+}
+
+.section-row-cell-class{
+  max-height: 48px !important;
+}

@@ -9,73 +9,34 @@
         <div class="confiq__sec py-7">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="content_box">
-                            <mat-checkbox class="" [(ngModel)]="config.hideScoreCard" [checked]="config.hideScoreCard">Hide Score Card</mat-checkbox>
-                            <mat-checkbox class="mt-2" [(ngModel)]="config.hideTopicWiseAnalysis" [checked]="config.hideTopicWiseAnalysis">Hide Topicwise Analysis</mat-checkbox>
-                            <mat-checkbox class="mt-2" [(ngModel)]="config.doNotShowReport" [checked]="config.doNotShowReport">Do Not Show Report</mat-checkbox>
-                            <mat-checkbox class="mt-2" [(ngModel)]="config.percentile" [checked]="config.percentile">Percentile</mat-checkbox>
-                        </div>
-                    </div>
-                    <!--  -->
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="content_box">
-                            <mat-checkbox class="" [(ngModel)]="config.hideAllCharts" [checked]="config.hideAllCharts">Hide All Charts</mat-checkbox>
-                            <mat-checkbox class="mt-2" [(ngModel)]="config.hideAreaWiseAnalysis" [checked]="config.hideAreaWiseAnalysis">Hide Areawise Analysis</mat-checkbox>
-                            <mat-checkbox class="mt-2" [(ngModel)]="config.reviewTestReport" [checked]="config.reviewTestReport">Is Enable Review Test in Report</mat-checkbox>
-                            <mat-checkbox class="mt-2" [(ngModel)]="config.hideSolutionAndQuestionSummary" [checked]="config.hideSolutionAndQuestionSummary">Hide Solution Tab & Questions Summary</mat-checkbox>
-                        </div>
-                    </div>
-                    <!--  -->
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="content_box">
-                            <mat-checkbox class="" [(ngModel)]="config.sectionalBreakup" [checked]="config.sectionalBreakup">Sectional BreakUp</mat-checkbox>
-                            <mat-checkbox class="mt-2" [(ngModel)]="config.hideDifficultyLevelAnalysis" [checked]="config.hideDifficultyLevelAnalysis">Hide Diffcultywise Analysis</mat-checkbox>
-                            <mat-checkbox class="mt-2" [(ngModel)]="config.hideAnalysis" [checked]="config.hideAnalysis">Hide Analysis</mat-checkbox>
-                            <mat-checkbox class="mt-2" [(ngModel)]="config.hideRank" [checked]="config.hideRank">Hide Rank</mat-checkbox>
-                        </div>
-                    </div>
-                    <!--  -->
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="content_box">
-                            <mat-checkbox class="" [(ngModel)]="config.sectionWiseAnalysis" [checked]="config.sectionWiseAnalysis">Sectionwise Analysis</mat-checkbox>
-                            <mat-checkbox class="mt-2" [(ngModel)]="config.questionWiseAnalysis" [checked]="config.questionWiseAnalysis">Questionwise Analysis</mat-checkbox>
-                            <mat-checkbox class="mt-2" [(ngModel)]="config.cutoff" [checked]="config.cutoff">CutOff</mat-checkbox> 
-                        </div>
-                    </div>
-                    <!--  -->
-                    <div class="col-md-6 col-sm-6">
-                        <div class="content_box">
-                             <table class="table mb-0">
-                                 <tr>
-                                    <td>Overall</td>
-                                    <td><input type="text" class="form-control" placeholder="0" [(ngModel)]="config.overall"></td>
-                                 </tr>
-                                 <tr>
-                                    <td>Data Interpreatation & Logical Reasoning</td>
-                                    <td><input type="text" class="form-control" placeholder="0" [(ngModel)]="config.reasoning"></td>
-                                 </tr>
-                             </table>
-                        </div>
-                    </div>
-                    <!--  -->
-                    <div class="col-md-6 col-sm-6">
-                        <div class="content_box">
-                             <table class="table mb-0">
-                                 <tr>
-                                    <td>Verbal Ability & Reading Comprehension</td>
-                                    <td><input type="text" class="form-control" placeholder="0" [(ngModel)]="config.comprehension"></td>
-                                 </tr>
-                                 <tr>
-                                    <td>Quantitative Aptitude</td>
-                                    <td><input type="text" class="form-control" placeholder="0" [(ngModel)]="config.aptitude"></td>
-                                 </tr>
-                             </table>
-                        </div>
-                    </div>
-                    <div class="col-12 text-center pt-5"> 
 
-                        <button mat-raised-button class="mat-btn save-btn mx-1" (click)="SubmitConfiguration()">
+                  <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="content_box" [formGroup]="configurationFormControl">
+                        <mat-checkbox formControlName="doNotShowReport"  class="mt-2" >Do Not Show Report</mat-checkbox>
+                        <mat-checkbox formControlName="allowCalculator" class="mt-2" >Percentile</mat-checkbox>
+                        <mat-checkbox formControlName="percentile" class="mt-2"  >Allow Calculator</mat-checkbox>
+                        <mat-checkbox formControlName="shuffleQuestions" class="mt-2" >Shuffle Question</mat-checkbox>
+                        <mat-checkbox formControlName="sectionalTest" class="mt-2" >Sectional Test</mat-checkbox>
+                      </div>
+                  </div>
+
+                    <div class="col-12  pt-5">
+                      <p>Percentile file:</p>
+                      <div class="custom-file mb-3">
+                        <input
+                          type="file"
+                          accept=".xlsx"
+                          class="custom-file-input"
+                          id="customFile"
+                          name="filename"
+                          (change)="onFileChange($event)"
+                        />
+                        <label class="custom-file-label" for="customFile">{{ fileName }}</label>
+                      </div>
+                    </div>
+                    <div class="col-12 text-center pt-5">
+
+                        <button mat-raised-button class="mat-btn save-btn mx-1" (click)="saveConfiguration()">
                             <mat-icon>save</mat-icon>
                             Save
                         </button>
@@ -85,11 +46,11 @@
                         </button>
                     </div>
                 </div>
-        
+
             </div><!--.//container-->
         </div>
-    
-    
-    
+
+
+
     </div>
 </div>
