@@ -1,0 +1,134 @@
+<div class="summary-tab">
+
+  <table #sectionTable mat-table [dataSource]="sectoionLevelDataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="name">
+      <th  class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Section Name. </th>
+      <td class="section-row-cell-class" mat-cell *matCellDef="let element"> {{element.name}} </td>
+      <td mat-footer-cell *matFooterCellDef> Total </td>
+    </ng-container>
+
+     <ng-container matColumnDef="correct">
+      <th  class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Correct </th>
+      <td class="section-row-cell-class" mat-cell *matCellDef="let element"> {{element.correct}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getSectionalTotalCount('correct')}} </td>
+
+    </ng-container>
+
+    <ng-container matColumnDef="incorrect">
+      <th  class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Incorrect </th>
+      <td class="section-row-cell-class" mat-cell *matCellDef="let element"> {{element.incorrect}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getSectionalTotalCount('incorrect')}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="skipped">
+      <th  class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Skipped </th>
+      <td class="section-row-cell-class" mat-cell *matCellDef="let element"> {{element.skipped}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getSectionalTotalCount('skipped')}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="marks">
+      <th  class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Marks </th>
+      <td class="section-row-cell-class" mat-cell *matCellDef="let element"> {{element.marks}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getSectionalTotalCount('marks')}}  </td>
+    </ng-container>
+
+    <ng-container matColumnDef="percentile">
+      <th  class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Percentile </th>
+      <td class="section-row-cell-class" mat-cell *matCellDef="let element"> {{element.percentileScore}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getSectionalTotalCount('percentileScore')}}  </td>
+    </ng-container>
+
+
+    <tr  class="custom-mat-header-th" mat-header-row *matHeaderRowDef="sectionLevelSummaryDisplayedColumns"></tr>
+    <tr class="section-row-class"  mat-row *matRowDef="let row; columns: sectionLevelSummaryDisplayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="sectionLevelSummaryDisplayedColumns"></tr>
+
+  </table>
+
+
+
+  <table #diffiultylevelTable mat-table [dataSource]="difficultyDataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="difficulty">
+      <th mat-header-cell *matHeaderCellDef >Difficulty</th>
+    </ng-container>
+
+    <ng-container matColumnDef="correct">
+      <th mat-header-cell *matHeaderCellDef [colSpan]="2"> Correct </th>
+    </ng-container>
+
+    <ng-container matColumnDef="incorrect">
+      <th mat-header-cell *matHeaderCellDef  [colSpan]="2"> Incorrect </th>
+    </ng-container>
+
+    <ng-container matColumnDef="skipped">
+      <th mat-header-cell *matHeaderCellDef  [colSpan]="2"> Skipped </th>
+    </ng-container>
+
+    <ng-container matColumnDef="mark">
+      <th mat-header-cell *matHeaderCellDef> Marks </th>
+    </ng-container>
+
+    <ng-container matColumnDef="level">
+      <th  class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Difficulty level  </th>
+      <td mat-cell *matCellDef="let element"> {{element.level}} </td>
+      <td mat-footer-cell *matFooterCellDef> Total </td>
+    </ng-container>
+
+     <ng-container matColumnDef="correctCount">
+      <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Count  </th>
+      <td mat-cell *matCellDef="let element"> {{element.correctCount}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{getDifficultLevelTotalCount('correctCount')}}   </td>
+    </ng-container>
+
+    <ng-container matColumnDef="correctAvgTime">
+      <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Avg. Time  </th>
+      <td mat-cell *matCellDef="let element"> {{ element.correctAvgTime | minuteSeconds}} </td>
+      <td mat-footer-cell *matFooterCellDef>  {{getDifficultLevelTotalCount('correctAvgTime') | minuteSeconds}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="incorrectCount">
+      <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Count  </th>
+      <td mat-cell *matCellDef="let element"> {{element.incorrectCount}} </td>
+      <td mat-footer-cell *matFooterCellDef>  {{getDifficultLevelTotalCount('incorrectCount')}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="incorrectAvgTime">
+      <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Avg. Time  </th>
+      <td mat-cell *matCellDef="let element"> {{element.incorrectAvgTime  | minuteSeconds}} </td>
+      <td mat-footer-cell *matFooterCellDef>  {{getDifficultLevelTotalCount('incorrectAvgTime') | minuteSeconds}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="skippedCount">
+      <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Count  </th>
+      <td mat-cell *matCellDef="let element"> {{element.skippedCount}} </td>
+      <td mat-footer-cell *matFooterCellDef>  {{getDifficultLevelTotalCount('skippedCount')}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="skippedAvgTime">
+      <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Avg. Time  </th>
+      <td mat-cell *matCellDef="let element"> {{ element.skippedAvgTime | minuteSeconds}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{ getDifficultLevelTotalCount('skippedAvgTime') | minuteSeconds}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="marks">
+      <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Marks  </th>
+      <td mat-cell *matCellDef="let element"> {{element.marks}} </td>
+      <td mat-footer-cell *matFooterCellDef>  {{getDifficultLevelTotalCount('marks')}} </td>
+    </ng-container>
+
+
+
+ <tr mat-header-row *matHeaderRowDef="['difficulty','correct','incorrect','skipped','mark']"
+      class="example-second-header-row">
+  </tr>
+
+    <tr mat-header-row *matHeaderRowDef="difficultySummaryDisplayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: difficultySummaryDisplayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="difficultySummaryDisplayedColumns"></tr>
+
+  </table>
+
+
+</div>

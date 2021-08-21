@@ -59,6 +59,7 @@
   },
   "STU_DASHBOARD_QUICKVIEW": {
     "QUICKVIEW": "Quick View",
+    "SUMMARY":"Summary",
     "QUESITONS_STAS": "Questions Statistics",
     "MARKS_STATS": "Marks Statistics",
     "TIME_STATS": "Time Statistics",

@@ -277,7 +277,7 @@ export class UpdateTestContentComponent implements OnInit {
       : this.sectionQuestionList.forEach((row) => this.selection.select(row));
   }
 
-  TestConfig() {
+  openTestConfigDialog() {
     const dialogRef = this.dialog.open(TestconfigComponent, {
       maxWidth: '1200px',
       width: '100%',
