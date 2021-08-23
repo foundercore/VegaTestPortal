@@ -160,12 +160,13 @@
                       class="answer-list"
                       [appMath]="transform(option.value)"
                     ></div>
-
-                    <span
-                      *ngIf="answer?.correctOptions?.includes(option.key)"
-                      class="badge badge-pill badge-primary ml-2"
-                      >{{ "STUDENT_SOLUTION_TAG.CORRECT_ANSWER" | translate }}
-                    </span>
+                    <div class="markcontainer-copy">
+                      <i
+                        *ngIf="answer?.correctOptions?.includes(option.key)"
+                        class="fas fa-check-circle success"
+                      >
+                      </i>
+                    </div>
                   </div>
                 </div>
 
