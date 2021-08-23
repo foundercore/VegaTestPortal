@@ -65,6 +65,10 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
 
   currentSelectedQuestion: any;
 
+  selectedQuestionCorrectAnswer:string | number;
+
+  selectedQuestionExplanation:string;
+
   optionsSelected = [];
 
 
@@ -159,7 +163,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
           section.answers.forEach(answer => {
             if(answer.markForReview){
               this.markForReviewQuestionList.push(answer.questionId);
-            } else if((answer.selectedOptions && answer.selectedOptions.length > 0 )|| answer.answerText.length > 0){
+            } else if((answer.selectedOptions && answer.selectedOptions.length > 0 ) || ( answer.answerText && answer.answerText.length > 0)){
               this.answeredQuestionList.push(answer.questionId);
             } else {
               this.visitedQuestionList.push(answer.questionId);
@@ -295,15 +299,14 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
   async saveAndNextAnswers(moveToNext = true,changeSection = null) {
     console.log('this.question=>', this.currentSelectedQuestion);
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
-    quesForMarkedAsReview.answerText = this.titaText;
     quesForMarkedAsReview.markForReview = this.getSelectedOption() != null
       || this.titaText != null ? false : true;
     quesForMarkedAsReview.assignmentId = this.assignmentId;
     quesForMarkedAsReview.questionId = this.currentSelectedQuestion.id.questionId;
     quesForMarkedAsReview.sectionId = this.currentSelectedSection.id;
-    quesForMarkedAsReview.selectedOptions = (this.getSelectedOption() as any);
     quesForMarkedAsReview.timeElapsedInSec = this.timeElapsedInSecond;
-
+    quesForMarkedAsReview.answerText = this.titaText;
+    quesForMarkedAsReview.selectedOptions = (this.getSelectedOption() as any);
 
     await this.testConfigService
       .saveandNextAnswers(
@@ -348,7 +351,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
   getSelectedOption() {
     const optionsSelectedArray = [];
     for (let i = 0; i < this.optionsSelected.length; i++) {
-      if (this.optionsSelected[i]) { optionsSelectedArray.push(String(i + 1)); }
+      if (this.optionsSelected[i]) { optionsSelectedArray.push(String(i)); }
     }
     if (optionsSelectedArray.length > 0) {
       console.log(
@@ -378,6 +381,8 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
     this.testConfigService.getQuestionbyQuestionId(this.currentSelectedSection.questions[index]?.id)
     .subscribe((question) => {
       this.currentSelectedQuestion = question;
+       this.showCorrectAnswerAndExplanation(question)
+
       if(setAnswer) {
           this.optionsSelected = [];
           this.setTITAQuestionFetchedAns(this.submissionData);
@@ -418,7 +423,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
             section.answers.forEach(answer => {
               if(answer.markForReview){
                 this.markForReviewQuestionList.push(answer.questionId);
-              } else if((answer.selectedOptions && answer.selectedOptions.length > 0 )|| answer.answerText.length > 0){
+              } else if((answer.selectedOptions && answer.selectedOptions.length > 0 )|| (answer.answerText && answer.answerText.length > 0)){
                 this.answeredQuestionList.push(answer.questionId);
               } else {
                 this.visitedQuestionList.push(answer.questionId);
@@ -499,7 +504,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
             this.optionsSelected = [];
             if (selectedOptions !== null) {
               selectedOptions.map((optIndex) => {
-                this.optionsSelected[Number(optIndex) - 1] = true;
+                this.optionsSelected[Number(optIndex)] = true;
               });
             }
           }
@@ -512,12 +517,12 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
 
   setOptionSelected(selected) {
     if (
-      this.optionsSelected[selected - 1] === true ||
-      this.optionsSelected[selected - 1] === false
+      this.optionsSelected[selected] === true ||
+      this.optionsSelected[selected] === false
     ) {
-      this.optionsSelected[selected - 1] = !this.optionsSelected[selected - 1];
+      this.optionsSelected[selected] = !this.optionsSelected[selected];
     } else {
-      this.optionsSelected[selected - 1] = true;
+      this.optionsSelected[selected] = true;
     }
 
   }
@@ -536,15 +541,17 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
     // first save the response on previous question
     if(this.isTestLive){
       this.currentSelectedQuestion.visited = true;
-      await this.saveWaitingTime(false);
-    }
-    this.timeElapsedInSecond = 0;
-    // move to the next question
-    {
+      this.questionNumber = currentQuestionIndex;
+      await this.saveWaitingTime(true);
+    } else  {
       this.questionNumber = currentQuestionIndex;
       this.optionsSelected = [];
       await this.testConfigService.getQuestionbyQuestionId(this.currentSelectedSection.questions[currentQuestionIndex]?.id).subscribe(
-        question => this.currentSelectedQuestion = question,
+        question =>{
+          this.currentSelectedQuestion = question;
+          this.showCorrectAnswerAndExplanation(question);
+
+        },
         (err)=>{
           this.toastrService.error(
           'Failed to get Question', err, this.toasterPostion
@@ -584,7 +591,51 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
           if (quesForMarkedAsReview.selectedOptions !== null) {
             this.toastrService.success('Response saved successfully', '', this.toasterPostion);
           }
-          this.getUserAllSubmissionData(moveToNext);
+          if(this.questionNumber == this.sectionsWithPapers.length - 1 && this.isSectionTimerTest){
+              this.isLastSectionQuestion = true;
+          } else {
+            this.isLastSectionQuestion = false;
+          }
+          this.timeElapsedInSecond = 0;
+          this.testConfigService
+            .getSudentSubmissionState(this.assignmentId, this.userName)
+            .subscribe(
+              (res: any) => {
+                this.submissionData = res;
+
+                this.visitedQuestionList = [];
+                this.markForReviewQuestionList = [];
+                this.answeredQuestionList = [];
+                res.sections.forEach(section => {
+                  section.answers.forEach(answer => {
+                    if(answer.markForReview){
+                      this.markForReviewQuestionList.push(answer.questionId);
+                    } else if((answer.selectedOptions && answer.selectedOptions.length > 0 )|| (answer.answerText && answer.answerText.length > 0)){
+                      this.answeredQuestionList.push(answer.questionId);
+                    } else {
+                      this.visitedQuestionList.push(answer.questionId);
+                    }
+                  });
+                });
+                this.testConfigService.getQuestionbyQuestionId(this.currentSelectedSection.questions[this.questionNumber]?.id)
+                      .subscribe((question) => {
+                        this.currentSelectedQuestion = question;
+                        this.showCorrectAnswerAndExplanation(question)
+                        this.optionsSelected = [];
+                        this.setTITAQuestionFetchedAns(this.submissionData);
+                        this.setCurrentQuestionSelectedOption();
+                      },
+                      (error:any) => {
+                          console.log('Error in fetching question');
+                      });
+              },
+              (error) => {
+                console.log(
+                  'Error in fetching user submitted data => Reasons can be: 1)This user doesn\'t has any submitted data 2). Internet connectivity issue'
+                );
+              }
+            );
+
         },
         (err) => {
           if (String(err.error.apierror.message).includes(
@@ -610,7 +661,10 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
     this.sectionsWithPapers = this.sectionQuestionMap.get(section.id);
     this.currentSelectedSection = section;
     await this.testConfigService.getQuestionbyQuestionId(this.currentSelectedSection.questions[0]?.id).subscribe(
-      question => this.currentSelectedQuestion = question,
+      question => {
+        this.currentSelectedQuestion = question;
+        this.showCorrectAnswerAndExplanation(question);
+      },
       (err)=>{
         this.toastrService.error(
         'Failed to get Question', err, this.toasterPostion
@@ -739,6 +793,20 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
     if(this.timerSource){
       this.timerSource.unsubscribe();
     }
+  }
+
+  showCorrectAnswerAndExplanation(question){
+    if(question?.answer?.options && question?.answer?.options.length > 0){
+      const isStartWithZero = question.options.some(x => x.key == 0);
+      if(isStartWithZero){
+        this.selectedQuestionCorrectAnswer = parseInt(question?.answer?.options)  + 1;
+      }else {
+        this.selectedQuestionCorrectAnswer = parseInt(question?.answer?.options);
+      }
+    } else {
+      this.selectedQuestionCorrectAnswer = question?.answer?.answerText;
+    }
+    this.selectedQuestionExplanation = question?.explanation;
   }
 }
 

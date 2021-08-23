@@ -4,6 +4,7 @@ import { RouterModule } from "@angular/router";
 import { VegaMaterialModule } from "src/app/core/material.module";
 import { SharedModule } from "src/app/shared/shared.module";
 import { ReportsComponent } from "../reports/reports.component";
+import { SectionWiseSummaryComponent } from "./section-wise-summary/section-wise-summary.component";
 import { SolutionFilterComponent } from "./solution-filter/solution-filter.component";
 import { SolutionFilterPipe } from "./solution-filter/solution-filter.pipe";
 import { SolutionRightPanelComponent } from "./solution-right-panel/solution-right-panel.component";
@@ -17,6 +18,7 @@ import { StudentReportComponent } from "./view-student-assignment-result/student
     SolutionRightPanelComponent,
     SolutionFilterComponent,
     SolutionFilterPipe,
+    SectionWiseSummaryComponent
   ],
   imports: [
     CommonModule,

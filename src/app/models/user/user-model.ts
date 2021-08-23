@@ -103,3 +103,14 @@ export interface IUserResponseModel extends IUserCommonModel{
 export interface IUserUpdateRequestModel extends IUserCommonModel{
   enabled?: boolean;
 }
+
+export interface ISearchUserModel{
+  enabled?: boolean,
+  pageNumber?: number,
+  pageSize?: number,
+  searchOnColumn?: string,
+  searchStringRegexPattern?: string,
+  sortColumn?: string,
+  sortOrder?: string,
+  userId?: string
+}

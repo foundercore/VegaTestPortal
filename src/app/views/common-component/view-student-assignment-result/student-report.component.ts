@@ -24,6 +24,7 @@ import {
   StudentReportModel,
 } from 'src/app/models/reports/student-report-model';
 import { FilterModel } from '../solution-filter/solution-filter.component';
+import { MathService } from 'src/app/shared/directives/math/math.service';
 
 @Component({
   selector: 'app-student-report',
@@ -50,6 +51,7 @@ export class StudentReportComponent implements OnInit {
     'name',
     'totalMarks',
     'marksReceived',
+    'percentile'
   ];
 
   displayedColumns: string[] = [
@@ -75,6 +77,8 @@ export class StudentReportComponent implements OnInit {
   rankingDetailsResult;
 
   metrics;
+
+  summaryData = new EventEmitter();
 
   currentSelection = 'Section Level';
 
@@ -108,7 +112,8 @@ export class StudentReportComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     public _sanitizer: DomSanitizer,
     public breadcrumbNavService: BreadcrumbNavService,
-    private ref:ChangeDetectorRef
+    private ref:ChangeDetectorRef,
+    private mathService: MathService
   ) {}
 
   ngOnInit() {
@@ -135,6 +140,7 @@ export class StudentReportComponent implements OnInit {
         .subscribe(
           (res) => {
             this.fetchedWholeAssignmentResult = res;
+            this.summaryData.emit(res.summary);
             this.fetchedWholeAssignmentResult.sections.forEach(section => {
               section.answers.sort((a,b) => {
                 const passage1 = a.passageContent ? a.passageContent : '';
@@ -379,8 +385,9 @@ export class StudentReportComponent implements OnInit {
     }
   }
 
-  public transform(value: string): SafeHtml {
-    return this._sanitizer.bypassSecurityTrustHtml(value);
+  public transform(value: string): any {
+    //return this._sanitizer.bypassSecurityTrustHtml(value);
+    return value;
   }
 
   getTotal(property: string) {

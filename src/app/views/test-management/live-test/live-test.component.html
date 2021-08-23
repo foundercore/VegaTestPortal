@@ -43,7 +43,7 @@
                         <ul>
                           <li *ngFor="let opt of currentSelectedQuestion?.options">
                               <div style="display: flex;    align-items: center;">
-                                <div style="padding-right: 5px;"> <mat-checkbox [checked]="optionsSelected[opt?.key - 1]"
+                                <div style="padding-right: 5px;"> <mat-checkbox [checked]="optionsSelected[opt?.key]"
                                   (change)="setOptionSelected(opt?.key)"  >
                                 </mat-checkbox></div>
                                 <div [appMath]="opt?.value"></div>
@@ -56,9 +56,9 @@
 
                 <div  *ngIf="!isTestLive" class="question-explanation">
                   <strong>Correct Option:</strong>
-                  <div class="correct-option-div"  [innerHTML]="currentSelectedQuestion?.answer?.options"> </div>
+                  <div class="correct-option-div"  [innerHTML]="selectedQuestionCorrectAnswer"> </div>
                   <strong>Explanation:</strong>
-                  <div class="explanation-div" [innerHTML]="currentSelectedQuestion?.explanation"> </div>
+                  <div class="explanation-div" [innerHTML]="selectedQuestionExplanation"> </div>
                 </div>
 
 

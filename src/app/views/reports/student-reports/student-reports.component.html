@@ -11,8 +11,8 @@
           class="search-container"
           placeholder="Search Batch"
           (keyup)="search($event)"
+          (keydown)="$event.stopPropagation()"
         />
-          <mat-option>None</mat-option>
           <mat-option *ngFor="let student of filteredStudentList" [value]="student">
             {{student.displayName}}
           </mat-option>

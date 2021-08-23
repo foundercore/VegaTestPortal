@@ -117,11 +117,11 @@ export class LiveTestInstructionComponent implements OnInit {
         }
       }
       this.startTestEvent.emit({
-       isTestStarted:true,
+       isTestStarted: true,
        testData: this.testData,
-       assignmentId:this.assignmentId,
-       isTestLive:this.isTestLive,
-       assignmentData:this.assignmentData
+       assignmentId: this.assignmentId,
+       isTestLive: this.isTestLive,
+       assignmentData: this.assignmentData
       });
   }
 }

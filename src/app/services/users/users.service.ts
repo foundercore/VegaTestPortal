@@ -1,4 +1,4 @@
-import { IUserCreateRequestModel, IUserUpdateRequestModel } from './../../models/user/user-model';
+import { ISearchUserModel, IUserCreateRequestModel, IUserUpdateRequestModel } from './../../models/user/user-model';
 import { HttpClient, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -32,6 +32,11 @@ export class UserService extends BaseService {
   createUsers(userobj: IUserCreateRequestModel): Observable<any> {
     const url = `${this.BASE_SERVICE_URL}/api/v1/users`;
     return this.http.post<any>(url,userobj);
+  }
+
+  searchUsers(user : ISearchUserModel){
+    const url = `${this.BASE_SERVICE_URL}/api/v1/users/users`;
+    return this.http.post<any>(url,user);
   }
 
   updateUsers(userobj: IUserUpdateRequestModel,userName: string): Observable<any> {

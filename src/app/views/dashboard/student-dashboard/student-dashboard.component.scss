@@ -21,24 +21,23 @@ table {
   width: 100%;
 }
 
-.mat-column-actions{
+.mat-column-actions {
   width: 250px;
   min-width: 250px;
   max-width: 250px;
 }
 
-.mat-column-marksObtained{
+.mat-column-marksObtained {
   width: 250px;
   min-width: 250px;
   max-width: 250px;
 }
 
-.mat-column-attempted{
+.mat-column-attempted {
   width: 250px;
   min-width: 250px;
   max-width: 250px;
 }
-
 
 .loading-shade {
   position: absolute;
@@ -64,7 +63,7 @@ table {
   width: 100%;
 }
 
-.assignment-search-bar{
+.assignment-search-bar {
   width: 100%;
   height: 60px;
   padding-left: 20px;
@@ -112,19 +111,8 @@ table {
       }
     }
   }
-
-  // .stats-conatiner {
-
-  //   .stats-card :active {
-  //     background-color: chartreuse;
-  //     color: chocolate;
-  //   }
-  // }
-
 }
-
 
 .custom-tabs .mat-tab-body-content {
   padding-top: 0px !important;
 }
-
