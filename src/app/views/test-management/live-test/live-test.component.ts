@@ -352,7 +352,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
   getSelectedOption() {
     const optionsSelectedArray = [];
     for (let i = 0; i < this.optionsSelected.length; i++) {
-      if (this.optionsSelected[i]) { optionsSelectedArray.push(String(i + 1)); }
+      if (this.optionsSelected[i]) { optionsSelectedArray.push(String(i)); }
     }
     if (optionsSelectedArray.length > 0) {
       console.log(
@@ -505,7 +505,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
             this.optionsSelected = [];
             if (selectedOptions !== null) {
               selectedOptions.map((optIndex) => {
-                this.optionsSelected[Number(optIndex) - 1] = true;
+                this.optionsSelected[Number(optIndex)] = true;
               });
             }
           }
@@ -518,12 +518,12 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
 
   setOptionSelected(selected) {
     if (
-      this.optionsSelected[selected - 1] === true ||
-      this.optionsSelected[selected - 1] === false
+      this.optionsSelected[selected] === true ||
+      this.optionsSelected[selected] === false
     ) {
-      this.optionsSelected[selected - 1] = !this.optionsSelected[selected - 1];
+      this.optionsSelected[selected] = !this.optionsSelected[selected];
     } else {
-      this.optionsSelected[selected - 1] = true;
+      this.optionsSelected[selected] = true;
     }
 
   }
