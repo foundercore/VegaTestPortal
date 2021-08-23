@@ -163,7 +163,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
           section.answers.forEach(answer => {
             if(answer.markForReview){
               this.markForReviewQuestionList.push(answer.questionId);
-            } else if((answer.selectedOptions && answer.selectedOptions.length > 0 )|| answer.answerText.length > 0){
+            } else if((answer.selectedOptions && answer.selectedOptions.length > 0 ) || ( answer.answerText && answer.answerText.length > 0)){
               this.answeredQuestionList.push(answer.questionId);
             } else {
               this.visitedQuestionList.push(answer.questionId);
@@ -299,15 +299,14 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
   async saveAndNextAnswers(moveToNext = true,changeSection = null) {
     console.log('this.question=>', this.currentSelectedQuestion);
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
-    quesForMarkedAsReview.answerText = this.titaText;
     quesForMarkedAsReview.markForReview = this.getSelectedOption() != null
       || this.titaText != null ? false : true;
     quesForMarkedAsReview.assignmentId = this.assignmentId;
     quesForMarkedAsReview.questionId = this.currentSelectedQuestion.id.questionId;
     quesForMarkedAsReview.sectionId = this.currentSelectedSection.id;
-    quesForMarkedAsReview.selectedOptions = (this.getSelectedOption() as any);
     quesForMarkedAsReview.timeElapsedInSec = this.timeElapsedInSecond;
-
+    quesForMarkedAsReview.answerText = this.titaText;
+    quesForMarkedAsReview.selectedOptions = (this.getSelectedOption() as any);
 
     await this.testConfigService
       .saveandNextAnswers(
@@ -424,7 +423,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
             section.answers.forEach(answer => {
               if(answer.markForReview){
                 this.markForReviewQuestionList.push(answer.questionId);
-              } else if((answer.selectedOptions && answer.selectedOptions.length > 0 )|| answer.answerText.length > 0){
+              } else if((answer.selectedOptions && answer.selectedOptions.length > 0 )|| (answer.answerText && answer.answerText.length > 0)){
                 this.answeredQuestionList.push(answer.questionId);
               } else {
                 this.visitedQuestionList.push(answer.questionId);
@@ -542,11 +541,9 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
     // first save the response on previous question
     if(this.isTestLive){
       this.currentSelectedQuestion.visited = true;
-      await this.saveWaitingTime(false);
-    }
-    this.timeElapsedInSecond = 0;
-    // move to the next question
-    {
+      this.questionNumber = currentQuestionIndex;
+      await this.saveWaitingTime(true);
+    } else  {
       this.questionNumber = currentQuestionIndex;
       this.optionsSelected = [];
       await this.testConfigService.getQuestionbyQuestionId(this.currentSelectedSection.questions[currentQuestionIndex]?.id).subscribe(
@@ -594,7 +591,51 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
           if (quesForMarkedAsReview.selectedOptions !== null) {
             this.toastrService.success('Response saved successfully', '', this.toasterPostion);
           }
-          this.getUserAllSubmissionData(moveToNext);
+          if(this.questionNumber == this.sectionsWithPapers.length - 1 && this.isSectionTimerTest){
+              this.isLastSectionQuestion = true;
+          } else {
+            this.isLastSectionQuestion = false;
+          }
+          this.timeElapsedInSecond = 0;
+          this.testConfigService
+            .getSudentSubmissionState(this.assignmentId, this.userName)
+            .subscribe(
+              (res: any) => {
+                this.submissionData = res;
+
+                this.visitedQuestionList = [];
+                this.markForReviewQuestionList = [];
+                this.answeredQuestionList = [];
+                res.sections.forEach(section => {
+                  section.answers.forEach(answer => {
+                    if(answer.markForReview){
+                      this.markForReviewQuestionList.push(answer.questionId);
+                    } else if((answer.selectedOptions && answer.selectedOptions.length > 0 )|| (answer.answerText && answer.answerText.length > 0)){
+                      this.answeredQuestionList.push(answer.questionId);
+                    } else {
+                      this.visitedQuestionList.push(answer.questionId);
+                    }
+                  });
+                });
+                this.testConfigService.getQuestionbyQuestionId(this.currentSelectedSection.questions[this.questionNumber]?.id)
+                      .subscribe((question) => {
+                        this.currentSelectedQuestion = question;
+                        this.showCorrectAnswerAndExplanation(question)
+                        this.optionsSelected = [];
+                        this.setTITAQuestionFetchedAns(this.submissionData);
+                        this.setCurrentQuestionSelectedOption();
+                      },
+                      (error:any) => {
+                          console.log('Error in fetching question');
+                      });
+              },
+              (error) => {
+                console.log(
+                  'Error in fetching user submitted data => Reasons can be: 1)This user doesn\'t has any submitted data 2). Internet connectivity issue'
+                );
+              }
+            );
+
         },
         (err) => {
           if (String(err.error.apierror.message).includes(
