@@ -323,11 +323,6 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
             this.sectionsWithPapers = this.sectionQuestionMap.get(changeSection.id);
             this.currentSelectedSection = changeSection;
           }
-          if(this.questionNumber == this.sectionsWithPapers.length - 1 && this.isSectionTimerTest){
-              this.isLastSectionQuestion = true;
-          } else {
-            this.isLastSectionQuestion = false;
-          }
           this.getUserAllSubmissionData(moveToNext);
         },
         (err) => {
@@ -380,6 +375,13 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
    getQuestion(index,setAnswer = false){
     this.testConfigService.getQuestionbyQuestionId(this.currentSelectedSection.questions[index]?.id)
     .subscribe((question) => {
+
+      if(this.questionNumber == this.sectionsWithPapers.length - 1 && this.isSectionTimerTest){
+          this.isLastSectionQuestion = true;
+      } else {
+        this.isLastSectionQuestion = false;
+      }
+
       this.currentSelectedQuestion = question;
        this.showCorrectAnswerAndExplanation(question)
 
@@ -677,6 +679,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
   async changeSection(event,sectionTimeSpend = 0) {
     const section = this.testData?.sections[event];
     this.questionNumber = -1;
+    this.isLastSectionQuestion = false;
 
     if(!this.isTestLive  && this.isSectionTimerTest){
       this.questionNumber = 0;

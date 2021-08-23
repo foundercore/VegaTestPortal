@@ -92,6 +92,8 @@ export class StudentReportComponent implements OnInit {
 
   isLoading: boolean = true;
 
+  testConfig;
+
   dataSource = new MatTableDataSource<StudentReportModel>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -125,8 +127,10 @@ export class StudentReportComponent implements OnInit {
     });
     this.isLoading = true;
     this.getAssignmentResults();
-    this.getRankingDetails();
   }
+
+
+
 
   getAssignmentResults() {
     combineLatest([
@@ -140,7 +144,7 @@ export class StudentReportComponent implements OnInit {
         .subscribe(
           (res) => {
             this.fetchedWholeAssignmentResult = res;
-            this.summaryData.emit(res.summary);
+            this.getTestConfig(res.testId,res);
             this.fetchedWholeAssignmentResult.sections.forEach(section => {
               section.answers.sort((a,b) => {
                 const passage1 = a.passageContent ? a.passageContent : '';
@@ -186,6 +190,26 @@ export class StudentReportComponent implements OnInit {
           }
         );
     });
+  }
+
+
+
+  getTestConfig(testId,res){
+    this.testConfigService.getQuestionPaper(testId).subscribe(resp =>
+      {
+        this.testConfig= resp;
+        res.summary.controlParam = resp.controlParam;
+        this.summaryData.emit(res.summary);
+        if(resp.controlParam){
+          if(!resp.controlParam.percentile){
+            this.rankingDisplayedColumn.pop();
+          }
+        } else{
+          this.rankingDisplayedColumn.pop();
+        }
+        this.getRankingDetails();
+      }
+      );
   }
 
   getRankingDetails() {

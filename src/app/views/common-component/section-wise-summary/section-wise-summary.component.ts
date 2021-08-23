@@ -8,6 +8,8 @@ import { MatTable } from '@angular/material/table';
 })
 export class SectionWiseSummaryComponent implements OnInit {
 
+  isPercentile = false;
+
   sectoionLevelDataSource = [];
 
   difficultyDataSource = [];
@@ -30,13 +32,21 @@ export class SectionWiseSummaryComponent implements OnInit {
   ngOnInit() {
 
     this.summaryData.subscribe(resp => {
+      if(resp.controlParam){
+        this.isPercentile = resp.controlParam.percentile;
+      }
+
+      if(!this.isPercentile){
+        this.sectionLevelSummaryDisplayedColumns.pop();
+      }
+
       resp.sections.forEach(section => {
         this.sectoionLevelDataSource.push({
           name:section.sectionName,
           correct:section.metric.correct,
           incorrect:section.metric.incorrect,
           skipped:section.metric.skipped,
-          marks:section.metric.totalMarks,
+          marks:section.metric.marksReceived,
           percentileScore:section.metric.percentileScore
         })
       });
@@ -52,7 +62,7 @@ export class SectionWiseSummaryComponent implements OnInit {
           incorrectAvgTime: level.metric.incorrect != 0 ? Math.round(level.metric.incorrectTimeInSec/level.metric.incorrect) : 0,
           skippedCount:level.metric.skipped,
           skippedAvgTime: level.metric.skipped != 0 ? Math.round(level.metric.skippedTimeInSec/level.metric.skipped) : 0,
-          marks:level.metric.totalMarks,
+          marks:level.metric.marksReceived,
           totalQuestions: level.metric.totalQuestions
         })
       });
