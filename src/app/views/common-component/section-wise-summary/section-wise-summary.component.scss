@@ -5,10 +5,14 @@ table {
 
 .summary-tab {
     display: flex;
+    flex-direction: column;
+    width: calc(100% - 20px);
+
     table{
       flex: 1;
        margin: 0px 10px;
        align-self: baseline;
+       margin-bottom: 20px;
     }
 }
 
@@ -19,4 +23,15 @@ table {
 
 .section-row-cell-class{
   max-height: 48px !important;
+}
+
+
+.number-cell{
+    text-align: center;
+}
+
+
+.custom-mat-sub-header-th{
+  font-size: 14px;
+  color: black;
 }
