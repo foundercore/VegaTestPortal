@@ -15,7 +15,8 @@ import { TestConfigService } from '../../assignments/services/test-config-servic
 import { DOCUMENT, Location } from '@angular/common';
 import { Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { mergeMap } from 'rxjs/operators';
+import { filter, mergeMap } from 'rxjs/operators';
+import { fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-live-test',
@@ -82,6 +83,10 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
 
   selectedTabIndex = new FormControl(0);
 
+  nativeNavigationSubscriber;
+
+  isSectionChangeTriggered = false;
+
   @Input() testData;
 
   @Input() assignmentData;
@@ -89,6 +94,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
   @Input() isTestLive = false;
 
   @ViewChild('TabGroup', { static: false }) Tab_Group: MatTabGroup;
+
 
   constructor(
     public dialog: MatDialog,
@@ -104,6 +110,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
   }
 
   ngOnInit(): void {
+    this.subscribeToNativeNavigation();
 
     this.elem = this.document.documentElement;
 
@@ -123,6 +130,27 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
     this.initialize();
   }
 
+  private subscribeToNativeNavigation() {
+    this.nativeNavigationSubscriber = fromEvent(window, 'beforeunload')
+    .pipe(
+      filter(() => true)
+    )
+    .subscribe((e) => {
+      this.saveAndNextAnswers(false);
+      console.log("You may lose your data if you refresh now");
+
+      if(this.timerSource){
+        this.timerSource.unsubscribe();
+        this.timerSource = null;
+      }
+
+      if(this.nativeNavigationSubscriber){
+        this.nativeNavigationSubscriber.unsubscribe();
+        this.nativeNavigationSubscriber = null;
+      }
+       return;
+    })
+  }
 
   initialize() {
     this.testData.sections.forEach(section => {
@@ -298,49 +326,62 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
 
   async saveAndNextAnswers(moveToNext = true,changeSection = null) {
     console.log('this.question=>', this.currentSelectedQuestion);
-    const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
-    quesForMarkedAsReview.markForReview = this.getSelectedOption() != null
-      || this.titaText != null ? false : true;
-    quesForMarkedAsReview.assignmentId = this.assignmentId;
-    quesForMarkedAsReview.questionId = this.currentSelectedQuestion.id.questionId;
-    quesForMarkedAsReview.sectionId = this.currentSelectedSection.id;
-    quesForMarkedAsReview.timeElapsedInSec = this.timeElapsedInSecond;
-    quesForMarkedAsReview.answerText = this.titaText;
-    quesForMarkedAsReview.selectedOptions = (this.getSelectedOption() as any);
 
-    await this.testConfigService
-      .saveandNextAnswers(
-        quesForMarkedAsReview.assignmentId,
-        quesForMarkedAsReview
-      )
-      .subscribe(
-        (res) => {
-          if (quesForMarkedAsReview.selectedOptions !== null) {
-            this.toastrService.success('Response saved successfully', '', this.toasterPostion);
+    if(!this.isSectionChangeTriggered){
+      const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
+      quesForMarkedAsReview.markForReview = this.getSelectedOption() != null
+        || this.titaText != null ? false : true;
+      quesForMarkedAsReview.assignmentId = this.assignmentId;
+      quesForMarkedAsReview.questionId = this.currentSelectedQuestion.id.questionId;
+      quesForMarkedAsReview.sectionId = this.currentSelectedSection.id;
+      quesForMarkedAsReview.timeElapsedInSec = this.timeElapsedInSecond;
+      quesForMarkedAsReview.answerText = this.titaText;
+      quesForMarkedAsReview.selectedOptions = (this.getSelectedOption() as any);
+
+      await this.testConfigService
+        .saveandNextAnswers(
+          quesForMarkedAsReview.assignmentId,
+          quesForMarkedAsReview
+        )
+        .subscribe(
+          (res) => {
+            if (quesForMarkedAsReview.selectedOptions !== null) {
+              this.toastrService.success('Response saved successfully', '', this.toasterPostion);
+            }
+            if(changeSection){
+              this.optionsSelected = [];
+              this.sectionsWithPapers = this.sectionQuestionMap.get(changeSection.id);
+              this.currentSelectedSection = changeSection;
+            }
+            this.getUserAllSubmissionData(moveToNext);
+          },
+          (err) => {
+            if (String(err.error.apierror.message).includes(
+              'already submitted by student'
+            )) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error while saving response !!!',
+                text: 'This test is already submitted. You cant save the response after submitting test',
+              });
+            }
+            else {
+              this.toastrService.error('Error - ' + err.error.apierror.message, '', this.toasterPostion);
+            }
+            console.log('Error while making the response for save', err);
           }
-          if(changeSection){
-            this.optionsSelected = [];
-            this.sectionsWithPapers = this.sectionQuestionMap.get(changeSection.id);
-            this.currentSelectedSection = changeSection;
-          }
-          this.getUserAllSubmissionData(moveToNext);
-        },
-        (err) => {
-          if (String(err.error.apierror.message).includes(
-            'already submitted by student'
-          )) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error while saving response !!!',
-              text: 'This test is already submitted. You cant save the response after submitting test',
-            });
-          }
-          else {
-            this.toastrService.error('Error - ' + err.error.apierror.message, '', this.toasterPostion);
-          }
-          console.log('Error while making the response for save', err);
-        }
-      );
+        );
+    } else {
+      this.isSectionChangeTriggered = false;
+      if(changeSection){
+        this.optionsSelected = [];
+        this.sectionsWithPapers = this.sectionQuestionMap.get(changeSection.id);
+        this.currentSelectedSection = changeSection;
+      }
+      this.getUserAllSubmissionData(moveToNext);
+    }
+
+
   }
 
   getSelectedOption() {
@@ -406,6 +447,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
       this.SaveandExit();
       return;
     }
+    this.isSectionChangeTriggered = true;
     tabGroup.selectedIndex = (tabGroup.selectedIndex + 1) % tabCount;
     console.log('tabGroup=', tabGroup);
   }
@@ -793,8 +835,17 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
   }
 
   ngOnDestroy(){
+
+    this.saveAndNextAnswers(false);
+
     if(this.timerSource){
       this.timerSource.unsubscribe();
+      this.timerSource = null;
+    }
+
+    if(this.nativeNavigationSubscriber){
+      this.nativeNavigationSubscriber.unsubscribe();
+      this.nativeNavigationSubscriber = null;
     }
   }
 
