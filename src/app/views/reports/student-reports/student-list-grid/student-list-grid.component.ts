@@ -73,6 +73,10 @@ export class StudentListGridComponent implements OnInit {
       this.studentId = params.student_id;
       this.clear();
     });
+
+    this.dataSource.filterPredicate = function(data, filter: string): boolean {
+      return data.testName.toLowerCase().includes(filter) || data.attempted.toLowerCase().includes(filter);
+    };
   }
 
   getAssignments(username) {
@@ -80,6 +84,15 @@ export class StudentListGridComponent implements OnInit {
       .getAssignmentByUsername(username)
       .subscribe((resp) => {
         this.resultData = resp;
+        this.resultData.forEach((x) => {
+          if (x.attempted) {
+            x.attempted = 'Attempted';
+          }
+          else{
+            x.attempted = 'Not Attempted';
+          }
+        });
+
         this.dataSource = new MatTableDataSource<any>(this.resultData);
         this.dataSource.paginator = this.paginator;
       });
