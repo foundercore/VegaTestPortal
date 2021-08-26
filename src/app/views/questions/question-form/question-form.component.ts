@@ -43,6 +43,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     description: new FormControl(),
     type: new FormControl(),
     answerText: new FormControl(),
+    videoUrl: new FormControl(),
   });
 
   secondStepFromGroup = new FormGroup({
@@ -61,8 +62,6 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     correctOption: new FormControl(),
     answerText: new FormControl(),
   });
-
-  // answerOptionFormGrp = new FormGroup({});
 
   answerOptionFormGrp: FormGroup;
   optionArrays: FormArray;
@@ -143,6 +142,9 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
             this.stepOneFormGroup
               .get('description')
               ?.setValue(resp.description);
+            this.stepOneFormGroup
+              .get('videoUrl')
+              ?.setValue(resp.videoExplanationUrl);
             this.stepOneFormGroup.get('type')?.setValue(resp.type);
 
             if (resp.type == 'MCQ') {
@@ -216,18 +218,6 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
     (<FormArray>this.answerOptionFormGrp.get('optionArrays')).removeAt(index);
   }
 
-  // addOption() {
-  //   this.options?.push({ key: this.optionCount, value: '' });
-  //   const newCntrl = new FormControl();
-  //   this.answerOptionFormGrp.addControl(this.optionCount, newCntrl);
-  //   this.optionCount = String(parseInt(this.optionCount) + 1);
-  // }
-
-  // removeOption(index: number, option: QuestionOption) {
-  //   this.options?.splice(index, 1);
-  //   this.answerOptionFormGrp.removeControl(option.key);
-  // }
-
   addTag(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
@@ -236,7 +226,6 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       this.tags?.push(value.trim());
     }
 
-    // Reset the input value
     if (input) {
       input.value = '';
     }
@@ -253,11 +242,6 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
   createQuestion() {
     const answerOptions = [];
     const trueOptions = [];
-
-    // for (const field in this.answerOptionFormGrp.controls) {
-    //   if (this.answerOptionFormGrp.controls[field].value)
-    //     answerOptions.push(field);
-    // }
 
     this.answerOptionFormGrp.get('optionArrays')['controls'].forEach((x, i) =>
       answerOptions.push({
@@ -284,6 +268,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       name: this.stepOneFormGroup.get('name')?.value,
       explanation: this.stepOneFormGroup.get('explanation')?.value,
       description: this.stepOneFormGroup.get('description')?.value,
+      videoExplanationUrl: this.stepOneFormGroup.get('videoUrl').value,
       type: this.stepOneFormGroup.get('type')?.value,
       options: answerOptions,
       positiveMark: this.secondStepFromGroup.get('positiveMark')?.value,
@@ -330,11 +315,6 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
       }
     });
 
-    // for (const field in this.answerOptionFormGrp.controls) {
-    //   if (this.answerOptionFormGrp.controls[field].value)
-    //     answerOptions.push(field);
-    // }
-
     let questionAnswer: QuestionAnswer = {
       answerText: this.questionForthFormGrp.get('answerText')?.value,
       options: trueOptions,
@@ -349,6 +329,7 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
         this.stepOneFormGroup.get('explanation')?.value;
       this.updatedQuestion.description =
         this.stepOneFormGroup.get('description')?.value;
+        this.updatedQuestion.videoExplanationUrl = this.stepOneFormGroup.get('videoUrl')?.value;
       this.updatedQuestion.type = this.stepOneFormGroup.get('type')?.value;
       this.updatedQuestion.options = answerOptions;
 

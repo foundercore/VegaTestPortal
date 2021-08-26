@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { AngularEditorModule } from "@kolkov/angular-editor";
 import { CountdownModule } from "ngx-countdown";
+import { EmbedVideo } from "ngx-embed-video";
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { VegaMaterialModule } from "src/app/core/material.module";
 import { SharedModule } from "src/app/shared/shared.module";
@@ -26,7 +27,8 @@ import { LiveTestComponent } from "./live-test/live-test.component";
     CountdownModule,
     AngularEditorModule,
     NgScrollbarModule,
-    SharedModule
+    SharedModule,
+    EmbedVideo.forRoot()
   ],
   schemas:[NO_ERRORS_SCHEMA]
 

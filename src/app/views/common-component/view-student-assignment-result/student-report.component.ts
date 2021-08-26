@@ -25,6 +25,8 @@ import {
 } from 'src/app/models/reports/student-report-model';
 import { FilterModel } from '../solution-filter/solution-filter.component';
 import { MathService } from 'src/app/shared/directives/math/math.service';
+import { VideoPreviewComponent } from '../../questions/video-preview/video-preview.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-student-report',
@@ -51,7 +53,7 @@ export class StudentReportComponent implements OnInit {
     'name',
     'totalMarks',
     'marksReceived',
-    'percentile'
+    'percentile',
   ];
 
   displayedColumns: string[] = [
@@ -114,8 +116,9 @@ export class StudentReportComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     public _sanitizer: DomSanitizer,
     public breadcrumbNavService: BreadcrumbNavService,
-    private ref:ChangeDetectorRef,
-    private mathService: MathService
+    private ref: ChangeDetectorRef,
+    private mathService: MathService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -129,31 +132,34 @@ export class StudentReportComponent implements OnInit {
     this.getAssignmentResults();
   }
 
-
-
-
   getAssignmentResults() {
     combineLatest([
       this.activatedRoute.params,
       this.activatedRoute.parent.params,
     ]).subscribe((params) => {
       let assignmentId = params[0].id;
-      let userName = params[1]?.student_id ? params[1]?.student_id: this.userName;
+      let userName = params[1]?.student_id
+        ? params[1]?.student_id
+        : this.userName;
       this.testConfigService
         .getStudentAssignmentResult(assignmentId, userName)
         .subscribe(
           (res) => {
             this.fetchedWholeAssignmentResult = res;
-            this.getTestConfig(res.testId,res);
-            this.fetchedWholeAssignmentResult.sections.forEach(section => {
-              section.answers.sort((a,b) => {
+            this.getTestConfig(res.testId, res);
+            this.fetchedWholeAssignmentResult.sections.forEach((section) => {
+              section.answers.sort((a, b) => {
                 const passage1 = a.passageContent ? a.passageContent : '';
 
                 const passage2 = b.passageContent ? b.passageContent : '';
 
                 const passageName1 = passage1 + (a.name ? a.name : '');
                 const passageName2 = passage2 + (b.name ? b.name : '');
-                return (passageName1 < passageName2 ? -1 : (passageName1 > passageName2 ? 1 : 0));
+                return passageName1 < passageName2
+                  ? -1
+                  : passageName1 > passageName2
+                  ? 1
+                  : 0;
               });
             });
             this.getSectionWiseStats(this.fetchedWholeAssignmentResult);
@@ -170,7 +176,7 @@ export class StudentReportComponent implements OnInit {
                 section.answers.forEach((answers) => {
                   this.explanationMap.set(answers.questionId, true);
                   this.passageMap.set(answers.questionId, true);
-                })
+                });
               }
             );
             if (this.solutionSectionArray.length != 0) {
@@ -192,24 +198,20 @@ export class StudentReportComponent implements OnInit {
     });
   }
 
-
-
-  getTestConfig(testId,res){
-    this.testConfigService.getQuestionPaper(testId).subscribe(resp =>
-      {
-        this.testConfig= resp;
-        res.summary.controlParam = resp.controlParam;
-        this.summaryData.emit(res.summary);
-        if(resp.controlParam){
-          if(!resp.controlParam.percentile){
-            this.rankingDisplayedColumn.pop();
-          }
-        } else{
+  getTestConfig(testId, res) {
+    this.testConfigService.getQuestionPaper(testId).subscribe((resp) => {
+      this.testConfig = resp;
+      res.summary.controlParam = resp.controlParam;
+      this.summaryData.emit(res.summary);
+      if (resp.controlParam) {
+        if (!resp.controlParam.percentile) {
           this.rankingDisplayedColumn.pop();
         }
-        this.getRankingDetails();
+      } else {
+        this.rankingDisplayedColumn.pop();
       }
-      );
+      this.getRankingDetails();
+    });
   }
 
   getRankingDetails() {
@@ -535,5 +537,11 @@ export class StudentReportComponent implements OnInit {
     } else {
       this.passageMap.set(questionId, true);
     }
+  }
+
+  openDialog(url): void {
+    const dialogRef = this.dialog.open(VideoPreviewComponent, {
+      data: { videoUrl: url },
+    });
   }
 }

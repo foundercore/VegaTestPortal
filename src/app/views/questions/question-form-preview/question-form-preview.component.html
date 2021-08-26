@@ -28,6 +28,12 @@
       <div class="w-100-div" style="margin-bottom: 20px">
         <div class="sub-heading">
           <mat-label>Explanation</mat-label>
+          <i
+            *ngIf="displayUrl != null"
+            (click)="openDialog()"
+            style="font-size: 24px; margin-left: 10px; cursor: pointer"
+            class="fab fa-youtube"
+          ></i>
         </div>
         <div
           class="text-area-div disabled"

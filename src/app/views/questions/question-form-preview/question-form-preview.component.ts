@@ -1,11 +1,18 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormArray, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { QuestionModel } from 'src/app/models/questions/question-model';
 import { QuestionManagementService } from 'src/app/services/question-management/question-management.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
+import { VideoPreviewComponent } from '../video-preview/video-preview.component';
 
 @Component({
   selector: 'app-question-form-preview',
@@ -19,6 +26,7 @@ export class QuestionFormPreviewComponent implements OnInit {
     explanation: new FormControl(),
     description: new FormControl(),
     type: new FormControl(),
+    videoUrl: new FormControl(),
     positiveMark: new FormControl(),
     negativeMark: new FormControl(),
     skipMark: new FormControl(),
@@ -65,13 +73,17 @@ export class QuestionFormPreviewComponent implements OnInit {
     ],
   };
 
+  displayUrl: any;
+
   constructor(
     private router: Router,
     private activateRouter: ActivatedRoute,
     public translate: TranslateService,
     private questionManagementService: QuestionManagementService,
     private location: Location,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public dialog: MatDialog,
+    private sanitizer: DomSanitizer
   ) {
     this.answerOptionFormGrp = this.fb.group({
       optionArrays: this.fb.array([]),
@@ -84,6 +96,7 @@ export class QuestionFormPreviewComponent implements OnInit {
         this.questionManagementService
           .getQuestion(params.id)
           .subscribe((resp) => {
+            this.displayUrl = resp.videoExplanationUrl;
             this.questionPreviewGroup
               .get('description')
               ?.setValue(resp.description);
@@ -165,5 +178,13 @@ export class QuestionFormPreviewComponent implements OnInit {
       flag: [''],
       value: [''],
     });
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(VideoPreviewComponent, {
+      data: { videoUrl: this.displayUrl },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 }
