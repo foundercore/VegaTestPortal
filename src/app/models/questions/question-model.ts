@@ -27,6 +27,7 @@ export interface QuestionModel {
   type: string | undefined;
   usedInPapers?: {} | undefined;
   explanation_added?: string;
+  videoExplanationUrl ?: string;
 }
 
 

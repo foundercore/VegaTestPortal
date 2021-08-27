@@ -11,6 +11,8 @@ import { Role } from 'src/app/core/constants';
 import { RoleGuard } from 'src/app/guard/role.guard';
 import { VegaMaterialModule } from 'src/app/core/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { VideoPreviewComponent } from './video-preview/video-preview.component';
+import { EmbedVideo } from 'ngx-embed-video';
 
 const routes: Routes = [
   {
@@ -47,12 +49,14 @@ const routes: Routes = [
     QuestionManagementComponent,
     QuestionMigrateUploadDialogComponent,
     UploadQuestionsComponent,
+    VideoPreviewComponent,
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     VegaMaterialModule,
     SharedModule,
+    EmbedVideo.forRoot()
   ],
   exports: [RouterModule],
 })

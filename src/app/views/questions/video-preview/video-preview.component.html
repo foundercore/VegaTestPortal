@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="col-8"><p>Video Explanation</p></div>
+  <div class="col-4">
+    <mat-icon style="float: right; cursor: pointer" (click)="onNoClick()"
+      >close</mat-icon
+    >
+  </div>
+</div>
+
+<div [innerHtml]="yt_iframe_html"></div>
+<!-- 
+<div id="visor-video">
+    <iframe width="300" height="200"
+      [src]="displayURL">
+    </iframe>        
+  </div> -->

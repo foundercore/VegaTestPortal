@@ -17,6 +17,7 @@ import { Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { filter, mergeMap } from 'rxjs/operators';
 import { fromEvent } from 'rxjs';
+import { VideoPreviewComponent } from '../../questions/video-preview/video-preview.component';
 
 @Component({
   selector: 'app-live-test',
@@ -412,6 +413,7 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
     }
   }
 
+  videoUrl : any;
 
    getQuestion(index,setAnswer = false){
     this.testConfigService.getQuestionbyQuestionId(this.currentSelectedSection.questions[index]?.id)
@@ -422,6 +424,9 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
       } else {
         this.isLastSectionQuestion = false;
       }
+
+      if(question.videoExplanationUrl != null)
+      this.videoUrl = question.videoExplanationUrl;
 
       this.currentSelectedQuestion = question;
        this.showCorrectAnswerAndExplanation(question)
@@ -862,5 +867,13 @@ export class LiveTestComponent implements  OnInit, OnDestroy  {
     }
     this.selectedQuestionExplanation = question?.explanation;
   }
-}
 
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(VideoPreviewComponent, {
+      data: { videoUrl: this.videoUrl },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
+  }
+}
