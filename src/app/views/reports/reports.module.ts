@@ -17,6 +17,13 @@ const routes: Routes = [
       breadcrumb: 'Student Report'
     }
   },
+  {
+    path: 'test',
+    loadChildren: () => import('./test-report/test-report.module').then(  (m) => m.TestReportModule ),
+    data: {
+      breadcrumb: 'Test Report'
+    }
+  }
 ];
 
 

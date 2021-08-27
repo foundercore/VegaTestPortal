@@ -55,4 +55,10 @@ export class TestAssignmentServiceService extends BaseService {
     const url = `${this.BASE_SERVICE_URL}/api/v1/test/assignment/submission/${assignment_id}/${username}/remove`;
     return this.http.delete<any>(url);
   }
+
+
+  getStudentTestReport(test_id: string){
+    const url = `${this.BASE_SERVICE_URL}/api/v1/test/report/${test_id}/students-test-report`;
+    return this.http.get<any>(url);
+  }
 }
