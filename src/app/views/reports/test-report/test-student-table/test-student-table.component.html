@@ -1,0 +1,94 @@
+<div class="mat-elevation-z8" style="margin: 0 20px 20px">
+  <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+    <ng-container matColumnDef="rank">
+      <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
+        {{ "STUDENT_RANKING_TAG.RANK" | translate }}
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row?.rank }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
+        <div>{{ "STUDENT_RANKING_TAG.NAME" | translate }}</div>
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.studentName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalMarks">
+      <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
+        {{ "STUDENT_RANKING_TAG.TOTAL_MARKS" | translate }}
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.totalMark }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="marksReceived">
+      <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
+        {{ "STUDENT_RANKING_TAG.MARK_RECEIVED" | translate }}
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.markRecieved }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="percentile">
+      <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
+        Percentile
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.percentile }}</td>
+    </ng-container>
+
+     <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="rankingDisplayedColumn.length">
+      <div class="example-element-detail"
+           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+
+           <table  style="margin: 20px;
+           border: 1px solid;" #sectionTable mat-table [dataSource]="element.sectionReports" class="mat-elevation-z8">
+            <ng-container matColumnDef="name">
+              <th  class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Section Name. </th>
+              <td class="section-row-cell-class" mat-cell *matCellDef="let row"> {{row.sectionName}} </td>
+              <td mat-footer-cell *matFooterCellDef> Total </td>
+            </ng-container>
+
+             <ng-container matColumnDef="markRecieved">
+              <th  class="custom-mat-header-th number-cell" mat-header-cell *matHeaderCellDef> Mark Recieved </th>
+              <td class="section-row-cell-class number-cell" mat-cell *matCellDef="let row"> {{row.markRecieved}} </td>
+              <td mat-footer-cell *matFooterCellDef class="number-cell"> {{getSectionalTotalCount(element,'markRecieved')}} </td>
+
+            </ng-container>
+
+
+            <ng-container matColumnDef="totalMark">
+              <th  class="custom-mat-header-th number-cell" mat-header-cell *matHeaderCellDef> Total Marks </th>
+              <td class="section-row-cell-class number-cell" mat-cell *matCellDef="let row"> {{row.totalMark}} </td>
+              <td mat-footer-cell *matFooterCellDef class="number-cell"> {{getSectionalTotalCount(element,'totalMark')}}  </td>
+            </ng-container>
+
+            <ng-container matColumnDef="percentile">
+              <th  class="custom-mat-header-th number-cell" mat-header-cell *matHeaderCellDef> Percentile </th>
+              <td class="section-row-cell-class number-cell" mat-cell *matCellDef="let row"> {{row.percentile}} </td>
+              <td mat-footer-cell *matFooterCellDef class="number-cell"> {{getSectionalTotalCount(element,'percentile')}}  </td>
+            </ng-container>
+
+
+            <tr  class="custom-mat-header-th" mat-header-row *matHeaderRowDef="sectionLevelSummaryDisplayedColumns"></tr>
+            <tr class="section-row-class"  mat-row *matRowDef="let row; columns: sectionLevelSummaryDisplayedColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="sectionLevelSummaryDisplayedColumns"></tr>
+
+          </table>
+
+      </div>
+    </td>
+  </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="rankingDisplayedColumn"></tr>
+    <tr mat-row  *matRowDef="let row; columns: rankingDisplayedColumn"
+    class="example-element-row"
+    [class.example-expanded-row]="expandedElement === row"
+    (click)="expandedElement = expandedElement === row ? null : row"
+    ></tr>
+
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+
+  </table>
+  <mat-paginator [pageSizeOptions]="pageOptions"></mat-paginator>
