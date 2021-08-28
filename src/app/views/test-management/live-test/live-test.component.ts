@@ -18,6 +18,7 @@ import { FormControl } from '@angular/forms';
 import { filter, mergeMap } from 'rxjs/operators';
 import { fromEvent } from 'rxjs';
 import { VideoPreviewComponent } from '../../questions/video-preview/video-preview.component';
+import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
 
 @Component({
   selector: 'app-live-test',
@@ -28,9 +29,11 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   timeSeconds = 0;
   timeElapsedInSecond = 0;
   testId = '';
-
+  selectedTabIndexValue = 0;
   questionNumber = 0;
   buttonStyle: ButtonStyleAttributesModel[] = [];
+
+  isTestSubmittedSuccessFully = false;
 
   questionNavigationButtonColorArray = [];
   sectionsWithPapers = [];
@@ -50,6 +53,8 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   elem: any;
 
   isLastSectionQuestion = false;
+
+  isFullLengthLastSection = false;
 
   isSectionTimerTest = false;
 
@@ -103,6 +108,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     private router: Router,
     public mathService: MathService,
     private location: Location,
+    public authorizationService: AuthorizationService,
     @Inject(DOCUMENT) private document: any
   ) {}
 
@@ -462,6 +468,12 @@ export class LiveTestComponent implements OnInit, OnDestroy {
       .getQuestionbyQuestionId(this.currentSelectedSection.questions[index]?.id)
       .subscribe(
         (question) => {
+          if(!this.isSectionTimerTest &&  this.questionNumber == this.sectionsWithPapers.length - 1 && this.selectedTabIndexValue == this.sectionQuestionMap.size - 1){
+            this.isFullLengthLastSection = true;
+          } else {
+            this.isFullLengthLastSection = false;
+          }
+
           if (
             this.questionNumber == this.sectionsWithPapers.length - 1 &&
             this.isSectionTimerTest
@@ -471,8 +483,11 @@ export class LiveTestComponent implements OnInit, OnDestroy {
             this.isLastSectionQuestion = false;
           }
 
-          if (question.videoExplanationUrl != null)
+          if (question.videoExplanationUrl != null) {
             this.videoUrl = question.videoExplanationUrl;
+          } else {
+            this.videoUrl = null;
+          }
 
           this.currentSelectedQuestion = question;
           this.showCorrectAnswerAndExplanation(question);
@@ -531,7 +546,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
             });
           });
           if (gotoNextQuestion) {
-            if (!this.isLastSectionQuestion) {
+            if (!this.isLastSectionQuestion && !this.isFullLengthLastSection) {
               this.goToNextQuestion();
             }
           } else {
@@ -656,7 +671,10 @@ export class LiveTestComponent implements OnInit, OnDestroy {
 
             if (question.videoExplanationUrl != null) {
               this.videoUrl = question.videoExplanationUrl;
+            } else {
+              this.videoUrl = null;
             }
+
           },
           (err) => {
             this.toastrService.error(
@@ -667,6 +685,11 @@ export class LiveTestComponent implements OnInit, OnDestroy {
           }
         );
       if (this.isTestLive) {
+        if(!this.isSectionTimerTest &&  this.questionNumber == this.sectionsWithPapers.length - 1 && this.selectedTabIndexValue == this.sectionQuestionMap.size - 1){
+          this.isFullLengthLastSection = true;
+        } else {
+          this.isFullLengthLastSection = false;
+        }
         if (
           this.questionNumber == this.sectionsWithPapers.length - 1 &&
           this.isSectionTimerTest
@@ -706,6 +729,12 @@ export class LiveTestComponent implements OnInit, OnDestroy {
               this.toasterPostion
             );
           }
+          if(!this.isSectionTimerTest &&  this.questionNumber == this.sectionsWithPapers.length - 1 && this.selectedTabIndexValue == this.sectionQuestionMap.size - 1){
+            this.isFullLengthLastSection = true;
+          } else {
+            this.isFullLengthLastSection = false;
+          }
+
           if (
             this.questionNumber == this.sectionsWithPapers.length - 1 &&
             this.isSectionTimerTest
@@ -746,6 +775,11 @@ export class LiveTestComponent implements OnInit, OnDestroy {
                   )
                   .subscribe(
                     (question) => {
+                      if (question.videoExplanationUrl != null) {
+                        this.videoUrl = question.videoExplanationUrl;
+                      } else {
+                        this.videoUrl = null;
+                      }
                       this.currentSelectedQuestion = question;
                       this.showCorrectAnswerAndExplanation(question);
                       this.optionsSelected = [];
@@ -795,6 +829,11 @@ export class LiveTestComponent implements OnInit, OnDestroy {
       .getQuestionbyQuestionId(this.currentSelectedSection.questions[0]?.id)
       .subscribe(
         (question) => {
+          if (question.videoExplanationUrl != null) {
+            this.videoUrl = question.videoExplanationUrl;
+          } else {
+            this.videoUrl = null;
+          }
           this.currentSelectedQuestion = question;
           this.showCorrectAnswerAndExplanation(question);
         },
@@ -809,6 +848,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   }
 
   async changeSection(event, sectionTimeSpend = 0) {
+    this.selectedTabIndexValue = event;
     const section = this.testData?.sections[event];
     this.questionNumber = -1;
     this.isLastSectionQuestion = false;
@@ -861,6 +901,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   submitAssessment() {
     this.testConfigService.saveandExit(this.assignmentId).subscribe(
       (res: any) => {
+        this.isTestSubmittedSuccessFully = true;
         this.close();
         this.router
           .navigate(['/home/dashboard/assignment_report/' + this.assignmentId])
@@ -929,7 +970,9 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.saveAndNextAnswers(false);
+    if(!this.isTestSubmittedSuccessFully){
+      this.saveAndNextAnswers(false);
+    }
 
     if (this.timerSource) {
       this.timerSource.unsubscribe();
