@@ -483,8 +483,11 @@ export class LiveTestComponent implements OnInit, OnDestroy {
             this.isLastSectionQuestion = false;
           }
 
-          if (question.videoExplanationUrl != null)
+          if (question.videoExplanationUrl != null) {
             this.videoUrl = question.videoExplanationUrl;
+          } else {
+            this.videoUrl = null;
+          }
 
           this.currentSelectedQuestion = question;
           this.showCorrectAnswerAndExplanation(question);
@@ -668,7 +671,10 @@ export class LiveTestComponent implements OnInit, OnDestroy {
 
             if (question.videoExplanationUrl != null) {
               this.videoUrl = question.videoExplanationUrl;
+            } else {
+              this.videoUrl = null;
             }
+
           },
           (err) => {
             this.toastrService.error(
@@ -769,6 +775,11 @@ export class LiveTestComponent implements OnInit, OnDestroy {
                   )
                   .subscribe(
                     (question) => {
+                      if (question.videoExplanationUrl != null) {
+                        this.videoUrl = question.videoExplanationUrl;
+                      } else {
+                        this.videoUrl = null;
+                      }
                       this.currentSelectedQuestion = question;
                       this.showCorrectAnswerAndExplanation(question);
                       this.optionsSelected = [];
@@ -818,6 +829,11 @@ export class LiveTestComponent implements OnInit, OnDestroy {
       .getQuestionbyQuestionId(this.currentSelectedSection.questions[0]?.id)
       .subscribe(
         (question) => {
+          if (question.videoExplanationUrl != null) {
+            this.videoUrl = question.videoExplanationUrl;
+          } else {
+            this.videoUrl = null;
+          }
           this.currentSelectedQuestion = question;
           this.showCorrectAnswerAndExplanation(question);
         },
