@@ -149,17 +149,22 @@ export class StudentReportComponent implements OnInit {
             this.getTestConfig(res.testId, res);
             this.fetchedWholeAssignmentResult.sections.forEach((section) => {
               section.answers.sort((a, b) => {
-                const passage1 = a.passageContent ? a.passageContent : '';
+                if (a.sequenceNumber == 0 && b.sequenceNumber == 0) {
+                  const passage1 = a.passageContent ? a.passageContent : '';
 
-                const passage2 = b.passageContent ? b.passageContent : '';
+                  const passage2 = b.passageContent ? b.passageContent : '';
 
-                const passageName1 = passage1 + (a.name ? a.name : '');
-                const passageName2 = passage2 + (b.name ? b.name : '');
-                return passageName1 < passageName2
-                  ? -1
-                  : passageName1 > passageName2
-                  ? 1
-                  : 0;
+                  const passageName1 = passage1 + (a.name ? a.name : '');
+                  const passageName2 = passage2 + (b.name ? b.name : '');
+                  return passageName1 < passageName2
+                    ? -1
+                    : passageName1 > passageName2
+                    ? 1
+                    : 0;
+                }else {
+                  return a.sequenceNumber < b.sequenceNumber ? -1 : 1;
+                }
+
               });
             });
             this.getSectionWiseStats(this.fetchedWholeAssignmentResult);

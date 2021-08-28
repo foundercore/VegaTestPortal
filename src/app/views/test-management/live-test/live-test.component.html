@@ -184,7 +184,7 @@
       </div>
       <div>
         <button
-          *ngIf="!isLastSectionQuestion"
+          *ngIf="!isLastSectionQuestion && !isFullLengthLastSection"
           class="save-next-btn"
           mat-raised-button
           (click)="saveAndNextAnswers()"
@@ -193,7 +193,7 @@
           Save And Next
         </button>
         <button
-          *ngIf="isSectionTimerTest && isLastSectionQuestion"
+          *ngIf="isLastSectionQuestion || isFullLengthLastSection"
           class="save-next-btn"
           mat-raised-button
           (click)="saveAndNextAnswers()"
@@ -206,7 +206,7 @@
     <div style="flex-basis: 350px; display: flex; justify-content: center">
       <div>
         <button
-          *ngIf="isTestLive && !isSectionTimerTest"
+          *ngIf="isTestLive && !isSectionTimerTest && authorizationService.isAdminAndStaff"
           class="save-exit-btn"
           mat-raised-button
           (click)="SaveandExit()"

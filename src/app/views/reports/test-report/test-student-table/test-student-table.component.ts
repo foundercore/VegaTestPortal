@@ -34,8 +34,8 @@ export class TestStudentTableComponent implements OnInit {
   rankingDisplayedColumn: string[] = [
     'rank',
     'name',
-    'totalMarks',
     'marksReceived',
+    'totalMarks',
     'percentile',
   ];
 
