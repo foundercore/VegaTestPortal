@@ -76,6 +76,8 @@ export class LiveTestComponent implements OnInit, OnDestroy {
 
   optionsSelected = [];
 
+  singleOptionsSelected = null;
+
   submissionData: any = null;
 
   visitedQuestionList: string[] = [];
@@ -395,6 +397,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
             }
             if (changeSection) {
               this.optionsSelected = [];
+              this.singleOptionsSelected = null;
               this.sectionsWithPapers = this.sectionQuestionMap.get(
                 changeSection.id
               );
@@ -427,6 +430,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
       this.isSectionChangeTriggered = false;
       if (changeSection) {
         this.optionsSelected = [];
+        this.singleOptionsSelected = null;
         this.sectionsWithPapers = this.sectionQuestionMap.get(changeSection.id);
         this.currentSelectedSection = changeSection;
       }
@@ -436,24 +440,35 @@ export class LiveTestComponent implements OnInit, OnDestroy {
 
   getSelectedOption() {
     const optionsSelectedArray = [];
-    for (let i = 0; i < this.optionsSelected.length; i++) {
-      if (this.optionsSelected[i]) {
-        optionsSelectedArray.push(String(i));
+    if(this.currentSelectedQuestion.type == 'MCQ'){
+      if(this.singleOptionsSelected){
+        optionsSelectedArray.push(String(this.singleOptionsSelected.key));
+        return optionsSelectedArray;
+      }
+      return null;
+    } else if (this.currentSelectedQuestion.type == 'MCQ_MULTIPLE'){
+      for (let i = 0; i < this.optionsSelected.length; i++) {
+        if (this.optionsSelected[i]) {
+          optionsSelectedArray.push(String(i));
+        }
+      }
+      if (optionsSelectedArray.length > 0) {
+        console.log(
+          'optionsSelectedArray after analyzing boolean array=>',
+          optionsSelectedArray
+        );
+        return optionsSelectedArray;
+      } else {
+        return null;
       }
     }
-    if (optionsSelectedArray.length > 0) {
-      console.log(
-        'optionsSelectedArray after analyzing boolean array=>',
-        optionsSelectedArray
-      );
-      return optionsSelectedArray;
-    } else {
-      return null;
-    }
+
+    return null;
   }
 
   goToNextQuestion() {
     this.optionsSelected = [];
+    this.singleOptionsSelected = null;
     this.timeElapsedInSecond = 0;
     if (this.questionNumber < this.sectionsWithPapers.length - 1) {
       this.questionNumber = this.questionNumber + 1;
@@ -494,6 +509,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
 
           if (setAnswer) {
             this.optionsSelected = [];
+            this.singleOptionsSelected = null;
             this.setTITAQuestionFetchedAns(this.submissionData);
             this.setCurrentQuestionSelectedOption();
           }
@@ -551,6 +567,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
             }
           } else {
             this.optionsSelected = [];
+            this.singleOptionsSelected = null;
             this.setTITAQuestionFetchedAns(this.submissionData);
             this.setCurrentQuestionSelectedOption();
           }
@@ -571,6 +588,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.optionsSelected.length; i++) {
       this.optionsSelected[i] = false;
     }
+    this.singleOptionsSelected = null;
     const questionForClearResponse = new QuestionMarkedForReviewModel();
     questionForClearResponse.answerText = null;
     questionForClearResponse.assignmentId = this.assignmentId;
@@ -619,12 +637,17 @@ export class LiveTestComponent implements OnInit, OnDestroy {
         section.answers.map((ans) => {
           if (ans?.questionId === this.currentSelectedQuestion?.id.questionId) {
             const selectedOptions = ans.selectedOptions;
-            this.optionsSelected = [];
-            if (selectedOptions !== null) {
-              selectedOptions.map((optIndex) => {
-                this.optionsSelected[Number(optIndex)] = true;
-              });
-            }
+              if(this.currentSelectedQuestion.type == 'MCQ'){
+                  this.singleOptionsSelected = this.currentSelectedQuestion.options.find(x => selectedOptions.includes(x.key));
+              } else {
+                this.optionsSelected = [];
+                this.singleOptionsSelected = null;
+                if (selectedOptions !== null) {
+                  selectedOptions.map((optIndex) => {
+                    this.optionsSelected[Number(optIndex)] = true;
+                  });
+                }
+              }
           }
         });
       }
@@ -660,6 +683,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     } else {
       this.questionNumber = currentQuestionIndex;
       this.optionsSelected = [];
+      this.singleOptionsSelected = null;
       await this.testConfigService
         .getQuestionbyQuestionId(
           this.currentSelectedSection.questions[currentQuestionIndex]?.id
@@ -783,6 +807,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
                       this.currentSelectedQuestion = question;
                       this.showCorrectAnswerAndExplanation(question);
                       this.optionsSelected = [];
+                      this.singleOptionsSelected = null;
                       this.setTITAQuestionFetchedAns(this.submissionData);
                       this.setCurrentQuestionSelectedOption();
                     },
@@ -823,6 +848,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
 
   async selectSection(section) {
     this.optionsSelected = [];
+    this.singleOptionsSelected = null;
     this.sectionsWithPapers = this.sectionQuestionMap.get(section.id);
     this.currentSelectedSection = section;
     await this.testConfigService

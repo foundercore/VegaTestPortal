@@ -224,3 +224,14 @@ ul > li {
   margin-top: 6px;
   cursor: auto;
 }
+
+
+.answer-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.answer-radio-button {
+  margin: 5px;
+}
