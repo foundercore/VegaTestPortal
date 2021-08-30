@@ -76,7 +76,7 @@
                     *ngIf="currentSelectedQuestion?.type !== 'TITA'"
                     style="padding-top: 20px"
                   >
-                    <ul>
+                    <ul *ngIf="currentSelectedQuestion?.type == 'MCQ_MUTIPLE'">
                       <li *ngFor="let opt of currentSelectedQuestion?.options">
                         <div style="display: flex; align-items: center">
                           <div style="padding-right: 5px">
@@ -90,6 +90,11 @@
                         </div>
                       </li>
                     </ul>
+                    <mat-radio-group aria-labelledby="answer-radio-group-label" class="answer-radio-group" *ngIf="currentSelectedQuestion?.type == 'MCQ'" [(ngModel)]="singleOptionsSelected">
+                          <mat-radio-button class="answer-radio-button" *ngFor="let opt of currentSelectedQuestion?.options" [value]="opt" >
+                            <div [appMath]="opt?.value"></div>
+                          </mat-radio-button>
+                    </mat-radio-group>
                   </div>
                 </div>
               </div>
@@ -124,17 +129,17 @@
     <div class="question-legend">
       <div class="marker">
         <div class="item">
-          <span class="marker_box attempted">0</span><span>Answered</span>
+          <span class="marker_box attempted"></span><span>Answered</span>
         </div>
         <div class="item">
-          <span class="marker_box not_attempted">0</span
+          <span class="marker_box not_attempted"></span
           ><span>Not Answered</span>
         </div>
         <div class="item">
-          <span class="marker_box not_visited">0</span><span>Not Visited</span>
+          <span class="marker_box not_visited"></span><span>Not Visited</span>
         </div>
         <div class="item">
-          <span class="marker_box mark_review">0</span
+          <span class="marker_box mark_review"></span
           ><span>Mark for Review</span>
         </div>
       </div>
