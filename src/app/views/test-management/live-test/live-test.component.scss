@@ -235,3 +235,8 @@ ul > li {
 .answer-radio-button {
   margin: 5px;
 }
+
+
+::ng-deep .mat-radio-label-content {
+  white-space: normal;
+}

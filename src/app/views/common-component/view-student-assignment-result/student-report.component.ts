@@ -149,7 +149,7 @@ export class StudentReportComponent implements OnInit {
             this.getTestConfig(res.testId, res);
             this.fetchedWholeAssignmentResult.sections.forEach((section) => {
               section.answers.sort((a, b) => {
-                if (a.sequenceNumber == 0 && b.sequenceNumber == 0) {
+                if ((a.sequenceNumber == undefined && b.sequenceNumber == undefined) || (a.sequenceNumber == 0 && b.sequenceNumber == 0)) {
                   const passage1 = a.passageContent ? a.passageContent : '';
 
                   const passage2 = b.passageContent ? b.passageContent : '';
