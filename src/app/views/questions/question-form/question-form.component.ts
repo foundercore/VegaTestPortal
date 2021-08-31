@@ -4,7 +4,13 @@ import {
 } from './../../../models/questions/question-model';
 import { QuestionManagementService } from './../../../services/question-management/question-management.service';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { QuestionOption } from 'src/app/models/questions/question-option-model';
@@ -16,6 +22,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { TranslateService } from '@ngx-translate/core';
 import { Location } from '@angular/common';
 import { MatStepper } from '@angular/material/stepper';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 declare var WirisPlugin: any;
 
 @Component({
@@ -329,7 +336,8 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
         this.stepOneFormGroup.get('explanation')?.value;
       this.updatedQuestion.description =
         this.stepOneFormGroup.get('description')?.value;
-        this.updatedQuestion.videoExplanationUrl = this.stepOneFormGroup.get('videoUrl')?.value;
+      this.updatedQuestion.videoExplanationUrl =
+        this.stepOneFormGroup.get('videoUrl')?.value;
       this.updatedQuestion.type = this.stepOneFormGroup.get('type')?.value;
       this.updatedQuestion.options = answerOptions;
 
@@ -451,5 +459,14 @@ export class QuestionFormComponent implements OnInit, AfterViewInit {
 
   nextStep(stepper: MatStepper) {
     stepper.next();
+  }
+
+  onChangeDemo(i) {
+    this.answerOptionFormGrp.get('optionArrays')['controls'].forEach((x) => {
+      x.get('flag').setValue(false);
+    });
+    this.answerOptionFormGrp.controls.optionArrays['controls'][i][
+      'controls'
+    ].flag.setValue(true);
   }
 }
