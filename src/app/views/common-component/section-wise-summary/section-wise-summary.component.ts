@@ -93,7 +93,4 @@ export class SectionWiseSummaryComponent implements OnInit {
         return 0;
   }
 
-
-  getTotalAveragerrect
-
 }
