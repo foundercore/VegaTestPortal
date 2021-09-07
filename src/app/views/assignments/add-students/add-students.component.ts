@@ -1,5 +1,9 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import {
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
 import { formatDate } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -14,7 +18,7 @@ import { UserService } from 'src/app/services/users/users.service';
 @Component({
   selector: 'app-add-students',
   templateUrl: './add-students.component.html',
-  styleUrls: ['./add-students.component.scss']
+  styleUrls: ['./add-students.component.scss'],
 })
 export class AddStudentsComponent implements OnInit {
   previousStudentList = [];
@@ -22,6 +26,10 @@ export class AddStudentsComponent implements OnInit {
   taggedStudentList = [];
 
   availableStudentList = [];
+
+  filteredAvailableStudentList = [];
+
+  filteredTaggedStudentList = [];
 
   isUserAdmin = false;
 
@@ -42,45 +50,63 @@ export class AddStudentsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    let assignedStudent= this.data.data.assignedToStudent == null? []:  this.data.data.assignedToStudent;
+    let assignedStudent =
+      this.data.data.assignedToStudent == null
+        ? []
+        : this.data.data.assignedToStudent;
 
     this.userService.getUserList().subscribe((resp) => {
-      this.availableStudentList = resp.filter((x) => !assignedStudent.includes(x.userName));
+      this.availableStudentList = resp.filter(
+        (x) => !assignedStudent.includes(x.userName)
+      );
+      this.filteredAvailableStudentList = this.availableStudentList;
 
-      this.taggedStudentList = resp.filter((x) => assignedStudent.includes(x.userName));
-
+      this.taggedStudentList = resp.filter((x) =>
+        assignedStudent.includes(x.userName)
+      );
+      this.filteredTaggedStudentList = this.taggedStudentList;
     });
-
-
   }
 
   addStudent() {
-
-    if(this.taggedStudentList.length == 0){
+    if (this.taggedStudentList.length == 0) {
       this.tosterService.error('Atleast one student should be tagged');
       return;
     }
 
-
-    const assignmentObj : AssignmentRequest = {
-      description : this.data.data.description,
+    const assignmentObj: AssignmentRequest = {
+      description: this.data.data.description,
       passcode: this.data.data.passcode?.value,
-      releaseDate: formatDate(this.data.data.releaseDate, 'yyyy-MM-dd hh:mm:ss', this.locale) ,
+      releaseDate: formatDate(
+        this.data.data.releaseDate,
+        'yyyy-MM-dd hh:mm:ss',
+        this.locale
+      ),
       testId: this.data.testId,
-      validFrom:formatDate(this.data.data.validFrom , 'yyyy-MM-dd hh:mm:ss', this.locale),
-      validTo: formatDate(this.data.data.validTo, 'yyyy-MM-dd hh:mm:ss', this.locale) ,
-      assignedToBatch:this.data.data.assignedToBatch,
-      assignedToStudent:this.taggedStudentList.map(x => x.userName)
-     }
-    this.testAssignmentService.updateAssignment(this.data.data.assignmentId, assignmentObj).subscribe(
-      (resp) => {
-        this.tosterService.success('Student is tagged successfully');
-        this.dialogRef.close();
-      },
-      (error) => {
-        this.tosterService.error(error.error.apierror.message);
-      }
-    );
+      validFrom: formatDate(
+        this.data.data.validFrom,
+        'yyyy-MM-dd hh:mm:ss',
+        this.locale
+      ),
+      validTo: formatDate(
+        this.data.data.validTo,
+        'yyyy-MM-dd hh:mm:ss',
+        this.locale
+      ),
+      assignedToBatch: this.data.data.assignedToBatch,
+      assignedToStudent: this.taggedStudentList.map((x) => x.userName),
+    };
+    this.testAssignmentService
+      .updateAssignment(this.data.data.assignmentId, assignmentObj)
+      .subscribe(
+        (resp) => {
+          this.tosterService.success('Student is tagged successfully');
+          this.dialogRef.close();
+        },
+        (error) => {
+          this.tosterService.error(error.error.apierror.message);
+        }
+      );
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -109,6 +135,8 @@ export class AddStudentsComponent implements OnInit {
     this.availableStudentList = this.availableStudentList.filter(
       (x) => !this.leftSideSelection.selected.includes(x)
     );
+    this.filteredTaggedStudentList = this.taggedStudentList;
+    this.filteredAvailableStudentList = this.availableStudentList;
     this.leftSideSelection.clear();
   }
 
@@ -119,6 +147,8 @@ export class AddStudentsComponent implements OnInit {
     this.taggedStudentList = this.taggedStudentList.filter(
       (x) => !this.rightSideSelection.selected.includes(x)
     );
+    this.filteredTaggedStudentList = this.taggedStudentList;
+    this.filteredAvailableStudentList = this.availableStudentList;
     this.rightSideSelection.clear();
   }
 
@@ -176,4 +206,25 @@ export class AddStudentsComponent implements OnInit {
     } row ${row.position + 1}`;
   }
 
+  search(event) {
+    this.filteredAvailableStudentList = this.searchStudent(event.target.value);
+  }
+
+  searchStudent(value: string) {
+    let filter = value.toLowerCase();
+    return this.availableStudentList.filter((option) =>
+      option.displayName.toLocaleLowerCase().includes(filter)
+    );
+  }
+
+  searchTagStudent(event) {
+    this.filteredTaggedStudentList = this.searchTagged(event.target.value);
+  }
+
+  searchTagged(value: string) {
+    let filter = value.toLowerCase();
+    return this.taggedStudentList.filter((option) =>
+      option.displayName.toLocaleLowerCase().includes(filter)
+    );
+  }
 }
