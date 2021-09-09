@@ -37,14 +37,19 @@
         <div
           cdkDropList
           #todoList="cdkDropList"
-          [cdkDropListData]="availableStudentList"
+          [cdkDropListData]="filteredAvailableStudentList"
           [cdkDropListConnectedTo]="[doneList]"
           class="example-list"
           (cdkDropListDropped)="drop($event)"
         >
+        <input
+        class="search-container"
+        placeholder="Search Batch"
+        (keyup)="search($event)"
+      />
           <div
             class="example-box"
-            *ngFor="let item of availableStudentList"
+            *ngFor="let item of filteredAvailableStudentList"
             cdkDrag
           >
             <mat-checkbox
@@ -90,14 +95,19 @@
         <div
           cdkDropList
           #doneList="cdkDropList"
-          [cdkDropListData]="taggedStudentList"
+          [cdkDropListData]="filteredTaggedStudentList"
           [cdkDropListConnectedTo]="[todoList]"
           class="example-list"
           (cdkDropListDropped)="drop($event)"
         >
+        <input
+        class="search-container"
+        placeholder="Search Batch"
+        (keyup)="searchTagStudent($event)"
+      />
           <div
             class="example-box"
-            *ngFor="let student of taggedStudentList"
+            *ngFor="let student of filteredTaggedStudentList"
             cdkDrag
           >
             <mat-checkbox
