@@ -21,6 +21,8 @@ export class TestconfigComponent implements OnInit {
 
   public fileName = 'Choose file';
 
+  public instituteFileName = 'Choose file'
+
   public file: FileUploadModel | undefined;
 
   public institueAnalysisFile : FileUploadModel | undefined; 
@@ -150,7 +152,7 @@ export class TestconfigComponent implements OnInit {
 
   institueAnalysisChange(event : any){
     if (event.target.files.length !== 0) {
-      this.file = {
+      this.institueAnalysisFile = {
         data: event.target.files[0],
         state: 'in',
         inProgress: false,
@@ -158,10 +160,10 @@ export class TestconfigComponent implements OnInit {
         canRetry: false,
         canCancel: true,
       };
-      this.fileName = event.target.files[0].name;
+      this.instituteFileName = event.target.files[0].name;
     } else {
-      this.fileName = 'Choose file';
-      this.file = undefined;
+      this.instituteFileName = 'Choose file';
+      this.institueAnalysisFile = undefined;
     }
   }
 
