@@ -17,6 +17,7 @@
                         <mat-checkbox formControlName="allowCalculator" class="mt-2"  >Allow Calculator</mat-checkbox>
                         <mat-checkbox formControlName="shuffleQuestions" class="mt-2" >Shuffle Question</mat-checkbox>
                         <mat-checkbox formControlName="sectionalTest" class="mt-2" >Sectional Test</mat-checkbox>
+                        <mat-checkbox formControlName="allowInstituteAnalysisMetadata" class="mt-2" >Institue Analysis</mat-checkbox>
                       </div>
                   </div>
 
@@ -34,6 +35,22 @@
                         <label class="custom-file-label" for="customFile">{{ fileName }}</label>
                       </div>
                     </div>
+
+                    <div class="col-12  pt-5">
+                      <p>Institue Analysis file:</p>
+                      <div class="custom-file mb-3">
+                        <input
+                          type="file"
+                          accept=".xlsx"
+                          class="custom-file-input"
+                          id="instituteFile"
+                          name="institutefilename"
+                          (change)="institueAnalysisChange($event)"
+                        />
+                        <label class="custom-file-label" for="instituteFile">{{ fileName }}</label>
+                      </div>
+                    </div>
+
                     <div class="col-12 text-center pt-5">
 
                         <button mat-raised-button class="mat-btn save-btn mx-1" (click)="saveConfiguration()">

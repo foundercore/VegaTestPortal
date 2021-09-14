@@ -23,12 +23,15 @@ export class TestconfigComponent implements OnInit {
 
   public file: FileUploadModel | undefined;
 
+  public institueAnalysisFile : FileUploadModel | undefined; 
+
   public configurationFormControl = new FormGroup({
       doNotShowReport: new FormControl(false),
       allowCalculator: new FormControl(false),
       percentile: new FormControl(false),
       shuffleQuestions: new FormControl(false),
       sectionalTest: new FormControl(false),
+      allowInstituteAnalysisMetadata : new FormControl(false),
     }
   )
 
@@ -51,7 +54,8 @@ export class TestconfigComponent implements OnInit {
             allowCalculator:res.controlParam.allowCalculator,
             percentile:res.controlParam.percentile,
             shuffleQuestions:res.controlParam.shuffleQuestions,
-            sectionalTest:res.controlParam.sectionalTest
+            sectionalTest:res.controlParam.sectionalTest,
+            allowInstituteAnalysisMetadata : res.controlParam.allowInstituteAnalysisMetadata
           })
         },
         (error) => {
@@ -66,17 +70,18 @@ export class TestconfigComponent implements OnInit {
   saveConfiguration(){
 
     if(this._data?.testId != null){
-      if(this.file){
+      if(this.file || this.institueAnalysisFile){
           forkJoin([
             this.testConfigService.saveTestConfiguration({
               doNotShowReport:this.configurationFormControl.controls.doNotShowReport.value,
               allowCalculator:this.configurationFormControl?.controls.allowCalculator.value,
               percentile:this.configurationFormControl?.controls.percentile.value,
               shuffleQuestions:this.configurationFormControl?.controls.shuffleQuestions.value,
-              sectionalTest: this.configurationFormControl?.controls.sectionalTest.value
+              sectionalTest: this.configurationFormControl?.controls.sectionalTest.value,
+              allowInstituteAnalysisMetadata : this.configurationFormControl?.controls.allowInstituteAnalysisMetadata.value
             },this._data?.testId),
-            this.testConfigService .savePercentileFile(this.file,this._data?.testId)
-
+            this.testConfigService.savePercentileFile(this.file,this._data?.testId),
+            this.testConfigService.saveInstituteAnalysisFile(this.institueAnalysisFile,this._data?.testId)
           ]).subscribe((results) => {
             this.dialogRef.close();
             this.toastrService.success("Test configured successfully");
@@ -90,7 +95,8 @@ export class TestconfigComponent implements OnInit {
           allowCalculator:this.configurationFormControl?.controls.allowCalculator.value,
           percentile:this.configurationFormControl?.controls.percentile.value,
           shuffleQuestions:this.configurationFormControl?.controls.shuffleQuestions.value,
-          sectionalTest: this.configurationFormControl?.controls.sectionalTest.value
+          sectionalTest: this.configurationFormControl?.controls.sectionalTest.value,
+          allowInstituteAnalysisMetadata : this.configurationFormControl?.controls.allowInstituteAnalysisMetadata.value
         },this._data?.testId).subscribe((results) => {
           this.dialogRef.close();
           this.toastrService.success("Test configured successfully");
@@ -141,5 +147,23 @@ export class TestconfigComponent implements OnInit {
       this.file = undefined;
     }
   }
+
+  institueAnalysisChange(event : any){
+    if (event.target.files.length !== 0) {
+      this.file = {
+        data: event.target.files[0],
+        state: 'in',
+        inProgress: false,
+        progress: 0,
+        canRetry: false,
+        canCancel: true,
+      };
+      this.fileName = event.target.files[0].name;
+    } else {
+      this.fileName = 'Choose file';
+      this.file = undefined;
+    }
+  }
+
 }
 

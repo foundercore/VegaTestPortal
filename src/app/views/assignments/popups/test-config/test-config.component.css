@@ -11,3 +11,7 @@
 .mat-checkbox {
     display: block;
 }
+
+.pt-5 {
+    padding-top: 0px !important;
+}
