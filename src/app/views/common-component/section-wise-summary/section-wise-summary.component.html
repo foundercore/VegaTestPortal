@@ -6,7 +6,7 @@
       <td class="section-row-cell-class" mat-cell *matCellDef="let element"> {{element.name}} </td>
       <td mat-footer-cell *matFooterCellDef> Total </td>
     </ng-container>
-
+    
      <ng-container matColumnDef="correct">
       <th  class="custom-mat-header-th number-cell" mat-header-cell *matHeaderCellDef> Correct </th>
       <td class="section-row-cell-class number-cell" mat-cell *matCellDef="let element"> {{element.correct}} </td>
@@ -30,6 +30,12 @@
       <th  class="custom-mat-header-th number-cell" mat-header-cell *matHeaderCellDef> Marks </th>
       <td class="section-row-cell-class number-cell" mat-cell *matCellDef="let element"> {{element.marks}} </td>
       <td mat-footer-cell *matFooterCellDef class="number-cell"> {{getSectionalTotalCount('marks')}}  </td>
+    </ng-container>
+
+    <ng-container matColumnDef="accuracy">
+      <th  class="custom-mat-header-th number-cell" mat-header-cell *matHeaderCellDef> Accuracy </th>
+      <td class="section-row-cell-class number-cell" mat-cell *matCellDef="let element">{{getAccuracy(element.correct,element.incorrect)}} </td>
+      <td mat-footer-cell *matFooterCellDef class="number-cell">{{getAccuracy(getSectionalTotalCount('correct'),getSectionalTotalCount('incorrect'))}}</td>
     </ng-container>
 
     <ng-container matColumnDef="percentile">
