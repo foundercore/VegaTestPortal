@@ -22,11 +22,12 @@
           <a [routerLink]="['./administrations/batch']">{{ 'HEADER_TAGS.BATCH' | translate }}</a>
         </div>
       </li>
-      <li class="navbar-dropdown" *ngIf="authorizationService.isAdminAndStaff">
+      <li class="navbar-dropdown">
         <a  style="cursor: pointer">{{ 'HEADER_TAGS.REPORTS' | translate }} <i class="fa fa-caret-down"></i></a>
         <div class="dropdown">
-          <a [routerLink]="['./reports/student']">{{ 'HEADER_TAGS.STUDENT_REPORT' | translate }}</a>
-          <a [routerLink]="['./reports/test']">{{ 'HEADER_TAGS.TEST_REPORT' | translate }}</a>
+          <a *ngIf="authorizationService.isAdminAndStaff" [routerLink]="['./reports/student']">{{ 'HEADER_TAGS.STUDENT_REPORT' | translate }}</a>
+          <a *ngIf="authorizationService.isAdminAndStaff" [routerLink]="['./reports/test']">{{ 'HEADER_TAGS.TEST_REPORT' | translate }}</a>
+          <a *ngIf="!authorizationService.isAdminAndStaff" [routerLink]="['./reports/test_analysis']">{{ 'HEADER_TAGS.REALTIME_TEST_REPORT' | translate }}</a>
 
         </div>
       </li>

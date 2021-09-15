@@ -1,0 +1,380 @@
+.btn__group {
+  text-align: right;
+}
+
+.btn__group .btn {
+  margin: 0 3px;
+}
+
+.add-btn span {
+  padding-left: 0.5rem;
+}
+
+.add-btn:hover {
+  background-color: #5bc4e1;
+  color: #fff;
+}
+.edit__btn {
+  margin-right: 0.2rem;
+}
+.edit__btn:hover {
+  background-color: rgb(0, 153, 255);
+  color: #fff;
+}
+.sectionDuration__p {
+  margin-right: 8rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+thead {
+  background: #ececec !important;
+}
+tr.mat-header-row {
+  height: 45px;
+}
+/* th {
+    background: #3a4248;
+    color: #fff !important;
+  }
+  .mat-header-cell {
+    background: #3a4248;
+    color: #fff !important;
+  } */
+
+.remove__btn {
+  margin-right: 0rem;
+}
+.remove__btn:hover {
+  background-color: red;
+  color: #fff;
+}
+
+.data__table td .action-btn {
+  cursor: pointer;
+  margin: 0 0.3rem;
+}
+
+.mat__action_btn:hover {
+  background-color: #275;
+  color: #fff;
+}
+
+
+
+/* Structure */
+
+.example-table-container {
+  position: relative;
+  max-height: 400px;
+  overflow: auto;
+}
+
+.example-table-container {
+  position: relative;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.example-loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-rate-limit-reached {
+  color: #980000;
+  max-width: 360px;
+  text-align: center;
+}
+
+/* Column Widths */
+.mat-column-subject,
+.mat-column-tags {
+  width: 200px;
+}
+
+.mat-column-explanation_added {
+  width: 100px;
+}
+
+.mat-column-description {
+  padding-left: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mat-column-name {
+  max-width: 400px;
+  width: 400px;
+  padding-left: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mat-column-actions {
+  width: 150px;
+  max-width: 150px;
+}
+
+.mat-column-select {
+  width: 50px;
+  max-width: 50px;
+}
+
+.question-list-grid {
+  margin: 20px;
+}
+
+.question-list-title {
+  margin: 20px;
+}
+
+.question-grid-search-bar {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.question-grid-action {
+  float: right;
+  margin: 20px;
+}
+
+.question-grid-action button {
+  margin: 0px 10px;
+}
+
+th.mat-header-cell {
+  text-align: left;
+  padding-left: 25px !important;
+}
+
+tr.mat-row td {
+  padding-left: 25px;
+  white-space: normal;
+}
+
+tr.mat-row td > p {
+  margin-bottom: 0;
+}
+
+li {
+  cursor: auto;
+}
+th{
+  font-weight: 900;
+  font-size: 13px;
+}
+
+
+/**
+Drag and drop CSS
+**/
+
+.question-list-header{
+  font-weight: 900;
+    font-size: 13px;
+}
+
+.section-question-list {
+  max-width: 100%;
+
+  border: solid 1px #ccc;
+  min-height: 60px;
+  display: block;
+  background: white;
+  border-radius: 4px;
+
+  box-shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%), 0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%)
+}
+
+.section-question-list-content{
+  max-height: 400px;
+  overflow: auto;
+}
+
+
+.question-box {
+  padding: 20px 0px;
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background: white;
+  font-size: 14px;
+}
+
+.question-name-div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.example-box:last-child {
+  border: none;
+}
+
+.section-question-list.cdk-drop-list-dragging .question-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.question-box-custom-placeholder {
+  background: #ccc;
+  border: dotted 3px #999;
+  min-height: 60px;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+
+
+/**
+
+Edit Section btn
+**/
+.section-action-btn{
+  width: 30px;
+  height: 30px;
+  position: relative;
+  text-align: center;
+  border-radius: 50%;
+  color: black;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  background: white;
+  margin: 5px;
+}
+
+.edit_btn:hover {
+  background-color: rgb(0, 153, 255);
+  color: #fff;
+}
+
+.delete_btn:hover {
+  background-color: red;
+  color: #fff;
+}
+
+.save_btn:hover {
+  background-color: green;
+  color: #fff;
+}
+
+
+.handle-icon {
+  color: #ccc;
+  cursor: move;
+  width: 24px;
+  height: 24px;
+}
+
+
+/**
+Arrow Flow Diagram CSS
+**/
+
+
+.box {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  overflow: hidden;
+}
+
+.box-item {
+  display: block;
+  position: relative;
+  float: left;
+  color: white;
+  height: 40px;
+  line-height: 40px;
+  margin-right: 10px;
+  padding: 0 10px;
+  background-color: #fcc;
+  border-radius: 4px;
+  padding-left: 15px;
+}
+.box-item:before {
+  content: "";
+  position: absolute;
+  right: -9px;
+  height: 0;
+  width: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 10px solid #fcc;
+  border-radius: 4px;
+}
+
+.complete-stage:before {
+  border-left: 10px solid #00c851 !important;
+}
+
+.in-progress-stage:before{
+  border-left: 10px solid #33b5e5 !important;
+}
+.in-complete-stage:before{
+  border-left: 10px solid #cccccc !important;
+}
+
+
+.box-item:after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  height: 0;
+  width: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 10px solid #fff;
+  border-radius: 4px;
+}
+/* .box-item:first-child:after {
+  display: none;
+} */
+/* .box-item:last-child {
+  margin-right: 0;
+}
+.box-item:last-child:before {
+  display: none;
+} */
+.complete-stage{
+background-color: #00c851 !important;
+}
+.in-progress-stage{
+  background-color: #33b5e5 !important;
+}
+.in-complete-stage{
+  background-color: #cccccc !important;
+}
+
+
+
+.success-bg {
+  background-color: #00c851 !important;
+}
+
+.warning-bg {
+  background-color: #fb3 !important;
+}
+
+.failure-bg {
+  background-color: #ff3547 !important;
+}

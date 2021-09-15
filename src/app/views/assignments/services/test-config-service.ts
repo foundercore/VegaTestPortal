@@ -70,7 +70,7 @@ export class TestConfigService extends BaseService {
 
   savePercentileFile(file: any,paperId: string): Observable<any> {
     const fd = new FormData();
-    fd.append('file', file!.data);
+    fd.append('file', file?.data);
     const url = `${this.BASE_SERVICE_URL}/api/v1/test/config/update-percentile-scorecard?paperId=${paperId}`;
 
     const req = new HttpRequest('POST', url, fd, {
@@ -82,7 +82,7 @@ export class TestConfigService extends BaseService {
 
   saveInstituteAnalysisFile(file: any,paperId: string): Observable<any> {
     const fd = new FormData();
-    fd.append('file', file!.data);
+    fd.append('file', file?.data);
     const url = `${this.BASE_SERVICE_URL}/api/v1/test/config/update-institute-analysis-file?paperId=${paperId}`;
 
     const req = new HttpRequest('POST', url, fd, {

@@ -5,7 +5,7 @@ import { Component, OnInit, ChangeDetectionStrategy, Inject } from '@angular/cor
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { forkJoin, of } from 'rxjs';
+import { forkJoin, of, Subscription } from 'rxjs';
 import { catchError, finalize, last, map, tap } from 'rxjs/operators';
 import { FileUploadModel } from 'src/app/models/file/file-upload-model';
 import { TestConfigurationVM } from '../../models/test-configuration';
@@ -25,7 +25,7 @@ export class TestconfigComponent implements OnInit {
 
   public file: FileUploadModel | undefined;
 
-  public institueAnalysisFile : FileUploadModel | undefined; 
+  public institueAnalysisFile : FileUploadModel | undefined;
 
   public configurationFormControl = new FormGroup({
       doNotShowReport: new FormControl(false),
@@ -59,6 +59,12 @@ export class TestconfigComponent implements OnInit {
             sectionalTest:res.controlParam.sectionalTest,
             allowInstituteAnalysisMetadata : res.controlParam.allowInstituteAnalysisMetadata
           })
+          if(res.controlParam.instituteAnalysisMetadata){
+              this.instituteFileName = res.controlParam.instituteAnalysisMetadata.fileName
+          }
+          if(res.controlParam.percentileScoreCard){
+            this.fileName = res.controlParam.percentileScoreCard.fileName
+        }
         },
         (error) => {
           this.toastrService.error(
@@ -72,40 +78,27 @@ export class TestconfigComponent implements OnInit {
   saveConfiguration(){
 
     if(this._data?.testId != null){
-      if(this.file || this.institueAnalysisFile){
-          forkJoin([
-            this.testConfigService.saveTestConfiguration({
-              doNotShowReport:this.configurationFormControl.controls.doNotShowReport.value,
-              allowCalculator:this.configurationFormControl?.controls.allowCalculator.value,
-              percentile:this.configurationFormControl?.controls.percentile.value,
-              shuffleQuestions:this.configurationFormControl?.controls.shuffleQuestions.value,
-              sectionalTest: this.configurationFormControl?.controls.sectionalTest.value,
-              allowInstituteAnalysisMetadata : this.configurationFormControl?.controls.allowInstituteAnalysisMetadata.value
-            },this._data?.testId),
-            this.testConfigService.savePercentileFile(this.file,this._data?.testId),
-            this.testConfigService.saveInstituteAnalysisFile(this.institueAnalysisFile,this._data?.testId)
-          ]).subscribe((results) => {
-            this.dialogRef.close();
-            this.toastrService.success("Test configured successfully");
-          }, (error) => {
-            this.toastrService.error(error?.error?.message ? error?.error?.message : error?.message, 'Error');
-          });
-        }
-       else {
-        this.testConfigService.saveTestConfiguration({
-          doNotShowReport:this.configurationFormControl.controls.doNotShowReport.value,
-          allowCalculator:this.configurationFormControl?.controls.allowCalculator.value,
-          percentile:this.configurationFormControl?.controls.percentile.value,
-          shuffleQuestions:this.configurationFormControl?.controls.shuffleQuestions.value,
-          sectionalTest: this.configurationFormControl?.controls.sectionalTest.value,
-          allowInstituteAnalysisMetadata : this.configurationFormControl?.controls.allowInstituteAnalysisMetadata.value
-        },this._data?.testId).subscribe((results) => {
-          this.dialogRef.close();
-          this.toastrService.success("Test configured successfully");
-        }, (error) => {
-          this.toastrService.error(error?.error?.message ? error?.error?.message : error?.message, 'Error');
-        });
+      let subscriptionList = [this.testConfigService.saveTestConfiguration({
+        doNotShowReport:this.configurationFormControl.controls.doNotShowReport.value,
+        allowCalculator:this.configurationFormControl?.controls.allowCalculator.value,
+        percentile:this.configurationFormControl?.controls.percentile.value,
+        shuffleQuestions:this.configurationFormControl?.controls.shuffleQuestions.value,
+        sectionalTest: this.configurationFormControl?.controls.sectionalTest.value,
+        allowInstituteAnalysisMetadata : this.configurationFormControl?.controls.allowInstituteAnalysisMetadata.value
+      },this._data?.testId),];
+      if(this.file){
+        subscriptionList.push( this.testConfigService.savePercentileFile(this.file,this._data?.testId));
       }
+      if(this.institueAnalysisFile){
+        subscriptionList.push(this.testConfigService.saveInstituteAnalysisFile(this.institueAnalysisFile,this._data?.testId))
+      }
+
+      forkJoin(subscriptionList).subscribe((results) => {
+        this.dialogRef.close();
+        this.toastrService.success("Test configured successfully");
+      }, (error) => {
+        this.toastrService.error(error?.error?.message ? error?.error?.message : error?.message, 'Error');
+      });
     }
   }
 

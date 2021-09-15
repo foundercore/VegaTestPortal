@@ -116,6 +116,7 @@
     "REPORTS": "Reports",
     "STUDENT_REPORT": "Student Report",
     "TEST_REPORT": "Test Report",
+    "REALTIME_TEST_REPORT": "Test Report",
     "PROFILE": "Profile",
     "CHANGE_PASS": "Change Password",
     "SIGNOUT": "Signout"
