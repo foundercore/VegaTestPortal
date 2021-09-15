@@ -26,6 +26,7 @@ export class SectionWiseSummaryComponent implements OnInit {
     'skipped',
     'marks',
     'accuracy',
+    'avgtime',
     'percentile',
   ];
 
@@ -39,6 +40,8 @@ export class SectionWiseSummaryComponent implements OnInit {
     'skippedAvgTime',
     'marks',
   ];
+
+  averageTime : number;
 
   @Input() summaryData = new EventEmitter();
 
@@ -65,11 +68,14 @@ export class SectionWiseSummaryComponent implements OnInit {
           incorrect: section.metric.incorrect,
           skipped: section.metric.skipped,
           marks: section.metric.marksReceived,
+          time : section.metric.totalTimeInSec,
           percentileScore: section.metric.percentileScore,
         });
       });
+
+      this.averageTime = Math.round((resp.metric.totalTimeInSec/resp.sections.length));
+
       this.sectionTable.renderRows();
-      console.log(this.sectoionLevelDataSource);
 
       resp.difficulty.forEach((level) => {
         this.difficultyDataSource.push({
