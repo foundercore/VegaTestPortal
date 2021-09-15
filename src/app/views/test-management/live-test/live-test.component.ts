@@ -134,17 +134,21 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     this.initialize();
   }
   @HostListener('window:beforeunload', ['$event'])
-  subscribeToNativeNavigation(event: any) {
-    console.log('close window/tab processing starts')
-    this.saveAndNextAnswers(false);
-    console.log('You may lose your data if you refresh now');
+  subscribeToNativeNavigation($event: any) {
+    console.log('close window/tab processing starts');
+    if (confirm('You data is loading. Are you sure you want to leave?')) {
+      this.saveAndNextAnswers(false);
 
-    if (this.timerSource) {
-      this.timerSource.unsubscribe();
-      this.timerSource = null;
+      console.log('You may lose your data if you refresh now');
+
+      if (this.timerSource) {
+        this.timerSource.unsubscribe();
+        this.timerSource = null;
+      }
+      $event.returnValue = 'Your changes will be lost.';
+      $event.preventDefault();
     }
-    event.returnValue = 'Your changes will be lost.';
-    return event;
+    
   }
 
   initialize() {
