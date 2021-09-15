@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
@@ -88,7 +88,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
 
   selectedTabIndex = new FormControl(0);
 
-  nativeNavigationSubscriber;
+  // nativeNavigationSubscriber;
 
   isSectionChangeTriggered = false;
 
@@ -115,7 +115,6 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscribeToNativeNavigation();
 
     this.elem = this.document.documentElement;
 
@@ -134,25 +133,22 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     }
     this.initialize();
   }
+  @HostListener('window:beforeunload', ['$event'])
+  subscribeToNativeNavigation($event: any) {
+    console.log('close window/tab processing starts');
+    if (confirm('You data is loading. Are you sure you want to leave?')) {
+      this.saveAndNextAnswers(false);
 
-  private subscribeToNativeNavigation() {
-    this.nativeNavigationSubscriber = fromEvent(window, 'beforeunload')
-      .pipe(filter(() => true))
-      .subscribe((e) => {
-        this.saveAndNextAnswers(false);
-        console.log('You may lose your data if you refresh now');
+      console.log('You may lose your data if you refresh now');
 
-        if (this.timerSource) {
-          this.timerSource.unsubscribe();
-          this.timerSource = null;
-        }
-
-        if (this.nativeNavigationSubscriber) {
-          this.nativeNavigationSubscriber.unsubscribe();
-          this.nativeNavigationSubscriber = null;
-        }
-        return;
-      });
+      if (this.timerSource) {
+        this.timerSource.unsubscribe();
+        this.timerSource = null;
+      }
+      $event.returnValue = 'Your changes will be lost.';
+      $event.preventDefault();
+    }
+    
   }
 
   initialize() {
@@ -214,9 +210,9 @@ export class LiveTestComponent implements OnInit, OnDestroy {
             });
 
             if (this.isSectionTimerTest) {
-              let sectionTimeSpendMap = new Map<string, number>();
+              const sectionTimeSpendMap = new Map<string, number>();
               this.submissionData.sections.forEach((section) => {
-                let timeLapsed = section.answers
+                const timeLapsed = section.answers
                   .map((x) => x.timeElapsedInSec)
                   .reduce((a, b) => a + b);
                 sectionTimeSpendMap.set(section.sectionId, timeLapsed);
@@ -259,7 +255,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
           },
           (error) => {
             console.log(
-              "Error in fetching user submitted data => Reasons can be: 1)This user doesn't has any submitted data"
+              'Error in fetching user submitted data => Reasons can be: 1)This user doesn\'t has any submitted data'
             );
             this.currentSelectedSection = this.testData.sections[0];
             this.sectionsWithPapers = this.sectionQuestionMap.get(
@@ -440,8 +436,8 @@ export class LiveTestComponent implements OnInit, OnDestroy {
 
   getSelectedOption() {
     const optionsSelectedArray = [];
-    if(this.currentSelectedQuestion.type == 'MCQ'){
-      if(this.singleOptionsSelected){
+    if (this.currentSelectedQuestion.type == 'MCQ'){
+      if (this.singleOptionsSelected){
         optionsSelectedArray.push(String(this.singleOptionsSelected.key));
         return optionsSelectedArray;
       }
@@ -483,7 +479,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
       .getQuestionbyQuestionId(this.currentSelectedSection.questions[index]?.id)
       .subscribe(
         (question) => {
-          if(!this.isSectionTimerTest &&  this.questionNumber == this.sectionsWithPapers.length - 1 && this.selectedTabIndexValue == this.sectionQuestionMap.size - 1){
+          if (!this.isSectionTimerTest &&  this.questionNumber == this.sectionsWithPapers.length - 1 && this.selectedTabIndexValue == this.sectionQuestionMap.size - 1){
             this.isFullLengthLastSection = true;
           } else {
             this.isFullLengthLastSection = false;
@@ -574,7 +570,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.log(
-            "Error in fetching user submitted data => Reasons can be: 1)This user doesn't has any submitted data 2). Internet connectivity issue"
+            'Error in fetching user submitted data => Reasons can be: 1)This user doesn\'t has any submitted data 2). Internet connectivity issue'
           );
           this.timeSeconds = this.convertminutestoseconds(
             this.currentSelectedSection.durationInMinutes
@@ -637,7 +633,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
         section.answers.map((ans) => {
           if (ans?.questionId === this.currentSelectedQuestion?.id.questionId) {
             const selectedOptions = ans.selectedOptions;
-              if(this.currentSelectedQuestion.type == 'MCQ'){
+            if (this.currentSelectedQuestion.type === 'MCQ'){
                   this.singleOptionsSelected = this.currentSelectedQuestion.options.find(x => selectedOptions.includes(x.key));
               } else {
                 this.optionsSelected = [];
@@ -709,7 +705,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
           }
         );
       if (this.isTestLive) {
-        if(!this.isSectionTimerTest &&  this.questionNumber == this.sectionsWithPapers.length - 1 && this.selectedTabIndexValue == this.sectionQuestionMap.size - 1){
+        if (!this.isSectionTimerTest &&  this.questionNumber == this.sectionsWithPapers.length - 1 && this.selectedTabIndexValue == this.sectionQuestionMap.size - 1){
           this.isFullLengthLastSection = true;
         } else {
           this.isFullLengthLastSection = false;
@@ -753,14 +749,16 @@ export class LiveTestComponent implements OnInit, OnDestroy {
               this.toasterPostion
             );
           }
-          if(!this.isSectionTimerTest &&  this.questionNumber == this.sectionsWithPapers.length - 1 && this.selectedTabIndexValue == this.sectionQuestionMap.size - 1){
+          if (!this.isSectionTimerTest &&
+            this.questionNumber === this.sectionsWithPapers.length - 1
+            && this.selectedTabIndexValue === this.sectionQuestionMap.size - 1){
             this.isFullLengthLastSection = true;
           } else {
             this.isFullLengthLastSection = false;
           }
 
           if (
-            this.questionNumber == this.sectionsWithPapers.length - 1 &&
+            this.questionNumber === this.sectionsWithPapers.length - 1 &&
             this.isSectionTimerTest
           ) {
             this.isLastSectionQuestion = true;
@@ -818,7 +816,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
               },
               (error) => {
                 console.log(
-                  "Error in fetching user submitted data => Reasons can be: 1)This user doesn't has any submitted data 2). Internet connectivity issue"
+                  'Error in fetching user submitted data => Reasons can be: 1)This user doesn\'t has any submitted data 2). Internet connectivity issue'
                 );
               }
             );
@@ -957,7 +955,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   }
 
   close() {
-    //this.dialogRef.close();
+    // this.dialogRef.close();
     this.timerSource.unsubscribe();
   }
 
@@ -965,49 +963,14 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     this.location.back();
   }
 
-  openFullscreen() {
-    if (this.elem.requestFullscreen) {
-      this.elem.requestFullscreen();
-    } else if (this.elem.mozRequestFullScreen) {
-      /* Firefox */
-      this.elem.mozRequestFullScreen();
-    } else if (this.elem.webkitRequestFullscreen) {
-      /* Chrome, Safari and Opera */
-      this.elem.webkitRequestFullscreen();
-    } else if (this.elem.msRequestFullscreen) {
-      /* IE/Edge */
-      this.elem.msRequestFullscreen();
-    }
-  }
-
-  closeFullscreen() {
-    if (this.document.exitFullscreen) {
-      this.document.exitFullscreen();
-    } else if (this.document.mozCancelFullScreen) {
-      /* Firefox */
-      this.document.mozCancelFullScreen();
-    } else if (this.document.webkitExitFullscreen) {
-      /* Chrome, Safari and Opera */
-      this.document.webkitExitFullscreen();
-    } else if (this.document.msExitFullscreen) {
-      /* IE/Edge */
-      this.document.msExitFullscreen();
-    }
-  }
-
   ngOnDestroy() {
-    if(!this.isTestSubmittedSuccessFully){
+    if (!this.isTestSubmittedSuccessFully){
       this.saveAndNextAnswers(false);
     }
 
     if (this.timerSource) {
       this.timerSource.unsubscribe();
       this.timerSource = null;
-    }
-
-    if (this.nativeNavigationSubscriber) {
-      this.nativeNavigationSubscriber.unsubscribe();
-      this.nativeNavigationSubscriber = null;
     }
   }
 
