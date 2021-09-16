@@ -38,6 +38,12 @@
       <td mat-footer-cell *matFooterCellDef class="number-cell">{{getAccuracy(getSectionalTotalCount('correct'),getSectionalTotalCount('incorrect'))}}</td>
     </ng-container>
 
+    <ng-container matColumnDef="avgtime">
+      <th  class="custom-mat-header-th number-cell" mat-header-cell *matHeaderCellDef> Avg Time </th>
+      <td class="section-row-cell-class number-cell" mat-cell *matCellDef="let element">{{element.time | minuteSeconds}} </td>
+      <td mat-footer-cell *matFooterCellDef class="number-cell">{{averageTime | minuteSeconds }}</td>
+    </ng-container>
+
     <ng-container matColumnDef="percentile">
       <th  class="custom-mat-header-th number-cell" mat-header-cell *matHeaderCellDef> Percentile </th>
       <td class="section-row-cell-class number-cell" mat-cell *matCellDef="let element"> {{element.percentileScore}} </td>
