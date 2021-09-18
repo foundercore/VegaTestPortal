@@ -19,6 +19,10 @@ export class SectionWiseSummaryComponent implements OnInit {
 
   difficultyDataSource = [];
 
+  sectionDifficultyDataSource = [];
+
+  timeAnalysisDataSource = [];
+
   sectionLevelSummaryDisplayedColumns: string[] = [
     'name',
     'correct',
@@ -41,9 +45,39 @@ export class SectionWiseSummaryComponent implements OnInit {
     'marks',
   ];
 
-  averageTime : number;
+  sectionWiseDifficultyCol: string[] = [
+    'name',
+    'easyCrctCount',
+    'easyIncrctCount',
+    'easySkippedCount',
+    'mediumCorrectCount',
+    'mediumIncorrectCount',
+    'mediumSkippedCount',
+    'hardCorrectCount',
+    'hardIncorrectCount',
+    'hardSkippedCount',
+  ];
+
+  timeAnalysisColumn: string[] = [
+    'name',
+    'easyCorrecttime',
+    'easyIncorrectTime',
+    'easySkippedTime',
+    'mediumCorrectTime',
+    'mediumIncorrectTime',
+    'mediumSkippedTime',
+    'hardCorrectTime',
+    'hardIncorrectTime',
+    'hardSkippedTime',
+  ];
+
+  averageTime: number;
 
   @Input() summaryData = new EventEmitter();
+
+  @Input() difficultyWiseStats = new EventEmitter();
+
+  @Input() timeAnalysisStats = new EventEmitter();
 
   @ViewChild('sectionTable') sectionTable: MatTable<any>;
 
@@ -52,6 +86,14 @@ export class SectionWiseSummaryComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    this.difficultyWiseStats.subscribe((resp) => {
+      this.sectionDifficultyDataSource = resp;
+    });
+
+    this.timeAnalysisStats.subscribe((resp) => {
+      this.timeAnalysisDataSource = resp;
+    });
+
     this.summaryData.subscribe((resp) => {
       if (resp.controlParam) {
         this.isPercentile = resp.controlParam.percentile;
@@ -68,12 +110,14 @@ export class SectionWiseSummaryComponent implements OnInit {
           incorrect: section.metric.incorrect,
           skipped: section.metric.skipped,
           marks: section.metric.marksReceived,
-          time : section.metric.totalTimeInSec,
+          time: section.metric.totalTimeInSec,
           percentileScore: section.metric.percentileScore,
         });
       });
 
-      this.averageTime = Math.round((resp.metric.totalTimeInSec/resp.sections.length));
+      this.averageTime = Math.round(
+        resp.metric.totalTimeInSec / resp.sections.length
+      );
 
       this.sectionTable.renderRows();
 
@@ -124,13 +168,12 @@ export class SectionWiseSummaryComponent implements OnInit {
     } else return 0;
   }
 
-  getAccuracy(correct,incorrect){
-    const attempted  = correct + incorrect;
-    if(correct == 0){
+  getAccuracy(correct, incorrect) {
+    const attempted = correct + incorrect;
+    if (correct == 0) {
       return 0;
-    }
-    else{
-      return Math.round((correct/attempted)*100)
+    } else {
+      return Math.round((correct / attempted) * 100);
     }
   }
 }

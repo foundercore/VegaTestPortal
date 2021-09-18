@@ -21,7 +21,9 @@ import { TestConfigService } from '../../assignments/services/test-config-servic
 import { BreadcrumbNavService } from '../../layout/breadcrumb/breadcrumb-nav.service';
 import {
   Metric,
+  SectDifficultyStatsModel,
   StudentReportModel,
+  TimeAnalysisStatsModel,
 } from 'src/app/models/reports/student-report-model';
 import { FilterModel } from '../solution-filter/solution-filter.component';
 import { MathService } from 'src/app/shared/directives/math/math.service';
@@ -45,6 +47,10 @@ export class StudentReportComponent implements OnInit {
   passageMap = new Map();
 
   solutionSectionWiseStats: StudentReportModel[] = [];
+
+  difficultyWiseStats: SectDifficultyStatsModel[] = [];
+
+  timeDistributionStats : TimeAnalysisStatsModel[] = [];
 
   solutionSectionWiseSelectedStats = new EventEmitter<StudentReportModel>();
 
@@ -81,6 +87,10 @@ export class StudentReportComponent implements OnInit {
   metrics;
 
   summaryData = new EventEmitter();
+
+  difficultyStats = new EventEmitter();
+
+  timeStats = new EventEmitter();
 
   currentSelection = 'Section Level';
 
@@ -149,7 +159,11 @@ export class StudentReportComponent implements OnInit {
             this.getTestConfig(res.testId, res);
             this.fetchedWholeAssignmentResult.sections.forEach((section) => {
               section.answers.sort((a, b) => {
-                if ((a.sequenceNumber == undefined && b.sequenceNumber == undefined) || (a.sequenceNumber == 0 && b.sequenceNumber == 0)) {
+                if (
+                  (a.sequenceNumber == undefined &&
+                    b.sequenceNumber == undefined) ||
+                  (a.sequenceNumber == 0 && b.sequenceNumber == 0)
+                ) {
                   const passage1 = a.passageContent ? a.passageContent : '';
 
                   const passage2 = b.passageContent ? b.passageContent : '';
@@ -161,10 +175,9 @@ export class StudentReportComponent implements OnInit {
                     : passageName1 > passageName2
                     ? 1
                     : 0;
-                }else {
+                } else {
                   return a.sequenceNumber < b.sequenceNumber ? -1 : 1;
                 }
-
               });
             });
             this.getSectionWiseStats(this.fetchedWholeAssignmentResult);
@@ -188,6 +201,8 @@ export class StudentReportComponent implements OnInit {
               this.solutionSectionSelection = this.solutionSectionArray[0];
               this.solutionSectionSelectedIndex = 0;
             }
+            this.getSecDifficultyStats(res.sections);
+            this.getTimeDistributionAnalysis(res.sections);
             this.breadcrumbNavService.pushOnClickCrumb({ label: res.testName });
             this.ref.detectChanges();
             this.createAssignmentChartData(res.summary.metric);
@@ -260,6 +275,149 @@ export class StudentReportComponent implements OnInit {
     } else {
       this.currentSolutionSelection = filterMode;
     }
+  }
+
+  getTimeDistributionAnalysis(sections) {
+    sections.forEach((section) => {
+      var x = new TimeAnalysisStatsModel();
+      var easyCorrectTime = 0;
+      var easySkippedTime = 0;
+      var easyIncorrectTime = 0;
+      var mediumCorrectTime = 0;
+      var mediumIncorrectTime = 0;
+      var mediumSkippedTime = 0;
+      var hardCorrectTime = 0;
+      var hardIncorrectTime = 0;
+      var hardSkippedTime = 0;
+
+      section.answers.forEach((answers) => {
+        if (answers.difficultyLevel == 'EASY') {
+          if (answers.answerStatus == 'CORRECT') {
+            easyCorrectTime = easyCorrectTime + answers.timeElapsedInSec;
+          } else if (answers.answerStatus == 'INCORRECT') {
+            easyIncorrectTime = easyIncorrectTime + answers.timeElapsedInSec;
+          } else {
+            easySkippedTime = easySkippedTime + answers.timeElapsedInSec;
+          }
+        }
+        if (answers.difficultyLevel == 'MEDIUM') {
+          if (answers.answerStatus == 'CORRECT') {
+            mediumCorrectTime = mediumCorrectTime + answers.timeElapsedInSec;
+          } else if (answers.answerStatus == 'INCORRECT') {
+            mediumIncorrectTime =
+              mediumIncorrectTime + answers.timeElapsedInSec;
+          } else {
+            mediumSkippedTime = mediumSkippedTime + answers.timeElapsedInSec;
+          }
+        }
+        if (answers.difficultyLevel == 'HARD') {
+          if (answers.answerStatus == 'CORRECT') {
+            hardCorrectTime = hardCorrectTime + answers.timeElapsedInSec;
+          } else if (answers.answerStatus == 'INCORRECT') {
+            hardIncorrectTime = hardIncorrectTime + answers.timeElapsedInSec;
+          } else {
+            hardSkippedTime = hardSkippedTime + answers.timeElapsedInSec;
+          }
+        }
+      });
+
+      x.name = section.sectionName;
+      x.easyCorrectTime = easyCorrectTime;
+      x.easyIncorrectTime = easyIncorrectTime;
+      x.easySkippedTime = easySkippedTime;
+      x.mediumCorrectTime = mediumCorrectTime;
+      x.mediumIncorrectTime = mediumIncorrectTime;
+      x.mediumSkippedTime = mediumSkippedTime;
+      x.hardCorrectTime = hardCorrectTime;
+      x.hardIncorrectTime = hardIncorrectTime;
+      x.hardSkippedTime = hardSkippedTime;
+      this.timeDistributionStats.push(x);
+    });
+    this.timeStats.emit(this.timeDistributionStats);
+  }
+
+  getSecDifficultyStats(sections) {
+    sections.forEach((section) => {
+      var x = new SectDifficultyStatsModel();
+      var easy = 0;
+      var easyTime = 0;
+      var easyCorrect = 0;
+      var easySkipped = 0;
+      var easyIncorrect = 0;
+      var medium = 0;
+      var mediumTime = 0;
+      var mediumCorrect = 0;
+      var mediumIncorrect = 0;
+      var mediumSkipped = 0;
+      var hard = 0;
+      var hardTime = 0;
+      var hardCorrect = 0;
+      var hardIncorrect = 0;
+      var hardSkipped = 0;
+      var veryHard = 0;
+      var veryHardTime = 0;
+
+      section.answers.forEach((answers) => {
+        if (answers.difficultyLevel == 'EASY') {
+          easy = easy + 1;
+          easyTime = easyTime + answers.timeElapsedInSec;
+          if (answers.answerStatus == 'CORRECT') {
+            easyCorrect = easyCorrect + 1;
+          } else if (answers.answerStatus == 'INCORRECT') {
+            easyIncorrect = easyIncorrect + 1;
+          } else {
+            easySkipped = easySkipped + 1;
+          }
+        }
+        if (answers.difficultyLevel == 'MEDIUM') {
+          medium = medium + 1;
+          mediumTime = mediumTime + answers.timeElapsedInSec;
+          if (answers.answerStatus == 'CORRECT') {
+            mediumCorrect = mediumCorrect + 1;
+          } else if (answers.answerStatus == 'INCORRECT') {
+            mediumIncorrect = mediumIncorrect + 1;
+          } else {
+            mediumSkipped = mediumSkipped + 1;
+          }
+        }
+        if (answers.difficultyLevel == 'HARD') {
+          hard = hard + 1;
+          hardTime = hardTime + answers.timeElapsedInSec;
+          if (answers.answerStatus == 'CORRECT') {
+            hardCorrect = hardCorrect + 1;
+          } else if (answers.answerStatus == 'INCORRECT') {
+            hardIncorrect = hardIncorrect + 1;
+          } else {
+            hardSkipped = hardSkipped + 1;
+          }
+        }
+        if (answers.difficultyLevel == 'VERYHARD') {
+          veryHard = veryHard + 1;
+          veryHardTime = veryHardTime + answers.timeElapsedInSec;
+        }
+      });
+
+      x.name = section.sectionName;
+      x.easy = easy;
+      x.easyTime = easyTime;
+      x.medium = medium;
+      x.mediumTime = mediumTime;
+      x.hard = hard;
+      x.hardTime = hardTime;
+      x.veryHard = veryHard;
+      x.veryHardTime = veryHardTime;
+      x.easyCorrect = easyCorrect;
+      x.easySkipped = easySkipped;
+      x.easyIncorrect = easyIncorrect;
+      x.mediumCorrect = mediumCorrect;
+      x.mediumIncorrect = mediumIncorrect;
+      x.mediumSkipped = mediumSkipped;
+      x.hardCorrect = hardCorrect;
+      x.hardIncorrect = hardIncorrect;
+      x.hardSkipped = hardSkipped;
+      this.difficultyWiseStats.push(x);
+    });
+    this.difficultyStats.emit(this.difficultyWiseStats);
   }
 
   getSectionWiseStats(fetchedWholeAssignmentResult) {

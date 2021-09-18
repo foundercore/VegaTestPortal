@@ -22,7 +22,7 @@
     </ng-template>
     <div class="tab-body">
       <app-section-wise-summary
-        [summaryData]="summaryData"
+        [summaryData]="summaryData" [difficultyWiseStats] = "difficultyStats" [timeAnalysisStats] = "timeStats"
       ></app-section-wise-summary>
     </div>
   </mat-tab>
@@ -89,15 +89,15 @@
                       {{ "STUDENT_SOLUTION_TAG.PASSAGE" | translate }}
                     </div>
                     <button
-                      style="font-family: cursive"
+                      style="font-family: Verdana;padding: 0px;"
                       mat-button
                       color="primary"
                       (click)="showPassage(answer.questionId)"
                     >
                       {{
                         passageMap.get(answer.questionId)
-                          ? "read more >>"
-                          : " << read less"
+                          ? "read more"
+                          : "read less"
                       }}
                     </button>
                   </div>
@@ -208,15 +208,15 @@
                     disabled
                   ></div>
                   <button
-                    style="font-family: cursive"
+                    style="font-family: Verdana;padding: 0px;"
                     mat-button
                     color="primary"
                     (click)="showExplanation(answer.questionId)"
                   >
                     {{
                       explanationMap.get(answer.questionId)
-                        ? "read more >>"
-                        : " << read less"
+                        ? "read more"
+                        : "read less"
                     }}
                   </button>
                 </div>
