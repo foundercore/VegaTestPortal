@@ -1,7 +1,19 @@
 <div class="container-fluid">
-  <div style=" position: absolute;right: 20px; top: 90px;">
-    <button mat-raised-button  class="add-btn mx-2" (click)="findInstitute()">
-      <span class="ml-2">Find Institute</span>
+  <div style=" position: absolute;
+  left: 50%;
+  width: 50%;
+  top: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;">
+    <div>
+      <span style="margin-right: 100px;font-weight: bold;">Total Mark : {{testResultObj.totalMarks}} </span>
+    </div>
+    <div>
+      <span style ="font-weight: bold;">Recieved Mark : {{testResultObj.marksReceived}} </span>
+    </div>
+    <button [disabled]="!controlparms?.percentile" mat-raised-button  class="add-btn mx-2" (click)="findInstitute()">
+      <span  class="ml-2">Find Institute</span>
     </button>
   </div>
   <mat-accordion >
@@ -100,8 +112,8 @@
                         <mat-checkbox style="margin-right: 15px;"
                           [disabled] = "sectionQuestion?.answerStatus == 'CORRECT'"
                           (click)="$event.stopPropagation()"
-                          (change)="$event ? selection.toggle(sectionQuestion) : null"
-                          [checked]="selection.isSelected(sectionQuestion)">
+                          (change)="$event ? selectionList[section.sectionId].toggle(sectionQuestion) : null"
+                          [checked]="selectionList[section.sectionId].isSelected(sectionQuestion)">
                         </mat-checkbox>
                       </div>
                     </div>

@@ -13,6 +13,7 @@ import { TestConfigService } from 'src/app/views/assignments/services/test-confi
 import { BreadcrumbNavService } from 'src/app/views/layout/breadcrumb/breadcrumb-nav.service';
 import { interval, forkJoin, of, Observable, combineLatest } from 'rxjs';
 import { TestAnalysisQuestionPreviewComponent } from '../test-analysis-question-preview/test-analysis-question-preview.component';
+import { TestAnalysisInstitutelistDialogComponent } from '../test-analysis-institutelist-dialog/test-analysis-institutelist-dialog.component';
 
 @Component({
   selector: 'app-test-analysis-grid',
@@ -24,11 +25,11 @@ export class TestAnalysisGridComponent implements OnInit {
   modelsections: any[] = [];
   summarySections : any  = {};
   totalQuestionListObj : any  = {};
-
+  testResultObj : any = {};
   testId: string = '';
   controlparms: TestConfigurationVM;
 
-  selection = new SelectionModel<QuestionModel>(true, []);
+  selectionList = [];
 
   sectionId: string = '';
   searchText: string = '';
@@ -71,9 +72,12 @@ export class TestAnalysisGridComponent implements OnInit {
         this.testConfigService.getQuestionPaper(this.testId)
       ]).subscribe(resp => {
           console.log(resp);
+          this.controlparms = resp[1]?.controlParam;
+          this.testResultObj = resp[0]?.summary.metric;
           this.modelsections = resp[0]?.sections;
           resp[0]?.summary.sections.forEach(section => {
             this.summarySections[section.sectionId] = section.metric;
+            this.selectionList[section.sectionId] = new SelectionModel<QuestionModel>(true, []);
           });
           console.log(this.summarySections)
           this.modelsections.forEach(section => {
@@ -127,7 +131,34 @@ export class TestAnalysisGridComponent implements OnInit {
   }
 
   findInstitute(){
+    let reqObj = {
+      sectionLevelMark:{
 
+      },
+      testId:"",
+      testMark:0
+    }
+    let totalTestMark = 0;
+    for (let [key, value] of Object.entries(this.selectionList)) {
+      let analysisMark = this.summarySections[key].marksReceived;
+      value.selected.forEach(question => {
+        analysisMark += this.totalQuestionListObj[question.questionId].positiveMark + Math.abs(this.totalQuestionListObj[question.questionId].negativeMark);
+      });
+      reqObj.sectionLevelMark[`${key}`] = analysisMark;
+      totalTestMark += analysisMark;
+    }
+    reqObj.testId = this.testId;
+    reqObj.testMark = totalTestMark;
+    console.log(reqObj);
+    this.testConfigService.getStudentTestAnalysis(this.testId,reqObj).subscribe(resp => {
+      this.dialog.open(TestAnalysisInstitutelistDialogComponent, {
+        data: {
+          institute : resp,
+          markReceived:totalTestMark,
+          totalTestMark:this.testResultObj.totalMarks
+        }
+      });
+    })
   }
 }
 

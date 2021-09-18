@@ -10,7 +10,7 @@
   padding-left: 0.5rem;
 }
 
-.add-btn:hover {
+.add-btn:hover:not([disabled]) {
   background-color: #5bc4e1;
   color: #fff;
 }

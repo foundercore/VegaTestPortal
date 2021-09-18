@@ -57,7 +57,7 @@ export class TestconfigComponent implements OnInit {
             percentile:res.controlParam.percentile,
             shuffleQuestions:res.controlParam.shuffleQuestions,
             sectionalTest:res.controlParam.sectionalTest,
-            allowInstituteAnalysisMetadata : res.controlParam.allowInstituteAnalysisMetadata
+            allowInstituteAnalysisMetadata : res.controlParam.allowInstituteAnalysis
           })
           if(res.controlParam.instituteAnalysisMetadata){
               this.instituteFileName = res.controlParam.instituteAnalysisMetadata.fileName
@@ -84,7 +84,7 @@ export class TestconfigComponent implements OnInit {
         percentile:this.configurationFormControl?.controls.percentile.value,
         shuffleQuestions:this.configurationFormControl?.controls.shuffleQuestions.value,
         sectionalTest: this.configurationFormControl?.controls.sectionalTest.value,
-        allowInstituteAnalysisMetadata : this.configurationFormControl?.controls.allowInstituteAnalysisMetadata.value
+        allowInstituteAnalysis : this.configurationFormControl?.controls.allowInstituteAnalysisMetadata.value
       },this._data?.testId),];
       if(this.file){
         subscriptionList.push( this.testConfigService.savePercentileFile(this.file,this._data?.testId));

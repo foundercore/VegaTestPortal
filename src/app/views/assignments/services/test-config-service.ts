@@ -214,4 +214,11 @@ export class TestConfigService extends BaseService {
     questionList.map((x,index) => x.sequenceNumber = index);
     return this.http.post<any>(url, questionList, this.headers);
   }
+
+  getStudentTestAnalysis(test_id: string,analysisObj){
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/report/${test_id}/students-test-analysis`;
+    return this.http.post<any>(Url,analysisObj,this.headers);
+  }
+
+
 }

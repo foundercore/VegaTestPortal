@@ -7,6 +7,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { CommonComponentModule } from '../../common-component/common-component.module';
 import { TestAnalysisGridComponent } from './test-analysis-grid/test-analysis-grid.component';
 import { TestAnalysisQuestionPreviewComponent } from './test-analysis-question-preview/test-analysis-question-preview.component';
+import { TestAnalysisInstitutelistDialogComponent } from './test-analysis-institutelist-dialog/test-analysis-institutelist-dialog.component';
 
 
 
@@ -29,7 +30,8 @@ const routes: Routes = [
   declarations: [
     TestAnalysisComponent,
     TestAnalysisGridComponent,
-    TestAnalysisQuestionPreviewComponent
+    TestAnalysisQuestionPreviewComponent,
+    TestAnalysisInstitutelistDialogComponent
   ],
   imports: [
     CommonModule,
