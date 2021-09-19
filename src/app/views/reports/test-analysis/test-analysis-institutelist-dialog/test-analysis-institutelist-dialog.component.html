@@ -1,0 +1,14 @@
+
+<div style="width: 500px;">
+  <div style="display: flex;     margin-bottom: 20px;   justify-content: space-between;">
+    <h4>Total Mark: {{data.totalTestMark}}</h4>
+    <h4>Received Mark: {{data.markReceived}}</h4>
+  </div>
+  <div>
+    <h4>Institute List</h4>
+    <mat-list role="institutelist">
+      <mat-list-item *ngFor="let institute of data.institute.instituesSelectedIn">{{institute}}</mat-list-item>
+    </mat-list>
+  </div>
+</div>
+

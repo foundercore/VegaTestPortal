@@ -70,8 +70,20 @@ export class TestConfigService extends BaseService {
 
   savePercentileFile(file: any,paperId: string): Observable<any> {
     const fd = new FormData();
-    fd.append('file', file!.data);
+    fd.append('file', file?.data);
     const url = `${this.BASE_SERVICE_URL}/api/v1/test/config/update-percentile-scorecard?paperId=${paperId}`;
+
+    const req = new HttpRequest('POST', url, fd, {
+      reportProgress: true,
+    });
+    return this.http.request(req);
+  }
+
+
+  saveInstituteAnalysisFile(file: any,paperId: string): Observable<any> {
+    const fd = new FormData();
+    fd.append('file', file?.data);
+    const url = `${this.BASE_SERVICE_URL}/api/v1/test/config/update-institute-analysis-file?paperId=${paperId}`;
 
     const req = new HttpRequest('POST', url, fd, {
       reportProgress: true,
@@ -202,4 +214,11 @@ export class TestConfigService extends BaseService {
     questionList.map((x,index) => x.sequenceNumber = index);
     return this.http.post<any>(url, questionList, this.headers);
   }
+
+  getStudentTestAnalysis(test_id: string,analysisObj){
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/report/${test_id}/students-test-analysis`;
+    return this.http.post<any>(Url,analysisObj,this.headers);
+  }
+
+
 }
