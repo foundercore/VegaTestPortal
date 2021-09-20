@@ -148,7 +148,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
       $event.returnValue = 'Your changes will be lost.';
       $event.preventDefault();
     }
-    
+
   }
 
   initialize() {
@@ -319,6 +319,15 @@ export class LiveTestComponent implements OnInit, OnDestroy {
           this.selectedTabIndex.setValue(this.selectedTabIndex.value + 1);
         });
       } else if (leftSecs == 0) {
+        this.timerSource.unsubscribe();
+        Swal.fire({
+          icon: 'success',
+          title: 'Test Over!!',
+          confirmButtonText: 'Ok',
+        }).finally(() => {
+          this.submitAssessment();
+        });
+      } else {
         this.timerSource.unsubscribe();
         Swal.fire({
           icon: 'success',
