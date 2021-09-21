@@ -4,7 +4,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
-import { forkJoin, timer } from 'rxjs';
+import { forkJoin, Observable, Subscription, timer } from 'rxjs';
 import { MathService } from 'src/app/shared/directives/math/math.service';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import Swal from 'sweetalert2';
@@ -102,6 +102,11 @@ export class LiveTestComponent implements OnInit, OnDestroy {
 
   videoUrl: any;
 
+  onlineEvent: Observable<Event>;
+  offlineEvent: Observable<Event>;
+  subscriptions: Subscription[] = [];
+
+
   constructor(
     public dialog: MatDialog,
     private testConfigService: TestConfigService,
@@ -132,7 +137,30 @@ export class LiveTestComponent implements OnInit, OnDestroy {
       this.testId = this.testData.questionPaperId;
     }
     this.initialize();
+    this.checkInternetConnectivity();
   }
+
+  checkInternetConnectivity(){
+    this.onlineEvent = fromEvent(window, 'online');
+    this.offlineEvent = fromEvent(window, 'offline');
+
+    this.subscriptions.push(this.offlineEvent.subscribe(e => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Connection lost! You are not connected to internet!!',
+        confirmButtonText: 'Ok',
+      }).finally(() => {
+          this.subscriptions.forEach(x => x.unsubscribe());
+          this.close();
+          this.router
+            .navigate(['/home/dashboard'])
+            .then(() => console.log('Navigate to score card'))
+            .catch((err) => console.log('Error=> Navigate to score card=>', err));
+      });
+      console.log('Offline...');
+    }));
+  }
+
   @HostListener('window:beforeunload', ['$event'])
   subscribeToNativeNavigation($event: any) {
     console.log('close window/tab processing starts');
