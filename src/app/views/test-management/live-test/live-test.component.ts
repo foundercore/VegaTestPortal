@@ -172,19 +172,18 @@ export class LiveTestComponent implements OnInit, OnDestroy {
 
   @HostListener('window:beforeunload', ['$event'])
   subscribeToNativeNavigation($event: any) {
-    console.log('close window/tab processing starts');
+    // console.log('close window/tab processing starts');
+    $event.preventDefault();
+    this.saveAndNextAnswers(false);
     if (confirm('You data is loading. Are you sure you want to leave?')) {
-      this.saveAndNextAnswers(false);
-
       console.log('You may lose your data if you refresh now');
-
       if (this.timerSource) {
         this.timerSource.unsubscribe();
         this.timerSource = null;
       }
-      $event.returnValue = 'Your changes will be lost.';
-      $event.preventDefault();
     }
+    $event.returnValue = 'Your changes will be lost.';
+    return false;
   }
 
   initialize() {
@@ -682,7 +681,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
         section.answers.map((ans) => {
           if (ans?.questionId === this.currentSelectedQuestion?.id.questionId) {
             const selectedOptions = ans.selectedOptions;
-            if (this.currentSelectedQuestion.type === 'MCQ') {
+            if (this.currentSelectedQuestion.type === 'MCQ' && selectedOptions !== null) {
               this.singleOptionsSelected =
                 this.currentSelectedQuestion.options.find((x) =>
                   selectedOptions.includes(x.key)
