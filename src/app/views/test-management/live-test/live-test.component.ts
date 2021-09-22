@@ -687,6 +687,20 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     });
   }
 
+  getCurrentQuestionSubmissionData(){
+    let answer = null;
+    this.submissionData?.sections.map((section) => {
+      if (section.sectionId === this.currentSelectedSection.id) {
+        section.answers.map((ans) => {
+          if (ans?.questionId === this.currentSelectedQuestion?.id.questionId) {
+            answer = ans;
+          }
+        });
+      }
+    });
+    return answer;
+  }
+
   setOptionSelected(selected) {
     if (
       this.optionsSelected[selected] === true ||
@@ -769,7 +783,16 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     quesForMarkedAsReview.questionId =
       this.currentSelectedQuestion.id.questionId;
     quesForMarkedAsReview.sectionId = this.currentSelectedSection.id;
-    quesForMarkedAsReview.selectedOptions = this.getSelectedOption() as any;
+    if(this.submissionData){
+      let previousResponse = this.getCurrentQuestionSubmissionData();
+      if(previousResponse){
+        quesForMarkedAsReview.selectedOptions = previousResponse.selectedOptions;
+      } else {
+        quesForMarkedAsReview.selectedOptions = [];
+      }
+    } else {
+      quesForMarkedAsReview.selectedOptions = [];
+    }
     quesForMarkedAsReview.timeElapsedInSec = this.timeElapsedInSecond;
 
     await this.testConfigService
