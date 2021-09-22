@@ -28,6 +28,7 @@ import { QuestionModel } from 'src/app/models/questions/question-model';
 import { SearchQuestion } from 'src/app/models/questions/search-question-model';
 import { QuestionManagementService } from 'src/app/services/question-management/question-management.service';
 import { QuestionsViewModel } from '../../models/questionsVM';
+import { SearchQuestionPaperVM } from '../../models/searchQuestionPaperVM';
 //import { SearchQuestionPaperVM } from '../../models/searchQuestionPaperVM';
 import { TestConfigService } from '../../services/test-config-service';
 import { AssessmentEditorComponent } from '../assessment-editor/assessment-editor.component';
@@ -77,6 +78,9 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
   isLoadingResults = true;
   isRateLimitReached = false;
   searchText: string = '';
+  questionPaperList = {};
+  Object = Object;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<QuestionslistComponent>,
@@ -100,7 +104,16 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const testSearchObj: SearchQuestionPaperVM = new SearchQuestionPaperVM ("1",1000);
+
+    this.testConfigService.getAllQuestionPaper(testSearchObj).subscribe(resp => {
+        resp.tests.forEach(element => {
+          this.questionPaperList[element.questionPaperId] = element.name;
+        });
+    })
+
+  }
   ngAfterViewInit() {
     this.getQuestions();
   }
@@ -338,7 +351,7 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     );
     this.totalNumberOfRecords = this.paginator.pageSize;
 
-    // exlude questions which already exists in the test 
+    // exlude questions which already exists in the test
     searchQuestion.testIdToBeExcluded = this._data.testId;
     if (this.isFilterApply) {
       if (
