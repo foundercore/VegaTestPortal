@@ -1,4 +1,7 @@
 <div class="summary-tab">
+  <div class="table-heading">
+    <strong><mat-label>Section Summary</mat-label></strong>
+  </div>
   <table
     #sectionTable
     mat-table
@@ -176,6 +179,9 @@
     ></tr>
   </table>
 
+  <div class="table-heading">
+    <strong><mat-label>Difficulty Analysis</mat-label></strong>
+  </div>
   <table
     #diffiultylevelTable
     mat-table
@@ -377,6 +383,9 @@
     ></tr>
   </table>
 
+  <div class="table-heading">
+    <strong><mat-label>Question Analysis</mat-label></strong>
+  </div>
   <table
     #sectionDifficultyTable
     mat-table
@@ -569,6 +578,9 @@
     <tr mat-footer-row *matFooterRowDef="sectionWiseDifficultyCol"></tr>
   </table>
 
+  <div class="table-heading">
+    <strong><mat-label>Time Distribution Analysis</mat-label></strong>
+  </div>
   <table
     #timeAnalysisTable
     mat-table
