@@ -17,6 +17,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { StackedVerticalBarChartComponent } from './charts/stacked-vertical-bar-chart/stacked-vertical-bar-chart.component';
 import { MathDirective } from './directives/math/math.directive';
 import { LoadingComponent } from './components/loading/loading.component';
+import { CustomToolTipComponent } from './directives/tooltip/custom-tool-tip/custom-tool-tip.component';
+import { ToolTipRendererDirective } from './directives/tooltip/tool-tip-renderer.directive';
 
 
 
@@ -32,7 +34,9 @@ import { LoadingComponent } from './components/loading/loading.component';
     MinuteSecondsPipe,
     FilterPipePipe,
     MathDirective,
-    LoadingComponent
+    LoadingComponent,
+    CustomToolTipComponent,
+    ToolTipRendererDirective
 
   ],
   imports: [
@@ -54,12 +58,14 @@ import { LoadingComponent } from './components/loading/loading.component';
     MinuteSecondsPipe,
     FilterPipePipe,
     MathDirective,
+    CustomToolTipComponent,
+    ToolTipRendererDirective,
 
     //Export module
     FormsModule,
     ReactiveFormsModule,
     AngularEditorModule,
-    LoadingComponent
+    LoadingComponent,
 
   ],
 })

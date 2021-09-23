@@ -28,6 +28,7 @@ import { QuestionModel } from 'src/app/models/questions/question-model';
 import { SearchQuestion } from 'src/app/models/questions/search-question-model';
 import { QuestionManagementService } from 'src/app/services/question-management/question-management.service';
 import { QuestionsViewModel } from '../../models/questionsVM';
+import { SearchQuestionPaperVM } from '../../models/searchQuestionPaperVM';
 //import { SearchQuestionPaperVM } from '../../models/searchQuestionPaperVM';
 import { TestConfigService } from '../../services/test-config-service';
 import { AssessmentEditorComponent } from '../assessment-editor/assessment-editor.component';
@@ -77,6 +78,8 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
   isLoadingResults = true;
   isRateLimitReached = false;
   searchText: string = '';
+
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<QuestionslistComponent>,
@@ -100,7 +103,9 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
+
   ngAfterViewInit() {
     this.getQuestions();
   }
@@ -227,7 +232,6 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
           model.skipMark = element.skipMark;
           this.quesmodel.push(model);
         });
-        //model.questions = this.quesmodel;
         this.testConfigService
           .updateQuestionPaperSectionMeta(
             this.quesmodel,
@@ -258,27 +262,6 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
       }
     }
   }
-
-  // searchtest() {
-  //   if (
-  //     this.searchText != '' &&
-  //     this.searchText != null &&
-  //     this.searchText != undefined &&
-  //     this.searchText.length > 3
-  //   ) {
-  //     this.questions = this.questions.filter((x) =>
-  //       x.name.includes(this.searchText)
-  //     );
-  //     this.dataSource = new MatTableDataSource(this.questions);
-  //     this.dataSource.sort = this.sort;
-  //     this.dataSource.paginator = this.paginator;
-  //   } else {
-  //     this.questions = this.questions2;
-  //     this.dataSource = new MatTableDataSource(this.questions);
-  //     this.dataSource.sort = this.sort;
-  //     this.dataSource.paginator = this.paginator;
-  //   }
-  // }
 
   applyFilter() {
     this.isFilterApply = true;
@@ -338,8 +321,10 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
     );
     this.totalNumberOfRecords = this.paginator.pageSize;
 
-    // exlude questions which already exists in the test 
+    // exlude questions which already exists in the test
     searchQuestion.testIdToBeExcluded = this._data.testId;
+    // include test associated details
+    searchQuestion.includeUsedTestDetails = true;
     if (this.isFilterApply) {
       if (
         this.filterGroup.controls.filterNameValue.value !== null &&

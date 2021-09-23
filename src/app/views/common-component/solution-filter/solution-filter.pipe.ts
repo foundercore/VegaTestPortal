@@ -15,19 +15,19 @@ export class SolutionFilterPipe implements PipeTransform {
     // kept, false will be filtered out
     let filterItems = items;
     if( filter?.filterData?.state != undefined && filter?.filterData?.state.length != 0)
-    filterItems = items.filter(item =>  filter.filterData.state.includes(item.answerStatus));
+    filterItems = filterItems.filter(item =>  filter.filterData.state.includes(item.answerStatus));
 
     if(filter?.filterData?.difficulty != undefined && filter?.filterData?.difficulty.length != 0 )
-    filterItems = items.filter(item =>   filter.filterData.difficulty.includes(item.difficultyLevel ));
+    filterItems = filterItems.filter(item =>   filter.filterData.difficulty.includes(item.difficultyLevel ));
 
     if( filter?.filterData?.subject != undefined  && filter?.filterData?.subject.length != 0)
-    filterItems = items.filter(item =>   filter.filterData.subject.includes(item.subject));
+    filterItems = filterItems.filter(item =>   filter.filterData.subject.includes(item.subject));
 
     if(filter?.filterData?.topic != undefined && filter?.filterData?.topic.length != 0 )
-    filterItems = items.filter(item =>   filter.filterData.topic.includes(item.topic));
+    filterItems = filterItems.filter(item =>   filter.filterData.topic.includes(item.topic));
 
     if(filter?.filterData?.subtopic != undefined  && filter?.filterData?.subtopic.length != 0 )
-    filterItems = items.filter(item =>  filter.filterData.subtopic.includes(item.subTopic));
+    filterItems = filterItems.filter(item =>  filter.filterData.subtopic.includes(item.subTopic));
 
 
 

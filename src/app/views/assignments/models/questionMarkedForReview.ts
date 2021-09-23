@@ -4,6 +4,6 @@ export class QuestionMarkedForReviewModel {
   markForReview: boolean;
   questionId: string;
   sectionId: string;
-  selectedOptions: [string];
+  selectedOptions: [];
   timeElapsedInSec: number;
 }

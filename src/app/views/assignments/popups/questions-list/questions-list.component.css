@@ -74,8 +74,8 @@ table {
 }
 
 .mat-column-select{
-  width:50px;
-  max-width: 50px;
+  width:75px;
+  max-width: 75px;
 }
 
 .question-list-grid{
@@ -164,12 +164,12 @@ tr.mat-row td {
   white-space: normal;
 }
 
-th.mat-header-cell:nth-child(2) { 
+th.mat-header-cell:nth-child(2) {
   padding-left: 5px !important;
 }
 
 tr.mat-row td:nth-child(2) {
-  padding-left: 5px; 
+  padding-left: 5px;
 }
 
 .scroll_box {
@@ -180,4 +180,13 @@ tr.mat-row td:nth-child(2) {
 .save__btn__box {
   padding-right: 20px;
   padding-bottom: 15px;
+}
+
+
+
+.custom-tooltip {
+  background-color: #232F34;
+  color: white;
+  padding: 16px;
+  border-radius: 5px;
 }
