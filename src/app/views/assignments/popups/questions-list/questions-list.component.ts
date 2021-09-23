@@ -78,8 +78,7 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
   isLoadingResults = true;
   isRateLimitReached = false;
   searchText: string = '';
-  questionPaperList = {};
-  Object = Object;
+
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
@@ -105,15 +104,8 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    const testSearchObj: SearchQuestionPaperVM = new SearchQuestionPaperVM ("1",1000);
-
-    this.testConfigService.getAllQuestionPaper(testSearchObj).subscribe(resp => {
-        resp.tests.forEach(element => {
-          this.questionPaperList[element.questionPaperId] = element.name;
-        });
-    })
-
   }
+
   ngAfterViewInit() {
     this.getQuestions();
   }
@@ -240,7 +232,6 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
           model.skipMark = element.skipMark;
           this.quesmodel.push(model);
         });
-        //model.questions = this.quesmodel;
         this.testConfigService
           .updateQuestionPaperSectionMeta(
             this.quesmodel,
@@ -271,27 +262,6 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
       }
     }
   }
-
-  // searchtest() {
-  //   if (
-  //     this.searchText != '' &&
-  //     this.searchText != null &&
-  //     this.searchText != undefined &&
-  //     this.searchText.length > 3
-  //   ) {
-  //     this.questions = this.questions.filter((x) =>
-  //       x.name.includes(this.searchText)
-  //     );
-  //     this.dataSource = new MatTableDataSource(this.questions);
-  //     this.dataSource.sort = this.sort;
-  //     this.dataSource.paginator = this.paginator;
-  //   } else {
-  //     this.questions = this.questions2;
-  //     this.dataSource = new MatTableDataSource(this.questions);
-  //     this.dataSource.sort = this.sort;
-  //     this.dataSource.paginator = this.paginator;
-  //   }
-  // }
 
   applyFilter() {
     this.isFilterApply = true;
@@ -353,6 +323,8 @@ export class QuestionslistComponent implements OnInit, AfterViewInit {
 
     // exlude questions which already exists in the test
     searchQuestion.testIdToBeExcluded = this._data.testId;
+    // include test associated details
+    searchQuestion.includeUsedTestDetails = true;
     if (this.isFilterApply) {
       if (
         this.filterGroup.controls.filterNameValue.value !== null &&

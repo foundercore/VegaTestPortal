@@ -162,12 +162,12 @@
                 </div>
 
                 <ng-template #tooltipTemplate>
-                  <div class="custom-tooltip" style="display: flex; flex-direction: column">
+                  <div class="custom-tooltip" style="display: flex; flex-direction: column"  *ngIf="row.usedInTestDetails">
                    <ul class="list-group">
-                    <li class="list-group-item" *ngFor="let key of Object.keys(row.usedInPapers)">{{questionPaperList[key]}}</li>
+                    <li class="list-group-item" *ngFor="let key of row.usedInTestDetails">{{key.name}}</li>
                   </ul>
-                  <div *ngIf="!row.usedInPapers">
-                    Not in used
+                  <div *ngIf="!row.usedInTestDetails">
+                    Not in use
                   </div>
                   </div>
                 </ng-template>

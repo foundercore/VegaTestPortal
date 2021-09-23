@@ -16,6 +16,7 @@ export class SearchQuestion {
   updateStartTime: string | undefined;
   migrationSectionName: string | undefined;
   testIdToBeExcluded: string | undefined;
+  includeUsedTestDetails: boolean | false;
 
 
   constructor(pageNumber:string,pageSizeValue:number,sortColumn?:string,sortOrder?:string,) {
