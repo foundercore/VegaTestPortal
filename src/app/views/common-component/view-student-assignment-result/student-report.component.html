@@ -22,7 +22,9 @@
     </ng-template>
     <div class="tab-body">
       <app-section-wise-summary
-        [summaryData]="summaryData" [difficultyWiseStats] = "difficultyStats" [timeAnalysisStats] = "timeStats"
+        [summaryData]="summaryData"
+        [difficultyWiseStats]="difficultyStats"
+        [timeAnalysisStats]="timeStats"
       ></app-section-wise-summary>
     </div>
   </mat-tab>
@@ -89,7 +91,7 @@
                       {{ "STUDENT_SOLUTION_TAG.PASSAGE" | translate }}
                     </div>
                     <button
-                      style="font-family: Verdana;padding: 0px;"
+                      style="font-family: Verdana; padding: 0px"
                       mat-button
                       color="primary"
                       (click)="showPassage(answer.questionId)"
@@ -125,6 +127,28 @@
                           style="margin-right: 5px"
                         ></i>
                         {{ answer?.timeElapsedInSec | minuteSeconds }}</mat-chip
+                      >
+                    </mat-chip-list>
+                  </div>
+
+                  <div
+                    style="
+                      position: absolute;
+                      right: 110px;
+                      border-radius: 20px;
+                      box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%),
+                        0 2px 10px 0 rgb(0 0 0 / 12%);
+                    "
+                  >
+                    <mat-chip-list aria-label="Fish selection">
+                      <mat-chip
+                        [ngClass]="{
+                          'success-bg': answer?.difficultyLevel == 'EASY',
+                          'failure-bg': answer?.difficultyLevel == 'HARD',
+                          'warning-bg': answer?.difficultyLevel == 'MEDIUM'
+                        }"
+                      >
+                        {{ answer?.difficultyLevel }}</mat-chip
                       >
                     </mat-chip-list>
                   </div>
@@ -194,11 +218,15 @@
                       "STUDENT_SOLUTION_TAG.EXPLANATION" | translate
                     }}</strong>
                     <i
-                    *ngIf="answer.videoExplanationUrl != null"
-                    (click)="openDialog(answer.videoExplanationUrl)"
-                    style="font-size: 24px; margin-left: 10px; cursor: pointer"
-                    class="fab fa-youtube"
-                  ></i>
+                      *ngIf="answer.videoExplanationUrl != null"
+                      (click)="openDialog(answer.videoExplanationUrl)"
+                      style="
+                        font-size: 24px;
+                        margin-left: 10px;
+                        cursor: pointer;
+                      "
+                      class="fab fa-youtube"
+                    ></i>
                   </div>
                   <div
                     [ngClass]="{
@@ -208,7 +236,7 @@
                     disabled
                   ></div>
                   <button
-                    style="font-family: Verdana;padding: 0px;"
+                    style="font-family: Verdana; padding: 0px"
                     mat-button
                     color="primary"
                     (click)="showExplanation(answer.questionId)"
@@ -225,7 +253,7 @@
           </mat-tab-group>
         </div>
 
-        <div class="col-lg-4 fixed">
+        <!-- <div class="col-lg-4 fixed">
           <div class="menu sticky-top p-3 bg-light">
             <app-solution-right-panel
               [data]="solutionSectionWiseSelectedStats"
@@ -235,7 +263,7 @@
               (filterParameters)="filterSolutionData($event)"
             ></app-solution-filter>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </mat-tab>
