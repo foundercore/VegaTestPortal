@@ -165,15 +165,7 @@
                       "
                     >
                       <mat-chip-list aria-label="Fish selection">
-                        <mat-chip
-                          [ngClass]="{
-                            'success-bg': answer?.difficultyLevel == 'EASY',
-                            'failure-bg': answer?.difficultyLevel == 'HARD',
-                            'warning-bg': answer?.difficultyLevel == 'MEDIUM'
-                          }"
-                        >
-                          {{ answer?.difficultyLevel }}</mat-chip
-                        >
+                        <mat-chip> {{ answer?.difficultyLevel }}</mat-chip>
                       </mat-chip-list>
                     </div>
                   </div>
