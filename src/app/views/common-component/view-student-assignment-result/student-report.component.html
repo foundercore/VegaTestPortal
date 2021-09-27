@@ -22,7 +22,9 @@
     </ng-template>
     <div class="tab-body">
       <app-section-wise-summary
-        [summaryData]="summaryData" [difficultyWiseStats] = "difficultyStats" [timeAnalysisStats] = "timeStats"
+        [summaryData]="summaryData"
+        [difficultyWiseStats]="difficultyStats"
+        [timeAnalysisStats]="timeStats"
       ></app-section-wise-summary>
     </div>
   </mat-tab>
@@ -33,211 +35,244 @@
       {{ "STUDENT_SOLUTION_TAG.SOLUTION" | translate }}
     </ng-template>
 
-    <div style="position: relative; height: 50px">
-      <div style="margin: 0px 20px; display: inline-block">
-        <mat-button-toggle-group
-          #sectionToggle="matButtonToggleGroup"
-          (change)="toggleSolutionSection($event.value)"
-          [(ngModel)]="solutionSectionSelection"
-          aria-label="Change Filter"
-        >
-          <mat-button-toggle
-            *ngFor="let section of solutionSectionArray; let index = index"
-            [value]="section"
-          >
-            {{ section?.name }}
-          </mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
-    </div>
+    <mat-drawer-container class="example-container" autosize>
+      <mat-drawer position="end" #drawer class="example-sidenav" mode="side">
+        <div>
+          <app-solution-right-panel
+            [data]="solutionSectionWiseSelectedStats"
+          ></app-solution-right-panel>
+          <app-solution-filter
+            [data]="filterData"
+            (filterParameters)="filterSolutionData($event)"
+          ></app-solution-filter>
+        </div>
+      </mat-drawer>
 
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-lg-8">
-          <mat-tab-group
-            class="invisible-tabs"
-            [selectedIndex]="solutionSectionSelectedIndex"
+      <div>
+        <mat-icon
+          style="cursor: pointer; float: right"
+          (click)="drawer.toggle()"
+          class="sidenav-menu"
+          >menu</mat-icon
+        >
+      </div>
+
+      <div style="position: relative; height: 50px; width: 98%">
+        <div style="margin: 0px 20px; display: inline-block">
+          <mat-button-toggle-group
+            #sectionToggle="matButtonToggleGroup"
+            (change)="toggleSolutionSection($event.value)"
+            [(ngModel)]="solutionSectionSelection"
+            aria-label="Change Filter"
           >
-            <mat-tab
-              *ngFor="let section of fetchedWholeAssignmentResult?.sections"
-              [label]="section.sectionName"
-              appMath
+            <mat-button-toggle
+              *ngFor="let section of solutionSectionArray; let index = index"
+              [value]="section"
             >
-              <div
-                *ngFor="
-                  let answer of section.answers
-                    | solutionFilterPipe: currentSolutionSelection;
-                  let i = index
-                "
-                class="question-card"
+              {{ section?.name }}
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-8">
+            <mat-tab-group
+              class="invisible-tabs"
+              [selectedIndex]="solutionSectionSelectedIndex"
+            >
+              <mat-tab
+                *ngFor="let section of fetchedWholeAssignmentResult?.sections"
+                [label]="section.sectionName"
+                appMath
               >
-                <div style="display: flex; margin-bottom: 10px">
-                  <div class="numberCircle">{{ i + 1 }}</div>
-                  <div>
+                <div
+                  *ngFor="
+                    let answer of section.answers
+                      | solutionFilterPipe: currentSolutionSelection;
+                    let i = index
+                  "
+                  class="question-card"
+                >
+                  <div style="display: flex; margin-bottom: 10px">
+                    <div class="numberCircle">{{ i + 1 }}</div>
+                    <div>
+                      <div style="margin-bottom: 10px">
+                        <strong>{{
+                          "STUDENT_SOLUTION_TAG.PASSAGE" | translate
+                        }}</strong>
+                      </div>
+                      <div
+                        [ngClass]="{
+                          limitTextHeight: passageMap.get(answer.questionId)
+                        }"
+                        [appMath]="transform(answer.passage)"
+                        disabled
+                      >
+                        {{ "STUDENT_SOLUTION_TAG.PASSAGE" | translate }}
+                      </div>
+                      <button
+                        style="font-family: Verdana; padding: 0px"
+                        mat-button
+                        color="primary"
+                        (click)="showPassage(answer.questionId)"
+                      >
+                        {{
+                          passageMap.get(answer.questionId)
+                            ? "read more"
+                            : "read less"
+                        }}
+                      </button>
+                    </div>
+
+                    <div
+                      style="
+                        position: absolute;
+                        right: 30px;
+                        border-radius: 20px;
+                        box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%),
+                          0 2px 10px 0 rgb(0 0 0 / 12%);
+                      "
+                    >
+                      <mat-chip-list aria-label="Fish selection">
+                        <mat-chip
+                          [ngClass]="{
+                            'success-bg': answer?.answerStatus == 'CORRECT',
+                            'failure-bg': answer?.answerStatus == 'INCORRECT',
+                            'warning-bg': answer?.answerStatus == 'SKIPPED'
+                          }"
+                          selected
+                        >
+                          <i
+                            class="fas fa-hourglass-half"
+                            style="margin-right: 5px"
+                          ></i>
+                          {{
+                            answer?.timeElapsedInSec | minuteSeconds
+                          }}</mat-chip
+                        >
+                      </mat-chip-list>
+                    </div>
+
+                    <div
+                      style="
+                        position: absolute;
+                        right: 110px;
+                        border-radius: 20px;
+                        box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%),
+                          0 2px 10px 0 rgb(0 0 0 / 12%);
+                      "
+                    >
+                      <mat-chip-list aria-label="Fish selection">
+                        <mat-chip> {{ answer?.difficultyLevel }}</mat-chip>
+                      </mat-chip-list>
+                    </div>
+                  </div>
+                  <div
+                    class="questionName"
+                    [appMath]="transform(answer.name)"
+                  ></div>
+                  <div style="margin-left: 30px">
+                    <div
+                      class="option"
+                      [ngClass]="{
+                        correct: answer?.correctOptions?.includes(option.key),
+                        selected: answer?.selectedOptions?.includes(option.key),
+                        wrong: !answer.correctOptions?.includes(option.key)
+                      }"
+                      *ngFor="let option of answer.inputOptions; let i = index"
+                    >
+                      <div class="markcontainer">
+                        <i
+                          *ngIf="
+                            answer?.answerStatus == 'CORRECT' &&
+                            answer?.correctOptions?.includes(option.key)
+                          "
+                          class="fas fa-check-circle success"
+                        ></i>
+                        <i
+                          *ngIf="
+                            answer?.answerStatus == 'INCORRECT' &&
+                            answer?.selectedOptions?.includes(option.key)
+                          "
+                          class="fas fa-times-circle failure"
+                        ></i>
+                      </div>
+                      <div
+                        class="answer-list"
+                        [appMath]="transform(option.value)"
+                      ></div>
+                      <div class="markcontainer-copy">
+                        <i
+                          *ngIf="answer?.correctOptions?.includes(option.key)"
+                          class="fas fa-check-circle success"
+                        >
+                        </i>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="answer?.type == 'TITA'" style="margin-left: 30px">
+                    <div class="option correct">
+                      <div
+                        [appMath]="transform(answer?.correctAnswerText)"
+                      ></div>
+                    </div>
+                    <div
+                      class="option"
+                      [ngClass]="{
+                        correct: answer?.answerStatus == 'CORRECT',
+                        wrong: answer?.answerStatus == 'INCORRECT'
+                      }"
+                    >
+                      <div [appMath]="transform(answer?.answerText)"></div>
+                    </div>
+                  </div>
+                  <mat-divider style="margin-top: 20px"></mat-divider>
+                  <div style="margin: 20px 30px">
                     <div style="margin-bottom: 10px">
                       <strong>{{
-                        "STUDENT_SOLUTION_TAG.PASSAGE" | translate
+                        "STUDENT_SOLUTION_TAG.EXPLANATION" | translate
                       }}</strong>
+                      <i
+                        *ngIf="answer.videoExplanationUrl != null"
+                        (click)="openDialog(answer.videoExplanationUrl)"
+                        style="
+                          font-size: 24px;
+                          margin-left: 10px;
+                          cursor: pointer;
+                        "
+                        class="fab fa-youtube"
+                      ></i>
                     </div>
                     <div
                       [ngClass]="{
-                        limitTextHeight: passageMap.get(answer.questionId)
+                        limitTextHeight: explanationMap.get(answer?.questionId)
                       }"
-                      [appMath]="transform(answer.passage)"
+                      [appMath]="transform(answer.explanation)"
                       disabled
-                    >
-                      {{ "STUDENT_SOLUTION_TAG.PASSAGE" | translate }}
-                    </div>
+                    ></div>
                     <button
-                      style="font-family: Verdana;padding: 0px;"
+                      style="font-family: Verdana; padding: 0px"
                       mat-button
                       color="primary"
-                      (click)="showPassage(answer.questionId)"
+                      (click)="showExplanation(answer.questionId)"
                     >
                       {{
-                        passageMap.get(answer.questionId)
+                        explanationMap.get(answer.questionId)
                           ? "read more"
                           : "read less"
                       }}
                     </button>
                   </div>
-
-                  <div
-                    style="
-                      position: absolute;
-                      right: 30px;
-                      border-radius: 20px;
-                      box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%),
-                        0 2px 10px 0 rgb(0 0 0 / 12%);
-                    "
-                  >
-                    <mat-chip-list aria-label="Fish selection">
-                      <mat-chip
-                        [ngClass]="{
-                          'success-bg': answer?.answerStatus == 'CORRECT',
-                          'failure-bg': answer?.answerStatus == 'INCORRECT',
-                          'warning-bg': answer?.answerStatus == 'SKIPPED'
-                        }"
-                        selected
-                      >
-                        <i
-                          class="fas fa-hourglass-half"
-                          style="margin-right: 5px"
-                        ></i>
-                        {{ answer?.timeElapsedInSec | minuteSeconds }}</mat-chip
-                      >
-                    </mat-chip-list>
-                  </div>
                 </div>
-                <div
-                  class="questionName"
-                  [appMath]="transform(answer.name)"
-                ></div>
-                <div style="margin-left: 30px">
-                  <div
-                    class="option"
-                    [ngClass]="{
-                      correct: answer?.correctOptions?.includes(option.key),
-                      selected: answer?.selectedOptions?.includes(option.key),
-                      wrong: !answer.correctOptions?.includes(option.key)
-                    }"
-                    *ngFor="let option of answer.inputOptions; let i = index"
-                  >
-                    <div class="markcontainer">
-                      <i
-                        *ngIf="
-                          answer?.answerStatus == 'CORRECT' &&
-                          answer?.correctOptions?.includes(option.key)
-                        "
-                        class="fas fa-check-circle success"
-                      ></i>
-                      <i
-                        *ngIf="
-                          answer?.answerStatus == 'INCORRECT' &&
-                          answer?.selectedOptions?.includes(option.key)
-                        "
-                        class="fas fa-times-circle failure"
-                      ></i>
-                    </div>
-                    <div
-                      class="answer-list"
-                      [appMath]="transform(option.value)"
-                    ></div>
-                    <div class="markcontainer-copy">
-                      <i
-                        *ngIf="answer?.correctOptions?.includes(option.key)"
-                        class="fas fa-check-circle success"
-                      >
-                      </i>
-                    </div>
-                  </div>
-                </div>
-
-                <div *ngIf="answer?.type == 'TITA'" style="margin-left: 30px">
-                  <div class="option correct">
-                    <div [appMath]="transform(answer?.correctAnswerText)"></div>
-                  </div>
-                  <div
-                    class="option"
-                    [ngClass]="{
-                      correct: answer?.answerStatus == 'CORRECT',
-                      wrong: answer?.answerStatus == 'INCORRECT'
-                    }"
-                  >
-                    <div [appMath]="transform(answer?.answerText)"></div>
-                  </div>
-                </div>
-                <mat-divider style="margin-top: 20px"></mat-divider>
-                <div style="margin: 20px 30px">
-                  <div style="margin-bottom: 10px">
-                    <strong>{{
-                      "STUDENT_SOLUTION_TAG.EXPLANATION" | translate
-                    }}</strong>
-                    <i
-                    *ngIf="answer.videoExplanationUrl != null"
-                    (click)="openDialog(answer.videoExplanationUrl)"
-                    style="font-size: 24px; margin-left: 10px; cursor: pointer"
-                    class="fab fa-youtube"
-                  ></i>
-                  </div>
-                  <div
-                    [ngClass]="{
-                      limitTextHeight: explanationMap.get(answer?.questionId)
-                    }"
-                    [appMath]="transform(answer.explanation)"
-                    disabled
-                  ></div>
-                  <button
-                    style="font-family: Verdana;padding: 0px;"
-                    mat-button
-                    color="primary"
-                    (click)="showExplanation(answer.questionId)"
-                  >
-                    {{
-                      explanationMap.get(answer.questionId)
-                        ? "read more"
-                        : "read less"
-                    }}
-                  </button>
-                </div>
-              </div>
-            </mat-tab>
-          </mat-tab-group>
-        </div>
-
-        <div class="col-lg-4 fixed">
-          <div class="menu sticky-top p-3 bg-light">
-            <app-solution-right-panel
-              [data]="solutionSectionWiseSelectedStats"
-            ></app-solution-right-panel>
-            <app-solution-filter
-              [data]="filterData"
-              (filterParameters)="filterSolutionData($event)"
-            ></app-solution-filter>
+              </mat-tab>
+            </mat-tab-group>
           </div>
         </div>
       </div>
-    </div>
+    </mat-drawer-container>
   </mat-tab>
 
   <mat-tab label="Ranking">

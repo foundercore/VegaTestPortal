@@ -197,9 +197,6 @@ table {
   margin-bottom: 10px;
 }
 
-.answer-list {
-}
-
 .option {
   background-color: #f1f1f1;
   position: relative;
@@ -295,9 +292,26 @@ tr.mat-footer-row {
 }
 
 .col-lg-8 {
-  width: 72% !important;
+  width: 100% !important;
 }
 
 .col-lg-4 {
   width: 28% !important;
+}
+
+.example-container {
+  width: 100%;
+  height: 100%;
+}
+
+.example-sidenav-content {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-sidenav {
+  width: 28%;
+  padding: 20px;
 }
