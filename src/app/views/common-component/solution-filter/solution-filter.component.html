@@ -1,123 +1,94 @@
-<div class="question-filter-panel">
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <i class="fas fa-filter filter-icon"></i> {{ 'STUDENT_SOLUTION_TAG.FILTER' | translate }}
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div
-        style="margin-left: 20px; margin-top: 20px"
-        [formGroup]="filterGroup"
-      >
-        <table>
-          <tr>
-            <div>
-              <mat-form-field appearance="outline" class="form-field-padding">
-                <mat-label>{{ 'STUDENT_SOLUTION_TAG.SUBJECT' | translate }}</mat-label>
-                <mat-select formControlName="subjectCntrl" multiple>
-                  <input
-                    class="search-container"
-                    placeholder="Search Subject"
-                    (keyup)="onsubKey($event)"
-                  />
-                  <mat-option
-                    *ngFor="let subject of filteredSubjects"
-                    [value]="subject"
-                    >{{ subject }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </tr>
+<div style="margin-bottom: -15px !important;margin-top: 20px;">
+  <span style="font-size: 18px; color: #272727">
+    <i class="fas fa-filter filter-icon"></i>
+    Filter
+  </span>
+</div>
 
-          <tr>
-            <div>
-              <mat-form-field appearance="outline" class="form-field-padding">
-                <mat-label>{{ 'STUDENT_SOLUTION_TAG.TOPIC' | translate }}</mat-label>
-                <mat-select formControlName="topicCntrl" multiple>
-                  <input
-                    class="search-container"
-                    placeholder="Search Topic"
-                    (keyup)="onTopicKey($event)"
-                  />
-                  <mat-option
-                    *ngFor="let topicList of filteredTopics"
-                    [value]="topicList"
-                    >{{ topicList }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </tr>
+<div style="padding: 2px" class="container-fluid stats-shadow">
+  <div style="margin-left: 20px; margin-top: 20px" [formGroup]="filterGroup">
+    <table>
+      <tr>
+        <div>
+          <mat-form-field appearance="outline" class="form-field-padding">
+            <mat-label>{{
+              "STUDENT_SOLUTION_TAG.SUBJECT" | translate
+              }}</mat-label>
+            <mat-select formControlName="subjectCntrl" multiple>
+              <input class="search-container" placeholder="Search Subject" (keyup)="onsubKey($event)" />
+              <mat-option *ngFor="let subject of filteredSubjects" [value]="subject">{{ subject }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </tr>
 
-          <tr>
-            <div>
-              <mat-form-field appearance="outline" class="form-field-padding">
-                <mat-label>{{ 'STUDENT_SOLUTION_TAG.SUB_TOPIC' | translate }}</mat-label>
-                <mat-select formControlName="subTopicCntrl" multiple>
-                  <input
-                    class="search-container"
-                    placeholder="Search Subtopic"
-                    (keyup)="onSubTopicKey($event)"
-                  />
-                  <mat-option
-                    *ngFor="let subtopic of filteredSubtopics"
-                    [value]="subtopic"
-                    >{{ subtopic }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </tr>
+      <tr>
+        <div>
+          <mat-form-field appearance="outline" class="form-field-padding">
+            <mat-label>{{
+              "STUDENT_SOLUTION_TAG.TOPIC" | translate
+              }}</mat-label>
+            <mat-select formControlName="topicCntrl" multiple>
+              <input class="search-container" placeholder="Search Topic" (keyup)="onTopicKey($event)" />
+              <mat-option *ngFor="let topicList of filteredTopics" [value]="topicList">{{ topicList }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </tr>
 
-          <tr>
-            <div>
-              <mat-form-field appearance="outline" class="form-field-padding">
-                <mat-label>{{ 'STUDENT_SOLUTION_TAG.DIFFICULTY' | translate }}</mat-label>
-                <mat-select formControlName="difficulty" multiple>
-                  <mat-option
-                    *ngFor="let level of difficultyLevels"
-                    [value]="level"
-                    >{{ level }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </tr>
+      <tr>
+        <div>
+          <mat-form-field appearance="outline" class="form-field-padding">
+            <mat-label>{{
+              "STUDENT_SOLUTION_TAG.SUB_TOPIC" | translate
+              }}</mat-label>
+            <mat-select formControlName="subTopicCntrl" multiple>
+              <input class="search-container" placeholder="Search Subtopic" (keyup)="onSubTopicKey($event)" />
+              <mat-option *ngFor="let subtopic of filteredSubtopics" [value]="subtopic">{{ subtopic }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </tr>
 
-          <tr>
-            <div>
-              <mat-form-field appearance="outline" class="form-field-padding">
-                <mat-label>{{ 'STUDENT_SOLUTION_TAG.STATE' | translate }}</mat-label>
-                <mat-select formControlName="state" multiple>
-                  <mat-option *ngFor="let state of states" [value]="state"
-                    >{{ state }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </tr>
-        </table>
-      </div>
-      <div style="text-align: center">
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="applyFilter()"
-          style="background: #0d6efd; color: white; margin-right: 20px"
-        >
-        {{ 'COMMON_TAG.APPLY' | translate }}
-        </button>
-        <button
-          mat-raised-button
-          color="danger"
-          (click)="resetFilter()"
-          style="background: #ff3547; color: white"
-        >
-        {{ 'COMMON_TAG.RESET' | translate }}
-        </button>
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
+      <tr>
+        <div>
+          <mat-form-field appearance="outline" class="form-field-padding">
+            <mat-label>{{
+              "STUDENT_SOLUTION_TAG.DIFFICULTY" | translate
+              }}</mat-label>
+            <mat-select formControlName="difficulty" multiple>
+              <mat-option *ngFor="let level of difficultyLevels" [value]="level">{{ level }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </tr>
+
+      <tr>
+        <div>
+          <mat-form-field appearance="outline" class="form-field-padding">
+            <mat-label>{{
+              "STUDENT_SOLUTION_TAG.STATE" | translate
+              }}</mat-label>
+            <mat-select formControlName="state" multiple>
+              <mat-option *ngFor="let state of states" [value]="state">{{ state }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </tr>
+    </table>
+  </div>
+  <div style="text-align: center;margin-bottom: 20px;">
+    <button mat-raised-button color="primary" (click)="applyFilter()"
+      style="background: #0d6efd; color: white; margin-right: 20px">
+      {{ "COMMON_TAG.APPLY" | translate }}
+    </button>
+    <button mat-raised-button color="danger" (click)="resetFilter()" style="background: #ff3547; color: white">
+      {{ "COMMON_TAG.RESET" | translate }}
+    </button>
+  </div>
 </div>
