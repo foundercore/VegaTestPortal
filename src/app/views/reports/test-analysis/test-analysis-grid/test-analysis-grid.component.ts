@@ -153,6 +153,7 @@ export class TestAnalysisGridComponent implements OnInit {
     this.testConfigService.getStudentTestAnalysis(this.testId,reqObj).subscribe(resp => {
       this.dialog.open(TestAnalysisInstitutelistDialogComponent, {
         data: {
+          sectionRecievedMark:reqObj.sectionLevelMark,
           institute : resp,
           markReceived:totalTestMark,
           totalTestMark:this.testResultObj.totalMarks

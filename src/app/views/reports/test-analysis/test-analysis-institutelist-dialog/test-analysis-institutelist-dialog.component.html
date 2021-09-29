@@ -1,14 +1,48 @@
+<h4>Performance Analysis</h4>
+<mat-divider></mat-divider>
 
-<div style="width: 500px;">
-  <div style="display: flex;     margin-bottom: 20px;   justify-content: space-between;">
-    <h4>Total Mark: {{data.totalTestMark}}</h4>
-    <h4>Received Mark: {{data.markReceived}}</h4>
+<div style="width: 500px;margin-top: 20px;">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="section">
+      <th mat-header-cell *matHeaderCellDef class="table-header"> Section </th>
+      <td mat-cell *matCellDef="let element"> {{element.sectionName}} </td>
+      <td mat-footer-cell *matFooterCellDef> Total </td>
+    </ng-container>
+
+    <ng-container matColumnDef="recievedMarks">
+      <th mat-header-cell *matHeaderCellDef class="table-header"> Recieved Mark </th>
+      <td mat-cell *matCellDef="let element"> {{data.sectionRecievedMark[element.sectionId]}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{ data.markReceived}} </td>
+
+    </ng-container>
+
+    <ng-container matColumnDef="percentile">
+      <th mat-header-cell *matHeaderCellDef class="table-header"> Percentile </th>
+      <td mat-cell *matCellDef="let element"> {{element.sectionPercentile}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{ data.institute.testPercentile}} </td>
+
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr mat-footer-row *matFooterRowDef="displayedColumns" class="example-first-footer-row"></tr>
+
+  </table>
+
+  <div *ngIf="data.institute.length == 0">
+    <div class="example-list" style="margin-top: 20px;" >
+      <div class="example-box" >Institutes</div>
+      <div class="example-box" *ngFor="let institute of data.institute.instituesSelectedIn">
+        {{institute}}
+      </div>
+    </div>
   </div>
-  <div>
-    <h4>Institute List</h4>
-    <mat-list role="institutelist">
-      <mat-list-item *ngFor="let institute of data.institute.instituesSelectedIn">{{institute}}</mat-list-item>
-    </mat-list>
+
+  <div *ngIf="data.institute.length > 0">
+      No Institutes
   </div>
+
 </div>
 
