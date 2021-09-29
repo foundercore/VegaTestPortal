@@ -1,4 +1,11 @@
-import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
@@ -106,7 +113,6 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   offlineEvent: Observable<Event>;
   subscriptions: Subscription[] = [];
 
-
   constructor(
     public dialog: MatDialog,
     private testConfigService: TestConfigService,
@@ -120,7 +126,6 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-
     this.elem = this.document.documentElement;
 
     this.store.select('appState').subscribe((data) => {
@@ -140,43 +145,45 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     this.checkInternetConnectivity();
   }
 
-  checkInternetConnectivity(){
+  checkInternetConnectivity() {
     this.onlineEvent = fromEvent(window, 'online');
     this.offlineEvent = fromEvent(window, 'offline');
 
-    this.subscriptions.push(this.offlineEvent.subscribe(e => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Connection lost! You are not connected to internet!!',
-        confirmButtonText: 'Ok',
-      }).finally(() => {
-          this.subscriptions.forEach(x => x.unsubscribe());
+    this.subscriptions.push(
+      this.offlineEvent.subscribe((e) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Connection lost! You are not connected to internet!!',
+          confirmButtonText: 'Ok',
+        }).finally(() => {
+          this.subscriptions.forEach((x) => x.unsubscribe());
           this.close();
           this.router
             .navigate(['/home/dashboard'])
             .then(() => console.log('Navigate to score card'))
-            .catch((err) => console.log('Error=> Navigate to score card=>', err));
-      });
-      console.log('Offline...');
-    }));
+            .catch((err) =>
+              console.log('Error=> Navigate to score card=>', err)
+            );
+        });
+        console.log('Offline...');
+      })
+    );
   }
 
   @HostListener('window:beforeunload', ['$event'])
   subscribeToNativeNavigation($event: any) {
-    console.log('close window/tab processing starts');
+    // console.log('close window/tab processing starts');
+    $event.preventDefault();
+    this.saveAndNextAnswers(false);
     if (confirm('You data is loading. Are you sure you want to leave?')) {
-      this.saveAndNextAnswers(false);
-
       console.log('You may lose your data if you refresh now');
-
       if (this.timerSource) {
         this.timerSource.unsubscribe();
         this.timerSource = null;
       }
-      $event.returnValue = 'Your changes will be lost.';
-      $event.preventDefault();
     }
-
+    $event.returnValue = 'Your changes will be lost.';
+    return false;
   }
 
   initialize() {
@@ -283,7 +290,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
           },
           (error) => {
             console.log(
-              'Error in fetching user submitted data => Reasons can be: 1)This user doesn\'t has any submitted data'
+              "Error in fetching user submitted data => Reasons can be: 1)This user doesn't has any submitted data"
             );
             this.currentSelectedSection = this.testData.sections[0];
             this.sectionsWithPapers = this.sectionQuestionMap.get(
@@ -473,13 +480,13 @@ export class LiveTestComponent implements OnInit, OnDestroy {
 
   getSelectedOption() {
     const optionsSelectedArray = [];
-    if (this.currentSelectedQuestion.type == 'MCQ'){
-      if (this.singleOptionsSelected){
+    if (this.currentSelectedQuestion.type == 'MCQ') {
+      if (this.singleOptionsSelected) {
         optionsSelectedArray.push(String(this.singleOptionsSelected.key));
         return optionsSelectedArray;
       }
       return null;
-    } else if (this.currentSelectedQuestion.type == 'MCQ_MULTIPLE'){
+    } else if (this.currentSelectedQuestion.type == 'MCQ_MULTIPLE') {
       for (let i = 0; i < this.optionsSelected.length; i++) {
         if (this.optionsSelected[i]) {
           optionsSelectedArray.push(String(i));
@@ -516,7 +523,11 @@ export class LiveTestComponent implements OnInit, OnDestroy {
       .getQuestionbyQuestionId(this.currentSelectedSection.questions[index]?.id)
       .subscribe(
         (question) => {
-          if (!this.isSectionTimerTest &&  this.questionNumber == this.sectionsWithPapers.length - 1 && this.selectedTabIndexValue == this.sectionQuestionMap.size - 1){
+          if (
+            !this.isSectionTimerTest &&
+            this.questionNumber == this.sectionsWithPapers.length - 1 &&
+            this.selectedTabIndexValue == this.sectionQuestionMap.size - 1
+          ) {
             this.isFullLengthLastSection = true;
           } else {
             this.isFullLengthLastSection = false;
@@ -607,7 +618,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.log(
-            'Error in fetching user submitted data => Reasons can be: 1)This user doesn\'t has any submitted data 2). Internet connectivity issue'
+            "Error in fetching user submitted data => Reasons can be: 1)This user doesn't has any submitted data 2). Internet connectivity issue"
           );
           this.timeSeconds = this.convertminutestoseconds(
             this.currentSelectedSection.durationInMinutes
@@ -670,17 +681,20 @@ export class LiveTestComponent implements OnInit, OnDestroy {
         section.answers.map((ans) => {
           if (ans?.questionId === this.currentSelectedQuestion?.id.questionId) {
             const selectedOptions = ans.selectedOptions;
-            if (this.currentSelectedQuestion.type === 'MCQ'){
-                  this.singleOptionsSelected = this.currentSelectedQuestion.options.find(x => selectedOptions.includes(x.key));
-              } else {
-                this.optionsSelected = [];
-                this.singleOptionsSelected = null;
-                if (selectedOptions !== null) {
-                  selectedOptions.map((optIndex) => {
-                    this.optionsSelected[Number(optIndex)] = true;
-                  });
-                }
+            if (this.currentSelectedQuestion.type === 'MCQ' && selectedOptions !== null) {
+              this.singleOptionsSelected =
+                this.currentSelectedQuestion.options.find((x) =>
+                  selectedOptions.includes(x.key)
+                );
+            } else {
+              this.optionsSelected = [];
+              this.singleOptionsSelected = null;
+              if (selectedOptions !== null) {
+                selectedOptions.map((optIndex) => {
+                  this.optionsSelected[Number(optIndex)] = true;
+                });
               }
+            }
           }
         });
       }
@@ -745,7 +759,6 @@ export class LiveTestComponent implements OnInit, OnDestroy {
             } else {
               this.videoUrl = null;
             }
-
           },
           (err) => {
             this.toastrService.error(
@@ -756,7 +769,11 @@ export class LiveTestComponent implements OnInit, OnDestroy {
           }
         );
       if (this.isTestLive) {
-        if (!this.isSectionTimerTest &&  this.questionNumber == this.sectionsWithPapers.length - 1 && this.selectedTabIndexValue == this.sectionQuestionMap.size - 1){
+        if (
+          !this.isSectionTimerTest &&
+          this.questionNumber == this.sectionsWithPapers.length - 1 &&
+          this.selectedTabIndexValue == this.sectionQuestionMap.size - 1
+        ) {
           this.isFullLengthLastSection = true;
         } else {
           this.isFullLengthLastSection = false;
@@ -809,9 +826,11 @@ export class LiveTestComponent implements OnInit, OnDestroy {
               this.toasterPostion
             );
           }
-          if (!this.isSectionTimerTest &&
-            this.questionNumber === this.sectionsWithPapers.length - 1
-            && this.selectedTabIndexValue === this.sectionQuestionMap.size - 1){
+          if (
+            !this.isSectionTimerTest &&
+            this.questionNumber === this.sectionsWithPapers.length - 1 &&
+            this.selectedTabIndexValue === this.sectionQuestionMap.size - 1
+          ) {
             this.isFullLengthLastSection = true;
           } else {
             this.isFullLengthLastSection = false;
@@ -870,13 +889,17 @@ export class LiveTestComponent implements OnInit, OnDestroy {
                       this.setCurrentQuestionSelectedOption();
                     },
                     (error: any) => {
-                      console.log('Error in fetching question');
+                      this.toastrService.error(
+                        'Error loading question. Please try again.',
+                        error,
+                        this.toasterPostion
+                      );
                     }
                   );
               },
               (error) => {
                 console.log(
-                  'Error in fetching user submitted data => Reasons can be: 1)This user doesn\'t has any submitted data 2). Internet connectivity issue'
+                  "Error in fetching user submitted data => Reasons can be: 1)This user doesn't has any submitted data 2). Internet connectivity issue"
                 );
               }
             );
@@ -975,11 +998,19 @@ export class LiveTestComponent implements OnInit, OnDestroy {
       cancelButtonColor: '#d33',
       cancelButtonText: 'Close',
       confirmButtonText: 'Submit',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.submitAssessment();
-      }
-    });
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.submitAssessment();
+        }
+      })
+      .catch((error) => {
+        this.toastrService.error(
+          'Error saving response. Please try again',
+          error,
+          this.toasterPostion
+        );
+      });
   }
 
   submitAssessment() {
@@ -1024,7 +1055,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (!this.isTestSubmittedSuccessFully){
+    if (!this.isTestSubmittedSuccessFully) {
       this.saveAndNextAnswers(false);
     }
 
