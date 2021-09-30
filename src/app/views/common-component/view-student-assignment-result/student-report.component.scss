@@ -315,3 +315,7 @@ tr.mat-footer-row {
   width: 28%;
   padding: 20px;
 }
+
+::ng-deep.mat-drawer-inner-container {
+  overflow: visible !important;
+}
