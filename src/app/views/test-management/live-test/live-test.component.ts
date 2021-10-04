@@ -355,6 +355,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
         });
       } else if (leftSecs == 0) {
         this.timerSource.unsubscribe();
+        this.saveWaitingTime(true);
         Swal.fire({
           icon: 'success',
           title: 'Test Over!!',
@@ -364,6 +365,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
         });
       } else {
         this.timerSource.unsubscribe();
+        this.saveWaitingTime(true);
         Swal.fire({
           icon: 'success',
           title: 'Test Over!!',
@@ -385,7 +387,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     quesForMarkedAsReview.sectionId = this.currentSelectedSection.id;
     quesForMarkedAsReview.selectedOptions = this.getSelectedOption() as any;
     quesForMarkedAsReview.timeElapsedInSec = this.timeElapsedInSecond;
-
+    this.timeElapsedInSecond = 0;
     this.testConfigService
       .setQuestionAsMarkedForReview(
         quesForMarkedAsReview.assignmentId,
@@ -420,7 +422,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
       quesForMarkedAsReview.timeElapsedInSec = this.timeElapsedInSecond;
       quesForMarkedAsReview.answerText = this.titaText;
       quesForMarkedAsReview.selectedOptions = this.getSelectedOption() as any;
-
+      this.timeElapsedInSecond = 0;
       await this.testConfigService
         .saveandNextAnswers(
           quesForMarkedAsReview.assignmentId,
@@ -509,7 +511,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   goToNextQuestion() {
     this.optionsSelected = [];
     this.singleOptionsSelected = null;
-    this.timeElapsedInSecond = 0;
+  //  this.timeElapsedInSecond = 0;
     if (this.questionNumber < this.sectionsWithPapers.length - 1) {
       this.questionNumber = this.questionNumber + 1;
       this.getQuestion(this.questionNumber, true);
@@ -642,12 +644,13 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     questionForClearResponse.sectionId = this.currentSelectedSection.id;
     questionForClearResponse.selectedOptions = this.getSelectedOption() as any;
     questionForClearResponse.timeElapsedInSec = this.timeElapsedInSecond;
+    this.timeElapsedInSecond = 0;
     this.testConfigService
       .clearQuestionResponse(this.testId, questionForClearResponse)
       .subscribe(
         (res) => {
           this.toastrService.success('Response cleared successfully');
-          this.timeElapsedInSecond = 0;
+
           this.getUserAllSubmissionData(false);
         },
         (err) => {
@@ -811,7 +814,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
       quesForMarkedAsReview.selectedOptions = [];
     }
     quesForMarkedAsReview.timeElapsedInSec = this.timeElapsedInSecond;
-
+    this.timeElapsedInSecond = 0;
     await this.testConfigService
       .saveandNextAnswers(
         quesForMarkedAsReview.assignmentId,
@@ -844,7 +847,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
           } else {
             this.isLastSectionQuestion = false;
           }
-          this.timeElapsedInSecond = 0;
+          //this.timeElapsedInSecond = 0;
           this.testConfigService
             .getSudentSubmissionState(this.assignmentId, this.userName)
             .subscribe(
