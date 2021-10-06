@@ -1,3 +1,9 @@
+<div class="export-btn">
+  <button class="mx-2 mat__action_btn" mat-raised-button (click)="download()" >
+    <mat-icon>cloud_download</mat-icon> Export
+  </button>
+</div>
+
 <div class="mat-elevation-z8" style="margin: 0 20px 20px">
   <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
     <ng-container matColumnDef="rank">
