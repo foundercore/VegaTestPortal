@@ -109,5 +109,14 @@ export class TestStudentTableComponent implements OnInit {
     return sum;
   }
 
+  download(){
+    this.testReportService.downloadTestReport(this.testId).subscribe(resp => {
+         let link = document.createElement('a');
+        link.download = this.testName + '.xlsx';
+        var blob = new Blob([resp], { type: 'application/vnd.ms-excel' });
+        link.href =  window.URL.createObjectURL(blob);
+        link.click();
+    })
+  }
 
 }

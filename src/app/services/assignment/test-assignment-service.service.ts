@@ -61,4 +61,10 @@ export class TestAssignmentServiceService extends BaseService {
     const url = `${this.BASE_SERVICE_URL}/api/v1/test/report/${test_id}/students-test-report`;
     return this.http.get<any>(url);
   }
+
+  downloadTestReport(test_id: string){
+  const url = `${this.BASE_SERVICE_URL}/api/v1/test/report/${test_id}/students-test-report/export`;
+  let headers = new HttpHeaders({ });
+    return this.http.get<any>(url, {headers:headers, responseType: 'blob' as 'json'});
+  }
 }
