@@ -164,9 +164,9 @@ export class StudentReportComponent implements OnInit {
                     b.sequenceNumber == undefined) ||
                   (a.sequenceNumber == 0 && b.sequenceNumber == 0)
                 ) {
-                  const passage1 = a.passageContent ? a.passageContent : '';
+                  const passage1 = a.passage ? a.passage : '';
 
-                  const passage2 = b.passageContent ? b.passageContent : '';
+                  const passage2 = b.passage ? b.passage : '';
 
                   const passageName1 = passage1 + (a.name ? a.name : '');
                   const passageName2 = passage2 + (b.name ? b.name : '');
