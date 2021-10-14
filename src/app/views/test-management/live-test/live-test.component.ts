@@ -743,7 +743,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     if (this.isTestLive) {
       this.currentSelectedQuestion.visited = true;
       this.questionNumber = currentQuestionIndex;
-      await this.saveWaitingTime(true);
+      await this.saveWaitingTime(false);
     } else {
       this.questionNumber = currentQuestionIndex;
       this.optionsSelected = [];
@@ -794,7 +794,7 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     }
   }
 
-  async saveWaitingTime(moveToNext = true) {
+  async saveWaitingTime(showSuccessMsg = true) {
     const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
     quesForMarkedAsReview.answerText = this.titaText;
     quesForMarkedAsReview.markForReview =
@@ -823,11 +823,14 @@ export class LiveTestComponent implements OnInit, OnDestroy {
       .subscribe(
         (res) => {
           if (quesForMarkedAsReview.selectedOptions !== null) {
-            this.toastrService.success(
-              'Response saved successfully',
-              '',
-              this.toasterPostion
-            );
+            if(showSuccessMsg){
+              this.toastrService.success(
+                'Response saved successfully',
+                '',
+                this.toasterPostion
+              );
+            }
+
           }
           if (
             !this.isSectionTimerTest &&
