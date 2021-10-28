@@ -4,15 +4,11 @@
   width: 150%;
   margin: 0px 20px;" *ngIf="show">
     <div>
-      <mat-form-field appearance="outline">
+      <mat-form-field style="width: 310px;" appearance="outline">
         <mat-label>Select Test</mat-label>
-        <mat-select  required (selectionChange)="selectTest($event)" [(ngModel)]="selectedTest">
-          <input
-          class="search-container"
-          placeholder="Search Test"
-          (keyup)="search($event)"
-          (keydown)="$event.stopPropagation()"
-        />
+        <mat-select required (selectionChange)="selectTest($event)" [(ngModel)]="selectedTest">
+          <input class="search-container" placeholder="Search Test" (keyup)="search($event)"
+            (keydown)="$event.stopPropagation()" />
           <mat-option *ngFor="let test of filteredTestList" [value]="test">
             {{test.name}}
           </mat-option>
