@@ -1,18 +1,14 @@
 <div class="student-dash-main">
 
   <div style="
-  width: 150%;
+  width: 195%;
   margin: 0px 20px;" *ngIf="show">
     <div>
-      <mat-form-field appearance="outline">
+      <mat-form-field style="width:310px;" appearance="outline">
         <mat-label>Select Student</mat-label>
-        <mat-select  required (selectionChange)="selectStudent($event)" [(ngModel)]="selectedStudent">
-          <input
-          class="search-container"
-          placeholder="Search Batch"
-          (keyup)="search($event)"
-          (keydown)="$event.stopPropagation()"
-        />
+        <mat-select required (selectionChange)="selectStudent($event)" [(ngModel)]="selectedStudent">
+          <input class="search-container" placeholder="Search Batch" (keyup)="search($event)"
+            (keydown)="$event.stopPropagation()" />
           <mat-option *ngFor="let student of filteredStudentList" [value]="student">
             {{student.displayName}}
           </mat-option>
