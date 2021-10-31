@@ -16,6 +16,7 @@ import { PAGE_OPTIONS } from 'src/app/core/constants';
 import { TestAssignmentServiceService } from 'src/app/services/assignment/test-assignment-service.service';
 import { DialogConformationComponent } from 'src/app/shared/components/dialog-conformation/dialog-conformation.component';
 import { ToastrService } from 'ngx-toastr';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-student-list-grid',
@@ -43,6 +44,9 @@ export class StudentListGridComponent implements OnInit {
   dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+
+  @ViewChild(MatSort) sort: MatSort;
+
 
   constructor(
     public translate: TranslateService,
@@ -74,9 +78,11 @@ export class StudentListGridComponent implements OnInit {
       this.clear();
     });
 
-    this.dataSource.filterPredicate = function(data, filter: string): boolean {
+    this.dataSource.filterPredicate = function (data, filter: string): boolean {
       return data.testName.toLowerCase().includes(filter) || data.attempted.toLowerCase().includes(filter);
     };
+
+
   }
 
   getAssignments(username) {
@@ -88,33 +94,34 @@ export class StudentListGridComponent implements OnInit {
           if (x.attempted) {
             x.attempted = 'Attempted';
           }
-          else{
+          else {
             x.attempted = 'Not Attempted';
           }
         });
 
         this.dataSource = new MatTableDataSource<any>(this.resultData);
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       });
   }
 
   viewResult(row: any) {
     console.log(
       '/home/reports/student/selected-student/' +
-        this.studentId +
-        '/' +
-        this.studentName +
-        '/assignment_report/' +
-        row.assignmentId
+      this.studentId +
+      '/' +
+      this.studentName +
+      '/assignment_report/' +
+      row.assignmentId
     );
     this.router
       .navigate([
         '/home/reports/student/selected-student/' +
-          this.studentId +
-          '/' +
-          this.studentName +
-          '/assignment_report/' +
-          row.assignmentId,
+        this.studentId +
+        '/' +
+        this.studentName +
+        '/assignment_report/' +
+        row.assignmentId,
       ])
       .then(() => console.log('Navigate to score card'))
       .catch((err) => console.log('Error=> Navigate to score card=>', err));
