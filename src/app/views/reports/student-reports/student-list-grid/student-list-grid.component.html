@@ -9,16 +9,16 @@
 
   <div class="student-result-container mat-elevation-z8">
     <div class="example-table-container" style="height: 400px; overflow: auto">
-      <table mat-table [dataSource]="dataSource" class="example-table">
+      <table mat-table [dataSource]="dataSource" matSort class="example-table">
         <ng-container matColumnDef="testName">
-          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
+          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>
             TEST NAME
           </th>
           <td mat-cell *matCellDef="let row">{{ row.testName }}</td>
         </ng-container>
 
         <ng-container matColumnDef="attempted">
-          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef>
+          <th class="custom-mat-header-th" mat-header-cell *matHeaderCellDef mat-sort-header>
             Test Status
           </th>
           <td mat-cell *matCellDef="let row">
