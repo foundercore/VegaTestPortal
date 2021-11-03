@@ -1,5 +1,13 @@
 <app-loading *ngIf="isLoading || !timerStarted"> </app-loading>
+<div style="display: none;">
+  <webcam [height]="100" [width]="100" [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
 
+            [videoOptions]="videoOptions"
+            [imageQuality]="1"
+
+            (initError)="handleInitError($event)"
+    ></webcam>
+</div>
 <div class="live-test-container" *ngIf="!isLoading && timerStarted">
   <div class="header">
     <div>

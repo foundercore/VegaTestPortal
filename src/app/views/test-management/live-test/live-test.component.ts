@@ -11,7 +11,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
-import { forkJoin, Observable, Subscription, timer } from 'rxjs';
+import { forkJoin, Observable, Subject, Subscription, timer } from 'rxjs';
 import { MathService } from 'src/app/shared/directives/math/math.service';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import Swal from 'sweetalert2';
@@ -26,6 +26,7 @@ import { filter, mergeMap } from 'rxjs/operators';
 import { fromEvent } from 'rxjs';
 import { VideoPreviewComponent } from '../../questions/video-preview/video-preview.component';
 import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
+import {WebcamImage, WebcamInitError, WebcamUtil} from 'ngx-webcam';
 
 @Component({
   selector: 'app-live-test',
@@ -113,6 +114,18 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   offlineEvent: Observable<Event>;
   subscriptions: Subscription[] = [];
 
+  //Camera Related Changes
+  public multipleWebcamsAvailable = false;
+  public deviceId: string;
+  public errors: WebcamInitError[] = [];
+  public webcamImage: WebcamImage = null;
+  // webcam snapshot trigger
+  private trigger: Subject<void> = new Subject<void>();
+  cameraInterval;
+  public videoOptions: MediaTrackConstraints = {
+    // width: {ideal: 1024},
+    // height: {ideal: 576}
+  };
   constructor(
     public dialog: MatDialog,
     private testConfigService: TestConfigService,
@@ -125,7 +138,31 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private document: any
   ) {}
 
+  public get triggerObservable(): Observable<void> {
+    return this.trigger.asObservable();
+  }
+
+  public handleImage(webcamImage: WebcamImage): void {
+    console.info('received webcam image', webcamImage);
+    this.webcamImage = webcamImage;
+  }
+
+  public handleInitError(error: WebcamInitError): void {
+    console.log(error);
+  }
+
   ngOnInit(): void {
+
+    this.cameraInterval = setInterval(function(){
+       this.trigger.next();
+    }, 30000);
+
+    WebcamUtil.getAvailableVideoInputs()
+      .then((mediaDevices: MediaDeviceInfo[]) => {
+        this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
+      });
+
+
     this.elem = this.document.documentElement;
 
     this.store.select('appState').subscribe((data) => {
@@ -1068,6 +1105,12 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     if (this.timerSource) {
       this.timerSource.unsubscribe();
       this.timerSource = null;
+    }
+
+    if(this.cameraInterval){
+
+        clearInterval(this.cameraInterval);
+
     }
   }
 
