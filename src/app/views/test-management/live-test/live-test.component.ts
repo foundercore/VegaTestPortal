@@ -145,6 +145,15 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   public handleImage(webcamImage: WebcamImage): void {
     console.info('received webcam image', webcamImage);
     this.webcamImage = webcamImage;
+    this.downloadImage(webcamImage);
+  }
+
+  downloadImage(webcamImage: WebcamImage) {
+      var link = document.createElement("a");
+      document.body.appendChild(link); // for Firefox
+      link.setAttribute("href", webcamImage.imageAsDataUrl);
+      link.setAttribute("download", "mrHankey.jpg");
+      link.click();
   }
 
   public handleInitError(error: WebcamInitError): void {
@@ -153,9 +162,9 @@ export class LiveTestComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.cameraInterval = setInterval(function(){
-       this.trigger.next();
-    }, 30000);
+    this.cameraInterval = setInterval(function(trigger){
+       trigger.next();
+    }, 30000,this.trigger);
 
     WebcamUtil.getAvailableVideoInputs()
       .then((mediaDevices: MediaDeviceInfo[]) => {
