@@ -126,6 +126,10 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     // width: {ideal: 1024},
     // height: {ideal: 576}
   };
+  enableSnapshot = false;
+  snapshotInterval = 30000;
+
+
   constructor(
     public dialog: MatDialog,
     private testConfigService: TestConfigService,
@@ -138,39 +142,21 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private document: any
   ) {}
 
-  public get triggerObservable(): Observable<void> {
-    return this.trigger.asObservable();
-  }
 
-  public handleImage(webcamImage: WebcamImage): void {
-    console.info('received webcam image', webcamImage);
-    this.webcamImage = webcamImage;
-    this.downloadImage(webcamImage);
-  }
-
-  downloadImage(webcamImage: WebcamImage) {
-      var link = document.createElement("a");
-      document.body.appendChild(link); // for Firefox
-      link.setAttribute("href", webcamImage.imageAsDataUrl);
-      link.setAttribute("download", "mrHankey.jpg");
-      link.click();
-  }
-
-  public handleInitError(error: WebcamInitError): void {
-    console.log(error);
-  }
 
   ngOnInit(): void {
 
-    this.cameraInterval = setInterval(function(trigger){
-       trigger.next();
-    }, 30000,this.trigger);
+    if(this.enableSnapshot){
 
-    WebcamUtil.getAvailableVideoInputs()
+      WebcamUtil.getAvailableVideoInputs()
       .then((mediaDevices: MediaDeviceInfo[]) => {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
       });
 
+      this.cameraInterval = setInterval(function(trigger){
+        trigger.next();
+     }, this.snapshotInterval,this.trigger);
+    };
 
     this.elem = this.document.documentElement;
 
@@ -1146,4 +1132,28 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     });
     dialogRef.afterClosed().subscribe((result) => {});
   }
+
+
+  public get triggerObservable(): Observable<void> {
+    return this.trigger.asObservable();
+  }
+
+  public handleImage(webcamImage: WebcamImage): void {
+    console.info('received webcam image', webcamImage);
+    this.webcamImage = webcamImage;
+    this.downloadImage(webcamImage);
+  }
+
+  downloadImage(webcamImage: WebcamImage) {
+      var link = document.createElement("a");
+      document.body.appendChild(link); // for Firefox
+      link.setAttribute("href", webcamImage.imageAsDataUrl);
+      link.setAttribute("download", "mrHankey.jpg");
+      link.click();
+  }
+
+  public handleInitError(error: WebcamInitError): void {
+    console.log(error);
+  }
+
 }

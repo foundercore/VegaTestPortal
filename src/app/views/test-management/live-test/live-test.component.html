@@ -1,5 +1,5 @@
 <app-loading *ngIf="isLoading || !timerStarted"> </app-loading>
-<div style="display: none;">
+<div style="display: none;" *ngIf="enableSnapshot">
   <webcam [height]="100" [width]="100" [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
 
             [videoOptions]="videoOptions"
