@@ -52,33 +52,27 @@
             <ng-container matColumnDef="name">
               <th  class="custom-mat-header-th" mat-header-cell *matHeaderCellDef> Section Name. </th>
               <td class="section-row-cell-class" mat-cell *matCellDef="let row"> {{row.sectionName}} </td>
-              <td mat-footer-cell *matFooterCellDef> Total </td>
             </ng-container>
 
              <ng-container matColumnDef="markRecieved">
               <th  class="custom-mat-header-th number-cell" mat-header-cell *matHeaderCellDef> Mark Recieved </th>
               <td class="section-row-cell-class number-cell" mat-cell *matCellDef="let row"> {{row.markRecieved}} </td>
-              <td mat-footer-cell *matFooterCellDef class="number-cell"> {{getSectionalTotalCount(element,'markRecieved')}} </td>
-
             </ng-container>
 
 
             <ng-container matColumnDef="totalMark">
               <th  class="custom-mat-header-th number-cell" mat-header-cell *matHeaderCellDef> Total Marks </th>
               <td class="section-row-cell-class number-cell" mat-cell *matCellDef="let row"> {{row.totalMark}} </td>
-              <td mat-footer-cell *matFooterCellDef class="number-cell"> {{getSectionalTotalCount(element,'totalMark')}}  </td>
             </ng-container>
 
             <ng-container matColumnDef="percentile">
               <th  class="custom-mat-header-th number-cell" mat-header-cell *matHeaderCellDef> Percentile </th>
               <td class="section-row-cell-class number-cell" mat-cell *matCellDef="let row"> {{row.percentile}} </td>
-              <td mat-footer-cell *matFooterCellDef class="number-cell"> {{getSectionalTotalCount(element,'percentile')}}  </td>
             </ng-container>
 
 
             <tr  class="custom-mat-header-th" mat-header-row *matHeaderRowDef="sectionLevelSummaryDisplayedColumns"></tr>
             <tr class="section-row-class"  mat-row *matRowDef="let row; columns: sectionLevelSummaryDisplayedColumns;"></tr>
-            <tr mat-footer-row *matFooterRowDef="sectionLevelSummaryDisplayedColumns"></tr>
 
           </table>
 
