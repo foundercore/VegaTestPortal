@@ -153,7 +153,7 @@ export class SectionWiseSummaryComponent implements OnInit {
   getSectionalTotalCount(param: string) {
     let sum = 0;
     this.sectoionLevelDataSource.forEach((x) => (sum += x[param]));
-    return sum;
+    return Math.round(sum) / 100;
   }
 
   getDifficultLevelTotalCount(param: string) {
