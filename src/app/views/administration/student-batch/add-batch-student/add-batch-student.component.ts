@@ -36,6 +36,8 @@ export class AddBatchStudentComponent implements OnInit {
   leftSideSelection = new SelectionModel<string>(true, []);
   rightSideSelection = new SelectionModel<string>(true, []);
 
+  showSpinner : boolean = false;
+
   constructor(
     private studentBatchService: StudentBatchService,
     private userService: UserService,
@@ -48,6 +50,7 @@ export class AddBatchStudentComponent implements OnInit {
 
   ngOnInit() {
     this.isUserAdmin = this.authorizationService.isAdmin;
+    this.showSpinner = true;
     this.studentBatchService
       .getStudentBatch(this.data.id.batchId)
       .subscribe((resp) => {
@@ -57,6 +60,7 @@ export class AddBatchStudentComponent implements OnInit {
           resp.students !== null ? resp.students : []
         );
         this.userService.getUserList().subscribe((resp) => {
+          this.showSpinner = false;
           this.availableStudentList = resp
             .filter((x) => x.roles.includes('ROLE_STUDENT'))
             .map((x) => x.email)
