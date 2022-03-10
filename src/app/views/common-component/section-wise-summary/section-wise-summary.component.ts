@@ -159,7 +159,7 @@ export class SectionWiseSummaryComponent implements OnInit {
   getDifficultLevelTotalCount(param: string) {
     let sum = 0;
     this.difficultyDataSource.forEach((x) => (sum += x[param]));
-    return sum;
+    return Math.round(sum)/100 ;
   }
 
   getAverage(value, total) {
