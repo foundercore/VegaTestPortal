@@ -10,10 +10,24 @@
             <div class="container">
                 <div class="row">
 
-                  <div class="col-lg-3 col-md-6 col-sm-6">
+                  <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="content_box" [formGroup]="configurationFormControl">
                         <mat-checkbox formControlName="doNotShowReport"  class="mt-2" >Do Not Show Report</mat-checkbox>
                         <mat-checkbox formControlName="percentile" class="mt-2" >Percentile</mat-checkbox>
+                        <div class="col-12  pt-5">
+                          <!-- <p>Percentile file:</p> -->
+                          <div class="custom-file mt-2">
+                            <input [disabled]="!configurationFormControl?.controls.percentile.value"
+                              type="file"
+                              accept=".xlsx"
+                              class="custom-file-input"
+                              id="customFile"
+                              name="filename"
+                              (change)="onFileChange($event)"
+                            />
+                            <label class="custom-file-label" for="customFile">{{ fileName }}</label>
+                          </div>
+                        </div>
                         <mat-checkbox formControlName="allowCalculator" class="mt-2"  >Allow Calculator</mat-checkbox>
                         <mat-checkbox formControlName="shuffleQuestions" class="mt-2" >Shuffle Question</mat-checkbox>
                         <mat-checkbox formControlName="sectionalTest" class="mt-2" >Sectional Test</mat-checkbox>
@@ -21,27 +35,15 @@
                       </div>
                   </div>
 
-                    <div class="col-12  pt-5">
-                      <p>Percentile file:</p>
-                      <div class="custom-file mb-3">
-                        <input
-                          type="file"
-                          accept=".xlsx"
-                          class="custom-file-input"
-                          id="customFile"
-                          name="filename"
-                          (change)="onFileChange($event)"
-                        />
-                        <label class="custom-file-label" for="customFile">{{ fileName }}</label>
-                      </div>
-                    </div>
+
 
                     <div class="col-12  pt-5">
-                      <p>Institue Analysis file:</p>
-                      <div class="custom-file mb-3">
+
+                      <div class="custom-file mt-2  mb-3">
                         <input
                           type="file"
                           accept=".xlsx"
+                         [disabled]="!configurationFormControl?.controls.allowInstituteAnalysisMetadata.value"
                           class="custom-file-input"
                           id="instituteFile"
                           name="instituteFileName"

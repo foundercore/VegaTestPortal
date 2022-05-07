@@ -48,7 +48,7 @@
         <button  mat-raised-button class="add-btn mx-2" *ngIf="status == 'PUBLISHED'"  (click)="viewAssignment()">
           <mat-icon>add_circle</mat-icon><span class="ml-2">View Assignment</span>
         </button>
-        <button  mat-raised-button class="add-btn mx-2"  (click)="addSection()" *ngIf=" totalDurationOfSections < totalTestDuration && status !== 'PUBLISHED'">
+        <button  mat-raised-button class="add-btn mx-2"  (click)="addSection()" *ngIf=" totalDurationOfSections < totalTestDuration && status !== 'PUBLISHED' && type !== 'NMAT'">
           <mat-icon>add_circle</mat-icon><span class="ml-2">Add Section</span>
         </button>
       </div>
@@ -68,8 +68,8 @@
               <mat-panel-description style="justify-content: flex-end;position: relative;">
                 <span style="position: absolute;left: 0px;">Section Duration : {{ section.durationInMinutes }} mins</span>
                 <ng-container>
-                  <span  *ngIf="status !== 'PUBLISHED'" class="section-action-btn edit_btn" (click)="editSection($event,section)"  matTooltip="Edit Section Info" ><i class="fas fa-edit"></i></span>
-                  <span  *ngIf="status !== 'PUBLISHED'" class="section-action-btn delete_btn" (click)="removeSection($event,section)"  matTooltip="Delete Section" ><i class="fas fa-trash-alt"></i></span>
+                  <span  *ngIf="status !== 'PUBLISHED' &&  type !== 'NMAT'" class="section-action-btn edit_btn" (click)="editSection($event,section)"  matTooltip="Edit Section Info" ><i class="fas fa-edit"></i></span>
+                  <span  *ngIf="status !== 'PUBLISHED'  &&  type !== 'NMAT'" class="section-action-btn delete_btn" (click)="removeSection($event,section)"  matTooltip="Delete Section" ><i class="fas fa-trash-alt"></i></span>
                   <span class="section-action-btn save_btn" (click)="saveQuestionSequence($event,section)" matTooltip="Save Question sequence in Section"><i class="fas fa-save" ></i></span>
                 </ng-container>
               </mat-panel-description>

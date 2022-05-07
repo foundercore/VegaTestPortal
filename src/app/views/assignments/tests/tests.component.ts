@@ -26,6 +26,7 @@ import Swal from 'sweetalert2';
 import { CloneAssignmentComponent } from '../clone-assignment/clone-assignment.component';
 import { TestVM } from '../models/postTestVM';
 import { SearchQuestionPaperVM } from '../models/searchQuestionPaperVM';
+import { Section } from '../models/sections';
 import { Status } from '../models/statusEnum';
 import { AssessmentEditorComponent } from '../popups/assessment-editor/assessment-editor.component';
 import { TestLiveComponent } from '../popups/test-live/test-live.component';
@@ -167,9 +168,37 @@ export class TestsComponent implements OnInit, AfterViewInit {
         this.testConfigService.createQuestionPaper(model).subscribe(
           (res: any) => {
             //if (res.isSuccess) {
-            this.toastrService.success('Test created successfully');
-            this.GetAllquestionPapers();
-            console.log('this.createdtest==', res);
+              if(result?.type == 'NMAT') {
+                let quantReasoningSection = new Section();
+                quantReasoningSection.name = 'Quantitative Reasoning';
+                quantReasoningSection.durationInMinutes =  res?.totalDurationInMinutes / 3;
+                quantReasoningSection.testId = res.testId;
+
+                let logicReasoningSection = new Section();
+                logicReasoningSection.name = 'Logical Reasoning';
+                logicReasoningSection.durationInMinutes = res?.totalDurationInMinutes / 3;
+                logicReasoningSection.testId =  res.testId;
+
+
+                let verbalReasoningSection = new Section();
+                verbalReasoningSection.name = 'Verbal Reasoning';
+                verbalReasoningSection.durationInMinutes = res?.totalDurationInMinutes / 3;
+                verbalReasoningSection.testId =  res.testId;
+
+                console.log(res);
+                forkJoin([this.testConfigService.addSection(quantReasoningSection),
+                  this.testConfigService.addSection(verbalReasoningSection),
+                  this.testConfigService.addSection(logicReasoningSection)]).subscribe(resp => {
+                    this.toastrService.success('Test created successfully');
+                    this.GetAllquestionPapers();
+                    console.log(resp);
+                  })
+              } else {
+                this.toastrService.success('Test created successfully');
+                this.GetAllquestionPapers();
+                console.log('this.createdtest==', res);
+              }
+
             // }
           },
           (error) => {
