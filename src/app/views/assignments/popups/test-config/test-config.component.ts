@@ -59,10 +59,10 @@ export class TestconfigComponent implements OnInit {
             sectionalTest:res.controlParam.sectionalTest,
             allowInstituteAnalysisMetadata : res.controlParam.allowInstituteAnalysis
           })
-          if(res.controlParam.instituteAnalysisMetadata){
+          if(res.controlParam.instituteAnalysisMetadata && res.controlParam.instituteAnalysisMetadata.fileName){
               this.instituteFileName = res.controlParam.instituteAnalysisMetadata.fileName
           }
-          if(res.controlParam.percentileScoreCard){
+          if(res.controlParam.percentileScoreCard && res.controlParam.percentileScoreCard.fileName){
             this.fileName = res.controlParam.percentileScoreCard.fileName
         }
         },

@@ -65,6 +65,7 @@ export class UpdateTestContentComponent implements OnInit {
   questionPaper = new EditTestMetaData();
   quest: any;
   status: string;
+  type:string;
   expandedStateArray = [];
   isLoadingResults: boolean;
   isRateLimitReached: boolean;
@@ -315,6 +316,7 @@ export class UpdateTestContentComponent implements OnInit {
       this.testConfigService
         .getQuestionPaper(this.route.snapshot.paramMap.get('id'))
         .subscribe((res: any) => {
+          this.type = res.type;
           this.questionPaper = res;
           if (!this.breadcrumModified)
             this.breadcrumbNavService.pushOnClickCrumb({ label: res.name });
