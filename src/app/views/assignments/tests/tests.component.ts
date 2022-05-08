@@ -13,7 +13,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
-import { forkJoin, merge, Observable, of as observableOf, Subject } from 'rxjs';
+import { concat, forkJoin, merge, Observable, of as observableOf, Subject } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 
 import { finalize } from 'rxjs/operators';
@@ -186,13 +186,19 @@ export class TestsComponent implements OnInit, AfterViewInit {
                 verbalReasoningSection.testId =  res.testId;
 
                 console.log(res);
-                forkJoin([this.testConfigService.addSection(quantReasoningSection),
-                  this.testConfigService.addSection(verbalReasoningSection),
-                  this.testConfigService.addSection(logicReasoningSection)]).subscribe(resp => {
-                    this.toastrService.success('Test created successfully');
-                    this.GetAllquestionPapers();
-                    console.log(resp);
-                  })
+                this.testConfigService.addSection(quantReasoningSection)
+                .subscribe(resp => {
+                  this.testConfigService.addSection(verbalReasoningSection)
+                  .subscribe(resp => {
+                    this.testConfigService.addSection(logicReasoningSection)
+                    .subscribe(resp => {
+                      this.toastrService.success('Test created successfully');
+                      this.GetAllquestionPapers();
+                      console.log(resp);
+                    });
+                  });
+                });
+
               } else {
                 this.toastrService.success('Test created successfully');
                 this.GetAllquestionPapers();

@@ -73,6 +73,7 @@ export class UpdateTestContentComponent implements OnInit {
   remarks: string = '';
   breadcrumModified: boolean;
   filter = '';
+  typeList = [];
 
   constructor(
     public dialog: MatDialog,
@@ -82,7 +83,10 @@ export class UpdateTestContentComponent implements OnInit {
     private router: Router,
     private location: Location,
     private breadcrumbNavService: BreadcrumbNavService
-  ) {}
+  ) {
+    this.testConfigService.getQuestionPaperType().subscribe(types => this.typeList = types);
+
+  }
 
   ngOnInit(): void {}
 
@@ -199,6 +203,7 @@ export class UpdateTestContentComponent implements OnInit {
       data: {
         testId: this.testId,
         questionPaper: this.questionPaper,
+        typeList: this.typeList
       },
     });
     dialogRef.afterClosed().subscribe((result) => {

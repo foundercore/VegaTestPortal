@@ -64,6 +64,7 @@ export class EditTestComponent implements OnInit {
     ],
   };
   questionPaper = new EditTestMetaData();
+  typeList = [];
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   tags: string[] = [];
@@ -75,13 +76,16 @@ export class EditTestComponent implements OnInit {
     private toastrService: ToastrService,
     private store: Store<AppState>,
     private router: Router
-  ) { }
+  ) {
+
+  }
 
   hasError = (controlName: string, errorName: string) => {
     return this.testForm.controls[controlName].hasError(errorName);
   };
 
   ngOnInit(): void {
+    this.typeList = this.editTest_data.typeList
     console.log('editTest_data =>', this.editTest_data);
     this.questionPaper = this.editTest_data.questionPaper;
     this.tags = this.editTest_data?.questionPaper?.tags || [];
@@ -94,7 +98,7 @@ export class EditTestComponent implements OnInit {
         [Validators.required]
       ),
       totalMarks: new FormControl(this.editTest_data.questionPaper.totalMarks, []),
-      type: new FormControl(this.editTest_data.questionPaper.type,[]),
+      type: new FormControl(this.typeList.find(x => x == this.editTest_data.questionPaper.type),[]),
       tags: new FormControl(this.editTest_data.questionPaper.tags, []),
       calculatorRequired: new FormControl(this.editTest_data.questionPaper.calculatorRequired, []),
       instructions: new FormControl(

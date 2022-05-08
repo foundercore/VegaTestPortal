@@ -46,6 +46,10 @@ export class TestConfigService extends BaseService {
     return this.http.post<any>(Url, model, this.headers);
   }
 
+   getQuestionPaperType (): Observable<any> {
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/types/all`;
+    return this.http.get<any>(Url, this.headers);
+  }
 
   getPendingVerficationTest(): Observable<any>{
     const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/pending-verification`;

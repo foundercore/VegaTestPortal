@@ -1,3 +1,4 @@
+import { TestConfigService } from 'src/app/views/assignments/services/test-config-service';
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
@@ -16,11 +17,15 @@ export class AssessmentEditorComponent implements OnInit {
   public testForm: FormGroup;
   isInputzero: boolean = false;
   descriptionFilled: boolean = true;
+  typeList = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) public _data: any,
     public dialogRef: MatDialogRef<AssessmentEditorComponent>,
-    public dialog: MatDialog
-  ) {}
+    public dialog: MatDialog,
+    public testService: TestConfigService
+  ) {
+    this.testService.getQuestionPaperType().subscribe(types => this.typeList = types);
+  }
   descriptionEditorconfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
