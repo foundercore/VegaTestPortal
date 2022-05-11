@@ -11,12 +11,14 @@ import { SharedModule } from "src/app/shared/shared.module";
 import { LiveTestInstructionComponent } from "./live-test-instruction/live-test-instruction.component";
 import { LiveTestWindowComponent } from "./live-test-window/live-test-window.component";
 import { LiveTestComponent } from "./live-test/live-test.component";
+import { NmatLiveTestComponent } from './nmat-live-test/nmat-live-test.component';
 
 @NgModule({
   declarations: [
     LiveTestInstructionComponent,
     LiveTestComponent,
-    LiveTestWindowComponent
+    LiveTestWindowComponent,
+    NmatLiveTestComponent
   ],
   imports: [
     CommonModule,
