@@ -1,3 +1,10 @@
 <app-live-test-instruction *ngIf="!isTestStarted" (startTestEvent)="startTest($event)"></app-live-test-instruction>
-<app-live-test *ngIf="isTestStarted" [testData]="testData" [isTestLive]="isTestLive" [assignmentData]="assignmentData"></app-live-test>
+
+<app-live-test *ngIf="isTestStarted && testType !== 'NMAT'" [testData]="testData" [isTestLive]="isTestLive"
+  [assignmentData]="assignmentData"></app-live-test>
+
+  <app-nmat-live-test  *ngIf="isTestStarted && testType === 'NMAT'"  [testData]="testData" [isTestLive]="isTestLive" [assignmentData]="assignmentData">
+  </app-nmat-live-test>
+
+
 
