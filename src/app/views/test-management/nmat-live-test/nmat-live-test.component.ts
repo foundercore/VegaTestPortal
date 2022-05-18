@@ -21,7 +21,7 @@ import { DOCUMENT, Location } from '@angular/common';
   selector: 'app-nmat-live-test',
   templateUrl: './nmat-live-test.component.html',
   styleUrls: ['./nmat-live-test.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NmatLiveTestComponent implements OnInit {
 
@@ -120,12 +120,13 @@ export class NmatLiveTestComponent implements OnInit {
   ngOnInit(): void {
     this.elem = this.document.documentElement;
     this.isLoading = false;
+    this.timerStarted = true;
     this.store.select('appState').subscribe((data) => {
       this.userName = data?.user?.userName;
       this.studentName = data?.user?.firstName + ' ' + data?.user?.lastName;
     });
 
-    this.isSectionTimerTest = this.testData.isSectionTimerTest;
+    this.isSectionTimerTest = true;
 
     if (this.isTestLive) {
       this.testId = this.assignmentData.testId;
@@ -182,7 +183,9 @@ export class NmatLiveTestComponent implements OnInit {
     this.testData.sections.forEach((section) => {
       this.sectionTotalTimeMap.set(
         section.id,
-        this.convertminutestoseconds(section.durationInMinutes)
+        // Temporary
+        this.convertminutestoseconds(40)
+        //this.convertminutestoseconds(section.durationInMinutes)
       );
     });
 
@@ -309,7 +312,9 @@ export class NmatLiveTestComponent implements OnInit {
   getTestTimerValue() {
     if (this.isSectionTimerTest) {
       return this.convertminutestoseconds(
-        this.currentSelectedSection.durationInMinutes
+        //Temporary
+        40
+        //this.currentSelectedSection.durationInMinutes
       );
     } else {
       return this.convertminutestoseconds(this.testData.totalDurationInMinutes);
