@@ -659,4 +659,9 @@ export class UpdateTestContentComponent implements OnInit {
     }
     return questions;
   }
+
+
+  allowToExpand(event){
+     event.stopPropagation();
+  }
 }
