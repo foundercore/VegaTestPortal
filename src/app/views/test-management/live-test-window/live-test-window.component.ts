@@ -26,8 +26,8 @@ export class LiveTestWindowComponent implements OnInit {
   startTest(event){
     this.isTestStarted = event.isTestStarted;
     this.testData = event.testData;
-    this.testType = event.testData.type
-    if(event.testData.type == "Full Length"){
+    this.testType = event.testData.type;
+    if (event.testData.type == 'Full Length'){
       this.testData.isSectionTimerTest = true;
     } else {
       this.testData.isSectionTimerTest = false;

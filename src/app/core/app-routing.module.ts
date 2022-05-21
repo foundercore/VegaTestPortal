@@ -2,16 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from '../views/layout/home/home.component';
 import { LoginComponent } from '../views/bootstrap/login/login.component';
-import { DashboardComponent } from '../views/dashboard/dashboard.component';
-import { ReportsComponent } from '../views/reports/reports.component';
 import { AuthGuard } from '../guard/auth.guard';
 import { RegisterComponent } from '../views/bootstrap/register/register.component';
 import { LoggedInAuthGuard } from '../guard/loggedin.guard';
 import { RoleGuard } from '../guard/role.guard';
 import { Role } from './constants';
-import { StudentReportComponent } from '../views/common-component/view-student-assignment-result/student-report.component';
-import { LiveTestComponent } from '../views/test-management/live-test/live-test.component';
-import { LiveTestInstructionComponent } from '../views/test-management/live-test-instruction/live-test-instruction.component';
 import { LiveTestWindowComponent } from '../views/test-management/live-test-window/live-test-window.component';
 
 const routes: Routes = [
