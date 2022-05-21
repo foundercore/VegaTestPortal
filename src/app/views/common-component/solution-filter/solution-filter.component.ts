@@ -48,20 +48,21 @@ export class SolutionFilterComponent implements OnInit {
       resp.forEach((section) => {
         section.answers.forEach((element) => {
           if (
-            !this.subtopicList.includes(element.subTopic) &&
-            element.subTopic.length != 0
+            element.subTopic?.length != 0 &&
+            !this.subtopicList.includes(element.subTopic) && element.subtopic
+
           ) {
             this.subtopicList.push(element.subtopic);
           }
           if (
             !this.subjectLists.includes(element.subject) &&
-            element.subject.length != 0
+            element.subject?.length != 0 && element.subject
           ) {
             this.subjectLists.push(element.subject);
           }
           if (
             !this.subjectLists.includes(element.topic) &&
-            element.topic.length != 0
+            element.topic?.length != 0 && element.topic
           ) {
             this.topicLists.push(element.topic);
           }

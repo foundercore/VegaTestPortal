@@ -91,7 +91,7 @@
                       </li>
                     </ul>
                     <mat-radio-group aria-labelledby="answer-radio-group-label" class="answer-radio-group" *ngIf="currentSelectedQuestion?.type == 'MCQ'" [(ngModel)]="singleOptionsSelected">
-                          <mat-radio-button class="answer-radio-button" *ngFor="let opt of currentSelectedQuestion?.options" [value]="opt" >
+                          <mat-radio-button class="answer-radio-button" *ngFor="let opt of currentSelectedQuestion?.options" [value]="opt"  (change)="toggleConfirmButton()" >
                             <div [appMath]="opt?.value"></div>
                           </mat-radio-button>
                     </mat-radio-group>
@@ -132,16 +132,22 @@
     <div class="footer-part1">
 
       <div>
+
+        <button   (click)="toggleNextBtn()" style="margin-right: 10px"
+        class="save-next-btn"  mat-raised-button     [disabled]="!isTestLive || !enableConfirmBtn">
+          Confirm
+        </button>
+
         <button
-          *ngIf="!isLastSectionQuestion && !isFullLengthLastSection"
+
           class="save-next-btn"
           mat-raised-button
           (click)="saveAndNextAnswers()"
-          [disabled]="!isTestLive"
+          [disabled]="!isTestLive || !enableNextBtn"
         >
-          Save And Next
+           Next
         </button>
-        <button
+        <!-- <button
           *ngIf="isLastSectionQuestion || isFullLengthLastSection"
           class="save-next-btn"
           mat-raised-button
@@ -149,10 +155,10 @@
           [disabled]="!isTestLive"
         >
           Save
-        </button>
+        </button> -->
       </div>
     </div>
-    <div style="flex-basis: 350px; display: flex; justify-content: center">
+    <div style="  display: flex; justify-content: center">
       <div>
         <button
           *ngIf="isTestLive && !isSectionTimerTest && authorizationService.isAdminAndStaff"

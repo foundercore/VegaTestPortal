@@ -66,6 +66,9 @@ export class TestsComponent implements OnInit, AfterViewInit {
   isRateLimitReached: boolean;
   actualTotalNumberOfRecords: 0;
   searchPattern: string = '';
+
+  private nmatSectionTimer = 40;
+
   constructor(
     private testConfigService: TestConfigService,
     public dialog: MatDialog,
@@ -171,18 +174,18 @@ export class TestsComponent implements OnInit, AfterViewInit {
               if(result?.type == 'NMAT') {
                 let quantReasoningSection = new Section();
                 quantReasoningSection.name = 'Quantitative Reasoning';
-                quantReasoningSection.durationInMinutes =  res?.totalDurationInMinutes / 3;
+                quantReasoningSection.durationInMinutes =  this.nmatSectionTimer;
                 quantReasoningSection.testId = res.testId;
 
                 let logicReasoningSection = new Section();
                 logicReasoningSection.name = 'Logical Reasoning';
-                logicReasoningSection.durationInMinutes = res?.totalDurationInMinutes / 3;
+                logicReasoningSection.durationInMinutes = this.nmatSectionTimer;;
                 logicReasoningSection.testId =  res.testId;
 
 
                 let verbalReasoningSection = new Section();
                 verbalReasoningSection.name = 'Verbal Reasoning';
-                verbalReasoningSection.durationInMinutes = res?.totalDurationInMinutes / 3;
+                verbalReasoningSection.durationInMinutes = this.nmatSectionTimer;;
                 verbalReasoningSection.testId =  res.testId;
 
                 console.log(res);

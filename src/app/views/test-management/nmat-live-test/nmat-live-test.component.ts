@@ -50,7 +50,8 @@ export class NmatLiveTestComponent implements OnInit {
   };
 
   elem: any;
-
+  enableNextBtn = false;
+  enableConfirmBtn = false;
   isLastSectionQuestion = false;
 
   isFullLengthLastSection = false;
@@ -378,7 +379,8 @@ export class NmatLiveTestComponent implements OnInit {
 
   async saveAndNextAnswers(moveToNext = true, changeSection = null) {
     console.log('this.question=>', this.currentSelectedQuestion);
-
+      this.enableConfirmBtn = false;
+      this.enableNextBtn = false;
     if (!this.isSectionChangeTriggered) {
       const quesForMarkedAsReview = new QuestionMarkedForReviewModel();
       quesForMarkedAsReview.markForReview =
@@ -578,9 +580,9 @@ export class NmatLiveTestComponent implements OnInit {
             });
           });
           if (gotoNextQuestion) {
-            if (!this.isLastSectionQuestion && !this.isFullLengthLastSection) {
+            //if (!this.isLastSectionQuestion && !this.isFullLengthLastSection) {
               this.goToNextQuestion();
-            }
+            //}
           } else {
             this.optionsSelected = [];
             this.singleOptionsSelected = null;
@@ -662,6 +664,7 @@ export class NmatLiveTestComponent implements OnInit {
   }
 
   setOptionSelected(selected) {
+    this.enableConfirmBtn = true;
     if (
       this.optionsSelected[selected] === true ||
       this.optionsSelected[selected] === false
@@ -1038,4 +1041,11 @@ export class NmatLiveTestComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {});
   }
 
+  toggleNextBtn(){
+    this.enableNextBtn = true;
+  }
+
+  toggleConfirmButton(){
+    this.enableConfirmBtn = true;
+  }
 }
