@@ -21,7 +21,7 @@
       {{ "STU_DASHBOARD_QUICKVIEW.SUMMARY" | translate }}
     </ng-template>
     <div class="tab-body">
-      <app-section-wise-summary
+      <app-section-wise-summary [type]="testConfig?.type"
         [summaryData]="summaryData"
         [difficultyWiseStats]="difficultyStats"
         [timeAnalysisStats]="timeStats"
@@ -164,7 +164,7 @@
                           0 2px 10px 0 rgb(0 0 0 / 12%);
                       "
                     >
-                      <mat-chip-list aria-label="Fish selection">
+                      <mat-chip-list aria-label="Fish selection" *ngIf="testConfig?.type != 'NMAT'">
                         <mat-chip> {{ answer?.difficultyLevel }}</mat-chip>
                       </mat-chip-list>
                     </div>

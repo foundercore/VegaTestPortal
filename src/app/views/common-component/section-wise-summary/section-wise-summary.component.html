@@ -179,10 +179,10 @@
     ></tr>
   </table>
 
-  <div class="table-heading">
+  <div class="table-heading" *ngIf="type != 'NMAT'">
     <strong><mat-label>Difficulty Analysis</mat-label></strong>
   </div>
-  <table
+  <table *ngIf="type != 'NMAT'"
     #diffiultylevelTable
     mat-table
     [dataSource]="difficultyDataSource"
