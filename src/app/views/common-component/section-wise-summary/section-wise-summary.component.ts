@@ -79,6 +79,8 @@ export class SectionWiseSummaryComponent implements OnInit {
 
   @Input() timeAnalysisStats = new EventEmitter();
 
+  @Input() type = '';
+
   @ViewChild('sectionTable') sectionTable: MatTable<any>;
 
   @ViewChild('diffiultylevelTable') diffiultylevelTable: MatTable<any>;
