@@ -663,7 +663,8 @@ export class UpdateTestContentComponent implements OnInit {
     let formatedQuestion = data.map(x => {
       return new QuestionExport(x);
     })
-     this.ConvertToCSV(formatedQuestion,filename);
+   // console.log(formatedQuestion);
+         this.ConvertToCSV(formatedQuestion,filename);
   }
 
   ConvertToCSV(objArray,filename) {
@@ -672,7 +673,10 @@ export class UpdateTestContentComponent implements OnInit {
           wrap  : '"',
           field : ',',
           eol   : '\n'
-      }
+      },
+      expandArrayObjects: true,
+      emptyFieldValue:'',
+
     };
     json2csv(objArray, (err, csvData) => {
 
