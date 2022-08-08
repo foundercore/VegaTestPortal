@@ -1,3 +1,4 @@
+import { QuestionExport } from './../../../models/questions/QuestionExport';
 import { Section } from './../models/sections';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
@@ -20,8 +21,7 @@ import { EditTestMetaData } from '../models/editTestMetaData';
 import { Location } from '@angular/common';
 import { BreadcrumbNavService } from '../../layout/breadcrumb/breadcrumb-nav.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { X } from '@angular/cdk/keycodes';
-import { repeat } from 'rxjs/operators';
+import { json2csv } from 'json-2-csv';
 
 @Component({
   selector: 'app-update-test-content',
@@ -651,5 +651,48 @@ export class UpdateTestContentComponent implements OnInit {
       });
     }
     return questions;
+  }
+
+  exportQuestions(){
+    this.testConfigService.getQuestionPaperLinkedQuestions(this.testId).subscribe(questions => {
+        this.downloadFile(questions,this.questionPaper.name);
+    })
+  }
+
+  downloadFile(data, filename='data') {
+    let formatedQuestion = data.map(x => {
+      return new QuestionExport(x);
+    })
+   // console.log(formatedQuestion);
+         this.ConvertToCSV(formatedQuestion,filename);
+  }
+
+  ConvertToCSV(objArray,filename) {
+    let options = {
+      delimiter: {
+          wrap  : '"',
+          field : ',',
+          eol   : '\n'
+      },
+      expandArrayObjects: true,
+      emptyFieldValue:'',
+
+    };
+    json2csv(objArray, (err, csvData) => {
+
+      let blob = new Blob(['\ufeff' + csvData], { type: 'text/csv;charset=utf-8;' });
+      let dwldLink = document.createElement("a");
+      let url = URL.createObjectURL(blob);
+      let isSafariBrowser = navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1;
+      if (isSafariBrowser) {  //if Safari open in new window to save file with random filename.
+          dwldLink.setAttribute("target", "_blank");
+      }
+      dwldLink.setAttribute("href", url);
+      dwldLink.setAttribute("download", filename + ".csv");
+      dwldLink.style.visibility = "hidden";
+      document.body.appendChild(dwldLink);
+      dwldLink.click();
+      document.body.removeChild(dwldLink);
+    }, options);
   }
 }
