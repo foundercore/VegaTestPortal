@@ -52,7 +52,7 @@
             </div>
           </div>
         </div>
-        <div class="test-prelogin-instructions">
+        <div class="test-prelogin-instructions" *ngIf="testData?.type !== 'NMAT'">
               <h2 class="test-instructions-article-label">Navigation</h2>
               <p><strong>1.</strong> To select a question to answer, you can do one of the following:</p>
                     <ul class="arrow" style="padding-left:35px;">
@@ -71,6 +71,17 @@
               <p><strong>3.</strong> To change an answer to a question, first select the question and then click on the new answer option followed by a click on the Next button.</p>
               <p><strong>4.</strong> Questions that are saved or marked for review after answering will ONLY be considered for evaluation.</p>
         </div>
+
+        <div class="test-prelogin-instructions"  *ngIf="testData.type === 'NMAT'">
+          <h2 class="test-instructions-article-label">Navigation</h2>
+          <p><strong>1.</strong> You cannot select the sequence of questions or the section. You must attempt each question as it appears on the screen.</p>
+          <p><strong>2.</strong> You cannot skip to the next section unless the time allocated for a particular section is completed.</p>
+          <p><strong>3.</strong> You must select the answer to the question in front of you before you can move to the next question. You cannot skip any question.</p>
+          <p><strong>4.</strong> You will not be able to return to any question once you have moved to the next question.</p>
+          <p><strong>5.</strong> If you end the test before its scheduled time, either intentionally or by mistake, you will not be able to see the un-attempted questions on your test.</p>
+          <p><strong>6.</strong> For each question, there is only one correct answer.</p>
+
+      </div>
 
       </article>
     </div>

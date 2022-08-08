@@ -67,7 +67,17 @@ export class TestsComponent implements OnInit, AfterViewInit {
   actualTotalNumberOfRecords: 0;
   searchPattern: string = '';
 
-  private nmatSectionTimer = 40;
+  nmatSectionList = [];
+  namtSectionListTiming = [{
+    name:'Quantitative Skill',
+    time:28
+  },{
+    name:'Logical Reasoning',
+    time:52
+  },{
+    name:'Language Skill',
+    time:40
+  }]
 
   constructor(
     private testConfigService: TestConfigService,
@@ -76,7 +86,9 @@ export class TestsComponent implements OnInit, AfterViewInit {
     private router: Router,
     private store: Store<AppState>,
     public authorizationService: AuthorizationService
-  ) {}
+  ) {
+    this.testConfigService.getNmatSectionNamelist().subscribe((resp:any) => this.nmatSectionList = resp);
+  }
   ngAfterViewInit(): void {
     this.store.select('appState').subscribe((data) => {
       this.userName = data.user.userName;
@@ -172,28 +184,22 @@ export class TestsComponent implements OnInit, AfterViewInit {
           (res: any) => {
             //if (res.isSuccess) {
               if(result?.type == 'NMAT') {
-                let quantReasoningSection = new Section();
-                quantReasoningSection.name = 'Quantitative Reasoning';
-                quantReasoningSection.durationInMinutes =  this.nmatSectionTimer;
-                quantReasoningSection.testId = res.testId;
+                let sectionObjectList = [];
+                for(let j=0;j<3;j++){
+                  let sectionObj = new Section();
+                  sectionObj.name = this.nmatSectionList[j];
+                  sectionObj.durationInMinutes =  this.namtSectionListTiming.find(x => x.name  == this.nmatSectionList[j]).time;
+                  sectionObj.testId = res.testId;
+                  sectionObjectList.push(sectionObj);
+                }
 
-                let logicReasoningSection = new Section();
-                logicReasoningSection.name = 'Logical Reasoning';
-                logicReasoningSection.durationInMinutes = this.nmatSectionTimer;;
-                logicReasoningSection.testId =  res.testId;
-
-
-                let verbalReasoningSection = new Section();
-                verbalReasoningSection.name = 'Verbal Reasoning';
-                verbalReasoningSection.durationInMinutes = this.nmatSectionTimer;;
-                verbalReasoningSection.testId =  res.testId;
 
                 console.log(res);
-                this.testConfigService.addSection(quantReasoningSection)
+                this.testConfigService.addSection(sectionObjectList[0])
                 .subscribe(resp => {
-                  this.testConfigService.addSection(verbalReasoningSection)
+                  this.testConfigService.addSection(sectionObjectList[1])
                   .subscribe(resp => {
-                    this.testConfigService.addSection(logicReasoningSection)
+                    this.testConfigService.addSection(sectionObjectList[2])
                     .subscribe(resp => {
                       this.toastrService.success('Test created successfully');
                       this.GetAllquestionPapers();
