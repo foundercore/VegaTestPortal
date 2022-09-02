@@ -41,16 +41,12 @@ export class LiveTestInstructionComponent implements OnInit {
   isPassCode = false;
 
   sectionList = [
-    {
-      number:'NUMBER',
-      name:'SECTION',
-      totalQuestions:'QUESTIONS'
-    }
+
   ];
 
   passcode;
 
-  @Output() startTestEvent = new EventEmitter<{isTestStarted:boolean,testData: any,assignmentId?:string,isTestLive:boolean,assignmentData?:any}>();
+  @Output() startTestEvent = new EventEmitter<{isTestStarted:boolean,testData: any,assignmentId?:string,isTestLive:boolean,assignmentData?:any,sectionList?:any}>();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -121,7 +117,8 @@ export class LiveTestInstructionComponent implements OnInit {
        testData: this.testData,
        assignmentId: this.assignmentId,
        isTestLive: this.isTestLive,
-       assignmentData: this.assignmentData
+       assignmentData: this.assignmentData,
+       sectionList: this.sectionList
       });
   }
 }

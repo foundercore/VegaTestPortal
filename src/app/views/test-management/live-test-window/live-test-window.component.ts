@@ -17,6 +17,8 @@ export class LiveTestWindowComponent implements OnInit {
 
   isTestLive = false;
 
+  sectionList = [];
+
   constructor() { }
 
   ngOnInit() {
@@ -34,6 +36,10 @@ export class LiveTestWindowComponent implements OnInit {
     }
     this.isTestLive = event.isTestLive;
     this.assignmentData = event.assignmentData;
+    this.sectionList = event.sectionList;
+    if(this.testType == 'NMAT'){
+      this.testData.sections = this.sectionList;
+    }
   }
 
 }

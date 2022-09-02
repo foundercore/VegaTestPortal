@@ -44,9 +44,18 @@
         <div class="test-sections-details">
           <h2 class="test-instructions-article-label">Sections</h2>
           <span style="padding: 10px 0 15px;">There are {{totalSections}} section that are part of this test:</span>
+
+          <div class="section-table-list-header" >
+            <div class="section"  >
+              <div style="flex: 1 1 25%;padding: 20px 0;"> NUMBER </div>
+              <div style="flex: 1 1 50%;padding: 20px 0;"> SECTION</div>
+              <div style="flex: 1 1 25%;padding: 20px 0;"> QUESTIONS</div>
+            </div>
+         </div>
           <div cdkDropList class="section-table-list" (cdkDropListDropped)="drop($event)">
-            <div class="section" *ngFor="let section of sectionList" cdkDrag>
-                  <div style="flex: 1 1 25%;padding: 20px 0;">{{section.number}}</div>
+
+            <div class="section-box" *ngFor="let section of sectionList;let index = index" cdkDrag>
+                  <div style="flex: 1 1 25%;padding: 20px 0;">{{index + 1}}</div>
                   <div style="flex: 1 1 50%;padding: 20px 0;">{{section.name}}</div>
                   <div style="flex: 1 1 25%;padding: 20px 0;">{{section.totalQuestions}}</div>
             </div>

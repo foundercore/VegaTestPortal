@@ -15,7 +15,7 @@
     </div>
   </mat-tab>
 
-  <mat-tab label="Summary">
+  <mat-tab label="Summary"  *ngIf="testConfig?.type != 'NMAT'">
     <ng-template mat-tab-label>
       <mat-icon class="example-tab-icon">bar_chart</mat-icon>
       {{ "STU_DASHBOARD_QUICKVIEW.SUMMARY" | translate }}
