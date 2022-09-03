@@ -13,7 +13,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
-import { forkJoin, merge, Observable, of as observableOf, Subject } from 'rxjs';
+import { concat, forkJoin, merge, Observable, of as observableOf, Subject } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 
 import { finalize } from 'rxjs/operators';
@@ -26,6 +26,7 @@ import Swal from 'sweetalert2';
 import { CloneAssignmentComponent } from '../clone-assignment/clone-assignment.component';
 import { TestVM } from '../models/postTestVM';
 import { SearchQuestionPaperVM } from '../models/searchQuestionPaperVM';
+import { Section } from '../models/sections';
 import { Status } from '../models/statusEnum';
 import { AssessmentEditorComponent } from '../popups/assessment-editor/assessment-editor.component';
 import { TestLiveComponent } from '../popups/test-live/test-live.component';
@@ -65,6 +66,19 @@ export class TestsComponent implements OnInit, AfterViewInit {
   isRateLimitReached: boolean;
   actualTotalNumberOfRecords: 0;
   searchPattern: string = '';
+
+  nmatSectionList = [];
+  namtSectionListTiming = [{
+    name:'Quantitative Skill',
+    time:28
+  },{
+    name:'Logical Reasoning',
+    time:52
+  },{
+    name:'Language Skill',
+    time:40
+  }]
+
   constructor(
     private testConfigService: TestConfigService,
     public dialog: MatDialog,
@@ -72,7 +86,9 @@ export class TestsComponent implements OnInit, AfterViewInit {
     private router: Router,
     private store: Store<AppState>,
     public authorizationService: AuthorizationService
-  ) {}
+  ) {
+    this.testConfigService.getNmatSectionNamelist().subscribe((resp:any) => this.nmatSectionList = resp);
+  }
   ngAfterViewInit(): void {
     this.store.select('appState').subscribe((data) => {
       this.userName = data.user.userName;
@@ -167,9 +183,37 @@ export class TestsComponent implements OnInit, AfterViewInit {
         this.testConfigService.createQuestionPaper(model).subscribe(
           (res: any) => {
             //if (res.isSuccess) {
-            this.toastrService.success('Test created successfully');
-            this.GetAllquestionPapers();
-            console.log('this.createdtest==', res);
+              if(result?.type == 'NMAT') {
+                let sectionObjectList = [];
+                for(let j=0;j<3;j++){
+                  let sectionObj = new Section();
+                  sectionObj.name = this.nmatSectionList[j];
+                  sectionObj.durationInMinutes =  this.namtSectionListTiming.find(x => x.name  == this.nmatSectionList[j]).time;
+                  sectionObj.testId = res.testId;
+                  sectionObjectList.push(sectionObj);
+                }
+
+
+                console.log(res);
+                this.testConfigService.addSection(sectionObjectList[0])
+                .subscribe(resp => {
+                  this.testConfigService.addSection(sectionObjectList[1])
+                  .subscribe(resp => {
+                    this.testConfigService.addSection(sectionObjectList[2])
+                    .subscribe(resp => {
+                      this.toastrService.success('Test created successfully');
+                      this.GetAllquestionPapers();
+                      console.log(resp);
+                    });
+                  });
+                });
+
+              } else {
+                this.toastrService.success('Test created successfully');
+                this.GetAllquestionPapers();
+                console.log('this.createdtest==', res);
+              }
+
             // }
           },
           (error) => {

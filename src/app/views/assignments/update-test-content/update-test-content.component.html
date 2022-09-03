@@ -53,7 +53,7 @@
         <button  mat-raised-button class="add-btn mx-2" *ngIf="status == 'PUBLISHED'"  (click)="viewAssignment()">
           <mat-icon>add_circle</mat-icon><span class="ml-2">View Assignment</span>
         </button>
-        <button  mat-raised-button class="add-btn mx-2"  (click)="addSection()" *ngIf=" totalDurationOfSections < totalTestDuration && status !== 'PUBLISHED'">
+        <button  mat-raised-button class="add-btn mx-2"  (click)="addSection()" *ngIf=" totalDurationOfSections < totalTestDuration && status !== 'PUBLISHED' && type !== 'NMAT'">
           <mat-icon>add_circle</mat-icon><span class="ml-2">Add Section</span>
         </button>
       </div>
@@ -63,7 +63,7 @@
     <mat-accordion *ngIf="modelsections?.length > 0">
       <div class="row" *ngFor="let section of modelsections; let i = index" style="margin-bottom: 20px" >
         <div class="col-lg-12">
-          <mat-expansion-panel [expanded]="expandedStateArray[i]">
+          <mat-expansion-panel [expanded]="expandedStateArray[i]" >
             <mat-expansion-panel-header (click)="getSectionId(section, i)">
 
               <mat-panel-title class="position-relative">
@@ -75,12 +75,12 @@
                 <ng-container>
                   <span  *ngIf="status !== 'PUBLISHED'" class="section-action-btn edit_btn" (click)="editSection($event,section)"  matTooltip="Edit Section Info" ><i class="fas fa-edit"></i></span>
                   <span  *ngIf="status !== 'PUBLISHED'" class="section-action-btn delete_btn" (click)="removeSection($event,section)"  matTooltip="Delete Section" ><i class="fas fa-trash-alt"></i></span>
-                  <span class="section-action-btn save_btn" (click)="saveQuestionSequence($event,section)" matTooltip="Save Question sequence in Section"><i class="fas fa-save" ></i></span>
+                  <span  class="section-action-btn save_btn" (click)="saveQuestionSequence($event,section)" matTooltip="Save Question sequence in Section"><i class="fas fa-save" ></i></span>
                 </ng-container>
               </mat-panel-description>
 
             </mat-expansion-panel-header>
-            <div class="row">
+            <div class="row"  >
               <div class="col-lg-6">
                 <div class="search-bar">
                   <mat-form-field style="width: 600px" appearance="outline">
@@ -121,7 +121,7 @@
 
 
 
-            <div cdkDropList class="section-question-list" (cdkDropListDropped)="drop($event)" #container2  cdkDropList
+            <div   cdkDropList class="section-question-list" (cdkDropListDropped)="drop($event)" #container2  cdkDropList
             cdkDropListLockAxis="y"
             cdkDropListOrientation="vertical">
               <div class="question-box">

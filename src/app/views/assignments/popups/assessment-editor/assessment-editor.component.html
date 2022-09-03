@@ -30,7 +30,7 @@
           >Duration should be greater than 0</span
         >
       </mat-form-field>
-      <mat-form-field appearance="outline" style="width: 100%">
+      <!-- <mat-form-field appearance="outline" style="width: 100%">
         <mat-label>Type</mat-label>
         <input
           matInput
@@ -40,8 +40,16 @@
         <mat-error *ngIf="hasError('type', 'required')"
           >Type has error</mat-error
         >
-        
+
+      </mat-form-field> -->
+      <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="type" required>
+          <mat-option [value]="type" *ngFor="let type of typeList">{{type}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="hasError('type', 'required')" > Type is <strong>required</strong></mat-error >
       </mat-form-field>
+
 
       <label for="description" class="label">Instruction</label>
 

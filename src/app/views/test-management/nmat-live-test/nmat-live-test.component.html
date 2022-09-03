@@ -1,0 +1,182 @@
+<app-loading *ngIf="isLoading || !timerStarted"> </app-loading>
+
+<div class="live-test-container" *ngIf="!isLoading && timerStarted">
+  <div class="header">
+    <div>
+      {{ testData?.name }}
+    </div>
+    <div style="display: flex; align-items: center">
+      <button
+        class="auto-btn p-0 m-1"
+        style="height: fit-content; min-width: auto"
+        mat-raised-button
+        (click)="calculate()"
+        *ngIf="testData?.calculatorRequired"
+      >
+        <mat-icon>calculate</mat-icon>
+      </button>
+      <div class="time">Time Left : {{ CountDownTimerValue }}</div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="question-content">
+      <div class="section-label"></div>
+      <mat-tab-group
+        [selectedIndex]="selectedTabIndex.value"
+        (selectedIndexChange)="changeSection($event)"
+        #TabGroup
+        class="live-test-sections"
+      >
+        <ng-container *ngFor="let section of testData?.sections">
+          <mat-tab
+            label="{{ section?.name }}"
+            [disabled]="isSectionTimerTest && isTestLive"
+          >
+            <div style="height: calc(100vh - 185px)">
+              <div
+                style="
+                  border-bottom: 1px solid #cccccc;
+                  font-size: 18px;
+                  padding-left: 10px;
+                "
+              >
+                <strong>Question No. {{ questionNumber + 1 }}</strong>
+              </div>
+              <div class="question">
+                <div
+                  class="question-passage"
+                  *ngIf="
+                    currentSelectedQuestion?.passageContent != 'null' &&
+                    currentSelectedQuestion?.passageContent != null
+                  "
+                >
+                  <div
+                    [innerHTML]="currentSelectedQuestion?.passageContent"
+                  ></div>
+                </div>
+
+                <div class="question-text">
+                  <div [innerHTML]="currentSelectedQuestion?.name"></div>
+
+                  <div
+                    style="margin-top: 20px"
+                    *ngIf="currentSelectedQuestion?.type == 'TITA'"
+                  >
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>Answer here...</mat-label>
+                      <input
+                        matInput
+                        placeholder="Answer here..."
+                        [(ngModel)]="titaText"
+                      />
+                    </mat-form-field>
+                  </div>
+
+                  <div
+                    *ngIf="currentSelectedQuestion?.type !== 'TITA'"
+                    style="padding-top: 20px"
+                  >
+                    <ul *ngIf="currentSelectedQuestion?.type == 'MCQ_MUTIPLE'">
+                      <li *ngFor="let opt of currentSelectedQuestion?.options">
+                        <div style="display: flex; align-items: center">
+                          <div style="padding-right: 5px">
+                            <mat-checkbox
+                              [checked]="optionsSelected[opt?.key]"
+                              (change)="setOptionSelected(opt?.key)"
+                            >
+                            </mat-checkbox>
+                          </div>
+                          <div [appMath]="opt?.value"></div>
+                        </div>
+                      </li>
+                    </ul>
+                    <mat-radio-group aria-labelledby="answer-radio-group-label" class="answer-radio-group" *ngIf="currentSelectedQuestion?.type == 'MCQ'" [(ngModel)]="singleOptionsSelected">
+                          <mat-radio-button class="answer-radio-button" *ngFor="let opt of currentSelectedQuestion?.options" [value]="opt"  (change)="toggleConfirmButton()" >
+                            <div [appMath]="opt?.value"></div>
+                          </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="!isTestLive" class="question-explanation">
+                <strong>Correct Option:</strong>
+                <div
+                  class="correct-option-div"
+                  [innerHTML]="selectedQuestionCorrectAnswer"
+                ></div>
+                <strong
+                  >Explanation:
+                  <i
+                    *ngIf="videoUrl != null"
+                    (click)="openDialog()"
+                    style="font-size: 24px; margin-left: 10px; cursor: pointer"
+                    class="fab fa-youtube"
+                  ></i
+                ></strong>
+
+                <div
+                  class="explanation-div"
+                  [innerHTML]="selectedQuestionExplanation"
+                ></div>
+              </div>
+            </div>
+          </mat-tab>
+        </ng-container>
+      </mat-tab-group>
+    </div>
+
+
+  </div>
+  <div class="footer">
+    <div class="footer-part1">
+
+      <div>
+
+        <button   (click)="toggleNextBtn()" style="margin-right: 10px"
+        class="save-next-btn"  mat-raised-button     [disabled]="!isTestLive || !enableConfirmBtn">
+          Confirm
+        </button>
+
+        <button
+
+          class="save-next-btn"
+          mat-raised-button
+          (click)="saveAndNextAnswers()"
+          [disabled]="!isTestLive || !enableNextBtn"
+        >
+           Next
+        </button>
+        <!-- <button
+          *ngIf="isLastSectionQuestion || isFullLengthLastSection"
+          class="save-next-btn"
+          mat-raised-button
+          (click)="saveAndNextAnswers()"
+          [disabled]="!isTestLive"
+        >
+          Save
+        </button> -->
+      </div>
+    </div>
+    <div style="  display: flex; justify-content: center">
+      <div>
+        <button
+          *ngIf="isTestLive && !isSectionTimerTest && authorizationService.isAdminAndStaff"
+          class="save-exit-btn"
+          mat-raised-button
+          (click)="SaveandExit()"
+        >
+          Save And Exit
+        </button>
+        <button
+          *ngIf="!isTestLive"
+          class="exit-btn"
+          mat-raised-button
+          (click)="exit()"
+        >
+          Exit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -17,7 +17,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" style="width: 100%">
-        
+
         <mat-label>Duration (Mins)</mat-label>
         <input
           type="number"
@@ -29,11 +29,11 @@
           >Duration is required</mat-error
         >
       </mat-form-field>
-      
+
       <mat-checkbox formControlName="calculatorRequired" style="padding-bottom: 15px;"> Calculator Required?  </mat-checkbox>
 
        <mat-form-field appearance="outline" style="width: 100%">
-        <mat-label>Type</mat-label>
+        <!-- <mat-label>Type</mat-label>
         <input
           matInput
           placeholder="Type"
@@ -41,11 +41,16 @@
         />
         <mat-error *ngIf="hasError('type', 'required')"
           >Type has error</mat-error
-        >
-        
+        > -->
+           <mat-label>Type</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option [value]="type" *ngFor="let type of typeList">{{type}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="hasError('type', 'required')" > Type is <strong>required</strong></mat-error >
+
       </mat-form-field>
 
-      
+
        <mat-form-field
              appearance="outline" style="width: 100%"
           >

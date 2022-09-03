@@ -17,4 +17,4 @@
    
  - STAGE:
    Build :
-   `ng build --prod --aot --configuration=staging`
+   `ng build --aot --configuration=staging`

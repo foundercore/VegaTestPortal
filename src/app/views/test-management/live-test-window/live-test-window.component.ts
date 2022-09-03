@@ -11,9 +11,13 @@ export class LiveTestWindowComponent implements OnInit {
 
   testData;
 
+  testType;
+
   assignmentData;
 
   isTestLive = false;
+
+  sectionList = [];
 
   constructor() { }
 
@@ -24,13 +28,18 @@ export class LiveTestWindowComponent implements OnInit {
   startTest(event){
     this.isTestStarted = event.isTestStarted;
     this.testData = event.testData;
-    if(event.testData.type == "Full Length"){
+    this.testType = event.testData.type;
+    if (event.testData.type == 'Full Length'){
       this.testData.isSectionTimerTest = true;
     } else {
       this.testData.isSectionTimerTest = false;
     }
     this.isTestLive = event.isTestLive;
     this.assignmentData = event.assignmentData;
+    this.sectionList = event.sectionList;
+    if(this.testType == 'NMAT'){
+      this.testData.sections = this.sectionList;
+    }
   }
 
 }
