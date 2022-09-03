@@ -224,6 +224,11 @@ export class TestConfigService extends BaseService {
     return this.http.post<any>(Url,analysisObj,this.headers);
   }
 
+  getQuestionPaperLinkedQuestions( test_id: string ): Observable<any> {
+    const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/${test_id}/linked-questions`;
+    return this.http.get<any>(Url);
+  }
+
   getNmatSectionNamelist(){
     const Url = `${this.BASE_SERVICE_URL}/api/v1/test/config/nmat/sectionname`;
     return this.http.get<any>(Url,this.headers);
