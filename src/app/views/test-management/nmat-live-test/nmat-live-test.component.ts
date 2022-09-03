@@ -92,6 +92,8 @@ export class NmatLiveTestComponent implements OnInit {
 
   isSectionChangeTriggered = false;
 
+  @Input() sectionList;
+
   @Input() testData;
 
   @Input() assignmentData;

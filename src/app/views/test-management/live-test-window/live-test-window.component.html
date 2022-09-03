@@ -3,7 +3,7 @@
 <app-live-test *ngIf="isTestStarted && testType !== 'NMAT'" [testData]="testData" [isTestLive]="isTestLive"
   [assignmentData]="assignmentData"></app-live-test>
 
-  <app-nmat-live-test  *ngIf="isTestStarted && testType === 'NMAT'"  [testData]="testData" [isTestLive]="isTestLive" [assignmentData]="assignmentData">
+  <app-nmat-live-test  *ngIf="isTestStarted && testType === 'NMAT'" [sectionList]="sectionList"  [testData]="testData" [isTestLive]="isTestLive" [assignmentData]="assignmentData">
   </app-nmat-live-test>
 
 
