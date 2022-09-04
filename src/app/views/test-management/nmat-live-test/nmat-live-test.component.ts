@@ -1,3 +1,4 @@
+import { filter } from 'rxjs/operators';
 import { Component, OnInit, ChangeDetectionStrategy, HostListener, Inject, Input, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -195,7 +196,8 @@ export class NmatLiveTestComponent implements OnInit {
     this.testData?.sections?.forEach((section, index) => {
       if (section != null && section.questions != null) {
         // sort question by Sequence
-        section.questions.sort((a, b) => {
+        let sectionCopy = section.questions;
+        sectionCopy.sort((a, b) => {
           if (a.sequenceNumber == 0 && b.sequenceNumber == 0) {
             const passage1 = a.passageContent ? a.passageContent : '';
 
@@ -212,6 +214,13 @@ export class NmatLiveTestComponent implements OnInit {
             return a.sequenceNumber < b.sequenceNumber ? -1 : 1;
           }
         });
+
+        let  remainingQuestion = sectionCopy.filter(x => x.passageContent == null || x.passageContent == '');
+        let passageQuestion = sectionCopy.filter(x => (x.passageContent != null && x.passageContent.trim().length > 0 ));
+        remainingQuestion = this.shuffle(remainingQuestion);
+
+        section.questions = remainingQuestion.concat(passageQuestion);
+
         this.sectionQuestionMap.set(section.id, section.questions);
       }
     });
@@ -1049,5 +1058,23 @@ export class NmatLiveTestComponent implements OnInit {
 
   toggleConfirmButton(){
     this.enableConfirmBtn = true;
+  }
+
+  shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
   }
 }
