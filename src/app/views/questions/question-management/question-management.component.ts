@@ -72,7 +72,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   topicList: string[] = [];
   topicListFilteredOptions: Observable<string[]>;
   subTopicList: string[] = [];
-  tags: string[] | undefined = [];
+  tagList: string[] | undefined = [];
   tagsFilteredOptions: Observable<string[]>;
   questionTypeList: string[] = [];
   questionTypeListFilteredOptions: Observable<string[]>;
@@ -80,6 +80,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
   filteredTopics = [];
   filteredSubjects = [];
   filteredQuestions = [];
+  filteredTags = [];
 
   @ViewChild(MatTable)
   table!: MatTable<any>;
@@ -108,7 +109,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
       this.questionService.getQuestionSubtopics(),
     ]).subscribe((results) => {
       this.questionTypeList = results[0];
-      this.tags = results[1];
+      this.tagList = results[1];
       this.subjectList = results[2];
       this.topicList = results[3];
       this.subTopicList = results[4];
@@ -145,6 +146,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
           );
         })
       );
+      this.filteredTags = this.tagList;
     });
   }
 
@@ -152,6 +154,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     this.filteredTopics = this.topicList;
     this.filteredSubjects = this.subjectList;
     this.filteredQuestions = this.questionTypeList;
+    this.filteredTags = this.tagList;
   }
 
   ngAfterViewInit() {
@@ -354,9 +357,8 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
-      row.id
-    }`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id
+      }`;
   }
 
   openBulkUploadDialog() {
@@ -368,7 +370,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
 
   openMigrateUploadDialog() {
     const dialogRef = this.dialog.open(QuestionMigrateUploadDialogComponent);
-    dialogRef.afterClosed().subscribe((result) => {});
+    dialogRef.afterClosed().subscribe((result) => { });
   }
 
   deleteQuestion(row: QuestionModel) {
@@ -439,7 +441,7 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
     );
   }
 
-  quesSearch(event){
+  quesSearch(event) {
     this.filteredQuestions = this.searchQues(event.target.value);
   }
 
@@ -449,4 +451,12 @@ export class QuestionManagementComponent implements OnInit, AfterViewInit {
       option.toLowerCase().includes(filter)
     );
   }
+
+  searchTag(event) {
+    let filter = event.target.value.toLowerCase();
+    this.filteredTags = this.tagList.filter((option) =>
+      option.toLowerCase().includes(filter)
+    );
+  }
+  
 }
