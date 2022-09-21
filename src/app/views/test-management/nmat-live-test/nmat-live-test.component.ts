@@ -188,8 +188,8 @@ export class NmatLiveTestComponent implements OnInit {
       this.sectionTotalTimeMap.set(
         section.id,
         // Temporary
-        this.convertminutestoseconds(40)
-        //this.convertminutestoseconds(section.durationInMinutes)
+        //this.convertminutestoseconds(40)
+        this.convertminutestoseconds(section.durationInMinutes)
       );
     });
 
@@ -325,8 +325,8 @@ export class NmatLiveTestComponent implements OnInit {
     if (this.isSectionTimerTest) {
       return this.convertminutestoseconds(
         //Temporary
-        40
-        //this.currentSelectedSection.durationInMinutes
+        //40
+        this.currentSelectedSection.durationInMinutes
       );
     } else {
       return this.convertminutestoseconds(this.testData.totalDurationInMinutes);
@@ -460,6 +460,20 @@ export class NmatLiveTestComponent implements OnInit {
         this.currentSelectedSection = changeSection;
       }
       this.getUserAllSubmissionData(moveToNext);
+    }
+  }
+
+  async previewNext(moveToNext = true, changeSection = null) {
+
+    this.optionsSelected = [];
+    this.singleOptionsSelected = null;
+  //  this.timeElapsedInSecond = 0;
+    if (this.questionNumber < this.sectionsWithPapers.length - 1) {
+      this.questionNumber = this.questionNumber + 1;
+      this.getQuestion(this.questionNumber, true);
+    } else {
+      this.questionNumber = 1;
+      this.goToNextSection();
     }
   }
 
