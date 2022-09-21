@@ -147,6 +147,17 @@
         >
            Next
         </button>
+
+        <button
+        style="margin-left: 10px"
+        class="save-next-btn"
+        mat-raised-button
+        (click)="previewNext()"
+        *ngIf="!isTestLive"
+      >
+        Preview Next
+      </button>
+
         <!-- <button
           *ngIf="isLastSectionQuestion || isFullLengthLastSection"
           class="save-next-btn"
