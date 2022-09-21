@@ -18,7 +18,7 @@ jobs:
         npm ci
         npm run ng build -- --prod
     - name: zip artifacts
-      run: cd dist/client && zip -r vegatestportal.zip ./*
+      run: cd dist/vega-test-portal && zip -r vega-test-portal.zip ./*
     - name: Create GitHub release
       id: create-new-release
       uses: actions/create-release@v1
@@ -35,6 +35,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create-new-release.outputs.upload_url }}
-        asset_path: ./dist/client/vegatestportal.zip
-        asset_name: vegatestportal-v${{ github.run_number }}.zip
+        asset_path: ./dist/vega-test-portal/vega-test-portal.zip
+        asset_name: vega-test-portal-v${{ github.run_number }}.zip
         asset_content_type: application/zip
