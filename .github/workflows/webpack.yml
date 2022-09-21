@@ -1,0 +1,40 @@
+name: vegatestportal
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Build project with npm
+      run: |
+        npm ci
+        npm run ng build -- --prod
+    - name: zip artifacts
+      run: cd dist/client && zip -r vegatestportal.zip ./*
+    - name: Create GitHub release
+      id: create-new-release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: vegatestportal-${{ github.run_number }}
+        body: |
+            Build generated through GitHub Actions - Release v${{ github.run_number }}
+    - name: Upload release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create-new-release.outputs.upload_url }}
+        asset_path: ./dist/client/vegatestportal.zip
+        asset_name: vegatestportal-v${{ github.run_number }}.zip
+        asset_content_type: application/zip
