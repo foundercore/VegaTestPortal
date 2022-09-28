@@ -198,7 +198,7 @@ export class NmatLiveTestComponent implements OnInit {
         // sort question by Sequence
         let sectionCopy = section.questions;
         sectionCopy.sort((a, b) => {
-          if (a.sequenceNumber == 0 && b.sequenceNumber == 0) {
+
             const passage1 = a.passageContent ? a.passageContent : '';
 
             const passage2 = b.passageContent ? b.passageContent : '';
@@ -210,16 +210,22 @@ export class NmatLiveTestComponent implements OnInit {
               : passageName1 > passageName2
               ? 1
               : 0;
-          } else {
-            return a.sequenceNumber < b.sequenceNumber ? -1 : 1;
-          }
+
         });
 
         let  remainingQuestion = sectionCopy.filter(x => x.passageContent == null || x.passageContent == '');
         let passageQuestion = sectionCopy.filter(x => (x.passageContent != null && x.passageContent.trim().length > 0 ));
         remainingQuestion = this.shuffle(remainingQuestion);
 
-        section.questions = remainingQuestion.concat(passageQuestion);
+        const rndInt = Math.floor(Math.random() * 3) + 1
+        if(rndInt > 1){
+          section.questions = passageQuestion.concat(remainingQuestion);
+
+        } else {
+          section.questions = remainingQuestion.concat(passageQuestion);
+
+        }
+
 
         this.sectionQuestionMap.set(section.id, section.questions);
       }
