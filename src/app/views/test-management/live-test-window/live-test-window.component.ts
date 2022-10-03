@@ -29,7 +29,7 @@ export class LiveTestWindowComponent implements OnInit {
     this.isTestStarted = event.isTestStarted;
     this.testData = event.testData;
     this.testType = event.testData.type;
-    if (event.testData.type == 'Full Length'){
+    if (event.testData.type == 'FULL_LENGTH'){
       this.testData.isSectionTimerTest = true;
     } else {
       this.testData.isSectionTimerTest = false;
