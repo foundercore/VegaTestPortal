@@ -112,6 +112,11 @@ export class StudentReportComponent implements OnInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
+
+  rankFlag: boolean;
+
+  loadSolutionPage: boolean;
+
   assignmentChartData: {
     type: string;
     title: string;
@@ -561,7 +566,6 @@ export class StudentReportComponent implements OnInit {
     }
   }
 
-  rankFlag: boolean;
 
   onTabChanged($event) {
     if ($event.tab.textLabel === 'Ranking') {
@@ -571,6 +575,8 @@ export class StudentReportComponent implements OnInit {
       } else {
         this.rankFlag = false;
       }
+    } else if ($event.tab.textLabel === 'Solution'){
+      this.loadSolutionPage = true;
     }
   }
 
