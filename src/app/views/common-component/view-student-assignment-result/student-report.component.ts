@@ -115,7 +115,7 @@ export class StudentReportComponent implements OnInit {
 
   rankFlag: boolean;
 
-  loadSolutionPage: boolean;
+  loadSolutionPage: false;
 
   assignmentChartData: {
     type: string;

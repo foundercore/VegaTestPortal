@@ -74,9 +74,12 @@
           </mat-button-toggle-group>
         </div>
       </div>
-
-      <div class="container-fluid" *ngIf="loadSolutionPage">
-        <div class="row">
+      
+      <div class="container-fluid" >
+        <div *ngIf="!loadSolutionPage">
+          <h1>Loading...</h1>
+        </div>
+        <div class="row" *ngIf="loadSolutionPage">
           <div class="col-lg-8">
             <mat-tab-group
               class="invisible-tabs"
