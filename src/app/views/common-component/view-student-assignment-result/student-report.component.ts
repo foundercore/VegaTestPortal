@@ -45,6 +45,8 @@ export class StudentReportComponent implements OnInit {
   explanationMap = new Map();
 
   passageMap = new Map();
+  
+  questionPassageMap = new Map();
 
   solutionSectionWiseStats: StudentReportModel[] = [];
 
@@ -115,7 +117,7 @@ export class StudentReportComponent implements OnInit {
 
   rankFlag: boolean;
 
-  loadSolutionPage: false;
+  loadSolutionPage = false;
 
   assignmentChartData: {
     type: string;
@@ -141,7 +143,6 @@ export class StudentReportComponent implements OnInit {
       this.userName = data?.user?.userName;
       this.studentName = data?.user?.firstName + ' ' + data?.user?.lastName;
       this.userType = data?.user?.authorities[0]?.authority;
-      console.log('data', data);
     });
     this.isLoading = true;
     this.getAssignmentResults();
@@ -163,6 +164,7 @@ export class StudentReportComponent implements OnInit {
             this.fetchedWholeAssignmentResult = res;
             this.getTestConfig(res.testId, res);
             this.fetchedWholeAssignmentResult.sections.forEach((section) => {
+              // sort answers
               section.answers.sort((a, b) => {
                 if (
                   (a.sequenceNumber == undefined &&
@@ -190,18 +192,7 @@ export class StudentReportComponent implements OnInit {
             this.solutionSectionWiseSelectedStats.emit(
               this.solutionSectionWiseStats[0]
             );
-            this.fetchedWholeAssignmentResult?.sections.forEach(
-              (section, i) => {
-                this.solutionSectionArray.push({
-                  index: i,
-                  name: section.sectionName,
-                });
-                section.answers.forEach((answers) => {
-                  this.explanationMap.set(answers.questionId, true);
-                  this.passageMap.set(answers.questionId, true);
-                });
-              }
-            );
+            
             if (this.solutionSectionArray.length != 0) {
               this.solutionSectionSelection = this.solutionSectionArray[0];
               this.solutionSectionSelectedIndex = 0;
@@ -216,16 +207,21 @@ export class StudentReportComponent implements OnInit {
             this.showFilteredData(this.currentSelection);
           },
           (err) => {
-            console.log('Error while fetching studentReport=>', err);
+            console.error('Error while fetching studentReport=>', err);
             this.isLoading = false;
           }
         );
     });
   }
 
-  getTestConfig(testId, res) {
+  private getTestConfig(testId, res) {
     this.testConfigService.getQuestionPaper(testId).subscribe((resp) => {
       this.testConfig = resp;
+      this.testConfig.sections.forEach(section => {
+        section.questions.forEach(question => {
+          this.questionPassageMap.set(section.id + question.id, question.passageContent);
+        });
+      });
       res.summary.controlParam = resp.controlParam;
       this.summaryData.emit(res.summary);
       if (resp.controlParam) {
@@ -236,6 +232,8 @@ export class StudentReportComponent implements OnInit {
         this.rankingDisplayedColumn.pop();
       }
       this.getRankingDetails();
+
+      this.setPassageDetails();
     });
   }
 
@@ -281,7 +279,22 @@ export class StudentReportComponent implements OnInit {
       this.currentSolutionSelection = filterMode;
     }
   }
-
+  setPassageDetails(){
+    this.fetchedWholeAssignmentResult?.sections.forEach(
+      (section, i) => {
+        this.solutionSectionArray.push({
+          index: i,
+          name: section.sectionName,
+        });
+        section.answers.forEach((answer) => {
+          this.explanationMap.set(answer.questionId, true);
+          this.passageMap.set(answer.questionId, true);
+          // add question passage into the answer object 
+          answer.passage = this.questionPassageMap.get(section.sectionId + answer.questionId);
+        });
+      }
+    );
+  }
   getTimeDistributionAnalysis(sections) {
     sections.forEach((section) => {
       var x = new TimeAnalysisStatsModel();
