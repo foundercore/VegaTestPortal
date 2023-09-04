@@ -29,7 +29,7 @@
     </div>
   </mat-tab>
 
-  <mat-tab label="Questions">
+  <mat-tab label="Solution">
     <ng-template mat-tab-label>
       <mat-icon class="example-tab-icon">question_answer</mat-icon>
       {{ "STUDENT_SOLUTION_TAG.SOLUTION" | translate }}
@@ -74,9 +74,12 @@
           </mat-button-toggle-group>
         </div>
       </div>
-
-      <div class="container-fluid">
-        <div class="row">
+      
+      <div class="container-fluid" >
+        <div *ngIf="!loadSolutionPage">
+          <h1>Loading...</h1>
+        </div>
+        <div class="row" *ngIf="loadSolutionPage">
           <div class="col-lg-8">
             <mat-tab-group
               class="invisible-tabs"
