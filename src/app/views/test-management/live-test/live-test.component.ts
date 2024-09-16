@@ -11,7 +11,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
-import { forkJoin, Observable, Subscription, timer } from 'rxjs';
+import { forkJoin, Observable, Subject, Subscription, timer } from 'rxjs';
 import { MathService } from 'src/app/shared/directives/math/math.service';
 import { AppState } from 'src/app/state_management/_states/auth.state';
 import Swal from 'sweetalert2';
@@ -26,6 +26,7 @@ import { filter, mergeMap } from 'rxjs/operators';
 import { fromEvent } from 'rxjs';
 import { VideoPreviewComponent } from '../../questions/video-preview/video-preview.component';
 import { AuthorizationService } from 'src/app/services/authorization/authorization.service';
+import {WebcamImage, WebcamInitError, WebcamUtil} from 'ngx-webcam';
 
 @Component({
   selector: 'app-live-test',
@@ -113,6 +114,22 @@ export class LiveTestComponent implements OnInit, OnDestroy {
   offlineEvent: Observable<Event>;
   subscriptions: Subscription[] = [];
 
+  //Camera Related Changes
+  public multipleWebcamsAvailable = false;
+  public deviceId: string;
+  public errors: WebcamInitError[] = [];
+  public webcamImage: WebcamImage = null;
+  // webcam snapshot trigger
+  private trigger: Subject<void> = new Subject<void>();
+  cameraInterval;
+  public videoOptions: MediaTrackConstraints = {
+    // width: {ideal: 1024},
+    // height: {ideal: 576}
+  };
+  enableSnapshot = false;
+  snapshotInterval = 30000;
+
+
   constructor(
     public dialog: MatDialog,
     private testConfigService: TestConfigService,
@@ -125,7 +142,22 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private document: any
   ) {}
 
+
+
   ngOnInit(): void {
+
+    if(this.enableSnapshot){
+
+      WebcamUtil.getAvailableVideoInputs()
+      .then((mediaDevices: MediaDeviceInfo[]) => {
+        this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
+      });
+
+      this.cameraInterval = setInterval(function(trigger){
+        trigger.next();
+     }, this.snapshotInterval,this.trigger);
+    };
+
     this.elem = this.document.documentElement;
 
     this.store.select('appState').subscribe((data) => {
@@ -1069,6 +1101,12 @@ export class LiveTestComponent implements OnInit, OnDestroy {
       this.timerSource.unsubscribe();
       this.timerSource = null;
     }
+
+    if(this.cameraInterval){
+
+        clearInterval(this.cameraInterval);
+
+    }
   }
 
   showCorrectAnswerAndExplanation(question) {
@@ -1094,4 +1132,28 @@ export class LiveTestComponent implements OnInit, OnDestroy {
     });
     dialogRef.afterClosed().subscribe((result) => {});
   }
+
+
+  public get triggerObservable(): Observable<void> {
+    return this.trigger.asObservable();
+  }
+
+  public handleImage(webcamImage: WebcamImage): void {
+    console.info('received webcam image', webcamImage);
+    this.webcamImage = webcamImage;
+    this.downloadImage(webcamImage);
+  }
+
+  downloadImage(webcamImage: WebcamImage) {
+      var link = document.createElement("a");
+      document.body.appendChild(link); // for Firefox
+      link.setAttribute("href", webcamImage.imageAsDataUrl);
+      link.setAttribute("download", "mrHankey.jpg");
+      link.click();
+  }
+
+  public handleInitError(error: WebcamInitError): void {
+    console.log(error);
+  }
+
 }

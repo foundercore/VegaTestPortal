@@ -6,6 +6,7 @@ import { AngularEditorModule } from "@kolkov/angular-editor";
 import { CountdownModule } from "ngx-countdown";
 import { EmbedVideo } from "ngx-embed-video";
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { WebcamModule } from "ngx-webcam";
 import { VegaMaterialModule } from "src/app/core/material.module";
 import { SharedModule } from "src/app/shared/shared.module";
 import { LiveTestInstructionComponent } from "./live-test-instruction/live-test-instruction.component";
@@ -30,7 +31,8 @@ import { NmatLiveTestComponent } from './nmat-live-test/nmat-live-test.component
     AngularEditorModule,
     NgScrollbarModule,
     SharedModule,
-    EmbedVideo.forRoot()
+    EmbedVideo.forRoot(),
+    WebcamModule
   ],
   schemas:[NO_ERRORS_SCHEMA]
 

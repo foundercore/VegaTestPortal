@@ -29,6 +29,7 @@ import { TermConditionPageComponent } from './views/term-condition-page/term-con
 import { ReportsModule } from './views/reports/reports.module';
 import { BreadcrumbNavService } from './views/layout/breadcrumb/breadcrumb-nav.service';
 import { TestManagementModule } from './views/test-management/test-management.module';
+import {WebcamModule} from 'ngx-webcam';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -71,7 +72,8 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
       },
       isolate : false
     }),
-    CountdownModule
+    CountdownModule,
+    WebcamModule
   ],
   providers: [
     AuthGuard,
