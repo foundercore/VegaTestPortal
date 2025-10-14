@@ -47,3 +47,5 @@ testem.log
 Thumbs.db
 /.metadata/
 package-lock.json
+/node_modules_backup
+/dist-backup

@@ -12,7 +12,7 @@ import { RoleGuard } from 'src/app/guard/role.guard';
 import { VegaMaterialModule } from 'src/app/core/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { VideoPreviewComponent } from './video-preview/video-preview.component';
-import { EmbedVideo } from 'ngx-embed-video';
+// import { EmbedVideo } from 'ngx-embed-video';
 
 const routes: Routes = [
   {
@@ -56,7 +56,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     VegaMaterialModule,
     SharedModule,
-    EmbedVideo.forRoot()
+    // EmbedVideo.forRoot()
   ],
   exports: [RouterModule],
 })
