@@ -1,6 +1,10 @@
 {
   "name": "vega-test-portal",
   "version": "0.0.0",
+  "engines": {
+    "node": "14.15.0",
+    "npm": "6.14.8"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -9,7 +13,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "buildProd": "ng build --configuration=production ",
-    "buildStage": " ng build --prod --aot --configuration=staging"
+    "buildStage": " ng build --prod --aot --configuration=staging",
+    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
+    "prestart": "node --max_old_space_size=8192"
   },
   "private": true,
   "dependencies": {
@@ -69,6 +75,6 @@
     "jasmine-spec-reporter": "~5.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "^4.0.7"
+    "typescript": "4.0.5"
   }
 }
